@@ -4,10 +4,15 @@
 export interface SelectProps  {
     icon?: React.JSX.Element;
     width?: "w-8" | "w-40" | "w-45" | "w-50" | "w-55" | "w-60" | "w-65" | "w-70" | "w-75" | "w-80" | "w-85" | "w-90" | "w-95" | "w-full";
-    value?: string;
+    value?: string | number;
     ariaControls?: string;
     className?: string;
-    onSelectValue: (value: string) => void;
+    onSelectValue: (value: SelectOption) => void;
+}
+
+export type SelectOption = {
+    id: string | number;
+    displayText: string;
 }
 
 export type SelectState = {

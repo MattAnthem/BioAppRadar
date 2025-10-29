@@ -1,4 +1,4 @@
-import loader from '../../assets/loader.gif';
+import loader from '../../../assets/loader.gif';
 import GlassHeader from '../cards/GlassHeader';
 
 const DataLoading = () => {

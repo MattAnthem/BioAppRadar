@@ -2,12 +2,14 @@ import  { useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import { useTheme } from '../../hooks/useTheme';
-import type { SelectProps } from './types';
+import type { SelectOption, SelectProps } from './types';
 import '../../css/select.css'
 import { useHandleKeyDown } from '../../hooks/useHandleKeyDown';
 
+
+
 interface SimpleSelectProps extends SelectProps {
-    options: string[];
+    options: SelectOption[];
     responsive?: boolean;
     title?: string;
 }
@@ -26,7 +28,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
     const { simpleSelect } = themes.theme;
     const { bg, border, hover, icon_color, option_hover, options_bg, text, selected_option, secondary_text } = simpleSelect;
     const simpleSelectRef = useRef<HTMLDivElement | null>(null);
-    
+
     const { 
         handleKeyDown,
         focusedIndex, 
@@ -71,23 +73,23 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                 <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} custom_select border shadow-lg z-15 absolute max-h-[200px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-2`}>
                     <div className='w-full'>
                         {
-                            options.map((option, i) => (
+                            options?.map((option, i) => (
                                     
                                 <option 
-                                    key={option}
+                                    key={option.id}
                                     id={`option-${i}`}
-                                    aria-selected={value === option}
+                                    aria-selected={value === option.displayText}
                                     className={`${option_hover} ${text} ${
-                                    value === option ? `${selected_option}` : ""
+                                    value === option.displayText ? `${selected_option}` : ""
                                     } ${
                                     focusedIndex === i ? "ring-1 ring-blue-500" : ""
                                     } rounded-sm cursor-pointer text-start my-1 p-2`}
                                     onClick={() => {
-                                        onSelectValue(option);
+                                        onSelectValue({displayText: option.displayText, id: option.id});
                                         setIsOpen(false);
                                     }}
                                 >
-                                    {option}
+                                    {option.displayText}
                                 </option>
                             ))
                         }

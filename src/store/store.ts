@@ -4,6 +4,8 @@ import windowSizeReducer from '../shared/slice/windowsizeSlice';
 import sidebarReducer from '../shared/components/navigation/sidebar/sidebarSlice';
 import topbarReducer from '../shared/components/navigation/topbar/topbarSlice';
 import alertReducer from '../shared/components/popups/alert/alertSlice';
+import varpopupReducer from '../shared/features/map-option-popups/mappopupsSlice';
+import livemapReducer from '../features/livemap/livemapSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
         sidebar: sidebarReducer,
         topbar: topbarReducer,
         alert: alertReducer,
+        mappopups: varpopupReducer,
+        livemap: livemapReducer
     }
 });
 

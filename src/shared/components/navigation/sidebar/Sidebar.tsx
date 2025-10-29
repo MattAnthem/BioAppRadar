@@ -124,30 +124,6 @@ const Sidebar = () => {
             <div className="w-full mt-auto">
 
 
-                    <NavButton 
-                        handleActivate={handleActiveButton}
-                        title="Settings"
-                        menu_to="settings"
-                        active={activeButton}
-                        icon={<Settings width={30}/>}
-                        isNav_minimized={isMinimized}
-                        ariaLabel="Settings NavLink"
-                        ariaControls="Settings page"
-                        tooltipText="Application settings"
-                    />
-
-
-                    <NavButton 
-                        handleActivate={handleActiveButton}
-                        title="Help & FAQ"
-                        menu_to="helps"
-                        active={activeButton}
-                        icon={<HelpCircle width={30}/>}
-                        isNav_minimized={isMinimized}
-                        ariaLabel="Help and FAQ NavLink"
-                        ariaControls="Help and FAQ page"
-                        tooltipText="Help and FAQ"
-                    />
             </div>
 
         </div>

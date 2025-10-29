@@ -3,10 +3,9 @@ type ColorbarProps = {
     colorCodes: string[];
     className: string;
     valueScale: number[] | string[];
-    isLoading: boolean;
 }
 
-const Colorbar = ({ colorCodes, className, valueScale, isLoading }: ColorbarProps) => {
+const Colorbar = ({ colorCodes, className, valueScale }: ColorbarProps) => {
 
     const gradientStyle = {
         background: `linear-gradient(to right, ${colorCodes.join(", ")})`,
@@ -14,11 +13,6 @@ const Colorbar = ({ colorCodes, className, valueScale, isLoading }: ColorbarProp
         opacity: "0.8"
     };
 
-    if (isLoading) return (
-      <div className={`${className} w-full px-1 h-5 flex justify-center items-start rounded-b-sm`}>
-        <div className="w-full h-4 rounded-b-sm border-t-gray-800/65 px-1 flex justify-between items-center pointer-events-none bg-gray-600"/>
-      </div>
-    )
 
   return (
     <div className={`${className} w-full px-1 h-5 flex justify-center items-start rounded-b-sm`}>

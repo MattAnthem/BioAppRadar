@@ -115,7 +115,7 @@ const LeafletMap = ({
 
     // Add coverage overlays
     const ovrls = overlayShapes.map((shape) => {
-      const layer = L.geoJSON(shape, {style: {color: 'blue',  stroke: false, fillOpacity: 0.3}});
+      const layer = L.geoJSON(shape, {style: {color: 'blue',  stroke: true, weight: 1, fillOpacity: 0.0}});
       layer.addTo(map);
       // Retrieve coordinates while we click on this shape
       layer.on('click', () => {
