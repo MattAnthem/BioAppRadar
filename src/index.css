@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+:root {
+    font-family: "Work Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+*::-webkit-scrollbar{
+    height: .3rem;
+    width: 10px !important;
+}
+  
+*::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+  
+*::-webkit-scrollbar-thumb {
+    background-color: #a1a1a1;
+    border-radius: 3px;
+}
+  
+*::-webkit-slider-thumb {
+    background-color: #2c3a4d;
+    appearance: none;
+}
+
+@layer base {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: inherit !important;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+select {
+  appearance: base-select;
+}
+

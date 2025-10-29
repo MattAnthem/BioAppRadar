@@ -1,0 +1,21 @@
+.custom_select::-webkit-scrollbar{
+    height: .2rem;
+    width: 5px !important;
+}
+  
+.custom_select::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+  
+.custom_select::-webkit-scrollbar-thumb {
+    background-color: #a1a1a1;
+    border-radius: 2px;
+    position: absolute;
+    right: 0;
+
+}
+  
+.custom_select::-webkit-slider-thumb {
+    background-color: #2c3a4d;
+    appearance: none;
+}
