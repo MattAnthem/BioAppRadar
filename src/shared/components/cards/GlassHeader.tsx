@@ -16,7 +16,7 @@ const GlassHeader = ({ children, className }: GlassHeaderProps) => {
       <div 
         className={`
             ${className}
-            absolute z-40 rounded-t-sm p-2 w-full flex justify-between isolate
+            absolute z-40 rounded-t-sm  w-full flex justify-between isolate
             border-white/20 bg-gray-900/55 shadow-md ring-2 ring-black/5
             backdrop-blur-sm
         `}

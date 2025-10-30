@@ -1,20 +1,87 @@
 import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
+import VerticalProfileChart from "../../shared/components/charts/VerticalProfileChart";
+import DataLoading from "../../shared/components/loader/DataLoading";
+import FetchError from "../../shared/components/loader/FetchError";
+import SimpleSelect from "../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../shared/components/selects/types";
+import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useVpData } from "./hooks/useVpData";
+import { changeVpPayload, setSelectedVpParameterOption } from "./vpChartSlice";
 
 
 const VpChart = () => {
+
+  // Redux
+  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vpchart)
+  const dispatch = useAppDispatch();
+
+  const { isLoading, data, error, refetch } = useVpData();
+  // console.log(data)
+
+
+  const handleDateChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = evt.target.value; 
+    const date = new Date(raw);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    dispatch(changeVpPayload({time: formatted}))
+  }
+
+  const handleVariableChange = (option: SelectOption) => {
+    dispatch(setSelectedVpParameterOption(option));
+    refetch();
+  }
+
+
+  if (isLoading) return (
+    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+      <DataLoading />
+    </div> 
+  )
+  if (error) return (
+    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+      <FetchError />
+    </div> 
+  )
+
   return (
     <SectionCard className='w-full lg:h-full h-[60vh] col-span-2 p-1'>
 
         {/* Heading */}
-        <GlassHeader className=" w-full">
-            <h3 className='text-white tracking-wider'>VP</h3>
-            <h2 className='text-white tracking-wider'>Vertical Profile</h2>
+        <GlassHeader className="p-1 w-full">
+            <h3 className='text-white tracking-wider'>VP ({selectedParameter.id})</h3>
+
+            {/* controls */}
+            <ChartParamsPopup>
+              <div className="w-full mb-2">
+                <small>Select Time</small>
+                <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
+              </div>
+
+              <div className="w-full">
+                <small>Select Variable</small>
+                <SimpleSelect
+                  options={parameterOptions}
+                  value={selectedParameter.displayText}
+                  onSelectValue={handleVariableChange}
+                  width="w-full"
+                />
+              </div>
+            </ChartParamsPopup>
+            
         </GlassHeader>           
 
         {/* Chart */}
-        <div className="flex mt-7 w-full h-full items-center justify-center ">
+        <div className="flex  w-full h-full items-center justify-center ">
+        {data && (
 
+            <VerticalProfileChart
+              data={data}
+            />
+
+          )}
         </div>
 
     </SectionCard>

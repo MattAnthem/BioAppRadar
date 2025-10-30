@@ -1,20 +1,97 @@
 import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
+import VerticalProfileHeatmap from "../../shared/components/charts/VerticalProfileHeatmap";
+import DataLoading from "../../shared/components/loader/DataLoading";
+import FetchError from "../../shared/components/loader/FetchError";
+import SimpleSelect from "../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../shared/components/selects/types";
+import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useVptsData } from "./hooks/useVptsData";
+import { changeVptsPayload, setSelectedVptsParameterOption } from "./vptsChartSlice";
 
 
 const VptsChart = () => {
+
+  // Redux
+  const { parameterOptions, selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
+  const dispatch = useAppDispatch();
+
+  // Tanstack
+  const { isLoading, data, error, refetch } = useVptsData();
+  console.log(data)
+
+  const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = evt.target.value; 
+    const date = new Date(raw);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    dispatch(changeVptsPayload({startTime: formatted}));
+  }
+
+  const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = evt.target.value; 
+    const date = new Date(raw);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    dispatch(changeVptsPayload({endTime: formatted}));
+  }
+
+  const handleVariableChange = (option: SelectOption) => {
+    dispatch(setSelectedVptsParameterOption(option));
+    refetch();
+  } 
+
+  
+
+  if (isLoading) return (
+    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+      <DataLoading />
+    </div> 
+  )
+  if (error) return (
+    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+      <FetchError />
+    </div> 
+  )
+
   return (
     <SectionCard className='w-full lg:h-full h-[60vh] col-span-2 p-1'>
 
         {/* Heading */}
-        <GlassHeader className=" w-full">
+        <GlassHeader className="p-1 w-full">
             <h3 className='text-white tracking-wider'>VPTS</h3>
-            <h2 className='text-white tracking-wider'>Vertical Profile Timeseries</h2>
+            {/* Controls */}
+            <ChartParamsPopup>
+
+              <div className="w-ful">
+                <small>Select variable</small>
+                <SimpleSelect
+                  options={parameterOptions}
+                  value={selectedParameter.displayText}
+                  onSelectValue={handleVariableChange}
+                  width="w-full"
+                />
+              </div>
+
+              <div className="w-full mb-2 flex flex-col">
+                <small>Select start Time</small>
+                <input max={vptsPayload.endTime} onChange={handleStartTimeChange} value={vptsPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
+                <small>Select end Time</small>
+                <input min={vptsPayload.startTime} onChange={handleEndTimeChange} value={vptsPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
+              </div>
+
+
+            </ChartParamsPopup>
         </GlassHeader>           
 
         {/* Chart */}
-        <div className="flex mt-7 w-full h-full items-center justify-center ">
-
+        <div className="flex w-full h-full items-center justify-center ">
+          {
+            data && (
+              <VerticalProfileHeatmap data={data}/>
+            )
+          }
         </div>
 
     </SectionCard>

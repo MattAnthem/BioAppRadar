@@ -6,17 +6,54 @@ import provinceCov from '../../shared/geojsons/administrative/rwanda_province.js
 import sectorCov from '../../shared/geojsons/administrative/rwanda_sector.json';
 import villageCov from '../../shared/geojsons/administrative/rwanda_village.json';
 import type { SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
+import type { SelectOption } from "../../shared/components/selects/types";
+
+const coverageOptions: SelectOption[] = [
+    {
+        id: 'country',
+        displayText: 'Country',
+        geometry: countryCov,
+    },
+    {
+        id: 'district',
+        displayText: 'District',
+        geometry: districtCov,
+    },
+    {
+        id: 'province',
+        displayText: 'Province',
+        geometry: provinceCov,
+    },
+    {
+        id: 'sector',
+        displayText: 'Sector',
+        geometry: sectorCov,
+    },
+    {
+        id: 'village',
+        displayText: 'Village',
+        geometry: villageCov,
+    },
+    {
+        id: 'cell',
+        displayText: 'Cell',
+        geometry: cellCov,
+    }
+]
+
 
 interface LivemapState {
-    coverage: object;
+    coverageOptions: SelectOption[];
+    selectedCoverage: SelectOption;
     spatialPayload: SpatialDataPayload;
     spatialData: SpatialDataResponse | null;
+
 }
 
-export type Administrative_boundaries = 'country' | 'district' | 'province' | 'sector' | 'village' | 'cell';
 
 const initialState: LivemapState = {
-    coverage: countryCov,
+    coverageOptions: coverageOptions,
+    selectedCoverage: coverageOptions[0],
     spatialPayload: {
         map: 'vid',
         type: 'vertical',
@@ -37,18 +74,9 @@ const livemapSlice = createSlice({
             state.spatialData = action.payload;
         },
         changeCoverage: (state, action) => {
-            if (action.payload === 'country') {
-                state.coverage = countryCov;
-            } else if (action.payload === 'district') {
-                state.coverage = districtCov;
-            }else if (action.payload === 'province') {
-                state.coverage = provinceCov;
-            }else if (action.payload === 'sector') {
-                state.coverage = sectorCov;
-            }else if (action.payload === 'village') {
-                state.coverage = villageCov;
-            } else if (action.payload === 'cell') {
-                state.coverage = cellCov;
+            const selected = state.coverageOptions.find(option => option.id === action.payload);
+            if (selected) {
+                state.selectedCoverage = selected;
             }
         }
     }

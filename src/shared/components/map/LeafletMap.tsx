@@ -4,6 +4,7 @@ import "leaflet-draw";
 import { enableDraw } from "./feature/enableDraw";
 
 type MapProps = {
+  baseMap: string;
   center?: [number, number];
   zoom?: number;
   className?: string;
@@ -42,6 +43,7 @@ type MapProps = {
  * @returns React.JSX.Element
  */
 const LeafletMap = ({
+  baseMap,
   center = [0, 0],
   zoom = 5,
   className = "w-full h-full",
@@ -74,7 +76,7 @@ const LeafletMap = ({
     });
 
     // Add tiles
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    L.tileLayer(baseMap, {
       maxZoom: 19,
     }).addTo(map);
 
@@ -99,7 +101,7 @@ const LeafletMap = ({
       map.remove();
       mapRef.current = null;
     };
-  }, [boxZoom, scrollWheelZoom]);
+  }, [boxZoom, scrollWheelZoom, baseMap]);
 
 
   // Add GeoJSON layers according to users parameters

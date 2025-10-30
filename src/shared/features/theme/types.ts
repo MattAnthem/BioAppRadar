@@ -14,6 +14,7 @@ export interface ThemeElements {
     charts: ChartsTheme;
     cards: cards;
     texts: Texts;
+    chartFontColor: string;
 }
 
 

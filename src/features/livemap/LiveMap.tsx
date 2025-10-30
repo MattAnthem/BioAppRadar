@@ -1,32 +1,23 @@
 import { useState } from 'react';
 import activeRadar from '../../assets/radar_on.png';
-import offRadar from '../../assets/radar_off.png';
-import { parameters, spatialData } from './livemapAPI';
-import DataLoading from '../../shared/components/loader/DataLoading';
-import FetchError from '../../shared/components/loader/FetchError';
+import { spatialData } from './livemapAPI';
 import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
-import AltitudeSlider from '../../shared/components/sliders/AltitudeSlider';
+import AltitudeSlider from '../../shared/features/altitude-slider/AltitudeSlider';
 import Colorbar from '../../shared/components/colorbar/Colorbar';
 import TimelineSlider from '../../shared/components/sliders/TimelineSlider';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import VaribalePopup from '../../shared/features/map-option-popups/VaribalePopup';
 import MapbasePopup from '../../shared/features/map-option-popups/MapbasePopup';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useSpatialData } from './hooks/useSpatialData';
+import type { SelectOption } from '../../shared/components/selects/types';
+import { setSpatialPayload } from './livemapSlice';
+import { changeAltitude } from '../../shared/features/altitude-slider/altitudeSlice';
 
 type LiveMapProps = {
     drawable: boolean;
 }
-
-const colors = [
-    "#30123b",
-    "#4685fa",
-    "#1ae4b6",
-    "#a4fc3c",
-    "#faba39",
-    "#e4450a",
-    "#7a0403"
-]
 
 const valueScale = [
     0,
@@ -46,17 +37,14 @@ const valueScale = [
 const LiveMap = ({ drawable }: LiveMapProps) => {
 
     // Redux
-    const { coverage } = useAppSelector(state => state.livemap);
+    const { selectedCoverage } = useAppSelector(state => state.livemap);
+    const { selectedMapBase, selectedColormap, selectedMapOption } = useAppSelector(state => state.mappopups);
+    const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
+    const dispatch = useAppDispatch();
 
-    // TODO use tanstack state
-    const [dataLoading, setDataLoading] = useState(false); 
-    const [fetchError, setFetchError] = useState(false);
 
     const [currentFrame, setCurrentFrame] = useState(0);
 
-    const [altIndex, setAltIndex] = useState(parameters.altitudesBand.length - 1);
-
-    
 
 
 
@@ -73,30 +61,35 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
 
 
     //#region Api call
-    // Format payload
-    /**
-     * {
-     *   type: vertical int prf
-     *   map: 'vid',   
-     *   height: 200,
-     *   time: '2025-10-23 16:34:00'     
-     * }
-     */
+ 
+    const  { error, isLoading, data } = useSpatialData();
+
+
+
+    // handle parameters changes
+    const handleSelectedVars = (option: SelectOption) => {
+        dispatch(setSpatialPayload({type: selectedMapOption.id as string, map: option.id as string}));
+    }
+
+    const handleAltitudeChange = (altitudeIndex: number) => {
+        dispatch(setSpatialPayload({height: altitudeOptions[altitudeIndex]}));
+        dispatch(changeAltitude(altitudeIndex))
+    }
 
     
     //#endregion
 
 
-    if (dataLoading) return <DataLoading/>
+    // if (isLoading) return <DataLoading/>
 
-    if (fetchError) return <FetchError/>
+    // if (error) return <FetchError/>
 
 
   return (
     <SectionCard className='relative w-full h-full p-1'>
 
         {/* Heading */}
-        <GlassHeader className='flex justify-between items-center'>
+        <GlassHeader className='p-1 flex justify-between items-center'>
         
             <h3 className='text-white tracking-wider'>Live Map</h3>
 
@@ -104,7 +97,7 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
             <div className="z-5 flex gap-3 justify-center items-end">
 
                 {/* Changer de variable */}
-                <VaribalePopup/> 
+                <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
 
                 
                 <MapbasePopup/>
@@ -115,16 +108,16 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
 
         {/* Altitude slider */}
         <AltitudeSlider
-            currentIndex={altIndex}
-            onChangeAltitude={setAltIndex}
+            currentIndex={currentAltitudeIndex}
+            onChangeAltitude={handleAltitudeChange}
             position='right'
-            altitudes={parameters.altitudesBand}
+            altitudes={altitudeOptions}
         />
 
 
         {/* Colorbar */}
         <Colorbar
-            colorCodes={colors}
+            colorCodes={selectedColormap.colors as string[]}
             valueScale={valueScale}
             className='absolute bottom-0 left-0 z-10'
         />
@@ -139,6 +132,7 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
 
         {/* Map Leaflet */}
         <LeafletMap
+            baseMap={selectedMapBase.url as string}
             drawable={drawable}
             onDrawPolygon={handlePolygonCreated}
             center={[-2.158, 30.1131097]}
@@ -161,7 +155,7 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
             //     }
             // }
 
-            overlayShapes={[coverage]}
+            overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
             onShapeClicked={handlePolygonClick}
         />
     

@@ -7,13 +7,10 @@ import AlertFlash from './shared/components/popups/alert/AlertFlash';
 import { Route, Routes } from 'react-router-dom';
 import AppLayout from './shared/layouts/AppLayout';
 import OverviewDashboard from './pages/OverviewDashboard';
-import { useAppSelector } from './store/hooks';
 
 function App() {
 
-  const { spatialPayload } = useAppSelector(state => state.livemap);
 
-  console.log(spatialPayload)
 
   return (
     <>

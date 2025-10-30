@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { hideMapBasePopup, toggleShowMapBasePopup } from "./mappopupsSlice";
+import { changeBaseMap, changeColormap, hideMapBasePopup, toggleShowMapBasePopup } from "./mappopupsSlice";
 import Tooltip from "../../components/popups/tooltip/Tooltip";
 import { useTheme } from "../../hooks/useTheme";
 import { Map } from "lucide-react";
@@ -11,89 +11,13 @@ import Colorbar from "../../components/colorbar/Colorbar";
 import { changeCoverage } from "../../../features/livemap/livemapSlice";
 
 
-const colors = [
-  "#30123b",
-  "#4685fa",
-  "#1ae4b6",
-  "#a4fc3c",
-  "#faba39",
-  "#e4450a",
-  "#7a0403"
-]
 
-const mapbaseOptions: SelectOption[] = [
-  {
-    id: 'openstreet',
-    displayText: 'Openstreet'
-  },
-  {
-    id: 'carto_light',
-    displayText: 'CARTO Light'
-  },
-  {
-    id: 'carto_dark',
-    displayText: 'CARTO Dark'
-  },
-  {
-    id: 'satellite',
-    displayText: 'Satellite'
-  },
-]
-
-const coverageOptions: SelectOption[] = [
-  {
-    id: 'country',
-    displayText: 'Country'
-  },
-  {
-    id: 'district',
-    displayText: 'District'
-  },
-  {
-    id: 'province',
-    displayText: 'Province'
-  },
-  {
-    id: 'sector',
-    displayText: 'Sector'
-  },
-  {
-    id: 'village',
-    displayText: 'Village'
-  },
-  {
-    id: 'cell',
-    displayText: 'Cell'
-  },
-]
-
-const colormapOptions: SelectOption[] = [
-  {
-    id: 'viridis',
-    displayText: 'Viridis'
-  },
-  {
-    id: 'Rainbow',
-    displayText: 'Rainbow'
-  },
-  {
-    id: 'winter',
-    displayText: 'Winter'
-  },
-  {
-    id: 'summer',
-    displayText: 'Summer'
-  },
-  {
-    id: 'ghistrainbow',
-    displayText: 'Ghist Rainbow'
-  },
-]
 
 const MapbasePopup = () => {
 
   // redux 
-  const { isMapBasePopupOpen } = useAppSelector(state => state.mappopups);
+  const { isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap } = useAppSelector(state => state.mappopups);
+  const { selectedCoverage, coverageOptions } = useAppSelector(state => state.livemap);
   const mapBasepopupRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
   
@@ -105,24 +29,18 @@ const MapbasePopup = () => {
     }
   })
 
-  const [selectedBase, setSelectedBase] = useState<SelectOption>(mapbaseOptions[0]);
-  const [selectedCoverage, setSelectedCoverage] = useState<SelectOption>(coverageOptions[0]);
-  const [selectedColormap, setSelectedColormap] = useState<SelectOption>(colormapOptions[0]);
 
+  // handlers
   const handleChangeBase = (option: SelectOption) => {
-    setSelectedBase(option);
-    console.log(option);
+    dispatch(changeBaseMap(option))
   }
 
   const handleChangeCoverage = (option: SelectOption) => {
-    setSelectedCoverage(option);
-    dispatch(changeCoverage(option.id))
-    console.log(option);
+    dispatch(changeCoverage(option.id));
   }
   
   const handleChangeColormap = (option: SelectOption) => {
-    setSelectedColormap(option);
-    console.log(option);
+    dispatch(changeColormap(option));
   }
 
   // theme
@@ -158,9 +76,9 @@ const MapbasePopup = () => {
         {/* Select map base */}
         <SimpleSelect
           onSelectValue={handleChangeBase}
-          options={mapbaseOptions}
+          options={mapBaseOptions}
           width="w-80"
-          value={selectedBase.displayText}
+          value={selectedMapBase.displayText}
           title="Select Base Map"
           className="border-0! bg-none!"
         />
@@ -189,7 +107,7 @@ const MapbasePopup = () => {
         <div className="w-full flex flex-col">
           <small>Preview</small>
           <Colorbar
-            colorCodes={colors}
+            colorCodes={selectedColormap.colors as string[]}
             valueScale={[]}
             className="w-full rounded-none!"
           />

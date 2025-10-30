@@ -13,6 +13,7 @@ export interface SelectProps  {
 export type SelectOption = {
     id: string | number;
     displayText: string;
+    [key: string]: string | number | string[] | undefined | object | SelectOption[];
 }
 
 export type SelectState = {

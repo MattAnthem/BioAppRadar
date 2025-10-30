@@ -5,13 +5,8 @@ const FetchError = () => {
   return (
     <div className="relative w-full h-full mt-4 rounded-sm p-1 z-25 bg-gray-500/50 left-0 top-0">
 
-        <GlassHeader className='absolute  top-0 py-2 flex justify-between items-center'>
+        <GlassHeader className='absolute px-1 top-0 py-2 flex justify-between items-center'>
           <span className='h-6 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-          <div className="flex jutify-between gap-2">
-            <span className='h-11 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-            <span className='h-11 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-            <span className='h-11 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-          </div>
         </GlassHeader>
 
         <div className="top-0 relative w-full h-full flex items-center justify-center">
@@ -25,7 +20,7 @@ const FetchError = () => {
                       "
           >
               <Unplug width={60} height={60} className='text-red-500'/>
-              <p className='font-semibold text-xs tracking-wider text-gray-300'>Error while fetching</p>
+              <p className='font-semibold text-xs tracking-wider text-gray-300'>Error Fetching DATA</p>
           </div>
         </div>
     </div>

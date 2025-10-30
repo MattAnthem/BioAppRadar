@@ -45,3 +45,7 @@ select {
   appearance: base-select;
 }
 
+.color {
+  background: #adadad;
+}
+

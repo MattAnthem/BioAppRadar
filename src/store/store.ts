@@ -6,6 +6,9 @@ import topbarReducer from '../shared/components/navigation/topbar/topbarSlice';
 import alertReducer from '../shared/components/popups/alert/alertSlice';
 import varpopupReducer from '../shared/features/map-option-popups/mappopupsSlice';
 import livemapReducer from '../features/livemap/livemapSlice';
+import altitudeReducer from "../shared/features/altitude-slider/altitudeSlice";
+import vpchartReducer from '../features/vp_chart/vpChartSlice';
+import vptschartReducer from '../features/vpts_chart/vptsChartSlice'
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +18,10 @@ export const store = configureStore({
         topbar: topbarReducer,
         alert: alertReducer,
         mappopups: varpopupReducer,
-        livemap: livemapReducer
+        livemap: livemapReducer,
+        altitude: altitudeReducer,
+        vpchart: vpchartReducer,
+        vptschart: vptschartReducer,
     }
 });
 

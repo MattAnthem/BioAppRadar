@@ -85,7 +85,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                                     focusedIndex === i ? "ring-1 ring-blue-500" : ""
                                     } rounded-sm cursor-pointer text-start my-1 p-2`}
                                     onClick={() => {
-                                        onSelectValue({displayText: option.displayText, id: option.id});
+                                        onSelectValue(option);
                                         setIsOpen(false);
                                     }}
                                 >

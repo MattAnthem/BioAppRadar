@@ -1,13 +1,10 @@
 import { useState } from "react";
-import type { Hierarchy } from "../components/selects/types";
+import type { Hierarchy, SelectOption } from "../components/selects/types";
 
 
 
 
-export type SelectOption = {
-  id: string | number;
-  displayText: string;
-};
+
 
 type SupportedOption = string | SelectOption | Hierarchy;
 

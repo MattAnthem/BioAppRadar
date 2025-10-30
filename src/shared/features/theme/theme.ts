@@ -6,7 +6,7 @@ import type { ThemeElements } from "./types"
 // bg-gradient-to-tl from-blue-50 to-sky-200
 
 export const light: ThemeElements = {
-
+    chartFontColor: '#424242',
     cards: {
         background: 'bg-gray-100',
         border: 'border-gray-500',
@@ -107,6 +107,7 @@ export const light: ThemeElements = {
 // bg-gradient-to-tl from-gray-800 to-slate-900
 
 export const dark: ThemeElements = {
+    chartFontColor: '#adadad',
     cards: {
         background: 'bg-zinc-700',
         border: 'border-zinc-500',
