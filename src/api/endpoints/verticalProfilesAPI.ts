@@ -11,9 +11,24 @@ export interface VptsPayload {
     endTime: string;
 }
 
+export type VtipPayload = VptsPayload;
+
+export interface VtipResponse {
+    name: string;
+    units: string;
+    height: number[];
+    times: string[];
+    parameter: number[];
+    ff: number[];
+    dd: number[];
+    day: boolean[];
+    sunrise: string[];
+    sunset: string[];
+}
+
 export interface VpResponse {
     name: string;
-    parameter: string;
+    parameter: (null | number)[];
     sunrise: string;
     sunset: string;
     time: string;
@@ -26,7 +41,7 @@ export interface VpResponse {
 
 export interface VptsResponse {
     name: string;
-    parameter: (number | null)[];
+    parameter: (number | null)[][];
     sunrise: string[];
     sunset: string[];
     times: string[];
@@ -44,6 +59,11 @@ export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
 
 export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => {
     const {data} = await axiosClient.post('/get_vpts', payload);
+    return data;
+}
+
+export const fetchVTIP = async (payload: VtipPayload): Promise<VtipResponse> => {
+    const {data} = await axiosClient.post('/get_vpi', payload);
     return data;
 }
 

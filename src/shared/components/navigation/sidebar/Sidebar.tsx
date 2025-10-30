@@ -1,4 +1,4 @@
-import {  Bell, FlipHorizontal, HelpCircle, Home, LayoutDashboard, Settings, SidebarIcon } from "lucide-react";
+import {  Bell, CalendarClock, FlipHorizontal,  Home, SidebarIcon } from "lucide-react";
 import logo_svg from "../../../../assets/dark_logo.svg"
 import { useTheme } from "../../../hooks/useTheme";
 import { useRef } from "react";
@@ -92,21 +92,8 @@ const Sidebar = () => {
 
                 <NavButton 
                     handleActivate={handleActiveButton}
-                    title="Forecast dashboard"
-                    menu_to="forecast_dash"
-                    active={activeButton}
-                    icon={<LayoutDashboard width={30}/>}
-                    isNav_minimized={isMinimized}
-                    ariaLabel="Forecast dashboard NavLink"
-                    ariaControls="Forecast dashboard page"
-                    tooltipText="Forecast Dashboard"
-                />
-
-
-                <NavButton 
-                    handleActivate={handleActiveButton}
-                    title="Vertical transect"
-                    menu_to="v_transect"
+                    title="Cross Section"
+                    menu_to="cross_section"
                     active={activeButton}
                     icon={<FlipHorizontal width={30}/>}
                     isNav_minimized={isMinimized}
@@ -114,6 +101,20 @@ const Sidebar = () => {
                     ariaControls="Vertical transect page"
                     tooltipText="Vertical transect"
                 />
+                
+                <NavButton 
+                    handleActivate={handleActiveButton}
+                    title="Historical Explorer"
+                    menu_to="history_explorer"
+                    active={activeButton}
+                    icon={<CalendarClock  width={30}/>}
+                    isNav_minimized={isMinimized}
+                    ariaLabel="Historical explorer NavLink"
+                    ariaControls="Historical explorer page"
+                    tooltipText="Historical Explorer"
+                />
+
+
 
         </div>
 

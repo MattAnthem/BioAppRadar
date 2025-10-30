@@ -5,8 +5,8 @@ import type { SelectOption } from "../../shared/components/selects/types";
 // Statics
 export const parameterOptions: SelectOption[] = [
     {
-        id: 'dens',
-        displayText: 'volume density '
+        id: 'dBZ',
+        displayText: 'reflectivity factor'
     },
     {
         id: 'eta',

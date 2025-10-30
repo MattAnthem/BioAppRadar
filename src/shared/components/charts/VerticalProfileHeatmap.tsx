@@ -5,7 +5,6 @@ import type { VptsResponse } from "../../../api/endpoints/verticalProfilesAPI";
 import { useTheme } from "../../hooks/useTheme";
 
 
-
 interface Props {
   data: VptsResponse | null;
 }
@@ -17,6 +16,10 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
   if (!data) {
     return <div className="text-gray-400 text-center p-4">No data available</div>;
   }
+
+  console.log("parameter shape:", data.parameter.length, data.parameter[0]?.length);
+  console.log("times:", data.times.length, "heights:", data.height.length);
+
 
   const trace: Data = {
     type: "heatmap",
@@ -30,15 +33,14 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
 
   const layout: Partial<Layout> = {
     xaxis: {
-      title: { text: "Time" },
+      // title: { text: `${data.name} [${data.units}]` },
       type: "date", 
-      tickangle: -45,
-      
+      tickangle: -9,
+      tickformat: "%Y-%m-%d",
     },
     yaxis: {
       title: { text: "Altitude [m]" },
-      dtick: 500,
-      autorange: "reversed", 
+      dtick: 800,
       rangemode: 'nonnegative'
     },
     margin: { l: 60, r: 20, t: 45, b: 40 },

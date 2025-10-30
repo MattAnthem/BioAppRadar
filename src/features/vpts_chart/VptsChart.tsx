@@ -6,6 +6,7 @@ import FetchError from "../../shared/components/loader/FetchError";
 import SimpleSelect from "../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../shared/components/selects/types";
 import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
+import { formatChartDateParam } from "../../shared/utils/date_format";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVptsData } from "./hooks/useVptsData";
 import { changeVptsPayload, setSelectedVptsParameterOption } from "./vptsChartSlice";
@@ -19,21 +20,16 @@ const VptsChart = () => {
 
   // Tanstack
   const { isLoading, data, error, refetch } = useVptsData();
-  console.log(data)
 
   const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
-    const date = new Date(raw);
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    const formatted = formatChartDateParam(raw);
     dispatch(changeVptsPayload({startTime: formatted}));
   }
 
   const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
-    const date = new Date(raw);
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    const formatted = formatChartDateParam(raw);
     dispatch(changeVptsPayload({endTime: formatted}));
   }
 
@@ -45,22 +41,22 @@ const VptsChart = () => {
   
 
   if (isLoading) return (
-    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+    <div className='w-full h-[50vh] p-1'>
       <DataLoading />
     </div> 
   )
   if (error) return (
-    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+    <div className='w-full h-[50vh] p-1'>
       <FetchError />
     </div> 
   )
 
   return (
-    <SectionCard className='w-full lg:h-full h-[60vh] col-span-2 p-1'>
+    <SectionCard className='w-full h-[50vh] p-1'>
 
         {/* Heading */}
         <GlassHeader className="p-1 w-full">
-            <h3 className='text-white tracking-wider'>VPTS</h3>
+            <h3 className='text-white tracking-wider'>VPTS (<small>{selectedParameter.displayText}</small>)</h3>
             {/* Controls */}
             <ChartParamsPopup>
 

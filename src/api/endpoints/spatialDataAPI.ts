@@ -8,6 +8,13 @@ export interface SpatialDataPayload {
     time: string;
 }
 
+export interface SpatialDataHistoryPayload {
+    type: 'map' | 'gif';
+    height: number;
+    time: string;
+    endTime?: string;
+}
+
 export interface SpatialDataResponse {
     height: number;
     time: string;

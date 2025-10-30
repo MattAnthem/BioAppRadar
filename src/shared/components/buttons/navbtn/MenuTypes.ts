@@ -1,5 +1,6 @@
 export type MenuNames = 
     "overview_dash"         | 
+    "cross_section"         | 
     "forecast_dash"         | 
     "v_transect"            | 
     "history_explorer"      | 

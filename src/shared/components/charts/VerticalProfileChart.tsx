@@ -16,20 +16,12 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
     return <div className="text-gray-400 text-center p-4">No data available</div>;
   }
 
-  
-  // Extraction 
-  // const validIndices = data.ff
-  //   .map((v, i) => (v !== null && data.height[i] !== null ? i : null))
-  //   .filter((i): i is number => i !== null);
-
-  // // const x = validIndices.map(i => data.ff[i]!);
-  // // const y = validIndices.map(i => data.height[i]);
 
   // Trace (vertical profile)
   const trace: Data = {
     type: "scatter",
     mode: "lines+markers",
-    x: data.ff,
+    x: data.parameter,
     y: data.height,
     line: { color: "red", width: 2 },
     marker: { size: 6, color: "white", line: { color: "red", width: 1 } },
@@ -37,7 +29,7 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
     connectgaps: true,
   };
 
-  // Mise en page
+
   const layout: Partial<Layout> = {
     xaxis: {
       title: { text: `${data.name} [${data.units}]` },
@@ -46,9 +38,9 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
     yaxis: {
       title: { text: "Altitude [m]" },
       autorange: "min",
-      rangemode: 'tozero'
+      rangemode: 'nonnegative'
     },
-    margin: { l: 60, r: 20, t: 10, b: 35 },
+    margin: { l: 60, r: 20, t: 45, b: 40 },
     // height: 3,
     paper_bgcolor: "transparent",
     plot_bgcolor: "transparent",

@@ -36,22 +36,22 @@ const VpChart = () => {
 
 
   if (isLoading) return (
-    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+    <div className="w-full h-[50vh] p-1">
       <DataLoading />
     </div> 
   )
   if (error) return (
-    <div className="w-full lg:h-full h-[60vh] col-span-2 p-1">
+    <div className="w-full h-[50vh] p-1">
       <FetchError />
     </div> 
   )
 
   return (
-    <SectionCard className='w-full lg:h-full h-[60vh] col-span-2 p-1'>
+    <SectionCard className='w-full h-[50vh] p-1'>
 
         {/* Heading */}
         <GlassHeader className="p-1 w-full">
-            <h3 className='text-white tracking-wider'>VP ({selectedParameter.id})</h3>
+            <h3 className='text-white tracking-wider'>VP (<small>{selectedParameter.displayText}</small>)</h3>
 
             {/* controls */}
             <ChartParamsPopup>

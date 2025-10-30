@@ -7,28 +7,28 @@ import type { SelectOption } from "../../shared/components/selects/types";
 // static
 export const parameterOptions: SelectOption[] = [
     {
-        id: 'mt',
-        displayText: 'cumulative migration traffic'
+        id: 'dbz',
+        displayText: 'Reflectivity factor'
     },
     {
-        id: 'mtr',
-        displayText: 'migration traffic rate'
+        id: 'dens',
+        displayText: 'Reflectivity eta'
     },
     {
-        id: 'rt',
-        displayText: 'cumulative reflectivity traffic'
+        id: 'n_dbz_all',
+        displayText: 'Number of range gates in DBZH estimates'
     },
     {
-        id: 'rtr',
-        displayText: 'reflectivity traffic rate'
+        id: 'n_dbz',
+        displayText: 'Number of range gates in density estimates'
     },
     {
-        id: 'vid',
-        displayText: 'vertically integrated densities'
+        id: 'sd_vvp',
+        displayText: 'VVP-retrieved radial velocity stdev'
     },
     {
-        id: 'vir',
-        displayText: 'Vertically Integrated Reflectivity'
+        id: 'w',
+        displayText: 'Vertical speed'
     }
 ]
 
