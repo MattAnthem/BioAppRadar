@@ -47,7 +47,7 @@ const AltitudeSlider = (
       </div>
 
       {/* Altitude band */}
-      <div className="h-full py-2 w-50 flex flex-col justify-center items-center lg:gap-0.5">
+      <div className="h-full  py-2 w-50 flex flex-col justify-center items-center lg:gap-0.5">
 
         {/* Max altitude */}
         <small>{formatBigNumber(altitudes[0])}</small>
@@ -59,7 +59,7 @@ const AltitudeSlider = (
               text={formatBigNumber(alt)}
               display_condition={true}
             >
-            <div  className="w-full flex items-start justify-center">
+            <div  className="w-full  flex items-start justify-center">
                 <button
                   onClick={() => onChangeAltitude(i)}
                   className={`${

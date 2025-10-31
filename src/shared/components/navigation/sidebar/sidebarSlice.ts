@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { MenuNames } from "../../buttons/navbtn/MenuTypes";
 
-const active_link = localStorage.getItem('active_link') as MenuNames | 'home';
+const active_link = localStorage.getItem('active_link') as MenuNames ;
 
 interface SidebarState {
     isMinimized: boolean;

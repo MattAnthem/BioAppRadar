@@ -75,7 +75,7 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
 
     //#region Api call
  
-    const  { error, isLoading, data } = useSpatialData();
+    // const  { error, isLoading, data } = useSpatialData();
 
 
 

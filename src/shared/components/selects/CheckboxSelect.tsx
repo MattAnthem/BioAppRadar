@@ -3,11 +3,11 @@ import { useRef, useState } from "react";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useTheme } from "../../hooks/useTheme";
 import { ChevronDown } from "lucide-react";
-import type { SelectProps } from "./types";
+import type { SelectOption, SelectProps } from "./types";
 
 
 interface CheckboxSelectProps extends SelectProps  {
-    options: string[];
+    options: SelectOption[];
     title?: string;
     values: string[];
 }
@@ -73,23 +73,23 @@ const CheckboxSelect = (
                         <div className="w-full">
                         {
                             options.map((option, i) => (
-                                <div key={option} className={`${option_hover} ${text} px-2 rounded-sm flex items-center gap-2`}>
+                                <div key={option.id} className={`${option_hover} ${text} px-2 rounded-sm flex items-center gap-2`}>
                                     <input
                                         onChange={() => onSelectValue(option)}
                                         type="checkbox"
-                                        name={option}
+                                        name={option.id as string}
                                         id={`option-${i}`}
-                                        checked={values.includes(option)}
+                                        checked={values.includes(option.id as string)}
                                         // disabled={!values.includes(option)}
                                         className={`
                                             
                                             ${
-                                                values.includes(option) ? `${selected_option}` : ""
+                                                values.includes(option.id as string) ? `${selected_option}` : ""
                                             } 
                                             rounded-sm cursor-pointer text-start my-2 p-2`
                                         }
                                     />
-                                    <label htmlFor={`option-${i}`} className="w-full">{option}</label>
+                                    <label htmlFor={`option-${i}`} className="w-full">{option.displayText}</label>
                                 </div>
                             ))
                         }

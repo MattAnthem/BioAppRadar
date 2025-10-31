@@ -7,7 +7,7 @@ type NotificationCardProps = {
     title: string;
     text?: string;
     notifType: NotifType;
-    actionHandler?: () => void; 
+    // actionHandler?: () => void; 
 }
 
 type NotifType = "info" | 'danger' | 'alert';
@@ -24,7 +24,7 @@ const NotificationCard = (
         title,
         text,
         notifType,
-        actionHandler
+        // actionHandler
     }: NotificationCardProps
 ) => {
 
