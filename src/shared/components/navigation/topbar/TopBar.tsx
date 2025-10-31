@@ -5,21 +5,11 @@ import { toggleTheme } from '../../../features/theme/themeSlice';
 import { toggleMinimize } from '../sidebar/sidebarSlice';
 import SwitchBtn from '../../buttons/switchbtn/SwitchBtn';
 
-// const CountryOptions = 
-//   [
-//     {
-//     "parent": "Africa (AF)",
-//     "childs":["RWANDA", "UGANDA", "KENYA", "TANZANIA"]
-//     },
-//     {
-//       "parent": "Europe (EU)",
-//       "childs": ["France", "Italy", "Belgium", "Swiss"]
-//     }
-//   ]
+
 
 
 const TopBar = () => {
-    // const [country, setCountry] = useState('RWANDA')
+
     const themes = useTheme();
     const { topbar } = themes.theme;
 
@@ -35,14 +25,6 @@ const TopBar = () => {
         dispatch(toggleMinimize())
     }
 
-
-        // retrieve select element
-    // const handleSelectedCoverage = useCallback((option: string) => {
-    //     setCountry(option); //updates the ui
-    //       console.log(option);
-    //   }, [])
-
-
   return (
     <div aria-label='topbar' className={`${topbar.main.bg} ${topbar.main.border} z-50 w-full flex justify-center items-center gap-3 absolute px-4 h-13 py-1 border-b drop-shadow-sm`}>
 
@@ -52,12 +34,6 @@ const TopBar = () => {
         <Menu width={30}/>
       </button>
       
-      {/* <HierarchySelect
-        icon={<EarthIcon/>}
-        options={CountryOptions}
-        value={country}
-        onSelectValue={handleSelectedCoverage}
-      /> */}
 
       {/* Right controls */}
       <div className="flex relative w-full justify-end items-center gap-3 opacity-100">
@@ -77,9 +53,6 @@ const TopBar = () => {
         <Moon className={topbar.contents.togller_color} width={30}/>
 
         {/* Langs */}
-        {/* <LangPopup 
-          langs={["English", "French", "Spanish", "Kyniarwanda"]}
-        /> */}
         
 
       </div>

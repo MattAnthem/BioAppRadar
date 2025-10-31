@@ -77,14 +77,14 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
 
            {/* Timestamp indicator */}
            {currentFrame ? (
-              <>
+              <div className="">
                 <h2 className="lg:text-xl text-gray-50 font-semibold tracking-wide">
                   {currentFrame.split(" ")[0]}
                 </h2>
                 <small className="text-normal text-gray-200 font-semibold tracking-wider">
                   {currentFrame.split(" ")[1]}
                 </small>
-              </>
+              </div>
             ) : (
               <span className="text-gray-400">No time selected</span>
             )}

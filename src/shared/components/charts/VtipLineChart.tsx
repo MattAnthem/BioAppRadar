@@ -15,7 +15,6 @@ interface Props {
       return <div className="text-gray-400 text-center p-4">No data available</div>;
     }
   
-  
     // Trace (vertical profile)
     const trace: Data = {
       type: "scatter",
@@ -37,7 +36,7 @@ interface Props {
         tickangle: -9,
       },
       yaxis: {
-        title: { text: `${data.name} [${data.units}]`, font: {size: 12} },
+        title: { text: `${data.name}`, font: {size: 12} },
         autorange: "min",
         rangemode: 'nonnegative'
       },

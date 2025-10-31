@@ -78,9 +78,6 @@ const MapOptions: SelectOption[] =
 
 // statics to be moved to the backend
 
-  
-
-
 const colormapOptions: SelectOption[] = [
   {
     id: 'viridis',
@@ -88,7 +85,7 @@ const colormapOptions: SelectOption[] = [
     colors: ['#440154', '#482878', '#3e4989', '#31688e', '#26828e', '#1f9e89', '#35b779', '#6ece58', '#b5de2b', '#fde725']
   },
   {
-    id: 'Rainbow',
+    id: 'rainbow',
     displayText: 'Rainbow',
     colors: ['#9400D3', '#4B0082', '#0000FF', '#00FF00', '#FFFF00', '#FF7F00', '#FF0000']
   },
@@ -142,7 +139,6 @@ const mapbaseOptions: SelectOption[] = [
   },
 ]
 
-
 interface VarPopupState {
     isVarPopupOpen: boolean;
     isMapBasePopupOpen: boolean;
@@ -180,6 +176,7 @@ const varpopupSlice = createSlice({
     reducers: {
         changeSelectedMapOption: (state, action) => {
           state.subOptions = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
+          state.selectedSubOption = action.payload.availableType[0];
           state.selectedMapOption = action.payload;
         },
         changeSelectedSubOption: (state, action) => {

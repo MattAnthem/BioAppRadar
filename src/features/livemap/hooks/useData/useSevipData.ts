@@ -1,5 +1,5 @@
-import { useAppSelector } from "../../../store/hooks";
-import { useSevipDataQuery } from "./useSevipQuery";
+import { useAppSelector } from "../../../../store/hooks";
+import { useSevipDataQuery } from "../useQuery/useSevipQuery";
 
 export function useSevipData() {
     const payload = useAppSelector((state) => state.livemap.sevipPayload);

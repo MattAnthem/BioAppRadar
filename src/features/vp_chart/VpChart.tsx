@@ -11,17 +11,17 @@ import { changeVpPayload, setSelectedVpParameterOption } from "./vpChartSlice";
 
 
 type VpChartProps = {
-  className?: string
+  className?: string;
+  showControls?: boolean;
 }
 
-const VpChart = ({ className }: VpChartProps) => {
+const VpChart = ({ className, showControls }: VpChartProps) => {
 
   // Redux
   const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vpchart)
   const dispatch = useAppDispatch();
 
   const { isLoading, data, error, refetch } = useVpData();
-  // console.log(data)
 
 
   const handleDateChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,30 +54,34 @@ const VpChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="flex rounded-t-sm justify-between border-white/20 bg-gray-900/55 shadow-md ring-2 ring-black/5 p-1 w-full">
-            <h3 className='text-white tracking-wider'>VP (<small>{selectedParameter.displayText}</small>)</h3>
+            <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
 
             {/* controls */}
-            <ChartParamsPopup>
-              <div className="w-full mb-2">
-                <small>Select Time</small>
-                <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
-              </div>
+            {
+              showControls && (
+                <ChartParamsPopup>
+                  <div className="w-full mb-2">
+                    <small>Select Time</small>
+                    <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
+                  </div>
 
-              <div className="w-full">
-                <small>Select Variable</small>
-                <SimpleSelect
-                  options={parameterOptions}
-                  value={selectedParameter.displayText}
-                  onSelectValue={handleVariableChange}
-                  width="w-full"
-                />
-              </div>
-            </ChartParamsPopup>
+                  <div className="w-full">
+                    <small>Select Variable</small>
+                    <SimpleSelect
+                      options={parameterOptions}
+                      value={selectedParameter.displayText}
+                      onSelectValue={handleVariableChange}
+                      width="w-full"
+                    />
+                  </div>
+                </ChartParamsPopup>
+              )
+            }
             
         </div>           
 
         {/* Chart */}
-        <div className=" w-full h-full items-center justify-center ">
+        <div className="flex-1 w-full h-full items-center justify-center ">
         {data && (
 
             <VerticalProfileChart

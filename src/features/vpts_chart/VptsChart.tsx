@@ -14,9 +14,10 @@ import { changeVptsPayload, setSelectedVptsParameterOption } from "./vptsChartSl
 
 type VptsChartProps = {
   className?: string;
+  showControls?: boolean;
 }
 
-const VptsChart = ({className}: VptsChartProps) => {
+const VptsChart = ({className, showControls}: VptsChartProps) => {
 
   // Redux
   const { parameterOptions, selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
@@ -60,29 +61,33 @@ const VptsChart = ({className}: VptsChartProps) => {
 
         {/* Heading */}
         <GlassHeader className="p-1 w-full">
-            <h3 className='text-white tracking-wider'>VPTS (<small>{selectedParameter.displayText}</small>)</h3>
+            <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
             {/* Controls */}
-            <ChartParamsPopup>
+            {
+              showControls && (
+                <ChartParamsPopup>
 
-              <div className="w-ful">
-                <small>Select variable</small>
-                <SimpleSelect
-                  options={parameterOptions}
-                  value={selectedParameter.displayText}
-                  onSelectValue={handleVariableChange}
-                  width="w-full"
-                />
-              </div>
+                  <div className="w-ful">
+                    <small>Select variable</small>
+                    <SimpleSelect
+                      options={parameterOptions}
+                      value={selectedParameter.displayText}
+                      onSelectValue={handleVariableChange}
+                      width="w-full"
+                    />
+                  </div>
 
-              <div className="w-full mb-2 flex flex-col">
-                <small>Select start Time</small>
-                <input max={vptsPayload.endTime} onChange={handleStartTimeChange} value={vptsPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
-                <small>Select end Time</small>
-                <input min={vptsPayload.startTime} onChange={handleEndTimeChange} value={vptsPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
-              </div>
+                  <div className="w-full mb-2 flex flex-col">
+                    <small>Select start Time</small>
+                    <input max={vptsPayload.endTime} onChange={handleStartTimeChange} value={vptsPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
+                    <small>Select end Time</small>
+                    <input min={vptsPayload.startTime} onChange={handleEndTimeChange} value={vptsPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
+                  </div>
 
 
-            </ChartParamsPopup>
+                </ChartParamsPopup>
+              )
+            }
         </GlassHeader>           
 
         {/* Chart */}

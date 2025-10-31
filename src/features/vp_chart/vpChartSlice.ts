@@ -7,23 +7,23 @@ export const parameterOptions: SelectOption[] = [
 
     {
         id: 'eta',
-        displayText: 'reflectivity eta '
+        displayText: 'Reflectivity eta '
     },
     {
         id: 'dbz',
-        displayText: 'reflectivity factor '
+        displayText: 'Reflectivity factor '
     },
     {
         id: 'w',
-        displayText: 'vertical speed '
+        displayText: 'Vertical speed '
     },
     {
         id: 'n_dbz',
-        displayText: 'number of range gates in density estimates '
+        displayText: 'Number of range gates in density estimates '
     },
     {
         id: 'n_dbz_all',
-        displayText: 'number of range gates in DBZH estimates '
+        displayText: 'Number of range gates in DBZH estimates '
     },
     {
         id: 'sd_vvp',

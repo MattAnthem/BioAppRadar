@@ -26,8 +26,6 @@ export default function WindowResize(){
 
             dispatch(setWindowSize(size));
 
-            console.log("Debug: __useWindowResizeHook__ window size : ", size);
-
         }, 300);
         handleResize();
 

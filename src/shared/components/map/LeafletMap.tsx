@@ -11,7 +11,6 @@ type MapProps = {
   className?: string;
   boxZoom?: boolean;
   scrollWheelZoom?: boolean;
-  onReady?: (map: L.Map) => void;
   onDrawPolygon?: (geojson: GeoJSON.Feature) => void;
   onDrawLine?: (start: L.LatLng, end: L.LatLng) => void;
   overlayImg?: {
@@ -22,11 +21,6 @@ type MapProps = {
   };
   overlayShapes?: GeoJSON.Feature[]; 
   onShapeClicked?: (geosjon: GeoJSON.Feature) => void;
-  markers?: Array<{
-    iconUrl: string;
-    position: [number, number];
-    popup?: string;
-  }>;
   drawable: boolean;
   enableLineDraw: boolean
 };
@@ -52,9 +46,7 @@ const LeafletMap = ({
   className = "w-full h-full",
   boxZoom = false,
   scrollWheelZoom = false,
-  onReady,
   overlayImg,
-  markers = [],
   drawable,
   onDrawPolygon,
   onDrawLine,
@@ -93,8 +85,7 @@ const LeafletMap = ({
     // Allow line drawing
     if (enableLineDraw) enableDrawLine(map, onDrawLine);
 
-    // Callback
-    if (onReady) onReady(map);
+
 
     return () => {
       // cleanup overlays
@@ -142,12 +133,6 @@ const LeafletMap = ({
   }, [onShapeClicked, overlayShapes]);
 
 
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.setView(center, zoom);
-    }
-  }, [center, zoom]);
-
   // Add/update overlays when props.overlays changes
   useEffect(() => { 
     const map = mapRef.current; 
@@ -162,31 +147,6 @@ const LeafletMap = ({
  
   }, [overlayImg]);
   
-
-  // Add/update markers when props.markers changes
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    // Remove old markers
-    markerRefs.current.forEach((m) => map.removeLayer(m));
-    markerRefs.current = [];
-
-    // Add new markers
-    markers.forEach((m) => {
-      const marker = L.marker(
-        m.position,
-        {        
-          icon: L.icon({
-            iconUrl: m.iconUrl,
-            iconSize: [20, 20],
-          })
-        }
-      ).addTo(map);
-      if (m.popup) marker.bindPopup(m.popup);
-      markerRefs.current.push(marker);
-    });
-  }, [markers]);
 
   return <div ref={containerRef} className={className} />;
 };

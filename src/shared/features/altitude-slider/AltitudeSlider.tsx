@@ -34,12 +34,12 @@ const AltitudeSlider = (
 ) => {
 
     const position_classes: Record<Position, string> = {
-        right: "right-2 lg:bottom-[18%] bottom-[25%]",
+        right: "right-2 lg:bottom-[20%] bottom-[25%]",
         left: "left-2 lg:bottom-[13%] bottom-[25%]"
     }
 
   return (
-    <div className={`${position_classes[position]} ${className} absolute z-10 isolate border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[35vh]  rounded-sm p-2 flex justify-start items-center`}>
+    <div className={`${position_classes[position]} ${className} absolute z-10 isolate border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[40vh]  rounded-sm p-2 flex justify-start items-center`}>
       
       {/* Legend Title */}
       <div className="w-full h-full flex justify-center items-center relative">
@@ -47,7 +47,7 @@ const AltitudeSlider = (
       </div>
 
       {/* Altitude band */}
-      <div className="h-fit py-2 w-50 flex flex-col justify-center items-center ">
+      <div className="h-fit py-2 w-50 flex flex-col justify-center items-center">
 
         {/* Max altitude */}
         <small>{formatBigNumber(altitudes[0])}</small>
@@ -59,20 +59,20 @@ const AltitudeSlider = (
               text={formatBigNumber(alt)}
               display_condition={true}
             >
-            <div  className="w-full  flex items-start justify-center">
-                <button
-                  onClick={() => onChangeAltitude(i)}
-                  className={`${
-                    i === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
-                  } w-4  h-[4.5px] relative cursor-pointer hover:bg-blue-800`}
-                >
-                  {
-                    (i === currentIndex) && (
-                      <ArrowLeft width={20} height={20} className='absolute text-red-500 bottom-[0.1px] left-full'/>
-                    )
-                  }
-                </button>
-            </div>
+              <div  className="w-full h-full flex items-start justify-center">
+                  <button
+                    onClick={() => onChangeAltitude(i)}
+                    className={`${
+                      i === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
+                    } w-4 h-1 relative cursor-pointer  hover:bg-blue-800`}
+                  >
+                    {
+                      (i === currentIndex) && (
+                        <ArrowLeft width={20} height={20} className='absolute text-red-500 bottom-[0.1px] left-full'/>
+                      )
+                    }
+                  </button>
+              </div>
             </Tooltip>
         ))}
 

@@ -8,8 +8,6 @@ export interface SpatialDataPayload {
     time: string;
 }
 
-
-
 export interface CrossSectionPayload {
     type: string;
     map: string;

@@ -5,7 +5,7 @@ import districtCov from '../../shared/geojsons/administrative/rwanda_district.js
 import provinceCov from '../../shared/geojsons/administrative/rwanda_province.json';
 import sectorCov from '../../shared/geojsons/administrative/rwanda_sector.json';
 import villageCov from '../../shared/geojsons/administrative/rwanda_village.json';
-import type { CrossSectionPayload, SevipPayload, SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
+import type { CrossSectionPayload, SevipPayload, SevipResponse, SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
 
 const coverageOptions: SelectOption[] = [
@@ -66,6 +66,7 @@ interface LivemapState {
     crossSectionPayload: CrossSectionPayload;
     mapTimeRange: string[],
     selectedMapTime: string;
+    sevipData: SevipResponse | null
 }
 
 
@@ -74,7 +75,7 @@ const initialState: LivemapState = {
     selectedCoverage: coverageOptions[0],
     sevipPayload: {
         parameter: 'vid',
-        colorbar: 'rainbow',
+        colorbar: 'viridis',
         time: '2020-11-10 12:40:00',
     },
     spatialPayload: {
@@ -84,6 +85,7 @@ const initialState: LivemapState = {
         time: "2025-10-23 16:34:00",
     },
     spatialData: null,
+    sevipData: null,
     crossSectionPayload: {
         startLat: 0,
         startLon: 0,
@@ -93,6 +95,7 @@ const initialState: LivemapState = {
         time: '',
         type: 'map'
     },
+
     mapTimeRange: avalaibleTimes,
     selectedMapTime: avalaibleTimes[0]   
 }
@@ -122,10 +125,10 @@ const livemapSlice = createSlice({
         },
 
         setSelectedTime: (state, action) => {
+            state.sevipPayload.time = action.payload;
             state.selectedMapTime = action.payload;
         }
         
-
     }
 })
 

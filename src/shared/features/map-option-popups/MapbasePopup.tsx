@@ -8,7 +8,7 @@ import { Map } from "lucide-react";
 import SimpleSelect from "../../components/selects/SimpleSelect";
 import type { SelectOption } from "../../components/selects/types";
 import Colorbar from "../../components/colorbar/Colorbar";
-import { changeCoverage } from "../../../features/livemap/livemapSlice";
+import { changeCoverage, setSevipPayload } from "../../../features/livemap/livemapSlice";
 
 
 
@@ -41,6 +41,7 @@ const MapbasePopup = () => {
   
   const handleChangeColormap = (option: SelectOption) => {
     dispatch(changeColormap(option));
+    dispatch(setSevipPayload({colorbar: option.id as string}))
   }
 
   // theme

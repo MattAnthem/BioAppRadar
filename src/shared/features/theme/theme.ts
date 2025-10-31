@@ -1,9 +1,5 @@
 import type { ThemeElements } from "./types"
 
-// bg-gradient-to-t from-blue-100 to-teal-50
-// bg-gradient-to-b from-indigo-50 to-sky-50
-// bg-gradient-to-b from-gray-50 to-gray-100
-// bg-gradient-to-tl from-blue-50 to-sky-200
 
 export const light: ThemeElements = {
     chartFontColor: '#424242',
@@ -103,8 +99,6 @@ export const light: ThemeElements = {
 }
 
 
-// bg-gradient-to-tl from-blue-900 to-sky-800
-// bg-gradient-to-tl from-gray-800 to-slate-900
 
 export const dark: ThemeElements = {
     chartFontColor: '#adadad',

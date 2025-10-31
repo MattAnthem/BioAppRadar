@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import activeRadar from '../../assets/radar_on.png';
-import { spatialData } from './livemapAPI';
 import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import AltitudeSlider from '../../shared/features/altitude-slider/AltitudeSlider';
@@ -13,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import type { SelectOption } from '../../shared/components/selects/types';
 import { setCrossSectionPayload, setSelectedTime, setSpatialPayload } from './livemapSlice';
 import { changeAltitude } from '../../shared/features/altitude-slider/altitudeSlice';
-import { useSevipData } from './hooks/useSevipData';
+import { useSevipData } from './hooks/useData/useSevipData';
 import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
 
@@ -46,14 +43,6 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
     };
 
     //#region  Transect payload
-    // Todo tanstack Payload to fecth transect
-    const handlePolygonCreated = (geojson: GeoJSON.Feature) => {
-        console.log('SELECTED TRANSECT LINE', geojson)
-    }
-
-    const handlePolygonClick = (geojson: GeoJSON.Feature) => {
-        console.log('SELECTED POLYGON AREA', geojson)
-    }
 
     const handleLineCreated = (start: L.LatLng, end: L.LatLng) => {
         console.log('start :', start, 'end:', end)
@@ -71,8 +60,6 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
  
     const  { error, isLoading, data, refetch } = useSevipData();
 
-
-
     // handle parameters changes
     const handleSelectedVars = (option: SelectOption) => {
         dispatch(setSpatialPayload({type: selectedMapOption.id as string, map: option.id as string}));
@@ -82,8 +69,7 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
         dispatch(setSpatialPayload({height: altitudeOptions[altitudeIndex]}));
         dispatch(changeAltitude(altitudeIndex))
     }
-
-    
+   
     //#endregion
 
 
@@ -99,14 +85,13 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
         </div>
     )
 
-
   return (
     <SectionCard className='relative w-full h-full p-1 col-span-6'>
 
         {/* Heading */}
         <GlassHeader className='p-1 flex justify-between items-center'>
         
-            <h3 className='text-white tracking-wider'>Live Map</h3>
+            <h3 className='text-white tracking-wider text-sm'>Live Map</h3>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-3 justify-center items-end">
@@ -121,18 +106,22 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
         </GlassHeader>
 
         {/* Altitude slider */}
-        <AltitudeSlider
-            currentIndex={currentAltitudeIndex}
-            onChangeAltitude={handleAltitudeChange}
-            position='right'
-            altitudes={altitudeOptions}
-        />
+        {
+            (selectedMapOption.id !== "vertical") && (
+                <AltitudeSlider
+                    currentIndex={currentAltitudeIndex}
+                    onChangeAltitude={handleAltitudeChange}
+                    position='right'
+                    altitudes={altitudeOptions}
+                />
+            )
+        }
 
 
         {/* Colorbar */}
         <Colorbar
             colorCodes={data?.ckeys.colors ?? []}
-            valueScale={data?.ckeys.labels ?? []}
+            valueScale={data?.ckeys.labels.map(Number)  ?? []}
             className='absolute bottom-0 left-0 z-10'
         />
 
@@ -150,33 +139,20 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
 
         {/* Map Leaflet */}
         <LeafletMap
+            className='relative z-4 w-full h-full rounded-sm'            
             baseMap={selectedMapBase.url as string}
             drawable={drawable}
             enableLineDraw={enableLineDraw}
             onDrawLine={handleLineCreated}
-            onDrawPolygon={handlePolygonCreated}
             center={[-2.158, 30.1131097]}
             zoom={8}
-            className='relative z-4 w-full h-full rounded-sm'
-            markers={
-                [                
-                    {
-                        position: [-2.158, 30.1131097],
-                        popup: 'Radar 001',
-                        iconUrl: activeRadar
-                    },
-                ]
-            }
-            
             overlayImg={
                 {
                     url: data?.data.png ?? '',
                     bounds: data?.data.bounds as L.LatLngBoundsExpression
                 }
             }
-
             overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
-            onShapeClicked={handlePolygonClick}
         />
     
     </SectionCard>

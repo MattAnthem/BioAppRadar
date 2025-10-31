@@ -1,4 +1,4 @@
-import { Settings2, Variable } from "lucide-react";
+import { Settings2 } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme"
 import Tooltip from "../../components/popups/tooltip/Tooltip";
 import { useRef } from "react";
@@ -90,7 +90,7 @@ const VaribalePopup = ({ onChangeMapVariable }: VariablePopupProps) => {
               width="w-85"
               options={subOptions}
               onSelectValue={handleSelectedMap}
-              value={selectedSubOption?.displayText}
+              value={selectedSubOption.displayText}
             />
           </div>
 
