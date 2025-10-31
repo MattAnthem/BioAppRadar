@@ -59,6 +59,7 @@ export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
 
 export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => {
     const {data} = await axiosClient.post('/get_vpts', payload);
+    console.log(data)
     return data;
 }
 

@@ -5,7 +5,7 @@ import districtCov from '../../shared/geojsons/administrative/rwanda_district.js
 import provinceCov from '../../shared/geojsons/administrative/rwanda_province.json';
 import sectorCov from '../../shared/geojsons/administrative/rwanda_sector.json';
 import villageCov from '../../shared/geojsons/administrative/rwanda_village.json';
-import type { SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
+import type { CrossSectionPayload, SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
 
 const coverageOptions: SelectOption[] = [
@@ -47,7 +47,7 @@ interface LivemapState {
     selectedCoverage: SelectOption;
     spatialPayload: SpatialDataPayload;
     spatialData: SpatialDataResponse | null;
-
+    crossSectionPayload: CrossSectionPayload;
 }
 
 
@@ -60,7 +60,16 @@ const initialState: LivemapState = {
         height: 200,
         time: "2025-10-23 16:34:00",
     },
-    spatialData: null
+    spatialData: null,
+    crossSectionPayload: {
+        startLat: 0,
+        startLon: 0,
+        endLat: 0,
+        endLon: 0,
+        map: 'zdr',
+        time: '',
+        type: 'map'
+    },
 }
 
 const livemapSlice = createSlice({
@@ -78,10 +87,15 @@ const livemapSlice = createSlice({
             if (selected) {
                 state.selectedCoverage = selected;
             }
+        },
+
+        setCrossSectionPayload: (state, action: PayloadAction<Partial<CrossSectionPayload>>) => {
+            state.crossSectionPayload = { ...state.crossSectionPayload, ...action.payload }
         }
+
     }
 })
 
-export const { changeCoverage, setSpatialPayload, setRadarData } = livemapSlice.actions;
+export const { changeCoverage, setSpatialPayload, setRadarData, setCrossSectionPayload } = livemapSlice.actions;
 export default livemapSlice.reducer;
 

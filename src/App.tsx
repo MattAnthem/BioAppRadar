@@ -12,15 +12,13 @@ import CrossSection from './pages/CrossSection';
 
 function App() {
 
-
-
   return (
     <>
       <ScrollToHash/>
       <WindowResize/>
       <AlertFlash/>
+      
       <Routes>
-        
         <Route element={<AppLayout/>}>
           <Route path='/' element={<OverviewDashboard/>} /> 
           <Route path='/overview_dash' element={<OverviewDashboard/>}/>

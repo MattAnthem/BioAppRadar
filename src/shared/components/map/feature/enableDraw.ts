@@ -27,7 +27,7 @@ export function enableDraw (map: L.Map, onPolygonCreated?: (geojson: GeoJSON.Fea
             circle: false,
             polyline: false,
             marker: false,
-            circleMarker: false
+            circleMarker: false,
         },
         edit: {
             featureGroup: drawnItems

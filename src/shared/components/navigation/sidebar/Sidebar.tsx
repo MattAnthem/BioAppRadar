@@ -99,7 +99,7 @@ const Sidebar = () => {
                     isNav_minimized={isMinimized}
                     ariaLabel="Vertical transect NavLink"
                     ariaControls="Vertical transect page"
-                    tooltipText="Vertical transect"
+                    tooltipText="Cross section"
                 />
                 
                 <NavButton 

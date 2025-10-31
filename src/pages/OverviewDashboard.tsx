@@ -9,20 +9,21 @@ const OverviewDashboard = () => {
   return (
     <MainLayout>
 
-        {/* Live map + charts (VP and VPTS) section */}
-        <div id='livemap' className="mb-2 lg:h-[90vh] flex-col w-full ">
+        {/* Live map  */}
+        <div id='livemap' className="lg:h-[90vh] flex-col w-full ">
 
             {/* Live Map */}
-            <div className="lg:h-full h-[60vh] lg:col-span-4">
+            <div className="lg:h-full h-[60vh]">
                 <LiveMap
                   drawable={false}
+                  enableLineDraw={false}
+                  displayTimeline={true}
                 />
             </div>
 
-
-
         </div>
 
+        {/* charts */}
         <div className="xl:grid xl:grid-cols-3 gap-4 ">
           <VtipChart/>
           <VpChart/>

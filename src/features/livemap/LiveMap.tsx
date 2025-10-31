@@ -12,11 +12,13 @@ import MapbasePopup from '../../shared/features/map-option-popups/MapbasePopup';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useSpatialData } from './hooks/useSpatialData';
 import type { SelectOption } from '../../shared/components/selects/types';
-import { setSpatialPayload } from './livemapSlice';
+import { setCrossSectionPayload, setSpatialPayload } from './livemapSlice';
 import { changeAltitude } from '../../shared/features/altitude-slider/altitudeSlice';
 
 type LiveMapProps = {
     drawable: boolean;
+    enableLineDraw: boolean;
+    displayTimeline: boolean;
 }
 
 const valueScale = [
@@ -34,7 +36,7 @@ const valueScale = [
  * @param drawable allow polygon drawing on the map and retrieve a GeoJSON
  * @returns React.JSX.Element
  */
-const LiveMap = ({ drawable }: LiveMapProps) => {
+const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) => {
 
     // Redux
     const { selectedCoverage } = useAppSelector(state => state.livemap);
@@ -57,8 +59,19 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
     const handlePolygonClick = (geojson: GeoJSON.Feature) => {
         console.log('SELECTED POLYGON AREA', geojson)
     }
+
+    const handleLineCreated = (start: L.LatLng, end: L.LatLng) => {
+        console.log('start :', start, 'end:', end)
+        dispatch(setCrossSectionPayload({
+            startLat: start.lat,
+            endLat: end.lat,
+            startLon: start.lng,
+            endLon: end.lng
+        }))
+    }
     //#endregion
 
+    
 
     //#region Api call
  
@@ -86,7 +99,7 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
 
 
   return (
-    <SectionCard className='relative w-full h-full p-1'>
+    <SectionCard className='relative w-full h-full p-1 col-span-6'>
 
         {/* Heading */}
         <GlassHeader className='p-1 flex justify-between items-center'>
@@ -122,18 +135,24 @@ const LiveMap = ({ drawable }: LiveMapProps) => {
             className='absolute bottom-0 left-0 z-10'
         />
 
-        {/* Timeline + timestamp indication  */}
-        <TimelineSlider 
-            frames={spatialData.timestamps}
-            animSpeed={900}
-            currentIndex={currentFrame}
-            onFrameChange={setCurrentFrame}
-        />
+        {/* Timeline   */}
+        {
+            displayTimeline && (
+                <TimelineSlider 
+                    frames={spatialData.timestamps}
+                    animSpeed={900}
+                    currentIndex={currentFrame}
+                    onFrameChange={setCurrentFrame}
+                />
+            )
+        }
 
         {/* Map Leaflet */}
         <LeafletMap
             baseMap={selectedMapBase.url as string}
             drawable={drawable}
+            enableLineDraw={enableLineDraw}
+            onDrawLine={handleLineCreated}
             onDrawPolygon={handlePolygonCreated}
             center={[-2.158, 30.1131097]}
             zoom={8}

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import L from 'leaflet';
 import "leaflet-draw";
 import { enableDraw } from "./feature/enableDraw";
+import { enableDrawLine } from "./feature/enableDrawLine";
 
 type MapProps = {
   baseMap: string;
@@ -12,6 +13,7 @@ type MapProps = {
   scrollWheelZoom?: boolean;
   onReady?: (map: L.Map) => void;
   onDrawPolygon?: (geojson: GeoJSON.Feature) => void;
+  onDrawLine?: (start: L.LatLng, end: L.LatLng) => void;
   overlayImg?: {
     url: string;
     bounds: L.LatLngBoundsExpression;
@@ -26,6 +28,7 @@ type MapProps = {
     popup?: string;
   }>;
   drawable: boolean;
+  enableLineDraw: boolean
 };
 
 
@@ -54,6 +57,8 @@ const LeafletMap = ({
   markers = [],
   drawable,
   onDrawPolygon,
+  onDrawLine,
+  enableLineDraw,
   overlayShapes,
   onShapeClicked
 }: MapProps) => {
@@ -84,6 +89,9 @@ const LeafletMap = ({
 
     // ALlow map draw on interface
     if (drawable) enableDraw(map, onDrawPolygon);
+
+    // Allow line drawing
+    if (enableLineDraw) enableDrawLine(map, onDrawLine);
 
     // Callback
     if (onReady) onReady(map);
