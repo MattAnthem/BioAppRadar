@@ -8,6 +8,8 @@ export interface SpatialDataPayload {
     time: string;
 }
 
+
+
 export interface CrossSectionPayload {
     type: string;
     map: string;
@@ -52,6 +54,26 @@ export interface SpatialDataResponse {
     lat: number[];
 }
 
+
+export interface SevipPayload {
+    parameter: string;
+    time: string;
+    colorbar: string;
+}
+
+export interface SevipResponse {
+    data: {png: string; bounds: [[number, number], [number, number]]};
+    ckeys: {labels: string[]; colors: string[]; png: string};
+    info: {time: string; name: string; units: string;}
+}
+
+export const fetchSevip = async (payload: SevipPayload): Promise<SevipResponse> => {
+    const { data } = await axiosClient.post('/get_sevip', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching data')
+    } 
+    return data.data;
+}
 export const fetchSpatialData = async (payload: SpatialDataPayload): Promise<SpatialDataResponse> => {
     const { data } = await axiosClient.post('/get_spatial_data', payload);
     if (data.status !== 0) {

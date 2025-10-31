@@ -5,7 +5,7 @@ import districtCov from '../../shared/geojsons/administrative/rwanda_district.js
 import provinceCov from '../../shared/geojsons/administrative/rwanda_province.json';
 import sectorCov from '../../shared/geojsons/administrative/rwanda_sector.json';
 import villageCov from '../../shared/geojsons/administrative/rwanda_village.json';
-import type { CrossSectionPayload, SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
+import type { CrossSectionPayload, SevipPayload, SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
 
 const coverageOptions: SelectOption[] = [
@@ -41,19 +41,42 @@ const coverageOptions: SelectOption[] = [
     }
 ]
 
+const avalaibleTimes: string[] = [
+    "2020-11-10 12:00:33",
+    "2020-11-10 12:10:05",
+    "2020-11-10 12:20:10",
+    "2020-11-10 12:30:16",
+    "2020-11-10 12:40:23",
+    "2020-11-10 12:50:30",
+    "2020-11-10 12:05:20",
+    "2020-11-10 12:15:25",
+    "2020-11-10 12:15:26",
+    "2020-11-10 12:35:01",
+    "2020-11-10 12:45:08",
+    "2020-11-10 12:55:14",
+]
+
 
 interface LivemapState {
     coverageOptions: SelectOption[];
     selectedCoverage: SelectOption;
     spatialPayload: SpatialDataPayload;
+    sevipPayload: SevipPayload,
     spatialData: SpatialDataResponse | null;
     crossSectionPayload: CrossSectionPayload;
+    mapTimeRange: string[],
+    selectedMapTime: string;
 }
 
 
 const initialState: LivemapState = {
     coverageOptions: coverageOptions,
     selectedCoverage: coverageOptions[0],
+    sevipPayload: {
+        parameter: 'vid',
+        colorbar: 'rainbow',
+        time: '2020-11-10 12:40:00',
+    },
     spatialPayload: {
         map: 'vid',
         type: 'vertical',
@@ -70,6 +93,8 @@ const initialState: LivemapState = {
         time: '',
         type: 'map'
     },
+    mapTimeRange: avalaibleTimes,
+    selectedMapTime: avalaibleTimes[0]   
 }
 
 const livemapSlice = createSlice({
@@ -78,6 +103,9 @@ const livemapSlice = createSlice({
     reducers: {
         setSpatialPayload: (state, action: PayloadAction<Partial<SpatialDataPayload>>) => {
             state.spatialPayload = { ...state.spatialPayload, ...action.payload }
+        },
+        setSevipPayload: (state, action: PayloadAction<Partial<SevipPayload>>) => {
+            state.sevipPayload = {...state.sevipPayload, ...action.payload}
         },
         setRadarData(state, action: PayloadAction<SpatialDataResponse | null>) {
             state.spatialData = action.payload;
@@ -91,11 +119,16 @@ const livemapSlice = createSlice({
 
         setCrossSectionPayload: (state, action: PayloadAction<Partial<CrossSectionPayload>>) => {
             state.crossSectionPayload = { ...state.crossSectionPayload, ...action.payload }
+        },
+
+        setSelectedTime: (state, action) => {
+            state.selectedMapTime = action.payload;
         }
+        
 
     }
 })
 
-export const { changeCoverage, setSpatialPayload, setRadarData, setCrossSectionPayload } = livemapSlice.actions;
+export const { changeCoverage, setSpatialPayload, setRadarData, setCrossSectionPayload, setSevipPayload, setSelectedTime } = livemapSlice.actions;
 export default livemapSlice.reducer;
 

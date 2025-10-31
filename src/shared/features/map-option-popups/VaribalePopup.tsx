@@ -1,4 +1,4 @@
-import { Variable } from "lucide-react";
+import { Settings2, Variable } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme"
 import Tooltip from "../../components/popups/tooltip/Tooltip";
 import { useRef } from "react";
@@ -55,7 +55,7 @@ const VaribalePopup = ({ onChangeMapVariable }: VariablePopupProps) => {
       >
         
         <button onClick={() => dispatch(toggleShowVarPopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Variable/>
+            <Settings2/>
         </button>
 
       </Tooltip>

@@ -54,7 +54,6 @@ export interface VptsResponse {
 
 export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
     const {data} = await axiosClient.post('/get_vp', payload);
-    console.log("DATA VP",data);
     if (data.status !== 0) {
         throw new Error('Error fetching data')
     } 
@@ -63,7 +62,6 @@ export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
 
 export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => {
     const {data} = await axiosClient.post('/get_vpts', payload);
-    console.log("DATA VPTS",data);
     if (data.status !== 0) {
         throw new Error('Error fetching data')
     } 
@@ -72,7 +70,6 @@ export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => 
 
 export const fetchVTIP = async (payload: VtipPayload): Promise<VtipResponse> => {
     const {data} = await axiosClient.post('/get_vtip', payload);
-    console.log("DATA VTIP",data);
     if (data.status !== 0) {
         throw new Error('Error fetching data')
     } 

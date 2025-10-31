@@ -22,7 +22,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
   const [isPlaying, setIsPlaying] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const currentFrame = frames[currentIndex];
+  const currentFrame = frames[currentIndex] ?? frames[0] ?? null;
 
   // Gestion de l’animation
   useEffect(() => {
@@ -76,12 +76,19 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
         <div className="flex pb-6 w-full justify-start items-center 2xl:gap-2 gap-1 mt-2 isolate border-white/20 bg-gray-900/45 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
 
            {/* Timestamp indicator */}
-          <div className="border-r-2 pr-2 border-r-gray-300">
-            <h2 className="lg:text-xl text-gray-50 font-semibold tracking-wide">
-              {currentFrame.split(" ")[0]}
-            </h2>
-            <small className="text-normal text-gray-200 font-semibold tracking-wider">{currentFrame.split(" ")[1]}</small>
-          </div>
+           {currentFrame ? (
+              <>
+                <h2 className="lg:text-xl text-gray-50 font-semibold tracking-wide">
+                  {currentFrame.split(" ")[0]}
+                </h2>
+                <small className="text-normal text-gray-200 font-semibold tracking-wider">
+                  {currentFrame.split(" ")[1]}
+                </small>
+              </>
+            ) : (
+              <span className="text-gray-400">No time selected</span>
+            )}
+
 
           {/* Play/Pause */}
           <button

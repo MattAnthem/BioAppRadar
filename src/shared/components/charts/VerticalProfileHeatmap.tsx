@@ -25,8 +25,6 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
     x: data.times,      
     y: data.height,     
     colorscale: "Cividis",
-    // colorbar: { title: `${data.name} [${data.units}]` },
-    // zsmooth: "fast", 
   };
 
   const layout: Partial<Layout> = {

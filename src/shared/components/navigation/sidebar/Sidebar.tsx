@@ -146,12 +146,7 @@ const Sidebar = () => {
         />
 
         {/* User menu */}
-        <NavAccountBtn
-            avatarUrl={avatar}
-            isNavMinimized={isMinimized}
-            title="Jhon Doe"
-            subtitle="jhondoe@gmail.com"
-        />
+
 
 
     </div>

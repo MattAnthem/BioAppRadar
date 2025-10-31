@@ -10,10 +10,12 @@ import LeafletMap from '../../shared/components/map/LeafletMap';
 import VaribalePopup from '../../shared/features/map-option-popups/VaribalePopup';
 import MapbasePopup from '../../shared/features/map-option-popups/MapbasePopup';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { useSpatialData } from './hooks/useSpatialData';
 import type { SelectOption } from '../../shared/components/selects/types';
-import { setCrossSectionPayload, setSpatialPayload } from './livemapSlice';
+import { setCrossSectionPayload, setSelectedTime, setSpatialPayload } from './livemapSlice';
 import { changeAltitude } from '../../shared/features/altitude-slider/altitudeSlice';
+import { useSevipData } from './hooks/useSevipData';
+import DataLoading from '../../shared/components/loader/DataLoading';
+import FetchError from '../../shared/components/loader/FetchError';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -21,15 +23,6 @@ type LiveMapProps = {
     displayTimeline: boolean;
 }
 
-const valueScale = [
-    0,
-    10,
-    20,
-    30,
-    40,
-    50,
-    60
-]
 
 /**
  * Interactive Live Map Feature 
@@ -39,16 +32,18 @@ const valueScale = [
 const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) => {
 
     // Redux
-    const { selectedCoverage } = useAppSelector(state => state.livemap);
-    const { selectedMapBase, selectedColormap, selectedMapOption } = useAppSelector(state => state.mappopups);
+    const { selectedCoverage, mapTimeRange, selectedMapTime } = useAppSelector(state => state.livemap);
+    const { selectedMapBase, selectedMapOption } = useAppSelector(state => state.mappopups);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch();
+    const currentIndex = Math.max(0, mapTimeRange.indexOf(selectedMapTime));
 
 
-    const [currentFrame, setCurrentFrame] = useState(0);
-
-
-
+    const handleFrameChange = (newIndex: number) => {
+        const newTime = mapTimeRange[newIndex];
+        dispatch(setSelectedTime(newTime));
+        refetch();
+    };
 
     //#region  Transect payload
     // Todo tanstack Payload to fecth transect
@@ -71,11 +66,10 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
     }
     //#endregion
 
-    
 
     //#region Api call
  
-    // const  { error, isLoading, data } = useSpatialData();
+    const  { error, isLoading, data, refetch } = useSevipData();
 
 
 
@@ -93,9 +87,17 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
     //#endregion
 
 
-    // if (isLoading) return <DataLoading/>
+    if (isLoading) return (
+        <div className="relative w-full h-full p-1 col-span-6">
+            <DataLoading/>
+        </div>
+    )
 
-    // if (error) return <FetchError/>
+    if (error) return (
+        <div className="relative w-full h-full p-1 col-span-6">
+            <FetchError/>
+        </div>
+    )
 
 
   return (
@@ -109,11 +111,10 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
             {/* Overlay controller */}
             <div className="z-5 flex gap-3 justify-center items-end">
 
+                <MapbasePopup/>
                 {/* Changer de variable */}
                 <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
-
-                
-                <MapbasePopup/>
+            
 
             </div>
 
@@ -130,8 +131,8 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
 
         {/* Colorbar */}
         <Colorbar
-            colorCodes={selectedColormap.colors as string[]}
-            valueScale={valueScale}
+            colorCodes={data?.ckeys.colors ?? []}
+            valueScale={data?.ckeys.labels ?? []}
             className='absolute bottom-0 left-0 z-10'
         />
 
@@ -139,10 +140,10 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
         {
             displayTimeline && (
                 <TimelineSlider 
-                    frames={spatialData.timestamps}
+                    frames={mapTimeRange}
                     animSpeed={900}
-                    currentIndex={currentFrame}
-                    onFrameChange={setCurrentFrame}
+                    currentIndex={currentIndex}
+                    onFrameChange={handleFrameChange}
                 />
             )
         }
@@ -167,12 +168,12 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
                 ]
             }
             
-            // overlayImg={
-            //     {
-            //         url: spatialData.reflectivities[currentFrame],
-            //         bounds: bounds as L.LatLngBoundsExpression
-            //     }
-            // }
+            overlayImg={
+                {
+                    url: data?.data.png ?? '',
+                    bounds: data?.data.bounds as L.LatLngBoundsExpression
+                }
+            }
 
             overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
             onShapeClicked={handlePolygonClick}
