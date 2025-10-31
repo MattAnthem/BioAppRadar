@@ -54,17 +54,25 @@ export interface VptsResponse {
 
 export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
     const {data} = await axiosClient.post('/get_vp', payload);
-    return data;
+    if (data.status !== 0) {
+        throw new Error('Error fetching data')
+    } 
+    return data.data;
 }
 
 export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => {
     const {data} = await axiosClient.post('/get_vpts', payload);
-    console.log(data)
-    return data;
+    if (data.status !== 0) {
+        throw new Error('Error fetching data')
+    } 
+    return data.data;
 }
 
 export const fetchVTIP = async (payload: VtipPayload): Promise<VtipResponse> => {
     const {data} = await axiosClient.post('/get_vpi', payload);
-    return data;
+    if (data.status !== 0) {
+        throw new Error('Error fetching data')
+    } 
+    return data.data;
 }
 

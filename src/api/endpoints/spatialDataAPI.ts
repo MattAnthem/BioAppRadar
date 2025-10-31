@@ -54,10 +54,16 @@ export interface SpatialDataResponse {
 
 export const fetchSpatialData = async (payload: SpatialDataPayload): Promise<SpatialDataResponse> => {
     const { data } = await axiosClient.post('/get_spatial_data', payload);
-    return data;
+    if (data.status !== 0) {
+        throw new Error('Error fetching data')
+    } 
+    return data.data;
 }
 
 export const fetchCrossSectionData = async (payload: CrossSectionPayload): Promise<CrossSectionResponse> => {
     const { data } = await axiosClient.post('/get_cross_section', payload);
-    return data;
+    if (data.status !== 0) {
+        throw new Error('Error fetching data')
+    } 
+    return data.data;
 }

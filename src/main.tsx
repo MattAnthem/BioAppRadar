@@ -30,8 +30,8 @@ loadConfig().then((config) => {
     );
   })
   .catch((err) => {
-    console.error('Erreur config.json :', err);
-    document.body.innerHTML = `<p style="color:red;text-align:center;margin-top:2rem;">Erreur de configuration<br>${err.message}</p>`;
+    console.error('config.json Error:', err);
+    document.body.innerHTML = `<p style="color:red;text-align:center;margin-top:2rem;">Configuration Error<br>${err.message}</p>`;
 });
 
 
