@@ -10,10 +10,10 @@ const OverviewDashboard = () => {
     <MainLayout>
 
         {/* Live map  */}
-        <div id='livemap' className="lg:h-[90vh] flex-col w-full ">
+        <div id='livemap' className="xl:grid lg:h-full flex-col w-full grid-cols-1 xl:grid-cols-6 gap-4">
 
             {/* Live Map */}
-            <div className="lg:h-full h-[60vh]">
+            <div className="lg:h-full h-[60vh] lg:col-span-4">
                 <LiveMap
                   drawable={false}
                   enableLineDraw={false}
@@ -21,13 +21,15 @@ const OverviewDashboard = () => {
                 />
             </div>
 
-        </div>
+            <div className="w-full h-full lg:col-span-2 col-span-4 grid lg:grid-rows-3 gap-2">
 
-        {/* charts */}
-        <div className="xl:grid xl:grid-cols-3 gap-4 ">
-          <VtipChart/>
-          <VpChart/>
-          <VptsChart/>
+                <VtipChart className="row-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+                <VpChart className="row-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+                <VptsChart className="row-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+
+            </div>
+  
+
         </div>
 
 

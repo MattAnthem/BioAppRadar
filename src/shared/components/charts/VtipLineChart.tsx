@@ -37,7 +37,7 @@ interface Props {
         tickangle: -9,
       },
       yaxis: {
-        title: { text: `${data.name} [${data.units}]` },
+        title: { text: `${data.name} [${data.units}]`, font: {size: 12} },
         autorange: "min",
         rangemode: 'nonnegative'
       },
@@ -53,9 +53,10 @@ interface Props {
         <Plot
           className="w-full h-full"
           data={[trace]}
-          layout={{...layout, autosize: true,}}
+          layout={{...layout, autosize: true, height: undefined}}
           config={{ responsive: true, displayModeBar: false }}
           style={{ width: "100%", height: "100%" }}
+          useResizeHandler
         />
       </div>
     );

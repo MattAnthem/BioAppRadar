@@ -14,7 +14,7 @@ type LayoutProps = {
  */
 const MainLayout = ({ className, children }: LayoutProps) => {
   return (
-    <div className={`${className} w-full h-screen 2xl:px-30 xl:px-10 px-4 py-20 overflow-y-scroll overflow-x-hidden`}>
+    <div className={`${className} w-full h-screen 2xl:px-15 xl:px-10 px-4 py-15 pb-20 overflow-y-scroll overflow-x-hidden`}>
       {children}
     </div>
   )

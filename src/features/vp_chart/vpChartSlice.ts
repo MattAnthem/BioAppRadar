@@ -4,10 +4,7 @@ import type { SelectOption } from "../../shared/components/selects/types";
 
 // Statics
 export const parameterOptions: SelectOption[] = [
-    {
-        id: 'dBZ',
-        displayText: 'reflectivity factor'
-    },
+
     {
         id: 'eta',
         displayText: 'reflectivity eta '
@@ -46,7 +43,7 @@ const initialState: VpCharState = {
     selectedParameter: parameterOptions[0],
     vpPayload: {
         parameter: parameterOptions[0].id as string,
-        time: '2020-11-12 05:55:14'
+        time: '2020-11-10 12:01:00'
     },
     vpData: null,
 }

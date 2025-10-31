@@ -56,7 +56,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                 aria-controls={ariaControls}
                 onKeyDown={handleKeyDown}
                 onClick={() => setIsOpen(!isOpen)}  
-                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border-1 p-2 flex justify-between items-center gap-2 cursor-pointer`}
+                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border p-2 flex justify-between items-center gap-2 cursor-pointer`}
             >
 
                 <span className={`${text} flex gap-3`}>
@@ -70,7 +70,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
 
             </button>
             {isOpen && (
-                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} custom_select border shadow-lg z-15 absolute max-h-[200px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-2`}>
+                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} custom_select border shadow-lg z-50 absolute max-h-[200px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-2`} style={{zIndex: 100}}>
                     <div className='w-full'>
                         {
                             options?.map((option, i) => (

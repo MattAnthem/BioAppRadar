@@ -12,7 +12,11 @@ import { useVtipData } from "./hooks/useVtipData";
 import { changeVtipPayload, setSelectedVtipParameterOption } from "./vtipChartSlice";
 
 
-const VtipChart = () => {
+type VtipChartProps = {
+  className?: string;
+}
+
+const VtipChart = ({ className }: VtipChartProps) => {
 
   // Redux 
   const { parameterOptions, selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
@@ -41,19 +45,19 @@ const VtipChart = () => {
 
 
   if (isLoading) return (
-    <div className="w-full h-[50vh] p-1">
+    <div className={`${className} p-1`}>
       <DataLoading />
     </div> 
   )
   if (error) return (
-    <div className="w-full h-[50vh] p-1">
+    <div className={`${className} p-1`}>
       <FetchError />
     </div> 
   )
 
 
   return (
-    <SectionCard className='w-full h-[50vh] p-1'>
+    <SectionCard className={`${className} p-1`}>
       
           {/* Heading */}
           <GlassHeader className="p-1 w-full">

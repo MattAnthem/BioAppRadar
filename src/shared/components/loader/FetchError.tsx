@@ -12,7 +12,7 @@ const FetchError = () => {
         <div className="top-0 relative w-full h-full flex items-center justify-center">
           <div className="  
                       rounded-sm 
-                      border-white/20 bg-gray-900/50 shadow-md ring-2 ring-black/5 p-8
+                      border-white/20 bg-gray-900/50 shadow-md ring-2 ring-black/5 p-4
                       backdrop-blur-sm
                       flex flex-col
                       items-center

@@ -12,7 +12,11 @@ import { useVptsData } from "./hooks/useVptsData";
 import { changeVptsPayload, setSelectedVptsParameterOption } from "./vptsChartSlice";
 
 
-const VptsChart = () => {
+type VptsChartProps = {
+  className?: string;
+}
+
+const VptsChart = ({className}: VptsChartProps) => {
 
   // Redux
   const { parameterOptions, selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
@@ -41,18 +45,18 @@ const VptsChart = () => {
   
 
   if (isLoading) return (
-    <div className='w-full h-[50vh] p-1'>
+    <div className={`${className}  p-1`}>
       <DataLoading />
     </div> 
   )
   if (error) return (
-    <div className='w-full h-[50vh] p-1'>
+    <div className={`${className}  p-1`}>
       <FetchError />
     </div> 
   )
 
   return (
-    <SectionCard className='w-full h-[50vh] p-1'>
+    <SectionCard className={`${className} p-1`}>
 
         {/* Heading */}
         <GlassHeader className="p-1 w-full">

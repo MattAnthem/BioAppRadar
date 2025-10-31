@@ -1,7 +1,7 @@
 import { useRef, useState, type ReactNode } from 'react'
 import Tooltip from '../../components/popups/tooltip/Tooltip';
 import { useTheme } from '../../hooks/useTheme';
-import { Variable } from 'lucide-react';
+import { Settings2 } from 'lucide-react';
 import { useClickOutside } from '../../hooks/useClickOutside';
 
 
@@ -33,12 +33,12 @@ const ChartParamsPopup = ({ children }: ChartParamsPopupProps) => {
       >
 
         <button onClick={() => setIsPopupOpen(!isPopupOpen)} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Variable/>
+            <Settings2 width={15} height={15}/>
         </button>
 
         {/* Pop-over menu */}
         <div className={`
-          ${options_bg} ${border}  border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
+          ${options_bg} ${border} z-50 border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
           ${isPopupOpen ? 
               "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
           }
@@ -57,4 +57,4 @@ const ChartParamsPopup = ({ children }: ChartParamsPopupProps) => {
   )
 }
 
-export default ChartParamsPopup
+export default ChartParamsPopup;

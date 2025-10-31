@@ -17,8 +17,6 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
     return <div className="text-gray-400 text-center p-4">No data available</div>;
   }
 
-  console.log("parameter shape:", data.parameter.length, data.parameter[0]?.length);
-  console.log("times:", data.times.length, "heights:", data.height.length);
 
 
   const trace: Data = {
@@ -39,7 +37,8 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
       tickformat: "%Y-%m-%d",
     },
     yaxis: {
-      title: { text: "Altitude [m]" },
+      title: { text: `Altitude (m)`, font: {size: 12} },
+  
       dtick: 800,
       rangemode: 'nonnegative'
     },
@@ -54,9 +53,10 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
       <Plot
         className="w-full h-full"
         data={[trace]}
-        layout={{...layout, autosize: true,}}
+        layout={{...layout, autosize: true, height: undefined}}
         config={{ responsive: true, displayModeBar: false }}
         style={{ width: "100%", height: "100%" }}
+        useResizeHandler
       />
     </div>
   );

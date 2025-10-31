@@ -37,12 +37,13 @@ interface VtipChartState {
     vtipData: VtipResponse | null;
 }
 
+
 const initialState: VtipChartState = {
     parameterOptions: parameterOptions,
     selectedParameter: parameterOptions[0],
     vtipPayload: {
-        startTime: '2020-11-12 03:00:30',
-        endTime: '2020-11-12 04:35:03',
+        startTime: '2020-11-10 12:01:00',
+        endTime: '2020-11-10 12:50:00',
         parameter: parameterOptions[0].id as string
     },
     vtipData: null,

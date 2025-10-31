@@ -1,4 +1,3 @@
-import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import VerticalProfileChart from "../../shared/components/charts/VerticalProfileChart";
 import DataLoading from "../../shared/components/loader/DataLoading";
@@ -11,7 +10,11 @@ import { useVpData } from "./hooks/useVpData";
 import { changeVpPayload, setSelectedVpParameterOption } from "./vpChartSlice";
 
 
-const VpChart = () => {
+type VpChartProps = {
+  className?: string
+}
+
+const VpChart = ({ className }: VpChartProps) => {
 
   // Redux
   const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vpchart)
@@ -36,21 +39,21 @@ const VpChart = () => {
 
 
   if (isLoading) return (
-    <div className="w-full h-[50vh] p-1">
+    <div className={`${className} p-1`}>
       <DataLoading />
     </div> 
   )
   if (error) return (
-    <div className="w-full h-[50vh] p-1">
+    <div className={`${className} p-1`}>
       <FetchError />
     </div> 
   )
 
   return (
-    <SectionCard className='w-full h-[50vh] p-1'>
+    <SectionCard className={`${className} flex flex-col h-[400px] p-1`}>
 
         {/* Heading */}
-        <GlassHeader className="p-1 w-full">
+        <div className="flex rounded-t-sm justify-between border-white/20 bg-gray-900/55 shadow-md ring-2 ring-black/5 p-1 w-full">
             <h3 className='text-white tracking-wider'>VP (<small>{selectedParameter.displayText}</small>)</h3>
 
             {/* controls */}
@@ -71,10 +74,10 @@ const VpChart = () => {
               </div>
             </ChartParamsPopup>
             
-        </GlassHeader>           
+        </div>           
 
         {/* Chart */}
-        <div className="flex  w-full h-full items-center justify-center ">
+        <div className=" w-full h-full items-center justify-center ">
         {data && (
 
             <VerticalProfileChart

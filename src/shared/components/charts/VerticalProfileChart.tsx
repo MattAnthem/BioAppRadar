@@ -40,7 +40,7 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
       autorange: "min",
       rangemode: 'nonnegative'
     },
-    margin: { l: 60, r: 20, t: 45, b: 40 },
+    margin: { l: 60, r: 0, t: 45, b: 60 },
     // height: 3,
     paper_bgcolor: "transparent",
     plot_bgcolor: "transparent",
@@ -48,13 +48,17 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex items-center justify-center">
       <Plot
-        className="w-full h-full"
         data={[trace]}
-        layout={{...layout, autosize: true,}}
+        layout={{
+          ...layout,
+          autosize: true,
+          height: undefined, 
+        }}
         config={{ responsive: true, displayModeBar: false }}
         style={{ width: "100%", height: "100%" }}
+        useResizeHandler
       />
     </div>
   );
