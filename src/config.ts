@@ -2,9 +2,7 @@ import type { AppConfig } from "./types/config";
 
 
 
-let config: AppConfig  = {
-  API_BASE_URL: "http://localhost:8585"
-};
+let config: AppConfig | null  = null
 
 export async function loadConfig(): Promise<AppConfig> {
   const response = await fetch('/config.json');
@@ -12,7 +10,7 @@ export async function loadConfig(): Promise<AppConfig> {
     throw new Error(`Impossible de charger config.json (${response.status})`);
   }
   config = await response.json();
-  return config;
+  return config as AppConfig;
 }
 
 export function getConfig(): AppConfig {
