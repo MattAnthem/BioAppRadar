@@ -3,7 +3,7 @@ import LiveMap from '../features/livemap/LiveMap';
 
 const CrossSection = () => {
   return (
-    <MainLayout className='lg:flex items-center'>
+    <MainLayout className=''>
         
         <div className="xl:grid grid-cols-9 h-[80vh] w-full gap-2">
 
@@ -18,6 +18,8 @@ const CrossSection = () => {
 
 
         </div>
+
+        
 
 
     </MainLayout>

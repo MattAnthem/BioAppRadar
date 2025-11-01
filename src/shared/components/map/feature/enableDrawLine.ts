@@ -52,9 +52,6 @@ export function enableDrawLine(
           const start = latlngs[0];
           const end = latlngs[latlngs.length - 1];
   
-          console.log("Start:", start.lat, start.lng);
-          console.log("End:", end.lat, end.lng);
-  
           if (onLineCreated) onLineCreated(start, end);
         }
       }

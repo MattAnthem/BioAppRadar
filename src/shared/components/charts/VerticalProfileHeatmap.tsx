@@ -1,8 +1,9 @@
 import React from "react";
 import Plot from "react-plotly.js";
-import type { Layout, Data } from "plotly.js";
+import type { Data } from "plotly.js";
 import type { VptsResponse } from "../../../api/endpoints/verticalProfilesAPI";
 import { useTheme } from "../../hooks/useTheme";
+import { setLayout } from "../../layouts/PlotlyLayout";
 
 
 interface Props {
@@ -17,8 +18,6 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
     return <div className="text-gray-400 text-center p-4">No data available</div>;
   }
 
-
-
   const trace: Data = {
     type: "heatmap",
     z: data.parameter,
@@ -27,24 +26,22 @@ const VerticalProfileHeatmap: React.FC<Props> = ({ data }) => {
     colorscale: "Cividis",
   };
 
-  const layout: Partial<Layout> = {
+
+  const layout = setLayout({
     xaxis: {
-      // title: { text: `${data.name} [${data.units}]` },
       type: "date", 
       tickangle: -9,
       tickformat: "%Y-%m-%d",
     },
     yaxis: {
       title: { text: `Altitude (m)`, font: {size: 12} },
-  
       dtick: 800,
       rangemode: 'nonnegative'
     },
-    margin: { l: 60, r: 20, t: 45, b: 40 },
-    paper_bgcolor: "transparent",
-    plot_bgcolor: "transparent",
-    font: { color: textColor },
-  };
+    textColor
+  })
+
+
 
   return (
     <div className="w-full h-full">

@@ -39,7 +39,7 @@ const AltitudeSlider = (
     }
 
   return (
-    <div className={`${position_classes[position]} ${className} absolute z-10 isolate border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[40vh]  rounded-sm p-2 flex justify-start items-center`}>
+    <div className={`${position_classes[position]} ${className} mr- z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[40vh]  rounded-sm p-2 flex justify-start items-center`}>
       
       {/* Legend Title */}
       <div className="w-full h-full flex justify-center items-center relative">

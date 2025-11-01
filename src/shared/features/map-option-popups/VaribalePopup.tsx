@@ -1,7 +1,7 @@
 import { Settings2 } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme"
 import Tooltip from "../../components/popups/tooltip/Tooltip";
-import { useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import SimpleSelect from "../../components/selects/SimpleSelect";
 import type { SelectOption } from "../../components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -15,6 +15,9 @@ type VariablePopupProps = {
 
 
 const VaribalePopup = ({ onChangeMapVariable }: VariablePopupProps) => {
+
+    const popupContentRef = useRef<HTMLDivElement>(null);
+    const [popupPosition, setPopupPosition] = useState<"top" | "bottom">("bottom");
 
     // Redux
     const { isVarPopupOpen } = useAppSelector(state => state.mappopups);
@@ -45,6 +48,22 @@ const VaribalePopup = ({ onChangeMapVariable }: VariablePopupProps) => {
       dispatch(changeSelectedSubOption(option));
     }
 
+    useLayoutEffect(() => {
+      if (!isVarPopupOpen || !popupContentRef.current || !varpopupRef.current) return;
+  
+      const triggerRect = varpopupRef.current.getBoundingClientRect();
+      const popupRect = popupContentRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - triggerRect.bottom;
+      const spaceAbove = triggerRect.top;
+  
+      // si pas assez d’espace en dessous, on le place au-dessus
+      if (spaceBelow < popupRect.height && spaceAbove > popupRect.height) {
+        setPopupPosition("top");
+      } else {
+        setPopupPosition("bottom");
+      }
+    }, [isVarPopupOpen]);
+
   return (
     <div ref={varpopupRef} className="relative">
 
@@ -62,12 +81,15 @@ const VaribalePopup = ({ onChangeMapVariable }: VariablePopupProps) => {
 
       {/* Pop-over menu */}
       
-      <div className={`
-          ${options_bg} ${border}  border shadow-sm flex flex-col gap-2 justify-center  w-90 absolute right-0 top-full p-2 rounded-sm
-          ${isVarPopupOpen ? 
-              "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
-          }
-          transition-all duration-75 ease-out
+      <div         
+          ref={popupContentRef}
+          className={`
+          ${options_bg} ${border} border shadow-sm flex flex-col gap-2 justify-center w-90
+          absolute right-0
+          ${popupPosition === "bottom" ? "top-full mt-2" : "bottom-full mb-2"}
+          p-2 rounded-sm
+          ${isVarPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}
+          transition-all duration-150 ease-out
           origin-top-right
         `}
       >

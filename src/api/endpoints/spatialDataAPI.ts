@@ -1,11 +1,17 @@
 import { axiosClient } from "../axiosClient";
 
-
 export interface SpatialDataPayload {
     type: string;
     map: string;
     height?: number;
     time: string;
+}
+
+export interface RadarPayload {
+    parameter: string;
+    time: string;
+    height: number;
+    colorbar: string;
 }
 
 export interface CrossSectionPayload {
@@ -39,51 +45,39 @@ export interface SpatialDataHistoryPayload {
     endTime?: string;
 }
 
-export interface SpatialDataResponse {
-    height: number;
-    time: string;
-    name: string;
-    units: string;
-    data: string;      
-    bounds: number[];
-    dd: number[][];
-    ff: number[][];
-    lon: number[];
-    lat: number[];
-}
-
-
 export interface SevipPayload {
     parameter: string;
     time: string;
     colorbar: string;
 }
 
-export interface SevipResponse {
+export interface SpatialDataResponse {
     data: {png: string; bounds: [[number, number], [number, number]]};
     ckeys: {labels: string[]; colors: string[]; png: string};
     info: {time: string; name: string; units: string;}
 }
 
-export const fetchSevip = async (payload: SevipPayload): Promise<SevipResponse> => {
+export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialDataResponse> => {
+    const { data } = await axiosClient.post('/get_radar', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching Radar data');
+    }
+    return data;
+}
+
+export const fetchSevip = async (payload: SevipPayload): Promise<SpatialDataResponse> => {
     const { data } = await axiosClient.post('/get_sevip', payload);
     if (data.status !== 0) {
-        throw new Error('Error fetching data')
-    } 
-    return data.data;
-}
-export const fetchSpatialData = async (payload: SpatialDataPayload): Promise<SpatialDataResponse> => {
-    const { data } = await axiosClient.post('/get_spatial_data', payload);
-    if (data.status !== 0) {
-        throw new Error('Error fetching data')
+        throw new Error('Error fetching SEVIP data');
     } 
     return data.data;
 }
 
+
 export const fetchCrossSectionData = async (payload: CrossSectionPayload): Promise<CrossSectionResponse> => {
     const { data } = await axiosClient.post('/get_cross_section', payload);
     if (data.status !== 0) {
-        throw new Error('Error fetching data')
+        throw new Error('Error fetching Cross section data');
     } 
     return data.data;
 }

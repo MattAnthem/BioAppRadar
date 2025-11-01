@@ -1,19 +1,21 @@
+import type { ReactNode } from 'react';
 import loader from '../../../assets/loader.gif';
 import GlassHeader from '../cards/GlassHeader';
 
 
+type Props = {
+  children?: ReactNode;
+}
 
-const DataLoading = () => {
+const DataLoading = ({children}: Props) => {
   return (
-    <div className="relative w-full h-full mt-4 rounded-sm p-1 z-25 bg-gray-500/50 left-0 top-0">
+    <div className="relative w-full h-full rounded-sm p-1 z-25 bg-gray-500/50 left-0 top-0">
 
-        <GlassHeader className='absolute  top-0 py-2 flex justify-between items-center'>
+        <GlassHeader className='absolute w-full top-0 p-1 flex justify-between items-center'>
           <span className='h-6 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-          {/* <div className="flex jutify-between gap-2">
-            <span className='h-11 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-            <span className='h-11 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-            <span className='h-11 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-          </div> */}
+          <div className="flex gap-3">
+            {children}
+          </div>
         </GlassHeader>
 
         <div className="top-0 relative w-full h-full flex items-center justify-center">

@@ -1,8 +1,9 @@
 import React from "react";
 import Plot from "react-plotly.js";
-import type { Data, Layout } from "plotly.js"; // adapte le chemin à ton projet
+import type { Data } from "plotly.js"; // adapte le chemin à ton projet
 import type { VpResponse } from "../../../api/endpoints/verticalProfilesAPI";
 import { useTheme } from "../../hooks/useTheme";
+import { setLayout } from "../../layouts/PlotlyLayout";
 
 interface Props {
   data: VpResponse | null;
@@ -17,7 +18,7 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
   }
 
 
-  // Trace (vertical profile)
+
   const trace: Data = {
     type: "scatter",
     mode: "lines+markers",
@@ -30,26 +31,25 @@ const VerticalProfileChart: React.FC<Props> = ({ data }) => {
   };
 
 
-  const layout: Partial<Layout> = {
+  const layout = setLayout({
     xaxis: {
-      title: { text: `${data.name} [${data.units}]` },
+      title: { text: `${data.name} [${data.units}]`, font: {size: 12} },
       rangemode: 'tozero'
     },
     yaxis: {
-      title: { text: "Altitude [m]" },
+      title: { text: "Altitude [m]", font: { size: 12 } },
       autorange: "min",
       rangemode: 'nonnegative'
     },
-    margin: { l: 60, r: 0, t: 45, b: 60 },
-    // height: 3,
-    paper_bgcolor: "transparent",
-    plot_bgcolor: "transparent",
-    font: { color: textColor },
-  };
+    textColor
+  })
+
+
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-full">
       <Plot
+        className="w-full h-full"
         data={[trace]}
         layout={{
           ...layout,

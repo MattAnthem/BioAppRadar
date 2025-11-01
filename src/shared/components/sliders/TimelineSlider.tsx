@@ -95,18 +95,18 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
             onClick={() => setIsPlaying(!isPlaying)}
             className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-2"
           >
-            {isPlaying ? <Pause /> : <Play />}
+            {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}
           </button>
           {/* Frame jump btns + speed*/}
           <div className="flex items-center justify-center bg-gray-800 rounded-sm">
             {/* Back to one past frame */}
             <Tooltip
               position="top"
-              text="Step back"
+              text="Step backward"
               display_condition={true}
             >
               <button onClick={handleStepBackward} className="p-2 rounded-l-sm hover:bg-gray-700 text-gray-300">
-                <ChevronLeft className=" rounded-sm"/>
+                <ChevronLeft width={20} height={20} className=" rounded-sm"/>
               </button>
 
             </Tooltip>
@@ -118,7 +118,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
               display_condition={true}
             >
               <button onClick={handleStepForward} className="p-2 rounded-r-sm hover:bg-gray-700 text-gray-300">
-                <ChevronRight className=" rounded-sm"/>
+                <ChevronRight width={20} height={20} className=" rounded-sm"/>
               </button>
             </Tooltip>
 
@@ -145,17 +145,17 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
 
           
           {/* Speed */}
-          <div className="flex items-center bg-gray-800 text-gray-300 rounded-sm">
+          <div className="flex opacity-30 hover:opacity-95 items-center bg-gray-800 text-gray-300 rounded-sm">
               <button onClick={handleDecrAnimSpeed} className="rounded-l-sm hover:bg-gray-700 p-2">
-                <Minus/>
+                <Minus width={20} height={20}/>
               </button>
 
-              <span className="tracking-wider p-2 border-x-2 border-gray-600">
+              <span className="tracking-wider text-sm p-2 border-x-2 border-gray-600">
                 {speed}ms
               </span>
 
               <button onClick={handleIncrAnimSpeed} className="rounded-r-sm hover:bg-gray-700 p-2">
-                <Plus/>
+                <Plus width={20} height={20}/>
               </button>
           </div>
 

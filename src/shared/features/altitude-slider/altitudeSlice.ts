@@ -8,7 +8,7 @@ const altitudeOptions: number[] = Array.from({length: 51}, (_, i) => i * 100);
 export const altitudeSlice = createSlice({
     name: 'altitude',
     initialState: {
-        altitudeOptions: altitudeOptions.toReversed(),
+        altitudeOptions: altitudeOptions.slice().reverse(),
         currentAltitudeIndex: altitudeOptions.length - 1    
     },
     reducers: {

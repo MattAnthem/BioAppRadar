@@ -25,6 +25,8 @@
     appearance: none;
 }
 
+.leaflet-control-zoom { margin-top: 60px; }
+
 @layer base {
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
@@ -45,7 +47,4 @@ select {
   appearance: base-select;
 }
 
-.color {
-  background: #adadad;
-}
 

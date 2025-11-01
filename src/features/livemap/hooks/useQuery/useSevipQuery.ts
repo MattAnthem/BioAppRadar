@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchSevip, type SevipPayload, type SevipResponse } from "../../../../api/endpoints/spatialDataAPI";
+import { fetchSevip, type SevipPayload, type SpatialDataResponse } from "../../../../api/endpoints/spatialDataAPI";
 
 export const useSevipDataQuery = (payload: SevipPayload) => {
-    return useQuery<SevipResponse>({
+    return useQuery<SpatialDataResponse>({
         queryKey: ["sevip_data", payload.time, payload.parameter, payload.colorbar],
         queryFn: async () => {
             try{

@@ -6,6 +6,10 @@ import type { SelectOption } from "../../shared/components/selects/types";
 export const parameterOptions: SelectOption[] = [
 
     {
+        id: 'dens',
+        displayText: 'Volume density'
+    },
+    {
         id: 'eta',
         displayText: 'Reflectivity eta '
     },

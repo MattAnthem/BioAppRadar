@@ -5,7 +5,7 @@ import districtCov from '../../shared/geojsons/administrative/rwanda_district.js
 import provinceCov from '../../shared/geojsons/administrative/rwanda_province.json';
 import sectorCov from '../../shared/geojsons/administrative/rwanda_sector.json';
 import villageCov from '../../shared/geojsons/administrative/rwanda_village.json';
-import type { CrossSectionPayload, SevipPayload, SevipResponse, SpatialDataPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
+import type { CrossSectionPayload, SevipPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
 
 const coverageOptions: SelectOption[] = [
@@ -60,13 +60,11 @@ const avalaibleTimes: string[] = [
 interface LivemapState {
     coverageOptions: SelectOption[];
     selectedCoverage: SelectOption;
-    spatialPayload: SpatialDataPayload;
     sevipPayload: SevipPayload,
-    spatialData: SpatialDataResponse | null;
     crossSectionPayload: CrossSectionPayload;
     mapTimeRange: string[],
     selectedMapTime: string;
-    sevipData: SevipResponse | null
+    sevipData: SpatialDataResponse | null
 }
 
 
@@ -78,13 +76,6 @@ const initialState: LivemapState = {
         colorbar: 'viridis',
         time: '2020-11-10 12:40:00',
     },
-    spatialPayload: {
-        map: 'vid',
-        type: 'vertical',
-        height: 200,
-        time: "2025-10-23 16:34:00",
-    },
-    spatialData: null,
     sevipData: null,
     crossSectionPayload: {
         startLat: 0,
@@ -104,14 +95,8 @@ const livemapSlice = createSlice({
     name: 'livemap',
     initialState,
     reducers: {
-        setSpatialPayload: (state, action: PayloadAction<Partial<SpatialDataPayload>>) => {
-            state.spatialPayload = { ...state.spatialPayload, ...action.payload }
-        },
         setSevipPayload: (state, action: PayloadAction<Partial<SevipPayload>>) => {
             state.sevipPayload = {...state.sevipPayload, ...action.payload}
-        },
-        setRadarData(state, action: PayloadAction<SpatialDataResponse | null>) {
-            state.spatialData = action.payload;
         },
         changeCoverage: (state, action) => {
             const selected = state.coverageOptions.find(option => option.id === action.payload);
@@ -132,6 +117,6 @@ const livemapSlice = createSlice({
     }
 })
 
-export const { changeCoverage, setSpatialPayload, setRadarData, setCrossSectionPayload, setSevipPayload, setSelectedTime } = livemapSlice.actions;
+export const { changeCoverage, setCrossSectionPayload, setSevipPayload, setSelectedTime } = livemapSlice.actions;
 export default livemapSlice.reducer;
 

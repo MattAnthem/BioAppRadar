@@ -1,12 +1,20 @@
 import { Unplug } from 'lucide-react';
 import GlassHeader from '../cards/GlassHeader';
+import type { ReactNode } from 'react';
 
-const FetchError = () => {
+type Props = {
+  children?: ReactNode;
+}
+
+const FetchError = ({children}: Props ) => {
   return (
-    <div className="relative w-full h-full mt-4 rounded-sm p-1 z-25 bg-gray-500/50 left-0 top-0">
+    <div className="relative w-full h-full rounded-sm p-1 z-25 bg-gray-500/50 left-0 top-0">
 
-        <GlassHeader className='absolute px-1 top-0 py-2 flex justify-between items-center'>
-          <span className='h-6 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
+        <GlassHeader className='absolute px-2 top-0 py-2 flex justify-between items-center'>
+          <span className='h-6 w-30 animate-pulse bg-gray-400/45 rounded-sm'/>
+          <div className="flex gap-3">
+            {children}
+          </div>
         </GlassHeader>
 
         <div className="top-0 relative w-full h-full flex items-center justify-center">

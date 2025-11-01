@@ -5,12 +5,12 @@ import type { SelectOption } from "../../shared/components/selects/types";
 // static
 export const parameterOptions: SelectOption[] = [
     {
-        id: 'mt',
-        displayText: 'Cumulative migration traffic'
-    },
-    {
         id: 'mtr',
         displayText: 'Migration traffic rate'
+    },
+    {
+        id: 'mt',
+        displayText: 'Cumulative migration traffic'
     },
     {
         id: 'rt',

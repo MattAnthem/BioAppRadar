@@ -90,7 +90,7 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
           </GlassHeader>
 
           {/* Chart */}
-          <div className="flex w-full h-full items-center justify-center ">
+          <div className="flex-1 w-full h-full items-center justify-center ">
             {
               data && (
                 <VtipLineChart

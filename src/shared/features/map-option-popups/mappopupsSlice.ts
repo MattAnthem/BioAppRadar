@@ -16,12 +16,12 @@ const MapOptions: SelectOption[] =
         displayText: 'Vertically Integrated Density '
       },
       {
-        id: 'eta-exp',
-        displayText: 'Eta Expected '
+        id: 'eta_sum',
+        displayText: 'Sum of observed linear reflectivities'
       },
       {
-        id: 'eta-obs',
-        displayText: 'Eta Observed '
+        id: 'eta_sum_expected',
+        displayText: 'Sum of expected linear reflectivities'
       }
     ]
   },

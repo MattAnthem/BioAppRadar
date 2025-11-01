@@ -16,15 +16,15 @@ const CrossSectionHeatmap: React.FC<Props> = ({ data }) => {
     return <div className="text-gray-400 text-center p-4">No data available</div>;
   }
 
-  // ---- Calcul de la distance horizontale cumulée entre chaque point ----
+
   const distances = computeCumulativeDistances(data.lat, data.lon);
 
-  // ---- Trace Plotly ----
+
   const trace: Data = {
     type: "heatmap",
     z: data.parameter,
     x: distances,
-    y: data.height.map(Number), // hauteur numérique
+    y: data.height.map(Number),
     colorscale: "Cividis",
     // colorbar: {
     //   title: `${data.name} [${data.units}]`,
@@ -32,7 +32,7 @@ const CrossSectionHeatmap: React.FC<Props> = ({ data }) => {
     zsmooth: "best",
   };
 
-  // ---- Layout ----
+ 
   const layout: Partial<Layout> = {
     title: {
       text: `${data.name} (Vertical Cross Section)`,
@@ -68,7 +68,7 @@ const CrossSectionHeatmap: React.FC<Props> = ({ data }) => {
 function computeCumulativeDistances(latitudes: number[], longitudes: number[]): number[] {
   if (latitudes.length !== longitudes.length) return [];
 
-  const R = 6371; // rayon Terre (km)
+  const R = 6371; 
   const toRad = (deg: number) => (deg * Math.PI) / 180;
 
   const distances = [0];

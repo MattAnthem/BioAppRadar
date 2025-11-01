@@ -25,8 +25,6 @@ type MapProps = {
   enableLineDraw: boolean
 };
 
-
-
 /**
  * Customized Leaflet Map 
  * @param center map center expressed with [lat, lon] 
@@ -57,8 +55,6 @@ const LeafletMap = ({
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const overlayImgRef = useRef<L.ImageOverlay | null>(null);
-  
-  const markerRefs = useRef<L.Marker[]>([]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -70,7 +66,19 @@ const LeafletMap = ({
       scrollWheelZoom,
       zoomControl: false,
       attributionControl: true,
+
     });
+
+
+    const zoomControl = L.control.zoom({ position: 'topleft' });
+    zoomControl.addTo(map);
+    const zoomContainer = zoomControl.getContainer();
+    if (zoomContainer) {
+      zoomContainer.style.marginTop = '60px';
+      zoomContainer.style.marginLeft = '10px';
+      zoomContainer.style.appearance= 'none'
+    }
+   
 
     // Add tiles
     L.tileLayer(baseMap, {
@@ -85,16 +93,9 @@ const LeafletMap = ({
     // Allow line drawing
     if (enableLineDraw) enableDrawLine(map, onDrawLine);
 
-
-
     return () => {
       // cleanup overlays
       if (overlayImgRef.current)  map.removeLayer(overlayImgRef.current);
-      
-
-      // cleanup markers
-      markerRefs.current.forEach((m) => map.removeLayer(m));
-      markerRefs.current = [];
 
       // cleanup map
       map.remove();
@@ -140,10 +141,8 @@ const LeafletMap = ({
     // Remove old overlays 
     if (overlayImgRef.current) map.removeLayer(overlayImgRef.current); 
     // Add new overlays 
-
-    const ovrl = L.imageOverlay(overlayImg.url, overlayImg.bounds, { opacity: overlayImg.opacity ?? 0.7, interactive: overlayImg.interactive ?? false, }).addTo(map); 
+    const ovrl = L.imageOverlay(overlayImg.url, overlayImg.bounds, { opacity: overlayImg.opacity ?? 0.7, zIndex: 10, interactive: overlayImg.interactive ?? false, }).addTo(map); 
     overlayImgRef.current = ovrl; 
-    
  
   }, [overlayImg]);
   

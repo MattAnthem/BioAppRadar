@@ -7,8 +7,7 @@ import LeafletMap from '../../shared/components/map/LeafletMap';
 import VaribalePopup from '../../shared/features/map-option-popups/VaribalePopup';
 import MapbasePopup from '../../shared/features/map-option-popups/MapbasePopup';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import type { SelectOption } from '../../shared/components/selects/types';
-import { setCrossSectionPayload, setSelectedTime, setSpatialPayload } from './livemapSlice';
+import { setCrossSectionPayload, setSelectedTime, setSevipPayload } from './livemapSlice';
 import { changeAltitude } from '../../shared/features/altitude-slider/altitudeSlice';
 import { useSevipData } from './hooks/useData/useSevipData';
 import DataLoading from '../../shared/components/loader/DataLoading';
@@ -18,6 +17,7 @@ type LiveMapProps = {
     drawable: boolean;
     enableLineDraw: boolean;
     displayTimeline: boolean;
+    displayControls?: boolean;
 }
 
 
@@ -26,22 +26,24 @@ type LiveMapProps = {
  * @param drawable allow polygon drawing on the map and retrieve a GeoJSON
  * @returns React.JSX.Element
  */
-const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) => {
+const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }: LiveMapProps) => {
 
     // Redux
     const { selectedCoverage, mapTimeRange, selectedMapTime } = useAppSelector(state => state.livemap);
-    const { selectedMapBase, selectedMapOption } = useAppSelector(state => state.mappopups);
+    const { selectedMapBase, selectedMapOption, selectedSubOption } = useAppSelector(state => state.mappopups);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch();
     const currentIndex = Math.max(0, mapTimeRange.indexOf(selectedMapTime));
+
+    // Tanstack fetch query
+    const  { error, isLoading, data } = useSevipData();
 
 
     const handleFrameChange = (newIndex: number) => {
         const newTime = mapTimeRange[newIndex];
         dispatch(setSelectedTime(newTime));
-        refetch();
     };
-
+    
     //#region  Transect payload
 
     const handleLineCreated = (start: L.LatLng, end: L.LatLng) => {
@@ -57,32 +59,33 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
 
 
     //#region Api call
- 
-    const  { error, isLoading, data, refetch } = useSevipData();
-
     // handle parameters changes
-    const handleSelectedVars = (option: SelectOption) => {
-        dispatch(setSpatialPayload({type: selectedMapOption.id as string, map: option.id as string}));
+    const handleSelectedVars = () => {
+        dispatch(setSevipPayload({parameter: selectedSubOption.id as string}))
     }
 
     const handleAltitudeChange = (altitudeIndex: number) => {
-        dispatch(setSpatialPayload({height: altitudeOptions[altitudeIndex]}));
         dispatch(changeAltitude(altitudeIndex))
     }
-   
     //#endregion
 
 
     if (isLoading) return (
-        <div className="relative w-full h-full p-1 col-span-6">
-            <DataLoading/>
+        <div className="relative w-full h-full col-span-6">
+            <DataLoading>
+                <MapbasePopup/>
+                <VaribalePopup  onChangeMapVariable={handleSelectedVars}/> 
+            </DataLoading>
         </div>
     )
 
     if (error) return (
-        <div className="relative w-full h-full p-1 col-span-6">
-            <FetchError/>
-        </div>
+        <SectionCard className="relative w-full h-full col-span-6">
+            <FetchError>
+                <MapbasePopup/>
+                <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
+            </FetchError>   
+        </SectionCard>
     )
 
   return (
@@ -91,15 +94,18 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
         {/* Heading */}
         <GlassHeader className='p-1 flex justify-between items-center'>
         
-            <h3 className='text-white tracking-wider text-sm'>Live Map</h3>
+            <h3 className='text-white tracking-wider text-sm'>{selectedSubOption.displayText}</h3>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-3 justify-center items-end">
 
                 <MapbasePopup/>
-                {/* Changer de variable */}
-                <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
-            
+                {/* Change variable */}
+                {
+                    displayControls && (
+                        <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
+                    )
+                }
 
             </div>
 
@@ -108,12 +114,14 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
         {/* Altitude slider */}
         {
             (selectedMapOption.id !== "vertical") && (
-                <AltitudeSlider
-                    currentIndex={currentAltitudeIndex}
-                    onChangeAltitude={handleAltitudeChange}
-                    position='right'
-                    altitudes={altitudeOptions}
-                />
+                <div className="h-full absolute bottom-2 right-0 flex lg:items-center items-start">
+                    <AltitudeSlider
+                         position='right'
+                        currentIndex={currentAltitudeIndex}
+                        onChangeAltitude={handleAltitudeChange}
+                        altitudes={altitudeOptions}
+                    />
+                </div>
             )
         }
 
@@ -148,8 +156,8 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline }: LiveMapProps) =>
             zoom={8}
             overlayImg={
                 {
-                    url: data?.data.png ?? '',
-                    bounds: data?.data.bounds as L.LatLngBoundsExpression
+                    url: data?.data?.png ?? '',
+                    bounds: data?.data?.bounds as L.LatLngBoundsExpression,
                 }
             }
             overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
