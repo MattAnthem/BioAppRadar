@@ -65,4 +65,4 @@ const NavContent = (
   )
 }
 
-export default NavContent;
+export default React.memo(NavContent);

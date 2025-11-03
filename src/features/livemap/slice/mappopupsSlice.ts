@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { SelectOption } from "../../components/selects/types";
+import type { SelectOption } from "../../../shared/components/selects/types";
 
 const MapOptions: SelectOption[] = 
 [  
@@ -139,6 +139,18 @@ const mapbaseOptions: SelectOption[] = [
   },
 ]
 
+/**
+ * @var isVarPopupOpen: UI state handling the Variable selection Select element
+ * @var isMapBasePopupOpen: UI state handling the Map Base selection Select element
+ * @var mapBaseOptions: Available Map Bases
+ * @var selectedMapBase: Selected Map Base
+ * @var colormapOptions: Available Colormaps
+ * @var selectedColormap: Selected Colormap
+ * @var mapOptions: Available Map Variables, SubVariables Included
+ * @var selectedMapOption: Selected Map Variable, SubVariable Included
+ * @var subOptions: Available SubVariables on a Variable
+ * @var selectedSubOption: Selected SubVariable From a Variable
+ */
 interface VarPopupState {
     isVarPopupOpen: boolean;
     isMapBasePopupOpen: boolean;
@@ -146,8 +158,8 @@ interface VarPopupState {
     selectedMapBase: SelectOption;
     colormapOptions: SelectOption[];
     selectedColormap: SelectOption;
-    selectedMapOption: SelectOption;
     mapOptions: SelectOption[];
+    selectedMapOption: SelectOption;
     subOptions: SelectOption[];
     selectedSubOption: SelectOption;
 }

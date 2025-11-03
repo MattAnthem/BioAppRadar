@@ -1,5 +1,10 @@
 import { axiosClient } from "../axiosClient";
 
+export interface ApiResponse<T> {
+    status: number,
+    data: T
+}
+
 export interface SpatialDataPayload {
     type: string;
     map: string;
@@ -8,9 +13,11 @@ export interface SpatialDataPayload {
 }
 
 export interface RadarPayload {
+    type: string;
     parameter: string;
     time: string;
-    height: number;
+    height?: number;
+    elevation_angle?: number;
     colorbar: string;
 }
 
@@ -54,7 +61,16 @@ export interface SevipPayload {
 export interface SpatialDataResponse {
     data: {png: string; bounds: [[number, number], [number, number]]};
     ckeys: {labels: string[]; colors: string[]; png: string};
-    info: {time: string; name: string; units: string;}
+    info: {time: string; name: string; height?: string, elevation_angle?: string; units: string;}
+}
+
+export const fetchSevip = async (payload: SevipPayload): Promise<SpatialDataResponse> => {
+    const { data } = await axiosClient.post('/get_sevip', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching SEVIP data');
+    } 
+    console.log("response: ", data.data)
+    return data.data;
 }
 
 export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialDataResponse> => {
@@ -65,13 +81,6 @@ export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialData
     return data;
 }
 
-export const fetchSevip = async (payload: SevipPayload): Promise<SpatialDataResponse> => {
-    const { data } = await axiosClient.post('/get_sevip', payload);
-    if (data.status !== 0) {
-        throw new Error('Error fetching SEVIP data');
-    } 
-    return data.data;
-}
 
 
 export const fetchCrossSectionData = async (payload: CrossSectionPayload): Promise<CrossSectionResponse> => {

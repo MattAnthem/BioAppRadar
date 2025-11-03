@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { toggleTheme } from '../../../features/theme/themeSlice';
 import { toggleMinimize } from '../sidebar/sidebarSlice';
 import SwitchBtn from '../../buttons/switchbtn/SwitchBtn';
+import React from 'react';
 
 
 
@@ -34,7 +35,6 @@ const TopBar = () => {
         <Menu width={30}/>
       </button>
       
-
       {/* Right controls */}
       <div className="flex relative w-full justify-end items-center gap-3 opacity-100">
 
@@ -52,12 +52,9 @@ const TopBar = () => {
         
         <Moon className={topbar.contents.togller_color} width={30}/>
 
-        {/* Langs */}
-        
-
       </div>
     </div>
   )
 }
 
-export default TopBar;
+export default React.memo(TopBar);

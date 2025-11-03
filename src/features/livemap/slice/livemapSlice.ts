@@ -1,12 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import cellCov from '../../shared/geojsons/administrative/rwanda_cell.json';
-import countryCov from '../../shared/geojsons/administrative/rwanda_country.json';
-import districtCov from '../../shared/geojsons/administrative/rwanda_district.json';
-import provinceCov from '../../shared/geojsons/administrative/rwanda_province.json';
-import sectorCov from '../../shared/geojsons/administrative/rwanda_sector.json';
-import villageCov from '../../shared/geojsons/administrative/rwanda_village.json';
-import type { CrossSectionPayload, SevipPayload, SpatialDataResponse } from "../../api/endpoints/spatialDataAPI";
-import type { SelectOption } from "../../shared/components/selects/types";
+import cellCov from '../../../shared/geojsons/administrative/rwanda_cell.json';
+import countryCov from '../../../shared/geojsons/administrative/rwanda_country.json';
+import districtCov from '../../../shared/geojsons/administrative/rwanda_district.json';
+import provinceCov from '../../../shared/geojsons/administrative/rwanda_province.json';
+import sectorCov from '../../../shared/geojsons/administrative/rwanda_sector.json';
+import villageCov from '../../../shared/geojsons/administrative/rwanda_village.json';
+import type { CrossSectionPayload, SevipPayload } from "../../../api/endpoints/spatialDataAPI";
+import type { SelectOption } from "../../../shared/components/selects/types";
 
 const coverageOptions: SelectOption[] = [
     {
@@ -64,7 +64,6 @@ interface LivemapState {
     crossSectionPayload: CrossSectionPayload;
     mapTimeRange: string[],
     selectedMapTime: string;
-    sevipData: SpatialDataResponse | null
 }
 
 
@@ -76,7 +75,6 @@ const initialState: LivemapState = {
         colorbar: 'viridis',
         time: '2020-11-10 12:40:00',
     },
-    sevipData: null,
     crossSectionPayload: {
         startLat: 0,
         startLon: 0,

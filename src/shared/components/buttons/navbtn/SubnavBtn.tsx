@@ -1,4 +1,4 @@
-
+import React from "react";
 
 type SubnavBtnProps = {
     sub: string;
@@ -36,4 +36,4 @@ const SubnavBtn = (
   )
 }
 
-export default SubnavBtn;
+export default React.memo(SubnavBtn);

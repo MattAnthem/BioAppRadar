@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
-import Tooltip from '../../components/popups/tooltip/Tooltip';
-import { formatBigNumber } from '../../utils/number_format'
+import { formatBigNumber } from '../../../shared/utils/number_format';
+import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 
 
 type Position = "left" | "right"

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Play, Pause, Minus, Plus, ChevronLeft, ChevronRight } from "lucide-react";
-import Tooltip from "../popups/tooltip/Tooltip";
+import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 
 type TimelineProps = {
   frames: string[];
@@ -57,8 +57,6 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
     }
 
     setSpeed((prev) => prev + 100);
-
-    console.log('INCREASING SPEED ', animSpeed)
 
   }
 

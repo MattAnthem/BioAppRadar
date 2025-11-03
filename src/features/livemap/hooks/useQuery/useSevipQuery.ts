@@ -3,16 +3,17 @@ import { fetchSevip, type SevipPayload, type SpatialDataResponse } from "../../.
 
 export const useSevipDataQuery = (payload: SevipPayload) => {
     return useQuery<SpatialDataResponse>({
-        queryKey: ["sevip_data", payload.time, payload.parameter, payload.colorbar],
+        queryKey: ["sevip_data", payload.parameter, payload.colorbar, payload.time],
         queryFn: async () => {
             try{
                 return await fetchSevip(payload);
             } catch (error) {
-                console.error('Failed to fetch VTPI data');
+                console.error('Failed to fetch SEVIP data');
                 throw error;
             }
         } ,
         enabled: Boolean(payload.parameter && payload.colorbar && payload.time),
         refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 30,  
     });
 }

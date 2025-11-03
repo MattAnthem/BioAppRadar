@@ -2,15 +2,16 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.tsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { BrowserRouter } from 'react-router-dom';
 import { loadConfig } from './config.ts';
 import { initAxiosClient } from './api/axiosClient.ts';
+import queryClient from './shared/queryClient/queryClient.ts';
 
 
-const queryClient = new QueryClient();
+
 
 
 loadConfig().then((config) => {

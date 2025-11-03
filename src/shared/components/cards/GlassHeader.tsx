@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 
 type GlassHeaderProps = {
     children: ReactNode;
@@ -27,4 +27,4 @@ const GlassHeader = ({ children, className }: GlassHeaderProps) => {
   )
 }
 
-export default GlassHeader;
+export default React.memo(GlassHeader);

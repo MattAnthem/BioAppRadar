@@ -1,17 +1,20 @@
 import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
-import AltitudeSlider from '../../shared/features/altitude-slider/AltitudeSlider';
-import Colorbar from '../../shared/components/colorbar/Colorbar';
-import TimelineSlider from '../../shared/components/sliders/TimelineSlider';
+import Colorbar from './components/Colorbar';
+import TimelineSlider from './components/TimelineSlider';
 import LeafletMap from '../../shared/components/map/LeafletMap';
-import VaribalePopup from '../../shared/features/map-option-popups/VaribalePopup';
-import MapbasePopup from '../../shared/features/map-option-popups/MapbasePopup';
+import VaribalePopup from './components/VaribalePopup';
+import MapbasePopup from './components/MapbasePopup';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setCrossSectionPayload, setSelectedTime, setSevipPayload } from './livemapSlice';
-import { changeAltitude } from '../../shared/features/altitude-slider/altitudeSlice';
-import { useSevipData } from './hooks/useData/useSevipData';
+import { changeAltitude } from './slice/altitudeSlice';
 import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
+import { usePreloadSevipFrames } from './hooks/useQuery/usePreloadSevipFrames';
+import { useSevipDataQuery } from './hooks/useQuery/useSevipQuery';
+import { useQueryClient } from '@tanstack/react-query';
+import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
+import { setCrossSectionPayload, setSelectedTime, setSevipPayload } from './slice/livemapSlice';
+import AltitudeSlider from './components/AltitudeSlider';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -30,13 +33,27 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
 
     // Redux
     const { selectedCoverage, mapTimeRange, selectedMapTime } = useAppSelector(state => state.livemap);
-    const { selectedMapBase, selectedMapOption, selectedSubOption } = useAppSelector(state => state.mappopups);
+    const { selectedMapBase, selectedMapOption, selectedSubOption, selectedColormap } = useAppSelector(state => state.mappopups);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch();
     const currentIndex = Math.max(0, mapTimeRange.indexOf(selectedMapTime));
+    const queryClient = useQueryClient();
+
 
     // Tanstack fetch query
-    const  { error, isLoading, data } = useSevipData();
+    usePreloadSevipFrames(mapTimeRange, selectedSubOption.id as string, selectedColormap.id as string);
+
+
+    const { data, isLoading, error } = useSevipDataQuery({
+      parameter: selectedSubOption.id as string,
+      colorbar: selectedColormap.id as string,
+      time: selectedMapTime
+    })
+
+    // Query the cached sevip data from IDB by its key 'sevip_data'
+    const key = ["sevip_data", selectedSubOption.id, selectedColormap.id, selectedMapTime];
+    const cached = queryClient.getQueryData<SpatialDataResponse>(key);
+    const currentData = data ?? cached;
 
 
     const handleFrameChange = (newIndex: number) => {
@@ -47,7 +64,6 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
     //#region  Transect payload
 
     const handleLineCreated = (start: L.LatLng, end: L.LatLng) => {
-        console.log('start :', start, 'end:', end)
         dispatch(setCrossSectionPayload({
             startLat: start.lat,
             endLat: end.lat,
@@ -70,7 +86,7 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
     //#endregion
 
 
-    if (isLoading) return (
+    if (isLoading && !cached) return (
         <div className="relative w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
@@ -87,6 +103,8 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
             </FetchError>   
         </SectionCard>
     )
+
+
 
   return (
     <SectionCard className='relative w-full h-full p-1 col-span-6'>
@@ -128,8 +146,8 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
 
         {/* Colorbar */}
         <Colorbar
-            colorCodes={data?.ckeys.colors ?? []}
-            valueScale={data?.ckeys.labels.map(Number)  ?? []}
+            colorCodes={data?.ckeys?.colors ?? []}
+            valueScale={data?.ckeys?.labels.map(Number)  ?? []}
             className='absolute bottom-0 left-0 z-10'
         />
 
@@ -156,8 +174,8 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
             zoom={8}
             overlayImg={
                 {
-                    url: data?.data?.png ?? '',
-                    bounds: data?.data?.bounds as L.LatLngBoundsExpression,
+                    url: currentData?.data?.png ?? '',
+                    bounds: currentData?.data?.bounds as L.LatLngBoundsExpression ?? undefined,
                 }
             }
             overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}

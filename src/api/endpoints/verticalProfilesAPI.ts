@@ -57,7 +57,7 @@ export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
     if (data.status !== 0) {
         throw new Error('Error fetching data')
     } 
-    return data.data.data;
+    return data.data;
 }
 
 export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => {
@@ -65,7 +65,7 @@ export const fetchVPTS = async (payload: VptsPayload): Promise<VptsResponse> => 
     if (data.status !== 0) {
         throw new Error('Error fetching data')
     } 
-    return data.data.data;
+    return data.data;
 }
 
 export const fetchVTIP = async (payload: VtipPayload): Promise<VtipResponse> => {
@@ -73,6 +73,6 @@ export const fetchVTIP = async (payload: VtipPayload): Promise<VtipResponse> => 
     if (data.status !== 0) {
         throw new Error('Error fetching data')
     } 
-    return data.data.data;
+    return data.data;
 }
 

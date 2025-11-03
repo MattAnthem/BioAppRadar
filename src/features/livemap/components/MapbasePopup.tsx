@@ -1,14 +1,14 @@
 import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { changeBaseMap, changeColormap, hideMapBasePopup, toggleShowMapBasePopup } from "./mappopupsSlice";
-import Tooltip from "../../components/popups/tooltip/Tooltip";
-import { useTheme } from "../../hooks/useTheme";
+import { useClickOutside } from "../../../shared/hooks/useClickOutside";
+import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
+import { useTheme } from "../../../shared/hooks/useTheme";
 import { Map } from "lucide-react";
-import SimpleSelect from "../../components/selects/SimpleSelect";
-import type { SelectOption } from "../../components/selects/types";
-import Colorbar from "../../components/colorbar/Colorbar";
-import { changeCoverage, setSevipPayload } from "../../../features/livemap/livemapSlice";
+import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../../shared/components/selects/types";
+import Colorbar from "./Colorbar";
+import { changeCoverage, setSevipPayload } from "../slice/livemapSlice";
+import { changeBaseMap, changeColormap, hideMapBasePopup, toggleShowMapBasePopup } from "../slice/mappopupsSlice";
 
 
 

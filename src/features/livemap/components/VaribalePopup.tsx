@@ -1,12 +1,12 @@
 import { Settings2 } from "lucide-react";
-import { useTheme } from "../../hooks/useTheme"
-import Tooltip from "../../components/popups/tooltip/Tooltip";
+import { useTheme } from "../../../shared/hooks/useTheme"
+import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import { useLayoutEffect, useRef, useState } from "react";
-import SimpleSelect from "../../components/selects/SimpleSelect";
-import type { SelectOption } from "../../components/selects/types";
+import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { changeSelectedMapOption, changeSelectedSubOption, hideVarPopup, toggleShowVarPopup } from "./mappopupsSlice";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../../shared/hooks/useClickOutside";
+import { changeSelectedMapOption, changeSelectedSubOption, hideVarPopup, toggleShowVarPopup } from "../slice/mappopupsSlice";
 
 
 type VariablePopupProps = {
@@ -56,7 +56,7 @@ const VaribalePopup = ({ onChangeMapVariable }: VariablePopupProps) => {
       const spaceBelow = window.innerHeight - triggerRect.bottom;
       const spaceAbove = triggerRect.top;
   
-      // si pas assez d’espace en dessous, on le place au-dessus
+      
       if (spaceBelow < popupRect.height && spaceAbove > popupRect.height) {
         setPopupPosition("top");
       } else {

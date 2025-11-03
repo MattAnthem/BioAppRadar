@@ -16,6 +16,7 @@ const OverviewDashboard = () => {
             
             <div className="h-full lg:col-span-6">
                 <LiveMap
+                  displayControls={false}
                   drawable={false}
                   enableLineDraw={false}
                   displayTimeline={true}

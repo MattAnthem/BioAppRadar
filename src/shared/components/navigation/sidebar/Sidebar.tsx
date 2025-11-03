@@ -1,14 +1,12 @@
 import {  Bell, CalendarClock, FlipHorizontal,  Home, SidebarIcon } from "lucide-react";
 import logo_svg from "../../../../assets/dark_logo.svg"
 import { useTheme } from "../../../hooks/useTheme";
-import { useRef } from "react";
+import React, { useRef } from "react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
-import avatar from '../../../../assets/avatar.jpg';
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import type { MenuNames } from "../../buttons/navbtn/MenuTypes";
 import { setActiveButton, setMinimized, toggleMinimize } from "./sidebarSlice";
 import NavButton from "../../buttons/navbtn/NavButton";
-import NavAccountBtn from "../../buttons/navbtn/NavAccountBtn";
 
 
 
@@ -118,18 +116,8 @@ const Sidebar = () => {
 
         </div>
 
-        <div className={`${main.section_line} w-full lg:h-1.5 h-0.5`}/>
+        <div className={`${main.section_line} w-full h-0.5`}/>
 
-        {/* Menu group 2 */}
-        <div className="w-full lg:h-full flex flex-col">
-            <div className="w-full mt-auto">
-
-
-            </div>
-
-        </div>
-
-        <div className={`${main.section_line} w-full lg:h-1.5 h-0.5`}/>
 
         {/* Notification center */}
         <NavButton 
@@ -145,12 +133,8 @@ const Sidebar = () => {
             badge={12}
         />
 
-        {/* User menu */}
-
-
-
     </div>
   )
 }
 
-export default Sidebar;
+export default React.memo(Sidebar);
