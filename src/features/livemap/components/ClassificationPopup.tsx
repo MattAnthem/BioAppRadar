@@ -55,7 +55,8 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
         hoverText='Classification Data'
         customIcon={<BirdIcon/>}
     >
-        <p>Select a variable</p>
+        <small>Select a variable</small>
+        <div className="border-b border-b-gray-400"/>
 
         <SimpleSelect
             options={availableVariables}
@@ -65,8 +66,9 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
         />
 
         <small>Select colors </small>
-        <input onChange={handleColorZeroChange} value={color_0} className='w-full rounded-sm' type="color" name="color_0" id="color_0" />
-        <input onChange={handleColorOneChange} value={color_1} className='w-full rounded-sm'  type="color" name="color_1" id="color_0" />
+        <div className="border-b border-b-gray-400"/>
+        <input onChange={handleColorZeroChange} value={color_0} className='w-full h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
+        <input onChange={handleColorOneChange} value={color_1} className='w-full h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
     </OptionPopover>
 
   )

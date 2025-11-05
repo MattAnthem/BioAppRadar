@@ -78,10 +78,6 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
     }
     //#endregion
 
-
-
-
-
     //#region Classification data handler 
     // Classification
     const handleClassificationVarsChange = (variable: SelectOption) => {
@@ -103,9 +99,6 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
 
 
     // Prefetch classification only
-
-
-
     const { data, isLoading, error } = usePrefetchAnimationData({
         currentTime: selectedMapTime,
         displayedData: 'classification',
@@ -130,6 +123,7 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
         <SectionCard className="relative w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
+                <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
             </FetchError>   
         </SectionCard>
     )

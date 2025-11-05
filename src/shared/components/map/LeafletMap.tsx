@@ -31,6 +31,7 @@ type MapProps = {
  * @param zoom map zoom
  * @param className additional classes
  * @param boxZoom allow box zoom functionnality
+ * @param onDrawLine allow allow line drawing on map
  * @param scrollWheelZoom allow scroll wheel zoom functionnality
  * @param overlayImg image overlay 
  * @param overlayShapes GeoJson polygons overlay (eg: cities, regions, parks, airports)

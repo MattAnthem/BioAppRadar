@@ -15,7 +15,7 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
     const popupRef = useRef<HTMLDivElement | null>(null);
 
     const themes = useTheme();
-    const { bg, border, hover, options_bg } = themes.theme.simpleSelect;
+    const { bg, border, hover, options_bg, text } = themes.theme.simpleSelect;
 
     // autohide 
     useClickOutside(popupRef, () => {
@@ -25,7 +25,7 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
     })
 
   return (
-    <div ref={popupRef} className=''>
+    <div ref={popupRef} className={text}>
       
       <Tooltip 
         position="bottom" 
@@ -41,7 +41,7 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
       </Tooltip>
         {/* Pop-over menu */}
         <div className={`
-          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
+          ${options_bg} ${border}  z-30 border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
           ${isPopupOpen ? 
               "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
           }

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
 
-const RadarTypeOptions: SelectOption[] = [
+export const RadarTypeOptions: SelectOption[] = [
 
           {
             id: 'polar',
@@ -13,7 +13,7 @@ const RadarTypeOptions: SelectOption[] = [
           },
 ]
 
-const RadarParameterOptions: SelectOption[] = [
+export const RadarParameterOptions: SelectOption[] = [
     { 
         id: 'ref', 
         displayText: 'Reflectivity' 
