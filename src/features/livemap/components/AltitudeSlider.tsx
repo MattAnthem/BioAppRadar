@@ -1,4 +1,3 @@
-import { ArrowLeft } from 'lucide-react';
 import { formatBigNumber } from '../../../shared/utils/number_format';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 
@@ -39,18 +38,14 @@ const AltitudeSlider = (
     }
 
   return (
-    <div className={`${position_classes[position]} ${className} mr- z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[40vh]  rounded-sm p-2 flex justify-start items-center`}>
+    <div className={`${position_classes[position]} ${className}  z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[30vh]  rounded-sm p-2 flex justify-center items-center`}>
       
-      {/* Legend Title */}
-      <div className="w-full h-full flex justify-center items-center relative">
-        <div className="absolute text-sm left-0 top-[50%] w-full tracking-widest -rotate-90 ">Altitude(m)</div>
-      </div>
 
       {/* Altitude band */}
-      <div className="h-fit py-2 w-50 flex flex-col justify-center items-center">
+      <div className="h-fit  flex flex-col justify-center items-center">
 
         {/* Max altitude */}
-        <small>{formatBigNumber(altitudes[0])}</small>
+        <small>{altitudes[0]}m</small>
    
         {altitudes.map((alt: number, i: number) => (
             <Tooltip
@@ -64,24 +59,15 @@ const AltitudeSlider = (
                     onClick={() => onChangeAltitude(i)}
                     className={`${
                       i === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
-                    } w-4 h-1 relative cursor-pointer  hover:bg-blue-800`}
+                    } w-3 h-1 hover:w-4 hover:h-4 hover:absolute hover:z-40 relative cursor-pointer  hover:bg-blue-800`}
                   >
-                    {
-                      (i === currentIndex) && (
-                        <ArrowLeft width={20} height={20} className='absolute text-red-500 bottom-[0.1px] left-full'/>
-                      )
-                    }
                   </button>
               </div>
             </Tooltip>
         ))}
 
-        {/* Max altitude */}
-                
-        <small>{altitudes[altitudes.length - 1]}</small>
-
-        {/* current altitude */}
-        <small className='font-semibold tracking-wide text-blue-950'>{altitudes[currentIndex]}m</small>
+        {/* Min altitude */}     
+        <small>{altitudes[altitudes.length - 1]}m</small>
 
       </div>
 

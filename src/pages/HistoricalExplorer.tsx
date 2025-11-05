@@ -1,5 +1,5 @@
 
-import LiveMap from '../features/livemap/LiveMap';
+import HistoryMap from '../features/history_map/HistoryMap';
 import VpChart from '../features/vp_chart/VpChart';
 import VptsChart from '../features/vpts_chart/VptsChart';
 import VtipChart from '../features/vtip_chart/VtipChart';
@@ -13,12 +13,7 @@ const HistoricalExplorer = () => {
 
                     
         <div className="h-full lg:col-span-6">
-            <LiveMap
-              displayControls
-              drawable={false}
-              enableLineDraw={false}
-              displayTimeline={true}
-            />
+            <HistoryMap/>
         </div>
 
         <VpChart showControls className="w-full lg:h-full xl:h-full  lg:col-span-2"/>

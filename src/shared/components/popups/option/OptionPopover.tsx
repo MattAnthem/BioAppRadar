@@ -1,16 +1,16 @@
-import { useRef, useState, type ReactNode } from 'react'
-import Tooltip from '../../components/popups/tooltip/Tooltip';
-import { useTheme } from '../../hooks/useTheme';
-import { Settings2 } from 'lucide-react';
-import { useClickOutside } from '../../hooks/useClickOutside';
-
+import React,{ useRef, useState, type ReactNode } from "react";
+import { useTheme } from "../../../hooks/useTheme";
+import { useClickOutside } from "../../../hooks/useClickOutside";
+import Tooltip from "../tooltip/Tooltip";
+import { Settings2 } from "lucide-react";
 
 type ChartParamsPopupProps = {
     children?: ReactNode;
     hoverText?: string;
+    customIcon?: ReactNode;
 }
 
-const ChartParamsPopup = ({ children, hoverText }: ChartParamsPopupProps) => {
+const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProps) => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const popupRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,7 +34,7 @@ const ChartParamsPopup = ({ children, hoverText }: ChartParamsPopupProps) => {
       >
 
         <button onClick={() => setIsPopupOpen(!isPopupOpen)} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Settings2 width={15} height={15}/>
+            {customIcon || <Settings2 width={15} height={15}/>}
         </button>
 
         {/* Pop-over menu */}
@@ -58,4 +58,4 @@ const ChartParamsPopup = ({ children, hoverText }: ChartParamsPopupProps) => {
   )
 }
 
-export default ChartParamsPopup;
+export default React.memo(OptionPopover);

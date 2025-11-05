@@ -6,9 +6,9 @@ import { useTheme } from "../../../shared/hooks/useTheme";
 import { Map } from "lucide-react";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import Colorbar from "./Colorbar";
-import { setSevipPayload } from "../slice/livemapSlice";
-import { changeBaseMap, changeColormap, hideMapBasePopup, setSelectedCoverageGenre, setSelectedCoverageType, toggleShowMapBasePopup } from "../slice/baseMapPopupSlice";
+import { setHistoryMapPayload } from "../../history_map/slice/historyMapSice";
+import { changeHistBaseMap, changeHistColormap, changeHistCoverage, hideHistMapBasePopup, toggleShowHistMapBasePopup } from "../slice/baseMapOption";
+import Colorbar from "../../livemap/components/Colorbar";
 
 
 
@@ -16,7 +16,8 @@ import { changeBaseMap, changeColormap, hideMapBasePopup, setSelectedCoverageGen
 const MapbasePopup = () => {
 
   // redux 
-  const {selectedCoverage, coverageOptions, coverageTypes, selectedCoverageType, isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
+  const { isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap, coverageOptions, selectedCoverage } = useAppSelector(state => state.basemaphistory);
+ 
   const mapBasepopupRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
   
@@ -24,27 +25,23 @@ const MapbasePopup = () => {
   // autohide 
   useClickOutside(mapBasepopupRef, () => {
     if (isMapBasePopupOpen) {
-      dispatch(hideMapBasePopup())
+      dispatch(hideHistMapBasePopup())
     }
   })
 
 
   // handlers
   const handleChangeBase = (option: SelectOption) => {
-    dispatch(changeBaseMap(option))
+    dispatch(changeHistBaseMap(option))
   }
 
-  // Coverage
-  const handleChangeCoverageGenre = (option: SelectOption) => {
-    dispatch(setSelectedCoverageGenre(option));
-  }
-  const handleChangeCoverageType = (option: SelectOption) => {
-    dispatch(setSelectedCoverageType(option));
+  const handleChangeCoverage = (option: SelectOption) => {
+    dispatch(changeHistCoverage(option.id));
   }
   
   const handleChangeColormap = (option: SelectOption) => {
-    dispatch(changeColormap(option));
-    dispatch(setSevipPayload({colorbar: option.id as string}))
+    dispatch(changeHistColormap(option));
+    dispatch(setHistoryMapPayload({colorbar: option.id as string}))
   }
 
   // theme
@@ -60,7 +57,7 @@ const MapbasePopup = () => {
         text="Change Base Map"
       >
         
-        <button onClick={() => dispatch(toggleShowMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
+        <button onClick={() => dispatch(toggleShowHistMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
             <Map/>
         </button>
 
@@ -87,30 +84,15 @@ const MapbasePopup = () => {
           className="border-0! bg-none!"
         />
 
-
-        <small>Coverages</small>
-        <div className="border-b border-b-gray-400"/>
-
-        {/* Select coverage Genre */}
+        {/* Select coverage */}
         <SimpleSelect
-          onSelectValue={handleChangeCoverageType}
+          onSelectValue={handleChangeCoverage}
           options={coverageOptions}
-          width="w-85"
+          width="w-80"
           value={selectedCoverage.displayText}
+          title="Select Coverage"
           className="border-0! bg-none!"
         />
-        {/* Select coverage Types */}
-        <SimpleSelect
-          onSelectValue={handleChangeCoverageGenre}
-          options={coverageTypes}
-          width="w-85"
-          value={selectedCoverageType.displayText}
-          className="border-0! bg-none!"
-        />
-        
-
-        <div className="border-b border-b-gray-400"/>
-
 
         {/* Select colormap */}
         <SimpleSelect
@@ -118,7 +100,7 @@ const MapbasePopup = () => {
           options={colormapOptions}
           width="w-80"
           value={selectedColormap.displayText}
-          title="Select Color Palette"
+          title="Select Coverage"
           className="border-0! bg-none!"
         />
 

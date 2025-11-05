@@ -1,84 +1,61 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
 
-const MapOptions: SelectOption[] = 
-[  
+
+// statics 
+
+export const CoverageOptions: SelectOption[] =  [
   {
-    id: 'vertical',
-    displayText: 'Vertically Integrated Profile',
+    id: 'administrative',
+    displayText: 'Administrative',
     availableType: [
       {
-        id: 'vir',
-        displayText: 'Vertically Integrated Reflectivity'
+          id: 'country',
+          displayText: 'Country',
       },
       {
-        id: 'vid',
-        displayText: 'Vertically Integrated Density '
+          id: 'province',
+          displayText: 'Province',
       },
       {
-        id: 'eta_sum',
-        displayText: 'Sum of observed linear reflectivities'
+          id: 'district',
+          displayText: 'District',
       },
       {
-        id: 'eta_sum_expected',
-        displayText: 'Sum of expected linear reflectivities'
-      }
+          id: 'sector',
+          displayText: 'Sector',
+      },
+      {
+          id: 'cell',
+          displayText: 'Cell',
+      },
+      {
+          id: 'village',
+          displayText: 'Village',
+      },
     ]
   },
   {
-    id: 'classification',
-    displayText: 'Classification',
+    id: 'special_zones',
+    displayText: 'Special Zones',
     availableType: [
       {
-        id: 'meteo-biology',
-        displayText: 'Meteorological vs Biological'
+          id: 'protected_areas',
+          displayText: 'Protected Areas'
       },
       {
-        id: 'bird-insect',
-        displayText: 'Bird vs Insect  '
+          id: 'wetland_zones',
+          displayText: 'Wetland Zones',
+      },
+      {
+          id: 'airports',
+          displayText: 'Airports'
       }
     ]
   },
-  {
-    id: 'radar_data',
-    displayText: 'Radar Data',
-    availableType: [
-      {
-        id: 'dr',
-        displayText: 'Depolarization ratio '
-      },
-      {
-        id: 'ref',
-        displayText: 'Reflectivity '
-      },
-      {
-        id: 'zdr',
-        displayText: 'Differential Reflectivity '
-      },
-      {
-        id: 'phi',
-        displayText: 'Differential Phase '
-      },
-      {
-        id: 'rho',
-        displayText: 'Correlation Coefficient '
-      },
-      {
-        id: 'vel',
-        displayText: 'Radial Velocity '
-      },
-      {
-        id: 'sw',
-        displayText: 'Spectrum Width '
-      }
-    ]
-  }
 ]
 
-
-// statics to be moved to the backend
-
-const colormapOptions: SelectOption[] = [
+export const colormapOptions: SelectOption[] = [
   {
     id: 'viridis',
     displayText: 'Viridis',
@@ -100,13 +77,13 @@ const colormapOptions: SelectOption[] = [
     colors: ['#008000', '#339900', '#66B200', '#99CC00', '#CCFF00', '#FFFF33', '#FFFF66', '#FFFF99', '#FFFFCC', '#FFFFFF']
   },
   {
-    id: 'ghistrainbow',
-    displayText: 'Ghist Rainbow',
+    id: 'gist_rainbow',
+    displayText: 'Gist Rainbow',
     colors: ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
   },
 ]
 
-const mapbaseOptions: SelectOption[] = [
+export const mapbaseOptions: SelectOption[] = [
   {
     id: 'openstreet',
     displayText: 'Openstreet',
@@ -146,9 +123,6 @@ const mapbaseOptions: SelectOption[] = [
  * @var selectedMapBase: Selected Map Base
  * @var colormapOptions: Available Colormaps
  * @var selectedColormap: Selected Colormap
- * @var mapOptions: Available Map Variables, SubVariables Included
- * @var selectedMapOption: Selected Map Variable, SubVariable Included
- * @var subOptions: Available SubVariables on a Variable
  * @var selectedSubOption: Selected SubVariable From a Variable
  */
 interface VarPopupState {
@@ -158,10 +132,10 @@ interface VarPopupState {
     selectedMapBase: SelectOption;
     colormapOptions: SelectOption[];
     selectedColormap: SelectOption;
-    mapOptions: SelectOption[];
-    selectedMapOption: SelectOption;
-    subOptions: SelectOption[];
-    selectedSubOption: SelectOption;
+    coverageOptions: SelectOption[];
+    selectedCoverage: SelectOption;
+    coverageTypes: SelectOption[];
+    selectedCoverageType: SelectOption;
 }
 
 const initialState: VarPopupState = {
@@ -175,25 +149,17 @@ const initialState: VarPopupState = {
     },
     colormapOptions: colormapOptions,
     selectedColormap: colormapOptions[0],
-    mapOptions: MapOptions,
-    selectedMapOption: MapOptions[0],
-    subOptions: Array.isArray(MapOptions[0].availableType) ? MapOptions[0].availableType : [],
-    selectedSubOption: Array.isArray(MapOptions[0].availableType) ? MapOptions[0].availableType[0] : null,
-    
+    coverageOptions: CoverageOptions,
+    selectedCoverage: CoverageOptions[0],
+    coverageTypes: Array.isArray(CoverageOptions[0].availableType) ? CoverageOptions[0].availableType : [],
+    selectedCoverageType: Array.isArray(CoverageOptions[0].availableType) ? CoverageOptions[0].availableType[0] : null,
+
 }
 
-const varpopupSlice = createSlice({
-    name: 'mappopups',
+const baseMapPopupSlice = createSlice({
+    name: 'basemappopup',
     initialState,
-    reducers: {
-        changeSelectedMapOption: (state, action) => {
-          state.subOptions = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
-          state.selectedSubOption = action.payload.availableType[0];
-          state.selectedMapOption = action.payload;
-        },
-        changeSelectedSubOption: (state, action) => {
-          state.selectedSubOption = action.payload;
-        },  
+    reducers: { 
         changeBaseMap: (state, action) => {
             state.selectedMapBase = action.payload;
         },
@@ -214,8 +180,26 @@ const varpopupSlice = createSlice({
         hideMapBasePopup: (state) => {
             state.isMapBasePopupOpen = false;
         },
+        
+        setSelectedCoverageGenre: (state, action) => {
+          state.coverageTypes = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
+          state.selectedCoverageType = action.payload.availableType[0];
+          state.selectedCoverage = action.payload;
+        },
+        setSelectedCoverageType: (state, action) => {
+          state.selectedCoverageType = action.payload;
+        }
+
     }
 })
 
-export const { hideVarPopup, toggleShowVarPopup, hideMapBasePopup, toggleShowMapBasePopup, changeBaseMap, changeColormap, changeSelectedMapOption, changeSelectedSubOption } = varpopupSlice.actions;
-export default varpopupSlice.reducer;
+export const { 
+  setSelectedCoverageType,
+  setSelectedCoverageGenre,
+  hideVarPopup, 
+  toggleShowVarPopup, 
+  hideMapBasePopup, 
+  toggleShowMapBasePopup, 
+  changeBaseMap, 
+  changeColormap } = baseMapPopupSlice.actions;
+export default baseMapPopupSlice.reducer;

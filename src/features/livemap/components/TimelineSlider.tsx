@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Play, Pause, Minus, Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 
 type TimelineProps = {
@@ -17,7 +17,6 @@ type TimelineProps = {
  * @returns React.JSX.Element
  */
 const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }: TimelineProps) => {
-  const [speed, setSpeed] = useState(animSpeed);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -29,7 +28,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
         onFrameChange((currentIndex + 1) % frames.length);
-      }, speed);
+      }, 900);
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -37,7 +36,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, speed, frames.length, onFrameChange, currentIndex]);
+  }, [isPlaying, frames.length, onFrameChange, currentIndex]);
 
   const handleStepBackward = () => {
     if (currentIndex > 0) {
@@ -51,19 +50,6 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
     }
   }
 
-  const handleIncrAnimSpeed = () => {
-    if (speed >= 2000 ) {
-      return;
-    }
-
-    setSpeed((prev) => prev + 100);
-
-  }
-
-  const handleDecrAnimSpeed = () => {
-    if (speed <= 100) return;
-    setSpeed((prev) => prev - 100);
-  }
 
   return (
     <div className="z-5 absolute bottom-0 left-0 w-full">
@@ -71,7 +57,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
 
 
         {/* Timeline controls */}
-        <div className="flex pb-6 w-full justify-start items-center 2xl:gap-2 gap-1 mt-2 isolate border-white/20 bg-gray-900/45 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
+        <div className="flex pb-4 w-full justify-start items-center 2xl:gap-2 gap-1 mt-2 border-white/20 bg-gray-900/45 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
 
            {/* Timestamp indicator */}
            {currentFrame ? (
@@ -123,39 +109,23 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
           </div>
 
           {/* Frames */}
-          <div className="flex justify-start items-center 2xl:gap-1">
+          <div className="flex h-full justify-center items-center lg:gap-1">
             {frames.map((frame, i) => (
               <Tooltip key={frame} position="top" text={frame} display_condition={true}>
 
                 <button
-                  
                   onClick={() => {
                     onFrameChange(i);
                     setIsPlaying(false); 
                   }}
                   className={`${
                     currentIndex === i ? "bg-blue-800" : "bg-gray-300"
-                    } hover:bg-blue-700 h-4 2xl:w-4 xl:w-2 w-1 cursor-pointer 2xl:rounded-xs`}
+                    } hover:bg-blue-700 h-4 2xl:w-4 w-2 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>
             ))}
           </div>
 
-          
-          {/* Speed */}
-          <div className="flex opacity-30 hover:opacity-95 items-center bg-gray-800 text-gray-300 rounded-sm">
-              <button onClick={handleDecrAnimSpeed} className="rounded-l-sm hover:bg-gray-700 p-2">
-                <Minus width={20} height={20}/>
-              </button>
-
-              <span className="tracking-wider text-sm p-2 border-x-2 border-gray-600">
-                {speed}ms
-              </span>
-
-              <button onClick={handleIncrAnimSpeed} className="rounded-r-sm hover:bg-gray-700 p-2">
-                <Plus width={20} height={20}/>
-              </button>
-          </div>
 
 
         </div>

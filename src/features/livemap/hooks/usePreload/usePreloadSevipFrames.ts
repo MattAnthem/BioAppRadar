@@ -5,13 +5,15 @@ import { fetchSevip } from "../../../../api/endpoints/spatialDataAPI";
 export const usePreloadSevipFrames = (
     frames: string[],
     parameter: string,
-    colorbar: string
+    colorbar: string,
+    options?: { enabled?: boolean }
 ) => {
 
     const queryClient = useQueryClient();
+    const enabled = options?.enabled ?? true
     
     useEffect(() => {
-      if (!frames.length) return;
+      if (!frames.length || !enabled) return;
     
       const preloadSequentially = async () => {
         for (const time of frames) {
@@ -24,6 +26,6 @@ export const usePreloadSevipFrames = (
       };
     
       preloadSequentially();
-    }, [colorbar, frames, parameter]);   
+    }, [colorbar, frames, parameter,]);   
 
 }

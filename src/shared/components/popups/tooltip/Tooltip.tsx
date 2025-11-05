@@ -53,7 +53,7 @@ const Tooltip = (
       {
         display_condition && (
           <span role='tooltip' className={`
-            z-20 absolute w-max ${pos_classes[position]}
+            z-50 absolute w-max ${pos_classes[position]}
             ${bg} ${text_color} px-2 py-1 rounded text-xs
             opacity-0 hidden group-hover:opacity-100 group-hover:block transition-opacity
           `}>

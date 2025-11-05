@@ -21,14 +21,14 @@ const DataLoading = ({children}: Props) => {
         <div className="top-0 relative w-full h-full flex items-center justify-center">
           <div className="  
               rounded-sm 
-              border-white/20 bg-gray-900/50 shadow-md ring-2 ring-black/5 p-4
+              border-white/20 bg-gray-900/50 shadow-md ring-2 ring-black/5 p-2
               backdrop-blur-sm
               flex flex-col
               items-center
               justify-center
               "
           >
-              <img src={loader} className='w-20' alt="loader" />
+              <img src={loader} className='w-8' alt="loader" />
               <p className='font-semibold text-xs tracking-wider text-gray-300'>LOADING DATA</p>
               
           </div>

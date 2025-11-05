@@ -1,45 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import cellCov from '../../../shared/geojsons/administrative/rwanda_cell.json';
-import countryCov from '../../../shared/geojsons/administrative/rwanda_country.json';
-import districtCov from '../../../shared/geojsons/administrative/rwanda_district.json';
-import provinceCov from '../../../shared/geojsons/administrative/rwanda_province.json';
-import sectorCov from '../../../shared/geojsons/administrative/rwanda_sector.json';
-import villageCov from '../../../shared/geojsons/administrative/rwanda_village.json';
-import type { CrossSectionPayload, SevipPayload } from "../../../api/endpoints/spatialDataAPI";
-import type { SelectOption } from "../../../shared/components/selects/types";
+import type { CrossSectionPayload, RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload } from "../../../api/endpoints/spatialDataAPI";
+import type { ClassificationDataPayload } from "../../../api/endpoints/classificationAPI";
 
-const coverageOptions: SelectOption[] = [
-    {
-        id: 'country',
-        displayText: 'Country',
-        geometry: countryCov,
-    },
-    {
-        id: 'district',
-        displayText: 'District',
-        geometry: districtCov,
-    },
-    {
-        id: 'province',
-        displayText: 'Province',
-        geometry: provinceCov,
-    },
-    {
-        id: 'sector',
-        displayText: 'Sector',
-        geometry: sectorCov,
-    },
-    {
-        id: 'village',
-        displayText: 'Village',
-        geometry: villageCov,
-    },
-    {
-        id: 'cell',
-        displayText: 'Cell',
-        geometry: cellCov,
-    }
-]
+
+
 
 const avalaibleTimes: string[] = [
     "2020-11-10 12:00:33",
@@ -58,9 +22,10 @@ const avalaibleTimes: string[] = [
 
 
 interface LivemapState {
-    coverageOptions: SelectOption[];
-    selectedCoverage: SelectOption;
+    displayedData: 'sevip' | 'classification' | 'radar'
     sevipPayload: SevipPayload,
+    classificationPayload: ClassificationDataPayload;
+    radarPayload: RadarPayload;
     crossSectionPayload: CrossSectionPayload;
     mapTimeRange: string[],
     selectedMapTime: string;
@@ -68,12 +33,26 @@ interface LivemapState {
 
 
 const initialState: LivemapState = {
-    coverageOptions: coverageOptions,
-    selectedCoverage: coverageOptions[0],
+    displayedData: 'classification',
+
     sevipPayload: {
         parameter: 'vid',
         colorbar: 'viridis',
-        time: '2020-11-10 12:40:00',
+        time: '2020-11-10 12:00:33',
+    },
+    classificationPayload: {
+        class: 'biometeo',
+        color_0: '#dc3545',
+        color_1: '#0d6efd',
+        height: 250,
+        time: '2020-11-10 12:00:33',
+    },
+    radarPayload: {
+        colorbar: 'viridis',
+        parameter: 'ref',
+        time: '2020-11-10 12:00:33', 
+        type: 'polar',
+        elevation_angle: 0.5,
     },
     crossSectionPayload: {
         startLat: 0,
@@ -93,15 +72,42 @@ const livemapSlice = createSlice({
     name: 'livemap',
     initialState,
     reducers: {
+
+        setDisplayedData: (state, action) => {
+            state.displayedData = action.payload;
+        },
         setSevipPayload: (state, action: PayloadAction<Partial<SevipPayload>>) => {
+            state.displayedData = 'sevip';
             state.sevipPayload = {...state.sevipPayload, ...action.payload}
         },
-        changeCoverage: (state, action) => {
-            const selected = state.coverageOptions.find(option => option.id === action.payload);
-            if (selected) {
-                state.selectedCoverage = selected;
-            }
+        setClassificationPayload: (state, action: PayloadAction<Partial<ClassificationDataPayload>>) => {
+            state.displayedData = 'classification';
+            state.classificationPayload = {...state.classificationPayload, ...action.payload}
         },
+        setRadarPayload: (
+            state,
+            action: PayloadAction<Partial<RadarGridPayload> | Partial<RadarPolarPayload>>
+          ) => {
+            state.displayedData = "radar";
+          
+            const prevPayload = state.radarPayload;
+            const incoming = action.payload;
+          
+            const effectiveType = incoming.type ?? prevPayload.type; 
+          
+            if (effectiveType === "grid") {
+              state.radarPayload = {
+                ...(prevPayload as RadarGridPayload),
+                ...(incoming as Partial<RadarGridPayload>),
+              };
+            } else {
+              state.radarPayload = {
+                ...(prevPayload as RadarPolarPayload),
+                ...(incoming as Partial<RadarPolarPayload>),
+              };
+            }
+          },
+          
 
         setCrossSectionPayload: (state, action: PayloadAction<Partial<CrossSectionPayload>>) => {
             state.crossSectionPayload = { ...state.crossSectionPayload, ...action.payload }
@@ -115,6 +121,6 @@ const livemapSlice = createSlice({
     }
 })
 
-export const { changeCoverage, setCrossSectionPayload, setSevipPayload, setSelectedTime } = livemapSlice.actions;
+export const { setCrossSectionPayload, setSevipPayload, setSelectedTime, setClassificationPayload, setRadarPayload, setDisplayedData } = livemapSlice.actions;
 export default livemapSlice.reducer;
 

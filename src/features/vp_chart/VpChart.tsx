@@ -2,9 +2,9 @@ import SectionCard from "../../shared/components/cards/SectionCard";
 import VerticalProfileChart from "../../shared/components/charts/VerticalProfileChart";
 import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
+import OptionPopover from "../../shared/components/popups/option/OptionPopover";
 import SimpleSelect from "../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../shared/components/selects/types";
-import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import { changeVpPayload, setSelectedVpParameterOption } from "./vpChartSlice";
@@ -59,11 +59,7 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
             {/* controls */}
             {
               showControls && (
-                <ChartParamsPopup>
-                  <div className="w-full mb-2">
-                    <small>Select Time</small>
-                    <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
-                  </div>
+                <OptionPopover hoverText="Select options">
 
                   <div className="w-full">
                     <small>Select Variable</small>
@@ -74,7 +70,12 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
                       width="w-full"
                     />
                   </div>
-                </ChartParamsPopup>
+
+                  <div className="w-full mb-2">
+                    <small>Select Time</small>
+                    <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
+                  </div>
+                </OptionPopover>
               )
             }
             

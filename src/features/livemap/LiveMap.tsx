@@ -1,96 +1,112 @@
 import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
-import Colorbar from './components/Colorbar';
-import TimelineSlider from './components/TimelineSlider';
-import LeafletMap from '../../shared/components/map/LeafletMap';
-import VaribalePopup from './components/VaribalePopup';
 import MapbasePopup from './components/MapbasePopup';
+import RadarPopup from './components/RadarPopup';
+import SevipPopup from './components/SevipPopup';
+import ClassificationPopup from './components/ClassificationPopup';
+import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { changeAltitude } from './slice/altitudeSlice';
+import { setClassificationPayload, setRadarPayload, setSelectedTime, setSevipPayload } from './slice/livemapSlice';
+import type { SelectOption } from '../../shared/components/selects/types';
+import { usePrefetchAnimationData } from './hooks/prefetchLive/prefetchAnimationData';
 import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
-import { usePreloadSevipFrames } from './hooks/useQuery/usePreloadSevipFrames';
-import { useSevipDataQuery } from './hooks/useQuery/useSevipQuery';
-import { useQueryClient } from '@tanstack/react-query';
-import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
-import { setCrossSectionPayload, setSelectedTime, setSevipPayload } from './slice/livemapSlice';
+import TimelineSlider from './components/TimelineSlider';
+import Colorbar from './components/Colorbar';
 import AltitudeSlider from './components/AltitudeSlider';
+import { changeAltitude } from './slice/altitudeSlice';
 
 type LiveMapProps = {
     drawable: boolean;
     enableLineDraw: boolean;
     displayTimeline: boolean;
-    displayControls?: boolean;
 }
 
 
-/**
- * Interactive Live Map Feature 
- * @param drawable allow polygon drawing on the map and retrieve a GeoJSON
- * @returns React.JSX.Element
- */
-const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }: LiveMapProps) => {
+const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) => {
 
-    // Redux
-    const { selectedCoverage, mapTimeRange, selectedMapTime } = useAppSelector(state => state.livemap);
-    const { selectedMapBase, selectedMapOption, selectedSubOption, selectedColormap } = useAppSelector(state => state.mappopups);
+    // Redux states
+    const { selectedCoverage, selectedMapTime, mapTimeRange, displayedData, classificationPayload, sevipPayload, radarPayload } = useAppSelector(state => state.livemap);
+    const { selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
-    const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch()
+
+    // ALtitude
+    const currentHeight = altitudeOptions[currentAltitudeIndex];
+    const handleAltitudeChange = (altitudeIndex: number) => {
+        dispatch(changeAltitude(altitudeIndex))
+    }
+
+    // Timeline
+    // to be replaced by actual time
     const currentIndex = Math.max(0, mapTimeRange.indexOf(selectedMapTime));
-    const queryClient = useQueryClient();
-
-
-    // Tanstack fetch query
-    usePreloadSevipFrames(mapTimeRange, selectedSubOption.id as string, selectedColormap.id as string);
-
-
-    const { data, isLoading, error } = useSevipDataQuery({
-      parameter: selectedSubOption.id as string,
-      colorbar: selectedColormap.id as string,
-      time: selectedMapTime
-    })
-
-    // Query the cached sevip data from IDB by its key 'sevip_data'
-    const key = ["sevip_data", selectedSubOption.id, selectedColormap.id, selectedMapTime];
-    const cached = queryClient.getQueryData<SpatialDataResponse>(key);
-    const currentData = data ?? cached;
-
-
     const handleFrameChange = (newIndex: number) => {
         const newTime = mapTimeRange[newIndex];
         dispatch(setSelectedTime(newTime));
     };
-    
-    //#region  Transect payload
 
-    const handleLineCreated = (start: L.LatLng, end: L.LatLng) => {
-        dispatch(setCrossSectionPayload({
-            startLat: start.lat,
-            endLat: end.lat,
-            startLon: start.lng,
-            endLon: end.lng
+    // Radar
+    const handleRadarTypeChange = (option: SelectOption) => {
+        dispatch(
+          setRadarPayload({
+            type: option.id as "polar" | "grid",
+            colorbar: selectedColormap.id as string,
+          })
+        );
+      };
+      
+      const handleRadarParameterChange = (option: SelectOption) => {
+        dispatch(
+          setRadarPayload({
+            parameter: option.id as string,
+            colorbar: selectedColormap.id as string,
+          })
+        );
+      };
+
+
+    // Sevip
+    const handleSevipVarChange = (option: SelectOption) => {
+        dispatch(setSevipPayload({
+            parameter: option.id as string
         }))
     }
-    //#endregion
 
 
-    //#region Api call
-    // handle parameters changes
-    const handleSelectedVars = () => {
-        dispatch(setSevipPayload({parameter: selectedSubOption.id as string}))
+    const handleClassificationVarsChange = (variable: SelectOption) => {
+        dispatch(setClassificationPayload({
+            class: variable.id as string
+        }))
+    }
+    const handleClassificationColor0Change = (color: string) => {
+        dispatch(setClassificationPayload({
+            color_0: color
+        }))
+    }
+    const handleClassificationColor1Change = (color: string) => {
+        dispatch(setClassificationPayload({
+            color_1: color
+        }))
     }
 
-    const handleAltitudeChange = (altitudeIndex: number) => {
-        dispatch(changeAltitude(altitudeIndex))
-    }
-    //#endregion
 
 
-    if (isLoading && !cached) return (
+    const { data, isLoading, error } = usePrefetchAnimationData({
+        currentTime: selectedMapTime,
+        displayedData,
+        timeRange: mapTimeRange, 
+        classifPayload: classificationPayload,
+        sevipPayload,
+        radarPayload,
+        colormap: selectedColormap.id as string,
+        altitude: currentHeight,
+    })
+
+
+    if (isLoading) return (
         <div className="relative w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
-                <VaribalePopup  onChangeMapVariable={handleSelectedVars}/> 
             </DataLoading>
         </div>
     )
@@ -99,11 +115,9 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
         <SectionCard className="relative w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
-                <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
             </FetchError>   
         </SectionCard>
     )
-
 
 
   return (
@@ -111,30 +125,49 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
 
         {/* Heading */}
         <GlassHeader className='p-1 flex justify-between items-center'>
-        
-            <h3 className='text-white tracking-wider text-sm'>{selectedSubOption.displayText}</h3>
+
+            <h3 className='text-white tracking-wider text-sm'>{data?.info.name}</h3>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-3 justify-center items-end">
 
                 <MapbasePopup/>
-                {/* Change variable */}
-                {
-                    displayControls && (
-                        <VaribalePopup onChangeMapVariable={handleSelectedVars}/> 
-                    )
-                }
+
+                <RadarPopup onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+
+                <SevipPopup onSevipVariableChange={handleSevipVarChange}/>
+
+                <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
 
             </div>
 
+
         </GlassHeader>
+
+
+        {/* Map Leaflet */}
+        <LeafletMap
+            className='relative z-4 w-full h-full rounded-sm'            
+            baseMap={selectedMapBase.url as string}
+            drawable={drawable}
+            enableLineDraw={enableLineDraw}
+            center={[-2.158, 30.1131097]}
+            zoom={8}
+            overlayImg={
+                {
+                    url: data?.data?.png ?? '',
+                    bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
+                }
+            }
+            // overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
+        />
 
         {/* Altitude slider */}
         {
-            (selectedMapOption.id !== "vertical") && (
-                <div className="h-full absolute bottom-2 right-0 flex lg:items-center items-start">
+            (displayedData === "classification" || radarPayload.type === 'grid') && (
+                <div className="h-full absolute bottom-2 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
-                         position='right'
+                        position='right'
                         currentIndex={currentAltitudeIndex}
                         onChangeAltitude={handleAltitudeChange}
                         altitudes={altitudeOptions}
@@ -142,16 +175,7 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
                 </div>
             )
         }
-
-
-        {/* Colorbar */}
-        <Colorbar
-            colorCodes={data?.ckeys?.colors ?? []}
-            valueScale={data?.ckeys?.labels.map(Number)  ?? []}
-            className='absolute bottom-0 left-0 z-10'
-        />
-
-        {/* Timeline   */}
+        {/* Timeline */}
         {
             displayTimeline && (
                 <TimelineSlider 
@@ -163,24 +187,40 @@ const LiveMap = ({ drawable, enableLineDraw, displayTimeline, displayControls }:
             )
         }
 
-        {/* Map Leaflet */}
-        <LeafletMap
-            className='relative z-4 w-full h-full rounded-sm'            
-            baseMap={selectedMapBase.url as string}
-            drawable={drawable}
-            enableLineDraw={enableLineDraw}
-            onDrawLine={handleLineCreated}
-            center={[-2.158, 30.1131097]}
-            zoom={8}
-            overlayImg={
-                {
-                    url: currentData?.data?.png ?? '',
-                    bounds: currentData?.data?.bounds as L.LatLngBoundsExpression ?? undefined,
-                }
-            }
-            overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
-        />
-    
+        {/* Colorbar */}
+        {
+            (displayedData !== 'classification') && (
+                <Colorbar
+                    colorCodes={data?.ckeys?.colors ?? []}
+                    valueScale={data?.ckeys?.labels.map(Number)  ?? []}
+                    className='absolute bottom-0 left-0 z-10'
+                />
+            )
+        }
+
+        {/* Classification legends */}
+        {
+            (displayedData === "classification") && (
+                <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 py-2 right-2 bottom-1">
+                    
+                    {/* Color 0 */}
+                    <div className="flex gap-2">
+                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: data?.legend?.class_0?.color}}/>
+                        <small className='text-white tracking-widest'>{data?.legend?.class_0?.name}</small>
+                    </div>
+                    {/* Color 1 */}
+                    <div className="flex gap-2">
+                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: data?.legend?.class_1?.color}}/>
+                        <small className='text-white tracking-widest'>{data?.legend?.class_1?.name}</small>
+                    </div>
+
+                    <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
+
+                </div>
+            )
+        }
+
+      
     </SectionCard>
   )
 }
