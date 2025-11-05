@@ -20,16 +20,18 @@ type LiveMapProps = {
     drawable: boolean;
     enableLineDraw: boolean;
     displayTimeline: boolean;
+    showControls?: boolean;
 }
 
 
-const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) => {
+const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= false }: LiveMapProps) => {
 
     // Redux states
     const { selectedCoverage, selectedMapTime, mapTimeRange, displayedData, classificationPayload, sevipPayload, radarPayload } = useAppSelector(state => state.livemap);
     const { selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch()
+
 
     // ALtitude
     const currentHeight = altitudeOptions[currentAltitudeIndex];
@@ -45,6 +47,7 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) =
         dispatch(setSelectedTime(newTime));
     };
 
+    //#region radar data handler
     // Radar
     const handleRadarTypeChange = (option: SelectOption) => {
         dispatch(
@@ -53,26 +56,34 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) =
             colorbar: selectedColormap.id as string,
           })
         );
-      };
+    };
       
-      const handleRadarParameterChange = (option: SelectOption) => {
+    const handleRadarParameterChange = (option: SelectOption) => {
         dispatch(
           setRadarPayload({
             parameter: option.id as string,
             colorbar: selectedColormap.id as string,
           })
         );
-      };
+    };
+    //#endregion
 
 
+    //#region sevip data handler
     // Sevip
     const handleSevipVarChange = (option: SelectOption) => {
         dispatch(setSevipPayload({
             parameter: option.id as string
         }))
     }
+    //#endregion
 
 
+
+
+
+    //#region Classification data handler 
+    // Classification
     const handleClassificationVarsChange = (variable: SelectOption) => {
         dispatch(setClassificationPayload({
             class: variable.id as string
@@ -88,16 +99,20 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) =
             color_1: color
         }))
     }
+    //#endregion
+
+
+    // Prefetch classification only
 
 
 
     const { data, isLoading, error } = usePrefetchAnimationData({
         currentTime: selectedMapTime,
-        displayedData,
-        timeRange: mapTimeRange, 
-        classifPayload: classificationPayload,
+        displayedData: 'classification',
+        timeRange: mapTimeRange,
         sevipPayload,
-        radarPayload,
+        radarPayload, 
+        classifPayload: classificationPayload,
         colormap: selectedColormap.id as string,
         altitude: currentHeight,
     })
@@ -124,18 +139,24 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) =
     <SectionCard className='relative w-full h-full p-1 col-span-6'>
 
         {/* Heading */}
-        <GlassHeader className='p-1 flex justify-between items-center'>
+        <GlassHeader className='z-20 p-1 flex justify-between items-center'>
 
             <h3 className='text-white tracking-wider text-sm'>{data?.info.name}</h3>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-3 justify-center items-end">
 
-                <MapbasePopup/>
+                <MapbasePopup displayColorbarOption={false}/>
 
-                <RadarPopup onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                {
+                    showControls && (
+                        <>
+                            <RadarPopup onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                            <SevipPopup onSevipVariableChange={handleSevipVarChange}/>
+                        </>
+                    )
+                }
 
-                <SevipPopup onSevipVariableChange={handleSevipVarChange}/>
 
                 <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
 
@@ -165,7 +186,7 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, }: LiveMapProps) =
         {/* Altitude slider */}
         {
             (displayedData === "classification" || radarPayload.type === 'grid') && (
-                <div className="h-full absolute bottom-2 right-2 flex lg:items-center items-start">
+                <div className="h-full absolute bottom-3 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}

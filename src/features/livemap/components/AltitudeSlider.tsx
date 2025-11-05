@@ -33,12 +33,12 @@ const AltitudeSlider = (
 ) => {
 
     const position_classes: Record<Position, string> = {
-        right: "right-2 lg:bottom-[20%] bottom-[25%]",
-        left: "left-2 lg:bottom-[13%] bottom-[25%]"
+        right: "right-2 lg:bottom-[25%] bottom-[25%]",
+        left: "left-2 lg:bottom-[20%] bottom-[25%]"
     }
 
   return (
-    <div className={`${position_classes[position]} ${className}  z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[65vh] lg:h-[full] h-[30vh]  rounded-sm p-2 flex justify-center items-center`}>
+    <div className={`${position_classes[position]} ${className}  z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[70vh] lg:h-[full] h-[35vh]  rounded-sm p-2 flex justify-center items-center`}>
       
 
       {/* Altitude band */}
@@ -59,7 +59,7 @@ const AltitudeSlider = (
                     onClick={() => onChangeAltitude(i)}
                     className={`${
                       i === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
-                    } w-3 h-1 hover:w-4 hover:h-4 hover:absolute hover:z-40 relative cursor-pointer  hover:bg-blue-800`}
+                    } w-3 h-1 hover:w-5  relative cursor-pointer  hover:bg-blue-800`}
                   >
                   </button>
               </div>

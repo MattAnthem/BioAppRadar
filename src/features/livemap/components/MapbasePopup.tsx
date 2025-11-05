@@ -12,8 +12,11 @@ import { changeBaseMap, changeColormap, hideMapBasePopup, setSelectedCoverageGen
 
 
 
+type BaseMapProps = {
+  displayColorbarOption?: boolean;
+}
 
-const MapbasePopup = () => {
+const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
 
   // redux 
   const {selectedCoverage, coverageOptions, coverageTypes, selectedCoverageType, isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
@@ -52,7 +55,7 @@ const MapbasePopup = () => {
   const { bg, border, hover, options_bg } = themes.theme.simpleSelect;
 
   return (
-    <div ref={mapBasepopupRef} className="relative">
+    <div ref={mapBasepopupRef} className="">
 
       <Tooltip 
         position="bottom" 
@@ -68,7 +71,7 @@ const MapbasePopup = () => {
 
       {/* Pop-over menu */}
       <div className={`
-          ${options_bg} ${border}  border shadow-sm flex flex-col gap-2 justify-center  w-90 absolute right-0 top-full p-2 rounded-sm
+          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center  w-90 absolute right-0  top-full p-2 rounded-sm
           ${isMapBasePopupOpen ? 
               "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
           }
@@ -78,12 +81,13 @@ const MapbasePopup = () => {
       >
 
         {/* Select map base */}
+        <small>Base Map</small>
+        <div className="border-b border-b-gray-400"/>
         <SimpleSelect
           onSelectValue={handleChangeBase}
           options={mapBaseOptions}
-          width="w-80"
+          width="w-85"
           value={selectedMapBase.displayText}
-          title="Select Base Map"
           className="border-0! bg-none!"
         />
 
@@ -109,28 +113,35 @@ const MapbasePopup = () => {
         />
         
 
-        <div className="border-b border-b-gray-400"/>
-
 
         {/* Select colormap */}
-        <SimpleSelect
-          onSelectValue={handleChangeColormap}
-          options={colormapOptions}
-          width="w-80"
-          value={selectedColormap.displayText}
-          title="Select Color Palette"
-          className="border-0! bg-none!"
-        />
-
         {/* Colormap preview */}
-        <div className="w-full flex flex-col">
-          <small>Preview</small>
-          <Colorbar
-            colorCodes={selectedColormap.colors as string[]}
-            valueScale={[]}
-            className="w-full rounded-none!"
-          />
-        </div>
+        {
+          displayColorbarOption && (
+            <>
+              <small>Colorbar</small>
+              <div className="border-b border-b-gray-400"/>
+              <SimpleSelect
+                onSelectValue={handleChangeColormap}
+                options={colormapOptions}
+                width="w-85"
+                value={selectedColormap.displayText}
+                className="border-0! bg-none!"
+              />
+
+              
+              
+              <div className="w-full flex flex-col">
+                <small>Preview</small>
+                <Colorbar
+                  colorCodes={selectedColormap.colors as string[]}
+                  valueScale={[]}
+                  className="w-full rounded-none!"
+                />
+              </div>
+            </>
+          )
+        }
 
       </div>
 

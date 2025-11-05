@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import type { ClassificationDataPayload, ClassificationDataResponse } from "../../../../api/endpoints/classificationAPI";
-import type { RadarGridPayload, RadarPolarPayload, SevipPayload, SpatialDataResponse } from "../../../../api/endpoints/spatialDataAPI";
+import type { RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload, SpatialDataResponse } from "../../../../api/endpoints/spatialDataAPI";
 import { usePreloadClassificationFrames } from "../usePreload/usePreloadClassificationFrames";
 import { useClassificationDataQuery } from "../useQuery/useClassificationQuery";
 import { usePreloadSevipFrames } from "../usePreload/usePreloadSevipFrames";
@@ -14,8 +14,8 @@ type PrefetchAnimationParams = {
     timeRange: string[];
     currentTime: string;
     classifPayload: ClassificationDataPayload;
-    sevipPayload: SevipPayload;
-    radarPayload: RadarGridPayload | RadarPolarPayload;
+    sevipPayload?: SevipPayload;
+    radarPayload?: RadarGridPayload | RadarPolarPayload;
     altitude: number; 
     colormap: string;
 }
@@ -48,7 +48,7 @@ export const usePrefetchAnimationData = ({
 
     usePreloadSevipFrames(
         timeRange,
-        sevipPayload.parameter,
+        sevipPayload?.parameter ?? '',
         colormap,
         { enabled: isSevip }
     )
@@ -56,8 +56,8 @@ export const usePrefetchAnimationData = ({
     usePreloadRadarFrames(
         timeRange,
         colormap,
-        radarPayload,
-        { enabled: isRadar }
+        radarPayload ?? ({} as RadarPayload),
+        { enabled: isRadar && !!radarPayload}
     )
 
     
@@ -71,29 +71,32 @@ export const usePrefetchAnimationData = ({
         height: altitude,
     }, isClassification);
 
-    const { data: sevipData, isLoading: isSevipLoading, error: sevipError } = useSevipDataQuery({
-        parameter: sevipPayload.parameter,
-        colorbar: colormap,
-        time: currentTime,
-    } , isSevip);
+    const { data: sevipData, isLoading: isSevipLoading, error: sevipError } = useSevipDataQuery(
+        sevipPayload
+        ? { parameter: sevipPayload.parameter, colorbar: colormap, time: currentTime }
+        : ({} as SevipPayload),
+        isSevip && !!sevipPayload
+    );
 
-    const { data: radarData, isLoading: isRadarLoading, error: radarError } = useRadarDataQuery({
-         ...radarPayload, 
-         time: currentTime 
-    }, isRadar);
+    const { data: radarData, isLoading: isRadarLoading, error: radarError } = useRadarDataQuery(
+        radarPayload
+        ? { ...radarPayload, time: currentTime }
+        : ({} as RadarPayload),
+        isRadar && !!radarPayload
+    );
 
 
 
 
     // Get the cached data
     const classifKey = ["classification_data", classifPayload.class, currentTime, classifPayload.color_0, classifPayload.color_1, altitude];
-    const sevipKey = [ "sevip_data", sevipPayload.parameter, colormap, currentTime];
-    const radarKey = [ "radar_data", radarPayload.parameter,  currentTime, radarPayload.type, colormap]
+    const sevipKey = sevipPayload ? [ "sevip_data", sevipPayload.parameter, colormap, currentTime] : [];
+    const radarKey = radarPayload ? [ "radar_data", radarPayload.parameter,  currentTime, radarPayload.type, colormap] : [];
 
     // Cached data
     const classifCached = queryClient.getQueryData<SpatialDataResponse>(classifKey) ?? null;
-    const sevipCached = queryClient.getQueryData<SpatialDataResponse>(sevipKey) ?? null;
-    const radarCached = queryClient.getQueryData<SpatialDataResponse>(radarKey) ?? null;
+    const sevipCached = sevipKey.length ? queryClient.getQueryData<SpatialDataResponse>(sevipKey) ?? null : null;
+    const radarCached = radarKey.length ? queryClient.getQueryData<SpatialDataResponse>(radarKey) ?? null : null;
 
 
     let data: SpatialDataResponse | ClassificationDataResponse | null = null;
@@ -107,12 +110,12 @@ export const usePrefetchAnimationData = ({
             error = classifError
             break;
     
-        case isSevip:
+        case isSevip  && !!sevipPayload:
             data = sevipData ?? sevipCached;
             isLoading = isSevipLoading;
             error = sevipError;
             break;
-        case isRadar: 
+        case isRadar && !!radarPayload: 
             data = radarData ?? radarCached;
             isLoading = isRadarLoading;
             error = radarError

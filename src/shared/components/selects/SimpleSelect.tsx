@@ -43,7 +43,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
     })
 
   return (
-    <fieldset className={`${width} ${border} ${title ? 'px-2 pb-2 rounded-sm border-2' : ''}`}>
+    <fieldset className={`${width} ${border} ${title ? 'px-2 pb-2 z-50 rounded-sm border-2' : ''}`}>
 
         {
             title && <legend className={`${secondary_text} px-2 ml-2 text-sm`}>{title}</legend>
@@ -70,7 +70,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
 
             </button>
             {isOpen && (
-                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} custom_select border shadow-lg z-50 absolute max-h-[200px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-2`} style={{zIndex: 100}}>
+                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} custom_select border shadow-lg  absolute max-h-[150px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-1.5 `} style={{zIndex: 300}}>
                     <div className='w-full'>
                         {
                             options?.map((option, i) => (

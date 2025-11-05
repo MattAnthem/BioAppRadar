@@ -14,6 +14,8 @@ export const usePreloadClassificationFrames = (
     const enabled = options?.enabled ?? true;
     useEffect(() => {
       if (!frames.length || !enabled) return;
+
+      console.log("Preloading classif frames")
     
       const preloadSequentially = async () => {
         for (const time of frames) {
@@ -26,5 +28,5 @@ export const usePreloadClassificationFrames = (
       };
     
       preloadSequentially();
-    }, [classType, color0, color1, frames, height]);
+    }, [classType, color0, color1, frames, height, enabled]);
 }

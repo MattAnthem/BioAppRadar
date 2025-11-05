@@ -25,7 +25,7 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
     })
 
   return (
-    <div ref={popupRef} className='relative'>
+    <div ref={popupRef} className=''>
       
       <Tooltip 
         position="bottom" 
@@ -37,9 +37,11 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
             {customIcon || <Settings2 width={15} height={15}/>}
         </button>
 
+        
+      </Tooltip>
         {/* Pop-over menu */}
         <div className={`
-          ${options_bg} ${border} z-50 border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
+          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
           ${isPopupOpen ? 
               "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
           }
@@ -51,8 +53,6 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
         {children}
 
       </div>
-        
-      </Tooltip>
 
     </div>
   )
