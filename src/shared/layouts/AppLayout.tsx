@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import Sidebar from '../components/navigation/sidebar/Sidebar';
 import TopBar from '../components/navigation/topbar/TopBar';
+import { Suspense } from 'react';
 
 /**
  * The Dashboard Main Layout, Responsible for placing the Sidebar, Topbar and the pages in their correct position
@@ -23,8 +24,16 @@ const AppLayout = () => {
         {/* Topbar */}
         <TopBar/>
 
-        {/* Pages */}
-        <Outlet />
+        <Suspense 
+          fallback={
+            <div className='w-full h-full'>
+              Loading BioAappRadar ...
+            </div>
+          }
+        >
+          {/* Pages */}
+          <Outlet />
+        </Suspense>
 
       </div>
     </div>
