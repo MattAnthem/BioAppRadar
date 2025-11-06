@@ -1,5 +1,5 @@
 import {  Bell, CalendarClock, FlipHorizontal,  Home, SidebarIcon } from "lucide-react";
-import logo_svg from "../../../../assets/dark_logo.svg"
+import logo_svg from "../../../../assets/dark_logo.webp"
 import { useTheme } from "../../../hooks/useTheme";
 import React, { useRef } from "react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
@@ -55,8 +55,8 @@ const Sidebar = () => {
         {/* AppLogo */}
         <div className={`mb-2 flex ${isMinimized ? 'items-start justify-center' : 'justify-between items-center'}  gap-1 p-1 w-full`}>
 
-            <div className="flex justify-start items-center">
-                <img src={logo_svg} className="w-10 h-10" alt="appicon" />
+            <div className="flex justify-start gap-2 items-center">
+                <img src={logo_svg} className="w-8 h-8" alt="appicon" />
                 <h1 className={`text-xl font-semibold ${isMinimized ? 'hidden' : navs.text} transition-opacity duration-100 ease-in-out tracking-wider`}>BioAppRadar</h1>
             </div>
 

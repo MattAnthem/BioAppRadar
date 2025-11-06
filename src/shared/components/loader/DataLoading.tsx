@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import loader from '../../../assets/loader.gif';
+import loader from '../../../assets/loader.webp';
 import GlassHeader from '../cards/GlassHeader';
 
 
