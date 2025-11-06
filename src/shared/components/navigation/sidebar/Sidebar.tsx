@@ -56,7 +56,7 @@ const Sidebar = () => {
         <div className={`mb-2 flex ${isMinimized ? 'items-start justify-center' : 'justify-between items-center'}  gap-1 p-1 w-full`}>
 
             <div className="flex justify-start gap-2 items-center">
-                <img src={logo_svg} className="w-8 h-8" alt="appicon" />
+                <img src={logo_svg} className="w-10 h-10" alt="appicon" />
                 <h1 className={`text-xl font-semibold ${isMinimized ? 'hidden' : navs.text} transition-opacity duration-100 ease-in-out tracking-wider`}>BioAppRadar</h1>
             </div>
 

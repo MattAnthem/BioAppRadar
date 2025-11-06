@@ -17,7 +17,7 @@
     "@tanstack/react-query-devtools": "^5.90.2",
     "@tanstack/react-query-persist-client": "^5.90.7",
     "axios": "^1.13.1",
-    "highcharts": "^12.4.0",
+    "highcharts": "^11.4.8",
     "highcharts-react-official": "^3.2.3",
     "idb-keyval": "^6.2.2",
     "leaflet": "^1.9.4",

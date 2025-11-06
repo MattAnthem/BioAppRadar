@@ -8,9 +8,10 @@ type ChartParamsPopupProps = {
     children?: ReactNode;
     hoverText?: string;
     customIcon?: ReactNode;
+    onClickEvent?: () => void;
 }
 
-const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProps) => {
+const OptionPopover = ({ children, hoverText, customIcon, onClickEvent }: ChartParamsPopupProps) => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const popupRef = useRef<HTMLDivElement | null>(null);
 
@@ -24,6 +25,11 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
         }
     })
 
+    const handleBtnClick = () => {
+      setIsPopupOpen(!isPopupOpen);
+      onClickEvent?.();
+    }
+
   return (
     <div ref={popupRef} className={text}>
       
@@ -33,7 +39,7 @@ const OptionPopover = ({ children, hoverText, customIcon }: ChartParamsPopupProp
         text={hoverText ?? ''}
       >
 
-        <button onClick={() => setIsPopupOpen(!isPopupOpen)} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
+        <button onClick={handleBtnClick} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
             {customIcon || <Settings2 width={15} height={15}/>}
         </button>
 

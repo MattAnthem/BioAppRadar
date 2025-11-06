@@ -11,9 +11,11 @@ type ClassificationPopupProps = {
     onChangeClassifVariable?: (option: SelectOption) => void;
     onChangeClassifColorZero?: (color: string) => void;
     onChangeClassifColorOne?: (color: string) => void;
+    color0Legend?: string;
+    color1Legend?: string;
 }
 
-const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne, onChangeClassifColorZero }: ClassificationPopupProps) => {
+const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne, onChangeClassifColorZero, color0Legend, color1Legend }: ClassificationPopupProps) => {
 
     const { availableVariables, selectedVariable, color_0, color_1 } = useAppSelector(state=> state.classificationpopup);
 
@@ -65,10 +67,18 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
             onSelectValue={handleClassificationVariableChange}
         />
 
-        <small>Select colors </small>
+        <small className='font-semibold'>Select colors </small>
         <div className="border-b border-b-gray-400"/>
-        <input onChange={handleColorZeroChange} value={color_0} className='w-full h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
-        <input onChange={handleColorOneChange} value={color_1} className='w-full h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
+
+        <div className="flex gap-2 justify-start items-center">
+            <small>{color0Legend} :</small>
+            <input onChange={handleColorZeroChange} value={color_0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
+        </div>
+        <div className="flex gap-2">
+            <small>{color1Legend} :</small>
+            <input onChange={handleColorOneChange} value={color_1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
+        </div>
+
     </OptionPopover>
 
   )

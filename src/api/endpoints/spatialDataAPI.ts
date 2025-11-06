@@ -85,6 +85,7 @@ export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialData
             colorbar: payload.colorbar,
             height: payload.height,
           };
+    console.log("AXIOS CALL RADAR DATA")
     const { data } = await axiosClient.post("/get_radar", payloadToSend);
     if (data.status !== 0) throw new Error("Error fetching Radar data");
     return data.data;

@@ -12,11 +12,11 @@ const HistoricalExplorer = () => {
         <div id='livemap' className="xl:grid mb-2 h-full lg:h-[55vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2">
 
                     
-        <div className="h-full lg:col-span-6">
-            <HistoryMap/>
-        </div>
+          <div className="h-full lg:col-span-6">
+              <HistoryMap/>
+          </div>
 
-        <VpChart showControls className="w-full lg:h-full xl:h-full  lg:col-span-2"/>
+          <VpChart showControls className="w-full lg:h-full xl:h-full  lg:col-span-2"/>
 
         </div>
 

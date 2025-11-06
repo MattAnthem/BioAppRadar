@@ -12,7 +12,6 @@ import { usePrefetchAnimationData } from './hooks/prefetchLive/prefetchAnimation
 import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
 import TimelineSlider from './components/TimelineSlider';
-import Colorbar from './components/Colorbar';
 import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
 
@@ -152,7 +151,13 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
                 }
 
 
-                <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
+                <ClassificationPopup 
+                    color0Legend={data?.legend?.class_0?.name} 
+                    color1Legend={data?.legend?.class_1?.name} 
+                    onChangeClassifVariable={handleClassificationVarsChange} 
+                    onChangeClassifColorOne={handleClassificationColor1Change} 
+                    onChangeClassifColorZero={handleClassificationColor0Change}
+                />
 
             </div>
 

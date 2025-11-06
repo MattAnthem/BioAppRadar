@@ -99,7 +99,7 @@ const HistoryMap = () => {
             overlayImg={
                 {
                     url: data?.data?.png ?? '',
-                    bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? undefined,
+                    bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
                 }
             }
             overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}

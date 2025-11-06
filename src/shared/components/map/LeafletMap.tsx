@@ -57,6 +57,7 @@ const LeafletMap = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const overlayImgRef = useRef<L.ImageOverlay | null>(null);
 
+  // Map initialization
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
@@ -79,8 +80,7 @@ const LeafletMap = ({
       zoomContainer.style.marginLeft = '10px';
       zoomContainer.style.appearance= 'none'
     }
-   
-
+  
     // Add tiles
     L.tileLayer(baseMap, {
       maxZoom: 19,
@@ -91,8 +91,6 @@ const LeafletMap = ({
     // ALlow map draw on interface
     if (drawable) enableDraw(map, onDrawPolygon);
 
-    // Allow line drawing
-    if (enableLineDraw) enableDrawLine(map, onDrawLine);
 
     return () => {
       // cleanup overlays
@@ -103,6 +101,15 @@ const LeafletMap = ({
       mapRef.current = null;
     };
   }, [boxZoom, scrollWheelZoom, baseMap]);
+
+    useEffect(() => {
+      const map = mapRef.current;
+      if (!map) return;
+    
+      if (enableLineDraw) {
+        enableDrawLine(map, onDrawLine);
+      } 
+    }, [enableLineDraw, onDrawLine]);
 
 
   // Add GeoJSON layers according to users parameters

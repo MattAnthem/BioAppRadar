@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchVCrossBioClass, type CrossSectionBioClassPayload, type CrossSectionBioClassResponse } from "../../../api/endpoints/crossSectionAPI";
+import { fetchVcrossRadar, type CrossSectionRadarPayload, type CrossSectionRadarResponse } from "../../../api/endpoints/crossSectionAPI";
 
-export const useVcrossBioclassQuery = (payload: CrossSectionBioClassPayload, enabled?: boolean) => {
-    return useQuery<CrossSectionBioClassResponse>({
+export const useVcrossRadarQuery = (payload: CrossSectionRadarPayload, enabled?: boolean) => {
+    return useQuery<CrossSectionRadarResponse>({
         queryKey: [
-            "vcross_bioclass",
-            payload.class,
+            "vcross_radar",
+            payload.parameter,
+            payload.type,
             payload.startLat,
             payload.endLat,
             payload.startLon,
@@ -15,15 +16,16 @@ export const useVcrossBioclassQuery = (payload: CrossSectionBioClassPayload, ena
         ],
         queryFn: async () => {
             try {
-                return await fetchVCrossBioClass(payload);
+                return await fetchVcrossRadar(payload);
             } catch (error) {
-                console.error('Failed to fetch vertical cross section Bioclass Data', error);
+                console.error('Failed to fetch vertical cross section Radar Data', error);
                 throw error;
             }
         },
         enabled: (enabled ?? true) && 
                 Boolean(
-                    payload.class && 
+                    payload.parameter && 
+                    payload.type &&
                     payload.startLat && 
                     payload.endLat &&
                     payload.startLon &&
