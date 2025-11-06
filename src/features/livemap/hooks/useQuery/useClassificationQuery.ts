@@ -3,7 +3,6 @@ import { type ClassificationDataResponse, type ClassificationDataPayload, fetchC
 
 export const useClassificationDataQuery = (payload: ClassificationDataPayload, enabled?: boolean) => {
     const key = ["classification_data", payload.class, payload.time, payload.color_0, payload.color_1, payload.height];
-    console.log("Querying classif frames")
     return useQuery<ClassificationDataResponse>({
         queryKey: key,
         queryFn: async () => {

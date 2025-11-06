@@ -2,7 +2,7 @@ import { axiosClient } from "../axiosClient";
 
 export interface CrossSectionBioClassPayload {
     class: string;
-    timme: string;
+    time: string;
     startLon: number;
     startLat: number;
     endLon: number;

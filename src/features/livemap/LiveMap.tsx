@@ -202,16 +202,6 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
             )
         }
 
-        {/* Colorbar */}
-        {
-            (displayedData !== 'classification') && (
-                <Colorbar
-                    colorCodes={data?.ckeys?.colors ?? []}
-                    valueScale={data?.ckeys?.labels.map(Number)  ?? []}
-                    className='absolute bottom-0 left-0 z-10'
-                />
-            )
-        }
 
         {/* Classification legends */}
         {

@@ -19,6 +19,7 @@ import classificationpopupReducer from '../features/livemap/slice/classification
 import radarpopupReducer from '../features/livemap/slice/radarPopupSlice';
 import histClassificationReducer from '../features/history_map/slice/histClassificationPopupSlice';
 import vcrossPopupReducer from '../features/vcross_map/slice/vcrossPopupSlice';
+import vcrossMapReducer from '../features/vcross_map/slice/vcrossMapSlice';
 
 export const store = configureStore({
     reducer: {
@@ -43,7 +44,7 @@ export const store = configureStore({
         hist_classifPopup: histClassificationReducer,
         radarpopup: radarpopupReducer,
         vcrosspopup: vcrossPopupReducer,
-
+        vcrossmap: vcrossMapReducer,
     }
 });
 

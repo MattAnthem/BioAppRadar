@@ -9,9 +9,10 @@ import { formatChartDateParam } from "../../../shared/utils/date_format";
 type Props = {
     onChangeVcrossRadarType?: (type: SelectOption) => void;
     onChangeVcrossRadarParam?: (param: SelectOption) => void;
+    onChangeVcrossRadarTime?: (time: string) => void;
 }   
 
-const VcrossRadarDataPopup = ({ onChangeVcrossRadarParam, onChangeVcrossRadarType }: Props) => {
+const VcrossRadarDataPopup = ({ onChangeVcrossRadarParam, onChangeVcrossRadarType, onChangeVcrossRadarTime }: Props) => {
 
     // Redux states
     const { availableRadarParameters, avalaibleRadarTypes, selectedRadarParameter, selectedRadarType, timeRadar } = useAppSelector(state => state.vcrosspopup);
@@ -30,10 +31,8 @@ const VcrossRadarDataPopup = ({ onChangeVcrossRadarParam, onChangeVcrossRadarTyp
     const handleRadarTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const raw = evt.target.value; 
         const formatted = formatChartDateParam(raw);
-
-        console.log(formatted);
-
         dispatch(setSelectedVcrossRadarTime(formatted));
+        onChangeVcrossRadarTime?.(formatted);
       }
 
 

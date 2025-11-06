@@ -1,19 +1,46 @@
 import SectionCard from '../../shared/components/cards/SectionCard'
 import GlassHeader from '../../shared/components/cards/GlassHeader'
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
 import VcrossBioClsDataPopup from './components/VcrossBioClsDataPopup'
 import VcrossRadarDataPopup from './components/VcrossRadarDataPopup'
+import { setVcrossBioClassPayload } from './slice/vcrossMapSlice'
+import type { SelectOption } from '../../shared/components/selects/types'
+import MapbasePopup from '../livemap/components/MapbasePopup'
 
 const Vcrossmap = () => {
 
-    const { selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
+    const { selectedMapBase } = useAppSelector(state => state.basemappopup);
+    // const { vcrossBioclassPayload } = useAppSelector(state => state.vcrossmap);
+    const dispatch = useAppDispatch();
 
-
+    // Handling BIOCLASS Payload elements
+    // coordinates
     const handleTransectLineDrawn = (start: L.LatLng, end: L.LatLng) => {
-  
-  
+        dispatch(setVcrossBioClassPayload({
+            startLat: start.lat,
+            endLat: end.lat,
+            startLon: start.lng,
+            endLon: end.lng
+        }))
     }
+
+    // Bioclass 
+    const handleChangeVcrossBioclassTime = (time: string) => {
+        dispatch(setVcrossBioClassPayload({
+            time
+        }))
+    }
+    const handleChangeVcrossBioclass = (option: SelectOption) => {
+        dispatch(setVcrossBioClassPayload({
+            class: option.id as string
+        }))
+    }
+
+    // Radar
+
+
+
 
   return (
     <SectionCard className='w-full h-full'>
@@ -27,8 +54,10 @@ const Vcrossmap = () => {
 
                 {/* Data popover Options */}
                 <div className="z-5 flex gap-3 justify-center items-end">
+                    <MapbasePopup/>
+
                     <VcrossRadarDataPopup/>
-                    <VcrossBioClsDataPopup/>
+                    <VcrossBioClsDataPopup onChangeBioclass={handleChangeVcrossBioclass} onChangeBioclassTime={handleChangeVcrossBioclassTime}/>
                 </div>
 
             </GlassHeader>

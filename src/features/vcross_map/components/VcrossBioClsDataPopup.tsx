@@ -8,9 +8,10 @@ import { formatChartDateParam } from '../../../shared/utils/date_format';
 
 type Props = {
   onChangeBioclass?: (option: SelectOption) => void;
+  onChangeBioclassTime?: (time: string) => void;
 }
 
-const VcrossBioClsDataPopup = ({ onChangeBioclass }: Props) => {
+const VcrossBioClsDataPopup = ({ onChangeBioclass, onChangeBioclassTime }: Props) => {
 
     const { availableBioClass, selectedBioClass, timeBioClass } = useAppSelector(state => state.vcrosspopup);
     const dispatch = useAppDispatch();
@@ -24,6 +25,7 @@ const VcrossBioClsDataPopup = ({ onChangeBioclass }: Props) => {
       const raw = evt.target.value; 
       const formatted = formatChartDateParam(raw);
       dispatch(setSelectedBioclassTime(formatted));
+      onChangeBioclassTime?.(formatted)
     }
 
   return (
