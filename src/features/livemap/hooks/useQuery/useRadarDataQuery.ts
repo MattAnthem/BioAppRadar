@@ -19,8 +19,7 @@ export const useRadarDataQuery = (payload: RadarPayload, enabled?: boolean) => {
           throw error;
         }
       },
-      enabled: (enabled ?? true) && Boolean( payload?.parameter && payload.colorbar && payload.time && payload.type && (payload.type === "polar" ? payload.elevation_angle !== undefined : payload.height !== undefined)
-      ),
+      enabled: (enabled ?? true),
       staleTime: 1000 * 60 * 10,
     });
 };

@@ -1,15 +1,16 @@
-import GlassHeader from "../../shared/components/cards/GlassHeader";
-import SectionCard from "../../shared/components/cards/SectionCard";
-import VerticalProfileHeatmap from "../../shared/components/charts/VerticalProfileHeatmap";
-import DataLoading from "../../shared/components/loader/DataLoading";
-import FetchError from "../../shared/components/loader/FetchError";
-import SimpleSelect from "../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../shared/components/selects/types";
-import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
-import { formatChartDateParam } from "../../shared/utils/date_format";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useVptsData } from "./hooks/useVptsData";
-import { changeVptsPayload, setSelectedVptsParameterOption } from "./vptsChartSlice";
+import GlassHeader from "../../../shared/components/cards/GlassHeader";
+import SectionCard from "../../../shared/components/cards/SectionCard";
+import VerticalProfileHeatmap from "../../../shared/components/charts/VerticalProfileHeatmap";
+import DataLoading from "../../../shared/components/loader/DataLoading";
+import FetchError from "../../../shared/components/loader/FetchError";
+import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../../shared/components/selects/types";
+import ChartParamsPopup from "../../../shared/features/chart-option-popups/ChartParamsPopup";
+import { formatChartDateParam } from "../../../shared/utils/date_format";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useVptsHistData } from "../hooks/useVptsHistData";
+import { changeVptsHistPayload, setSelectedVptsHistParameterOption } from "../slices/vptsHistChartSlice";
+
 
 
 type VptsChartProps = {
@@ -17,29 +18,29 @@ type VptsChartProps = {
   showControls?: boolean;
 }
 
-const VptsChart = ({className, showControls}: VptsChartProps) => {
+const VptsHistChart = ({className, showControls}: VptsChartProps) => {
 
   // Redux
-  const { parameterOptions, selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
+  const { parameterOptions, selectedParameter, vptsPayload } = useAppSelector(state => state.vpts_histchart);
   const dispatch = useAppDispatch();
 
   // Tanstack
-  const { isLoading, data, error, refetch } = useVptsData();
+  const { isLoading, data, error, refetch } = useVptsHistData();
 
   const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
     const formatted = formatChartDateParam(raw);
-    dispatch(changeVptsPayload({startTime: formatted}));
+    dispatch(changeVptsHistPayload({startTime: formatted}));
   }
 
   const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
     const formatted = formatChartDateParam(raw);
-    dispatch(changeVptsPayload({endTime: formatted}));
+    dispatch(changeVptsHistPayload({endTime: formatted}));
   }
 
   const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVptsParameterOption(option));
+    dispatch(setSelectedVptsHistParameterOption(option));
     refetch();
   } 
 
@@ -103,4 +104,4 @@ const VptsChart = ({className, showControls}: VptsChartProps) => {
   )
 }
 
-export default VptsChart;
+export default VptsHistChart;

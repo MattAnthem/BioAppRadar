@@ -1,15 +1,15 @@
-import GlassHeader from "../../shared/components/cards/GlassHeader";
-import SectionCard from "../../shared/components/cards/SectionCard";
-import VtipLineChart from "../../shared/components/charts/VtipLineChart";
-import DataLoading from "../../shared/components/loader/DataLoading";
-import FetchError from "../../shared/components/loader/FetchError";
-import SimpleSelect from "../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../shared/components/selects/types";
-import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
-import { formatChartDateParam } from "../../shared/utils/date_format";
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { useVtipData } from "./hooks/useVtipData";
-import { changeVtipPayload, setSelectedVtipParameterOption } from "./vtipChartSlice";
+import GlassHeader from "../../../shared/components/cards/GlassHeader";
+import SectionCard from "../../../shared/components/cards/SectionCard";
+import VtipLineChart from "../../../shared/components/charts/VtipLineChart";
+import DataLoading from "../../../shared/components/loader/DataLoading";
+import FetchError from "../../../shared/components/loader/FetchError";
+import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../../shared/components/selects/types";
+import ChartParamsPopup from "../../../shared/features/chart-option-popups/ChartParamsPopup";
+import { formatChartDateParam } from "../../../shared/utils/date_format";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useVtipHistData } from "../hooks/useVtipHistData";
+import { changeVtipHistPayload, setSelectedVtipHistParameterOption } from "../slices/vtipHistChartSlice";
 
 
 type VtipChartProps = {
@@ -17,29 +17,29 @@ type VtipChartProps = {
   showControls?: boolean;
 }
 
-const VtipChart = ({ className, showControls }: VtipChartProps) => {
+const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
 
   // Redux 
   const { parameterOptions, selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
   const dispatch = useAppDispatch();
 
   // Tanstack
-  const { isLoading, data, error, refetch } = useVtipData();
+  const { isLoading, data, error, refetch } = useVtipHistData();
 
   const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
     const formatted = formatChartDateParam(raw);
-    dispatch(changeVtipPayload({startTime: formatted}));
+    dispatch(changeVtipHistPayload({startTime: formatted}));
   }
 
   const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
     const formatted = formatChartDateParam(raw);
-    dispatch(changeVtipPayload({endTime: formatted}));
+    dispatch(changeVtipHistPayload({endTime: formatted}));
   }
 
   const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVtipParameterOption(option));
+    dispatch(setSelectedVtipHistParameterOption(option));
     refetch();
   } 
 
@@ -106,4 +106,4 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
   )
 }
 
-export default VtipChart
+export default VtipHistChart;

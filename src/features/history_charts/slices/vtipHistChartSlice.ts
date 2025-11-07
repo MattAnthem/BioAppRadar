@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { VtipPayload, VtipResponse } from "../../api/endpoints/verticalProfilesAPI";
-import type { SelectOption } from "../../shared/components/selects/types";
+import type { SelectOption } from "../../../shared/components/selects/types";
+import type { VtipPayload } from "../../../api/endpoints/verticalProfilesAPI";
 
 // static
 export const parameterOptions: SelectOption[] = [
@@ -47,14 +47,14 @@ const initialState: VtipChartState = {
     }
 }
 
-const vtipChartSlice = createSlice({
+const vtipHistChartSlice = createSlice({
     name: 'vtipchart',
     initialState,
     reducers: {
-        changeVtipPayload: (state, action: PayloadAction<Partial<VtipPayload>>) => {
+        changeVtipHistPayload: (state, action: PayloadAction<Partial<VtipPayload>>) => {
             state.vtipPayload = { ...state.vtipPayload, ...action.payload }
         },
-        setSelectedVtipParameterOption: (state, action) => {
+        setSelectedVtipHistParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
             state.vtipPayload = {
                 ...state.vtipPayload,
@@ -65,5 +65,5 @@ const vtipChartSlice = createSlice({
     }
 });
 
-export const { changeVtipPayload, setSelectedVtipParameterOption, setVtipData } = vtipChartSlice.actions;
-export default vtipChartSlice.reducer;
+export const { changeVtipHistPayload, setSelectedVtipHistParameterOption } = vtipHistChartSlice.actions;
+export default vtipHistChartSlice.reducer;

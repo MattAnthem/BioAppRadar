@@ -10,7 +10,7 @@ const Colorbar = ({ colorCodes, className, valueScale }: ColorbarProps) => {
     const gradientStyle = {
         background: `linear-gradient(to right, ${colorCodes.join(", ")})`,
         width: "100%",
-        opacity: "0.8"
+        opacity: "0.85"
     };
 
 

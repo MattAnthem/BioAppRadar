@@ -22,9 +22,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
  
   const mapBasepopupRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
-  
 
-  console.log("SELECTED COLORMAP ", selectedColormap)
 
   // autohide 
   useClickOutside(mapBasepopupRef, () => {

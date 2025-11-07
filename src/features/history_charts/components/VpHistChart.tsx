@@ -1,13 +1,14 @@
-import SectionCard from "../../shared/components/cards/SectionCard";
-import VerticalProfileChart from "../../shared/components/charts/VerticalProfileChart";
-import DataLoading from "../../shared/components/loader/DataLoading";
-import FetchError from "../../shared/components/loader/FetchError";
-import SimpleSelect from "../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../shared/components/selects/types";
-import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useVpData } from "./hooks/useVpData";
-import { changeVpPayload, setSelectedVpParameterOption } from "./vpChartSlice";
+import SectionCard from "../../../shared/components/cards/SectionCard";
+import VerticalProfileChart from "../../../shared/components/charts/VerticalProfileChart";
+import DataLoading from "../../../shared/components/loader/DataLoading";
+import FetchError from "../../../shared/components/loader/FetchError";
+import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
+import type { SelectOption } from "../../../shared/components/selects/types";
+import ChartParamsPopup from "../../../shared/features/chart-option-popups/ChartParamsPopup";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useVpHistData } from "../hooks/useVpHistData";
+import { changeVpHistPayload, setSelectedVpHistParameterOption } from "../slices/vpHistChartSlice";
+
 
 
 type VpChartProps = {
@@ -15,13 +16,13 @@ type VpChartProps = {
   showControls?: boolean;
 }
 
-const VpChart = ({ className, showControls }: VpChartProps) => {
+const VpHistChart = ({ className, showControls }: VpChartProps) => {
 
   // Redux
-  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vpchart)
+  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vp_histchart)
   const dispatch = useAppDispatch();
 
-  const { isLoading, data, error, refetch } = useVpData();
+  const { isLoading, data, error, refetch } = useVpHistData();
 
 
   const handleDateChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,11 +30,11 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
     const date = new Date(raw);
     const pad = (n: number) => n.toString().padStart(2, '0');
     const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    dispatch(changeVpPayload({time: formatted}))
+    dispatch(changeVpHistPayload({time: formatted}))
   }
 
   const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVpParameterOption(option));
+    dispatch(setSelectedVpHistParameterOption(option));
     refetch();
   }
 
@@ -98,4 +99,4 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
   )
 }
 
-export default VpChart;
+export default VpHistChart;

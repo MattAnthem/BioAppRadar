@@ -7,6 +7,7 @@ import FetchError from '../../shared/components/loader/FetchError';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import type { SelectOption } from '../../shared/components/selects/types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import AltitudeSlider from '../livemap/components/AltitudeSlider';
 import Colorbar from '../livemap/components/Colorbar';
 import ClassificationPopup from './components/ClassificationPopupHist';
 import MapbasePopup from './components/MapbasePopup';
@@ -15,6 +16,7 @@ import SevipPopup from './components/SevipPopup';
 import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
+import { changeHistAltitude } from './slice/histAltitudeSlice';
 import { setClassifPayloadHist, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
 
 const HistoryMap = () => {
@@ -22,8 +24,9 @@ const HistoryMap = () => {
     // Redux call
     // Selected Radar type and Radar Parameter
     const { selectedMapBase, selectedColormap, selectedCoverage } = useAppSelector(state => state.hist_basemap);
+    const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
-    const { mapModeHist } = useAppSelector(state => state.historymap)
+    const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap)
 
     //#region  Overlay fetching
     const isRadar = mapModeHist === 'radar';
@@ -124,6 +127,15 @@ const HistoryMap = () => {
             colorbar: colorname
         }))
     }
+
+    // Altitude 
+    const handleAltitudeChange = (altIndex: number) => {
+        dispatch(changeHistAltitude(altIndex));
+
+        dispatch(setClassifPayloadHist({height: altitudeOptions[altIndex]}))
+        dispatch(setRadarPayloadHist({height: altitudeOptions[altIndex]}))
+
+    }
     
 
     //#endregion
@@ -192,6 +204,18 @@ const HistoryMap = () => {
         }
 
         {/* altitude slider */}
+        {
+            ((mapModeHist === 'classification' || radarPayloadHist.type === 'grid') && (mapModeHist !== 'sevip' || radarPayloadHist.type !== 'polar')) && (
+                <div className="h-full absolute bottom-3 right-2 flex lg:items-center items-start">
+                    <AltitudeSlider
+                        position='right'
+                        currentIndex={currentAltitudeIndex}
+                        onChangeAltitude={handleAltitudeChange}
+                        altitudes={altitudeOptions}
+                    />
+                </div>
+            )
+        }
 
 
         {/* Classification legends */}

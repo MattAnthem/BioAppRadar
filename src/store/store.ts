@@ -22,6 +22,9 @@ import vcrossMapReducer from '../features/vcross_map/slice/vcrossMapSlice';
 import histAltitudeReducer from '../features/history_map/slice/histAltitudeSlice';
 import histRadarPopupReducer from '../features/history_map/slice/histRadarPopupSlice'
 import histSevipPopupReducer from '../features/history_map/slice/histSevipPopup';
+import vpHistChartReducer from '../features/history_charts/slices/vpHistChartSlice';
+import vptsHistChartReducer from '../features/history_charts/slices/vptsHistChartSlice';
+import vtipHistChartReducer from '../features/history_charts/slices/vtipHistChartSlice';
 
 
 export const store = configureStore({
@@ -44,6 +47,9 @@ export const store = configureStore({
         hist_altitude: histAltitudeReducer,
         hist_radarpopup: histRadarPopupReducer,
         hist_sevippopup: histSevipPopupReducer,
+        vp_histchart: vpHistChartReducer,
+        vpts_histchart: vptsHistChartReducer,
+        vtip_histchart: vtipHistChartReducer,
 
 
         // Refactor

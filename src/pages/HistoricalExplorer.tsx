@@ -1,8 +1,8 @@
 
+import VpHistChart from '../features/history_charts/components/VpHistChart';
+import VptsHistChart from '../features/history_charts/components/VptsHistChart';
+import VtipHistChart from '../features/history_charts/components/VtipHistChart';
 import HistoryMap from '../features/history_map/HistoryMap';
-import VpChart from '../features/vp_chart/VpChart';
-import VptsChart from '../features/vpts_chart/VptsChart';
-import VtipChart from '../features/vtip_chart/VtipChart';
 import MainLayout from '../shared/layouts/MainLayout';
 
 const HistoricalExplorer = () => {
@@ -16,15 +16,15 @@ const HistoricalExplorer = () => {
               <HistoryMap/>
           </div>
 
-          <VpChart showControls className="w-full lg:h-full xl:h-full  lg:col-span-2"/>
+          <VpHistChart showControls className="w-full lg:h-full xl:h-full  lg:col-span-2"/>
 
         </div>
 
         <div className="xl:grid lg:grid lg:grid-cols-2 grid-cols-1 w-full lg:h-1/3 gap-2">
 
-          <VtipChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+          <VtipHistChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
 
-          <VptsChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+          <VptsHistChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
 
         </div>
         
