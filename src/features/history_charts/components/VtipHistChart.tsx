@@ -1,7 +1,6 @@
 import { useState } from "react";
 import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
-import VtipLineChart from "../../../shared/components/charts/VtipLineChart";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
@@ -17,6 +16,7 @@ import { Fullscreen, Unplug } from "lucide-react";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import { useVtipImageQuery } from "../hooks/useVtipImageQuery";
 import loader from '../../../assets/loader.webp';
+import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 
 
 type VtipChartProps = {
@@ -177,10 +177,10 @@ const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
           </GlassHeader>
 
           {/* Chart */}
-          <div className="flex-1 w-full h-full items-center justify-center ">
+          <div className="flex-1 mt-8 w-full h-full items-center justify-center ">
             {
               data && (
-                <VtipLineChart
+                <HighchartVtip
                   data={data}
                 />
               )

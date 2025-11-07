@@ -1,7 +1,6 @@
 import { useState } from "react";
 import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
-import VerticalProfileHeatmap from "../../../shared/components/charts/VerticalProfileHeatmap";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
@@ -17,6 +16,7 @@ import ChartModal from "./ChartModal";
 import { Fullscreen, Unplug } from "lucide-react";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import loader from '../../../assets/loader.webp';
+import VptsHeatmapChart from "../../../shared/components/charts/HighchartsVpts";
 
 
 type VptsChartProps = {
@@ -162,10 +162,10 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
         </GlassHeader>           
 
         {/* Chart */}
-        <div className="flex w-full h-full items-center justify-center ">
+        <div className="flex mt-8 w-full h-full items-center justify-center ">
           {
             data && (
-              <VerticalProfileHeatmap data={data}/>
+              <VptsHeatmapChart data={data}/>
             )
           }
         </div>

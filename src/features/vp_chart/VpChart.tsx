@@ -86,7 +86,7 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="flex-1 w-full h-full items-center justify-center ">
+        <div className="flex mt-2 w-full h-full items-center justify-center ">
         {data && (
 
               <VpChartHighcharts

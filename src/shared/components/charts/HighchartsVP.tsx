@@ -1,24 +1,13 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts';
 import Windbarb from 'highcharts/modules/windbarb';
 import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from '../../hooks/useTheme';
+import type { VpResponse } from '../../../api/endpoints/verticalProfilesAPI';
 
 // Initialiser le module Windbarb
 Windbarb(Highcharts);
 
-export interface VpResponse {
-  name: string;
-  parameter: (null | number)[];
-  sunrise: string;
-  sunset: string;
-  time: string;
-  units: string;
-  day: boolean;
-  dd: (null | number)[];
-  ff: (null | number)[];
-  height: number[];
-}
 
 interface VpChartProps {
   data: VpResponse;
@@ -87,7 +76,7 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
           marker: { enabled: true, radius: 3 },
           tooltip: {
             headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: `Altitude: {point.x} m <br> {series.name}: {point.y} ${data.units}`
+            pointFormat: `Value: {point.y:.2f} ${data.units}<br>Altitude: {point.x} m<br>Date: {point.x:%Y-%m-%d %H:%M:%S}`
           }
         },
         {
@@ -101,19 +90,19 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
           xOffset: maxParams,
           tooltip: {
             headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: 'Altitude: {point.x} m<br>Speed: {point.value:.1f} m/s<br>Dir: {point.direction:.0f}°'
+            pointFormat: `Speed: {point.value:.1f} m/s<br>Direction: {point.direction:.0f}°<br>Altitude: {point.x} m<br>Date: {point.x:%Y-%m-%d %H:%M:%S}`
           }
         }
       ],
       legend: { enabled: false  },
       credits: { enabled: false },
       responsive: {
-        // rules: [
-        //   {
-        //     condition: { maxWidth: 300 },
-        //     chartOptions: { chart: { height: 300 } }
-        //   }
-        // ]
+        rules: [
+          {
+            condition: { maxWidth: 800 },
+            chartOptions: { chart: { height: 450 } }
+          }
+        ]
       }
     };
   };

@@ -21,7 +21,7 @@ const CrossSection = () => {
 
 
           {/* Generated cross section */}
-          <SectionCard className='col-span-4 h-full p-1 flex justify-center items-center'>
+          <SectionCard className='col-span-4 w-full h-full p-1 flex justify-center items-center'>
             <VcrossHeatmap/>
           </SectionCard>
 

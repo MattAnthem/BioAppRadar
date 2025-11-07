@@ -1,6 +1,6 @@
 import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
-import VtipLineChart from "../../shared/components/charts/VtipLineChart";
+import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
 import SimpleSelect from "../../shared/components/selects/SimpleSelect";
@@ -99,10 +99,10 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
           </GlassHeader>
 
           {/* Chart */}
-          <div className="flex-1 w-full h-full items-center justify-center ">
+          <div className="flex-1 mt-8 w-full h-full items-center justify-center ">
             {
               data && (
-                <VtipLineChart
+                <HighchartVtip
                   data={data}
                 />
               )

@@ -1,6 +1,6 @@
 import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
-import VerticalProfileHeatmap from "../../shared/components/charts/VerticalProfileHeatmap";
+import VptsHeatmapChart from "../../shared/components/charts/HighchartsVpts";
 import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
 import SimpleSelect from "../../shared/components/selects/SimpleSelect";
@@ -91,10 +91,10 @@ const VptsChart = ({className, showControls}: VptsChartProps) => {
         </GlassHeader>           
 
         {/* Chart */}
-        <div className="flex w-full h-full items-center justify-center ">
+        <div className="flex mt-8 w-full h-full items-center justify-center ">
           {
             data && (
-              <VerticalProfileHeatmap data={data}/>
+              <VptsHeatmapChart data={data}/>
             )
           }
         </div>

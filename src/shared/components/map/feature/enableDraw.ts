@@ -18,9 +18,9 @@ export function enableDraw (map: L.Map, onPolygonCreated?: (geojson: GeoJSON.Fea
             polygon: {
                 allowIntersection: false,
                 shapeOptions: {
-                    color: "#ff0000",
-                    fillColor: '#ff6666',
-                    fillOpacity: 0.4,
+                    color: "#d60808",
+                    fillColor: '#d60808',
+                    fillOpacity: 1,
                 }
             },
             rectangle: false,

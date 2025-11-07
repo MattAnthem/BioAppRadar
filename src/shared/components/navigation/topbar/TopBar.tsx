@@ -25,7 +25,7 @@ const TopBar = () => {
     }
 
   return (
-    <div aria-label='topbar' className={`${topbar.main.bg} ${topbar.main.border} z-50 w-full flex justify-center items-center gap-3 absolute px-4 h-13 py-1 border-b drop-shadow-sm`}>
+    <div aria-label='topbar' className={`${topbar.main.bg} ${topbar.main.border} z-50 w-full flex justify-center items-center gap-3 absolute px-4 h-10 py-1 border-b drop-shadow-sm`}>
 
       {/* Left Controls */}
       {/* Menu toggler button for smaller screen */}
@@ -36,19 +36,19 @@ const TopBar = () => {
       {/* Right controls */}
       <div className="flex relative w-full justify-end items-center gap-3 opacity-100">
 
-        <Sun className={topbar.contents.togller_color} width={30}/>
+        <Sun className={topbar.contents.togller_color} width={20}/>
 
         {/* Switch button */}
         <SwitchBtn 
             handler_func={handleSwitch}
             isActive={isDarkMode}
-            height={20}
-            width={40}
+            height={15}
+            width={30}
             ariaLabel='Toggle theme'
             ariaControls='App theme'
         />
         
-        <Moon className={topbar.contents.togller_color} width={30}/>
+        <Moon className={topbar.contents.togller_color} width={20}/>
 
       </div>
     </div>

@@ -184,7 +184,7 @@ const HistoryMap = () => {
 
         {/* Colorbar */}
         {
-            !isClassif && (
+            (mapModeHist !== 'classification') && (
                 <Colorbar
                     colorCodes={(data as SpatialDataResponse)?.ckeys?.colors ?? []}
                     valueScale={(data as SpatialDataResponse)?.ckeys?.labels.map(Number)  ?? []}

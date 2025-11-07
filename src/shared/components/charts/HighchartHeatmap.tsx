@@ -2,125 +2,108 @@ import React, { useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HCHeatmap from 'highcharts/modules/heatmap';
-import type { CrossSectionBioClassResponse, CrossSectionRadarResponse } from '../../../api/endpoints/crossSectionAPI';
+import { useTheme } from '../../hooks/useTheme';
+import type { CrossSectionRadarResponse, CrossSectionBioClassResponse } from '../../../api/endpoints/crossSectionAPI';
 
 HCHeatmap(Highcharts);
 
-
-
-interface VcrossHeatmapProps {
+type Props = {
   data: CrossSectionRadarResponse | CrossSectionBioClassResponse;
-}
+};
 
-const VcrossHeatmap: React.FC<VcrossHeatmapProps> = ({ data }) => {
-  const heatmapData = useMemo(() => {
-    const points: [number, number, number][] = [];
-    data.vcross.forEach((row, yIndex) => {
-      row.forEach((value, xIndex) => {
-        if (value !== null && value !== undefined) {
-          points.push([xIndex, yIndex, value]);
-        }
-      });
-    });
-    return points;
-  }, [data]);
+const VcrossHeatmap: React.FC<Props> = ({ data }) => {
+  const { theme } = useTheme();
+  const { chartFontColor, chartGridline } = theme;
 
-  const options: Highcharts.Options = {
-    chart: {
-      type: 'heatmap',
-      // backgroundColor: 'transparent', 
-      plotBorderWidth: 0,
-      margin: [60, 100, 80, 100],
-      height: 600,
-      style: {
-        fontFamily: 'Work-sans, Inter, sans-serif',
-      },
-    },
-    title: {
-      text: `Vertical Cross Section of ${data.info.name}`,
-      style: {
-        color: '#2b2b2b ',
-        fontSize: '14px',
-        fontWeight: '600',
-      },
-    },
-    subtitle: {
-      text: `(${data.start_point.lat.toFixed(2)}, ${data.start_point.lon.toFixed(2)}) → (${data.end_point.lat.toFixed(2)}, ${data.end_point.lon.toFixed(2)})`,
-      style: {
-        color: '#bbbbbb',
-        fontSize: '13px',
-      },
-    },
-    xAxis: {
-      categories: data.xaxis.values.map((v) => v.toFixed(1)),
-      title: {
-        text: data.xaxis.label,
-        style: { color: '#ffffff', fontSize: '13px' },
-      },
-      labels: { style: { color: '#cccccc', fontSize: '11px' } },
-      lineColor: '#333',
-      tickColor: '#555',
-    },
-    yAxis: {
-      categories: data.yaxis.values.map((v) => v.toFixed(1)),
-      title: {
-        text: data.yaxis.label,
-        style: { color: '#ffffff', fontSize: '13px' },
-      },
-      labels: { style: { color: '#cccccc', fontSize: '11px' } },
-      reversed: false,
-      gridLineColor: '#222',
-      min: 0,
-      max: 6000,
-      tickInterval: 500,
-    },
-    colorAxis: {
-      min: Math.min(...heatmapData.map((p) => p[2])),
-      max: Math.max(...heatmapData.map((p) => p[2])),
-      stops: [
-        [0, '#001f3f'], 
-        [0.25, '#0074D9'],
-        [0.5, '#2ECC40'], 
-        [0.75, '#FFDC00'], 
-        [1, '#FF4136'], 
-      ],
-    },
-    legend: {
-      align: 'right',
-      layout: 'vertical',
-      verticalAlign: 'middle',
-      symbolHeight: 200,
-      itemStyle: { color: '#ffffff', fontSize: '11px' },
-    },
-    series: [
-      {
-        name: 'Value',
+  const options = useMemo(() => {
+    const seriesData: [number, number, number | null][] = [];
+    const xVals = data.xaxis.values;
+    const yVals = data.yaxis.values;
+
+    for (let j = 0; j < yVals.length; j++) {
+      for (let i = 0; i < xVals.length; i++) {
+        seriesData.push([xVals[i], yVals[j], data.vcross[j][i]]);
+      }
+    }
+
+    const colorStops: [number, string][] = [
+      [0.0, '#0000FF'],
+      [0.2, '#00FFFF'],
+      [0.4, '#00FF00'],
+      [0.6, '#FFFF00'],
+      [0.8, '#FFA500'],
+      [1.0, '#FF0000']
+    ];
+
+    return {
+      chart: {
         type: 'heatmap',
-        data: heatmapData,
-        borderWidth: 0.3,
-        borderColor: '#222',
-        dataLabels: { enabled: false },
+        zoomType: 'x',
+        backgroundColor: 'transparent',
+        plotBorderWidth: 1,
+        style: {
+          fontFamily: 'Inter, sans-serif',
+          color: chartFontColor
+        }
       },
-    ],
-    tooltip: {
-      backgroundColor: '#1a1d25',
-      borderColor: '#333',
-      style: { color: '#fff', fontSize: '12px' },
-      formatter: function () {
-        const xLabel = data.xaxis.values[(this.point as any).x];
-        const yLabel = data.yaxis.values[(this.point as any).y];
-        const value = (this.point as any).value;
-        return `
-          <b>${value.toFixed(2)}</b><br/>
-          ${data.xaxis.label}: ${xLabel.toFixed(2)}<br/>
-          ${data.yaxis.label}: ${yLabel.toFixed(2)}
-        `;
+      title: { text: null },
+      xAxis: {
+        title: { text: data.xaxis.label },
+        lineWidth: 1,
+        gridLineColor: chartGridline,
+        labels: { style: { color: chartFontColor } }
       },
-    },
-    credits: { enabled: false },
-  };
+      yAxis: {
+        title: { text: data.yaxis.label },
+        labels: { style: { color: chartFontColor } },
+        gridLineColor: chartGridline,
+        min: 0,
+        max: 7000
+      },
+      colorAxis: {
+        min: 0,
+        stops: colorStops,
+        labels: { format: '{value:.1f}' }
+      },
+      tooltip: {
+        formatter: function (this: any) {
+          if (this.point.value !== null) {
+            return `
+              <b>${data.info.name ?? data.info.class}</b><br/>
+              ${data.xaxis.label}: ${this.point.x}<br/>
+              ${data.yaxis.label}: ${this.point.y}<br/>
+              Value: ${this.point.value.toFixed(2)} ${'units' in data.info ? data.info.units : ''}
+            `;
+          }
+          return false;
+        }
+      },
+      series: [
+        {
+          type: 'heatmap',
+          name: data.info.name ?? data.info.class,
+          data: seriesData,
+          turboThreshold: 0,
+          colsize: 1,
+          rowsize: 1000,
+          nullColor: 'rgba(0, 0, 0, 0)',
+          borderWidth: 0
+        }
+      ],
+      legend: { enabled: false },
+      credits: { enabled: false }
+    };
+  }, [data, chartFontColor, chartGridline]);
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <div className="w-full h-full">
+      <HighchartsReact
+        highcharts={Highcharts}
+        options={options}
+        containerProps={{ style: { width: '100%', height: '100%' } }}
+      />
+    </div>
+  );
 };
 
 export default VcrossHeatmap;

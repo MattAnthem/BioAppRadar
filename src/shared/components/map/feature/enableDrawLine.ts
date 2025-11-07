@@ -29,7 +29,7 @@ export function enableDrawLine(
     position: "topleft",
     draw: {
       polyline: { 
-        shapeOptions: { color: "#00bfff", weight: 4 },
+        shapeOptions: { color: "#d60808", weight: 4, fillOpacity: 1 },
         allowIntersection: false,
         repeatMode: false
       },
