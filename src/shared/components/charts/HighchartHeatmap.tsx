@@ -1,99 +1,123 @@
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import HeatmapModule from 'highcharts/modules/heatmap';
-HeatmapModule(Highcharts); 
+import React, { useMemo } from 'react';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import HCHeatmap from 'highcharts/modules/heatmap';
+import type { CrossSectionBioClassResponse, CrossSectionRadarResponse, CrossSectionResponse } from '../../../api/endpoints/crossSectionAPI';
 
-const heatmapData = [
-    [0, 0, 10],
-    [0, 1, 19],
-    [0, 2, 8],
-    [0, 3, 24],
-    [0, 4, 67],
-    [1, 0, 92],
-    [1, 1, 58],
-    [1, 2, 78],
-    [1, 3, 117],
-    [1, 4, 48],
-    [2, 0, 35],
-    [2, 1, 15],
-    [2, 2, 123],
-    [2, 3, 64],
-    [2, 4, 52],
-    [3, 0, 72],
-    [3, 1, 132],
-    [3, 2, 114],
-    [3, 3, 19],
-    [3, 4, 16],
-    [4, 0, 38],
-    [4, 1, 5],
-    [4, 2, 8],
-    [4, 3, 117],
-    [4, 4, 115],
-    [5, 0, 88],
-    [5, 1, 32],
-    [5, 2, 12],
-    [5, 3, 6],
-    [5, 4, 120],
-    [6, 0, 13],
-    [6, 1, 44],
-    [6, 2, 88],
-    [6, 3, 98],
-    [6, 4, 96],
-    [7, 0, 31],
-    [7, 1, 1],
-    [7, 2, 82],
-    [7, 3, 32],
-    [7, 4, 30],
-    [8, 0, 85],
-    [8, 1, 97],
-    [8, 2, 123],
-    [8, 3, 64],
-    [8, 4, 84],
-    [9, 0, 47],
-    [9, 1, 114],
-    [9, 2, 31],
-    [9, 3, 48],
-    [9, 4, 91]
-];
+HCHeatmap(Highcharts);
 
-const chartOptions = {
+
+
+interface VcrossHeatmapProps {
+  data: CrossSectionRadarResponse | CrossSectionBioClassResponse;
+}
+
+const VcrossHeatmap: React.FC<VcrossHeatmapProps> = ({ data }) => {
+  const heatmapData = useMemo(() => {
+    const points: [number, number, number][] = [];
+    data.vcross.forEach((row, yIndex) => {
+      row.forEach((value, xIndex) => {
+        if (value !== null && value !== undefined) {
+          points.push([xIndex, yIndex, value]);
+        }
+      });
+    });
+    return points;
+  }, [data]);
+
+  const options: Highcharts.Options = {
     chart: {
-      type: "heatmap",
-      marginTop: 40,
-      marginBottom: 80,
+      type: 'heatmap',
+      backgroundColor: 'transparent', 
+      plotBorderWidth: 0,
+      margin: [60, 100, 80, 100],
+      height: 600,
+      style: {
+        fontFamily: 'Inter, sans-serif',
+      },
     },
     title: {
-      text: "My React Heatmap",
+      text: `Vertical Cross Section of ${data.info.name}`,
+      style: {
+        color: '#2b2b2b ',
+        fontSize: '14px',
+        fontWeight: '600',
+      },
+    },
+    subtitle: {
+      text: `(${data.start_point.lat.toFixed(2)}, ${data.start_point.lon.toFixed(2)}) → (${data.end_point.lat.toFixed(2)}, ${data.end_point.lon.toFixed(2)})`,
+      style: {
+        color: '#bbbbbb',
+        fontSize: '13px',
+      },
     },
     xAxis: {
-      categories: ["Category A", "Category B", "Category C"],
+      categories: data.xaxis.values.map((v) => v.toFixed(1)),
+      title: {
+        text: data.xaxis.label,
+        style: { color: '#ffffff', fontSize: '13px' },
+      },
+      labels: { style: { color: '#cccccc', fontSize: '11px' } },
+      lineColor: '#333',
+      tickColor: '#555',
     },
     yAxis: {
-      categories: ["Row 1", "Row 2", "Row 3"],
-      title: null,
+      categories: data.yaxis.values.map((v) => v.toFixed(1)),
+      title: {
+        text: data.yaxis.label,
+        style: { color: '#ffffff', fontSize: '13px' },
+      },
+      labels: { style: { color: '#cccccc', fontSize: '11px' } },
+      reversed: true,
+      gridLineColor: '#222',
     },
     colorAxis: {
-      min: 0,
-      minColor: "#FFFFFF",
-    //   maxColor: Highcharts.getOptions().colors[0],
+      min: Math.min(...heatmapData.map((p) => p[2])),
+      max: Math.max(...heatmapData.map((p) => p[2])),
+      stops: [
+        [0, '#001f3f'], // bleu foncé
+        [0.25, '#0074D9'], // bleu vif
+        [0.5, '#2ECC40'], // vert
+        [0.75, '#FFDC00'], // jaune
+        [1, '#FF4136'], // rouge
+      ],
+    },
+    legend: {
+      align: 'right',
+      layout: 'vertical',
+      verticalAlign: 'middle',
+      symbolHeight: 200,
+      itemStyle: { color: '#ffffff', fontSize: '11px' },
     },
     series: [
       {
-        name: "Sales",
-        borderWidth: 1,
+        name: 'Value',
+        type: 'heatmap',
         data: heatmapData,
-        dataLabels: {
-          enabled: true,
-          color: "#000000",
-        },
+        borderWidth: 0.3,
+        borderColor: '#222',
+        dataLabels: { enabled: false },
       },
     ],
+    tooltip: {
+      backgroundColor: '#1a1d25',
+      borderColor: '#333',
+      style: { color: '#fff', fontSize: '12px' },
+      formatter: function () {
+        const xLabel = data.xaxis.values[(this.point as any).x];
+        const yLabel = data.yaxis.values[(this.point as any).y];
+        const value = (this.point as any).value;
+        return `
+          <b>${value.toFixed(2)}</b><br/>
+          ${data.xaxis.label}: ${xLabel.toFixed(2)}<br/>
+          ${data.yaxis.label}: ${yLabel.toFixed(2)}
+        `;
+      },
+    },
+    credits: { enabled: false },
   };
 
-  function HeatmapChart() {
-    return (
-      <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-    );
-  }
+  return <HighchartsReact highcharts={Highcharts} options={options} />;
+};
 
-  export default HeatmapChart
+export default VcrossHeatmap;

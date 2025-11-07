@@ -17,7 +17,7 @@ import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
-import { setClassifPayloadHist, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
+import { setClassifPayloadHist, setMapModeHist, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
 
 const HistoryMap = () => {
 
@@ -136,6 +136,18 @@ const HistoryMap = () => {
         dispatch(setRadarPayloadHist({height: altitudeOptions[altIndex]}))
 
     }
+
+    const toggleSevipMode = () => {
+        dispatch(setMapModeHist('sevip'));
+    }
+
+    const toggleRadarMode = () => {
+        dispatch(setMapModeHist('radar'));
+    }
+
+    const toggleClassifMode = () => {
+        dispatch(setMapModeHist('classification'));
+    }
     
 
     //#endregion
@@ -144,10 +156,9 @@ const HistoryMap = () => {
         <div className="relative w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
-                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
-                <ClassificationPopup onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
-
+                <SevipPopup toggleMode={toggleSevipMode} onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <RadarOptionPopup toggleMode={toggleRadarMode} onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <ClassificationPopup toggleMode={toggleClassifMode} onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
             </DataLoading>
         </div>
     )
@@ -156,9 +167,9 @@ const HistoryMap = () => {
         <SectionCard className="relative w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
-                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
-                <ClassificationPopup onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
+                <SevipPopup toggleMode={toggleSevipMode} onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <RadarOptionPopup toggleMode={toggleRadarMode} onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <ClassificationPopup toggleMode={toggleClassifMode} onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
 
             </FetchError>   
         </SectionCard>
@@ -176,17 +187,17 @@ const HistoryMap = () => {
 
                 <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 
-                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <SevipPopup toggleMode={toggleSevipMode} onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <RadarOptionPopup toggleMode={toggleRadarMode} onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
                 <ClassificationPopup 
-                    color0Legend={data?.legend?.class_0?.name} 
-                    color1Legend={data?.legend?.class_1?.name} 
-                     onChangeClassifTime={handleChangeClassifTime} 
-                     onChangeClassifVariable={handleChangeClassifVariable} 
-                     onChangeClassifColorZero={handleChangeClassifColor0} 
-                     onChangeClassifColorOne={handleChangeClassifColor1} 
+                    toggleMode={toggleClassifMode} 
+                    onChangeClassifTime={handleChangeClassifTime} 
+                    onChangeClassifVariable={handleChangeClassifVariable} 
+                    onChangeClassifColorZero={handleChangeClassifColor0} 
+                    onChangeClassifColorOne={handleChangeClassifColor1} 
+                    color0Legend={(data as ClassificationDataResponse)?.legend?.class_0?.name}
+                    color1Legend={(data as ClassificationDataResponse)?.legend?.class_1?.name}
                 />
-
                 
             </div>
 
@@ -196,8 +207,8 @@ const HistoryMap = () => {
         {
             !isClassif && (
                 <Colorbar
-                    colorCodes={data?.ckeys?.colors ?? []}
-                    valueScale={data?.ckeys?.labels.map(Number)  ?? []}
+                    colorCodes={(data as SpatialDataResponse)?.ckeys?.colors ?? []}
+                    valueScale={(data as SpatialDataResponse)?.ckeys?.labels.map(Number)  ?? []}
                     className='absolute bottom-0 left-0 z-10'
                 />
             )
@@ -205,7 +216,7 @@ const HistoryMap = () => {
 
         {/* altitude slider */}
         {
-            ((mapModeHist === 'classification' || radarPayloadHist.type === 'grid') && (mapModeHist !== 'sevip' || radarPayloadHist.type !== 'polar')) && (
+            (mapModeHist === 'classification' || (mapModeHist === 'radar' && radarPayloadHist.type === 'grid')) && (
                 <div className="h-full absolute bottom-3 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
                         position='right'
@@ -237,6 +248,29 @@ const HistoryMap = () => {
             }
             // overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
         />
+
+
+        {/* Classification legends */}
+        {
+            (mapModeHist === "classification") && (
+                <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
+                    
+                    {/* Color 0 */}
+                    <div className="flex gap-2">
+                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
+                        <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
+                    </div>
+                    {/* Color 1 */}
+                    <div className="flex gap-2">
+                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
+                        <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
+                    </div>
+
+                    <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
+
+                </div>
+            )
+        }
 
       
     </SectionCard>

@@ -9,9 +9,10 @@ import { formatChartDateParam } from '../../../shared/utils/date_format';
 type SevipPopupProps = {
     onSevipVariableChange?: (type: SelectOption) => void;
     onSevipTimeChange?: (time: string) => void;
+    toggleMode?: () => void;
 }
 
-const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange }: SevipPopupProps) => {
+const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange, toggleMode }: SevipPopupProps) => {
 
     const { selectedVariable, availableVariables, histTimeSevip } = useAppSelector(state => state.hist_sevippopup);
     const dispatch = useAppDispatch();
@@ -32,9 +33,11 @@ const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange }: SevipPopupProp
     <OptionPopover
         hoverText='Vertical Integrated Profile Data'
         customIcon={<FlipVerticalIcon/>}   
+        onClickEvent={toggleMode}
     >
 
-        <p>Select a variable</p>
+        <small>Select a variable</small>
+        <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={availableVariables}
             value={selectedVariable.displayText}
@@ -52,4 +55,4 @@ const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange }: SevipPopupProp
   )
 }
 
-export default SevipPopup
+export default SevipPopup;

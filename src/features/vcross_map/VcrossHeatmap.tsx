@@ -48,7 +48,7 @@ const VcrossHeatmap = () => {
   return (
     <div className='w-full h-full flex items-center justify-center'>
 
-        <HeatmapChart  />
+        <HeatmapChart data={data!} />
 
     </div>
   )

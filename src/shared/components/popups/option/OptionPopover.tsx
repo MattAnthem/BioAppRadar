@@ -26,8 +26,8 @@ const OptionPopover = ({ children, hoverText, customIcon, onClickEvent }: ChartP
     })
 
     const handleBtnClick = () => {
-      setIsPopupOpen(!isPopupOpen);
       onClickEvent?.();
+      setIsPopupOpen(!isPopupOpen);
     }
 
   return (

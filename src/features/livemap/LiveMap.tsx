@@ -14,6 +14,7 @@ import FetchError from '../../shared/components/loader/FetchError';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
+import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -152,8 +153,8 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
 
 
                 <ClassificationPopup 
-                    color0Legend={data?.legend?.class_0?.name} 
-                    color1Legend={data?.legend?.class_1?.name} 
+                    color0Legend={(data as ClassificationDataResponse)?.legend?.class_0?.name} 
+                    color1Legend={(data as ClassificationDataResponse)?.legend?.class_1?.name} 
                     onChangeClassifVariable={handleClassificationVarsChange} 
                     onChangeClassifColorOne={handleClassificationColor1Change} 
                     onChangeClassifColorZero={handleClassificationColor0Change}
@@ -215,13 +216,13 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
                     
                     {/* Color 0 */}
                     <div className="flex gap-2">
-                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: data?.legend?.class_0?.color}}/>
-                        <small className='text-white tracking-widest'>{data?.legend?.class_0?.name}</small>
+                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
+                        <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
                     </div>
                     {/* Color 1 */}
                     <div className="flex gap-2">
-                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: data?.legend?.class_1?.color}}/>
-                        <small className='text-white tracking-widest'>{data?.legend?.class_1?.name}</small>
+                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
+                        <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
                     </div>
 
                     <small className='text-white tracking-wide'>Height: {data?.info.height}</small>

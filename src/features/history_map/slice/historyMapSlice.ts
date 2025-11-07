@@ -42,15 +42,15 @@ const historymapSlice = createSlice({
             state.mapModeHist = action.payload;
         },
         setSevipPayloadHist: (state, action: PayloadAction<Partial<SevipPayload>>) => {
-            state.mapModeHist = 'sevip';
+            // state.mapModeHist = 'sevip';
             state.sevipPayloadHist = {...state.sevipPayloadHist, ...action.payload}
         },
         setClassifPayloadHist: (state, action: PayloadAction<Partial<ClassificationDataPayload>>) => {
-            state.mapModeHist = 'classification';
+            // state.mapModeHist = 'classification';
             state.classifPayloadHist = { ...state.classifPayloadHist, ...action.payload }
         },
         setRadarPayloadHist: (state, action: PayloadAction<Partial<RadarGridPayload> | Partial<RadarPolarPayload>>) => {
-            state.mapModeHist = 'radar';
+            // state.mapModeHist = 'radar';
           
             const prevPayload = state.radarPayloadHist;
             const incoming = action.payload;

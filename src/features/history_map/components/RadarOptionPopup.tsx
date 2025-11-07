@@ -10,10 +10,11 @@ type RadarOptionPopupProps = {
     onChangeRadarType?: (type: SelectOption) => void;
     onChangeRadarParameter?: (parameter: SelectOption) => void;
     onChangeRadarTime?: (time: string) => void;
+    toggleMode?: () => void;
 }
 
 
-const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType, onChangeRadarTime }: RadarOptionPopupProps) => {
+const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType, onChangeRadarTime, toggleMode }: RadarOptionPopupProps) => {
 
     // Redux
     const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist } = useAppSelector(state => state.hist_radarpopup);
@@ -42,8 +43,10 @@ const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType, onChangeR
     <OptionPopover
         hoverText='Radar Data'
         customIcon={<RadarIcon/>}
+        onClickEvent={toggleMode}
     >
-        <p>Select Radar Type</p>
+        <small className='font-semibold'>Select Radar Type</small>
+        <div className="border-b border-b-gray-400"/>
 
         {/* Type Select */}
         <SimpleSelect
@@ -53,7 +56,8 @@ const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType, onChangeR
             onSelectValue={handleRadarTypeChange}
         />
         
-        <small>Select parameter</small>
+        <small className='font-semibold'>Select parameter</small>
+        <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={availableParameters}
             value={selectedParameter.displayText}
@@ -62,7 +66,7 @@ const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType, onChangeR
         />
 
         {/* Time */}
-        <small>Select time</small>
+        <small className='font-semibold'>Select time</small>
         <div className="border-b border-b-gray-400"/>
         <input onChange={handleRadarTimeChange} value={radarTimeHist} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="sevipHistTime" id="sevipHistTime" />
 

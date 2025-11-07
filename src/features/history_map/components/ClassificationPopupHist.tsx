@@ -17,9 +17,10 @@ type ClassificationPopupProps = {
   color0Legend?: string;
   color1Legend?: string;
   onChangeClassifTime?: (time: string) => void;
+  toggleMode?: () => void;
 }
 
-const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne, onChangeClassifColorZero, color0Legend, color1Legend, onChangeClassifTime }: ClassificationPopupProps) => {
+const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne, onChangeClassifColorZero, color0Legend, color1Legend, onChangeClassifTime, toggleMode }: ClassificationPopupProps) => {
 
   const { availableVariables, selectedVariable, color_0, color_1, histClassifTime } = useAppSelector(state=> state.classificationpopup);
 
@@ -67,8 +68,9 @@ return (
   <OptionPopover
       hoverText='Classification Data'
       customIcon={<BirdIcon/>}
+      onClickEvent={toggleMode}
   >
-      <small>Select a variable</small>
+      <small className='font-semibold'>Select a variable</small>
       <div className="border-b border-b-gray-400"/>
 
       <SimpleSelect
@@ -91,7 +93,7 @@ return (
       </div>
 
               {/* Time */}
-        <small>Select time</small>
+        <small className='font-semibold'>Select time</small>
         <div className="border-b border-b-gray-400"/>
         <input onChange={handleClassifTimeChange} value={histClassifTime} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="classifHistTime" id="classifHistTime" />
 

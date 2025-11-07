@@ -1,8 +1,8 @@
 import { useAppSelector } from "../../../../store/hooks";
-import { useClassificationDataQuery } from "../../../livemap/hooks/useQuery/useClassificationQuery";
+import { useClassifHistDataQuery } from "../useQuery/useClassifHistDataQuery";
 
 export function useClassifData (enabled: boolean) {
     const payload = useAppSelector(state => state.historymap.classifPayloadHist);
-    const query = useClassificationDataQuery(payload, enabled);
+    const query = useClassifHistDataQuery(payload, enabled);
     return query;
 }

@@ -3,14 +3,26 @@ import { fetchRadarData, type RadarPayload, type SpatialDataResponse } from "../
 
 
 export const useRadarDataQuery = (payload: RadarPayload, enabled?: boolean) => {
-    return useQuery<SpatialDataResponse>({
-      queryKey: [
+  const queryKey =
+  payload.type === "grid"
+    ? [
         "radar_data",
+        payload.type,
         payload.parameter,
         payload.time,
-        payload.type,
         payload.colorbar,
-      ],
+        payload.height,
+      ]
+    : [
+        "radar_data",
+        payload.type,
+        payload.parameter,
+        payload.time,
+        payload.colorbar,
+        payload.elevation_angle,
+      ];
+    return useQuery<SpatialDataResponse>({
+      queryKey,
       queryFn: async () => {
         try {
           return await fetchRadarData(payload);
