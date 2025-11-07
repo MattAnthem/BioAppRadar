@@ -10,14 +10,18 @@ export interface SpatialDataPayload {
 export interface RadarPolarPayload {
     type: 'polar';
     parameter: string;
-    time: string;
+    time?: string;
+    startTime?: string;
+    endTime?: string;
     elevation_angle: number;
     colorbar: string;
 }
 export interface RadarGridPayload {
     type: 'grid';
     parameter: string;
-    time: string;
+    time?: string;
+    startTime?: string;
+    endTime?: string;
     height: number;
     colorbar: string;
 }
@@ -70,7 +74,7 @@ export interface SpatialDataResponse {
 
 
 export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialDataResponse> => {
-    const payloadToSend = payload.type === "polar"
+    const payloadT = payload.type === "polar"
         ? {
             type: payload.type,
             parameter: payload.parameter,
@@ -85,8 +89,7 @@ export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialData
             colorbar: payload.colorbar,
             height: payload.height,
           };
-    console.log("AXIOS CALL RADAR DATA")
-    const { data } = await axiosClient.post("/get_radar", payloadToSend);
+    const { data } = await axiosClient.post("/get_radar", payloadT);
     if (data.status !== 0) throw new Error("Error fetching Radar data");
     return data.data;
   };

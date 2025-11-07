@@ -1,128 +1,73 @@
-import { useLayoutEffect, useRef, useState } from 'react'
-import { useTheme } from '../../../shared/hooks/useTheme';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { useClickOutside } from '../../../shared/hooks/useClickOutside';
-import { changeSelectedParameter, changeSelectedRadarOption, hideRadarParamsOptions, toggleShowRadarParamsOptions } from '../slice/radarOptionSlice';
+import { setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType } from '../slice/histRadarPopupSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
-import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
-import { Radar } from 'lucide-react';
+import { RadarIcon } from 'lucide-react';
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
+import OptionPopover from '../../../shared/components/popups/option/OptionPopover';
+import { formatChartDateParam } from '../../../shared/utils/date_format';
 
 type RadarOptionPopupProps = {
     onChangeRadarType?: (type: SelectOption) => void;
     onChangeRadarParameter?: (parameter: SelectOption) => void;
+    onChangeRadarTime?: (time: string) => void;
 }
 
 
-const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType }: RadarOptionPopupProps) => {
-
-    const popupContentRef = useRef<HTMLDivElement>(null);
-    const [popupPosition, setPopupPosition] = useState<"top" | "bottom">("bottom");
-
-    const themes = useTheme();
-    const { bg, border, hover, options_bg } = themes.theme.simpleSelect;
+const RadarOptionPopup = ({ onChangeRadarParameter, onChangeRadarType, onChangeRadarTime }: RadarOptionPopupProps) => {
 
     // Redux
-    const { isPopupOpen, radarOptions, radarParameters, selectedParameter, selectedRadarOption } = useAppSelector(state => state.radaroption);
-    const paramPopupRef = useRef<HTMLDivElement | null>(null);
+    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist } = useAppSelector(state => state.hist_radarpopup);
     const dispatch = useAppDispatch();
 
-    // autohide 
-    useClickOutside(paramPopupRef, () => {
-        if (isPopupOpen) {
-            dispatch(hideRadarParamsOptions());
-        }
-    })
 
-
-    const handleSelectedRadarOption = (option: SelectOption) => {
-        onChangeRadarType?.(option)
-        dispatch(changeSelectedRadarOption(option));
+    const handleRadarTypeChange = (option: SelectOption) => {
+        onChangeRadarType?.(option);
+        dispatch(setSelectedHistRadarType(option));
     }
-  
-  
-    const handleSelectedParameter = (option: SelectOption) => {
+
+    const handleRadarParameterChange = (option: SelectOption) => {
         onChangeRadarParameter?.(option);
-        dispatch(changeSelectedParameter(option));
+        dispatch(setSelectedHistRadarParameter(option));
+    }
+
+    const handleRadarTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const raw = evt.target.value; 
+        const formatted = formatChartDateParam(raw);
+        dispatch(setRadarTimeHist(formatted));
+        onChangeRadarTime?.(formatted);
     }
   
-      useLayoutEffect(() => {
-        if (!isPopupOpen || !popupContentRef.current || !paramPopupRef.current) return;
-    
-        const triggerRect = paramPopupRef.current.getBoundingClientRect();
-        const popupRect = popupContentRef.current.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - triggerRect.bottom;
-        const spaceAbove = triggerRect.top;
-    
-        
-        if (spaceBelow < popupRect.height && spaceAbove > popupRect.height) {
-          setPopupPosition("top");
-        } else {
-          setPopupPosition("bottom");
-        }
-      }, [isPopupOpen]); 
 
   return (
-    <div ref={paramPopupRef} className='relative'>
+    <OptionPopover
+        hoverText='Radar Data'
+        customIcon={<RadarIcon/>}
+    >
+        <p>Select Radar Type</p>
 
-        <Tooltip
-            position='bottom'
-            display_condition={!isPopupOpen}
-            text='Change Radar options'
-        >
+        {/* Type Select */}
+        <SimpleSelect
+            options={availableTypes}
+            value={selectedType.displayText}
+            width='w-95'
+            onSelectValue={handleRadarTypeChange}
+        />
+        
+        <small>Select parameter</small>
+        <SimpleSelect
+            options={availableParameters}
+            value={selectedParameter.displayText}
+            width='w-95'
+            onSelectValue={handleRadarParameterChange}
+        />
 
-            <button onClick={() => dispatch(toggleShowRadarParamsOptions())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-                <Radar/>
-            </button>
-
-        </Tooltip>
-
-        {/* Menu */}
-        <div 
-          ref={popupContentRef}
-          className={`
-          ${options_bg} ${border} border shadow-sm flex flex-col gap-2 justify-center w-90
-          absolute right-0
-          ${popupPosition === "bottom" ? "top-full mt-2" : "bottom-full mb-2"}
-          p-2 rounded-sm
-          ${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}
-          transition-all duration-150 ease-out
-          origin-top-right
-        `}
-        >
+        {/* Time */}
+        <small>Select time</small>
+        <div className="border-b border-b-gray-400"/>
+        <input onChange={handleRadarTimeChange} value={radarTimeHist} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="sevipHistTime" id="sevipHistTime" />
 
 
-            {/* Select option */}
-            <SimpleSelect
-                onSelectValue={handleSelectedRadarOption}
-                options={radarOptions}
-                width="w-80"
-                value={selectedRadarOption.displayText}
-                title="Select Type"
-                className="border-0! bg-none!"
-            />
-
-            {/* Sub element of selected */}
-            <div className="w-full flex flex-col">
-                <small>Select parameter</small>
-                <SimpleSelect
-                    width="w-85"
-                    options={radarParameters}
-                    onSelectValue={handleSelectedParameter}
-                    value={selectedParameter?.displayText}
-                />
-            </div>
-            {/* Time interval select */}
-            <div className="w-full mb-2">
-                <small>Select Start Time</small>
-                <input onChange={() => console.log('object')} value={'2020-01-01 00:00:00'} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
-                <small>Select End Time</small>
-                <input onChange={() => console.log('object')} value={'2020-01-01 00:00:00'} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
-            </div>
-
-        </div>
-      
-    </div>
+    </OptionPopover>
   )
 }
 

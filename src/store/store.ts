@@ -10,9 +10,8 @@ import altitudeReducer from "../features/livemap/slice/altitudeSlice";
 import vpchartReducer from '../features/vp_chart/vpChartSlice';
 import vptschartReducer from '../features/vpts_chart/vptsChartSlice';
 import vtipchartReducer from '../features/vtip_chart/vtipChartSlice';
-import radaroptionReducer from '../features/history_map/slice/radarOptionSlice';
-import historymapReducer from '../features/history_map/slice/historyMapSice';
-import basemaphistoryReducer from '../features/history_map/slice/baseMapOption';
+import historymapReducer from '../features/history_map/slice/historyMapSlice';
+import basemaphistoryReducer from '../features/history_map/slice/histBaseMapPopupSlice';
 
 import sevippopupReducer from '../features/livemap/slice/SevipPopupSlice';
 import classificationpopupReducer from '../features/livemap/slice/classificationPopupSlice';
@@ -20,6 +19,10 @@ import radarpopupReducer from '../features/livemap/slice/radarPopupSlice';
 import histClassificationReducer from '../features/history_map/slice/histClassificationPopupSlice';
 import vcrossPopupReducer from '../features/vcross_map/slice/vcrossPopupSlice';
 import vcrossMapReducer from '../features/vcross_map/slice/vcrossMapSlice';
+import histAltitudeReducer from '../features/history_map/slice/histAltitudeSlice';
+import histRadarPopupReducer from '../features/history_map/slice/histRadarPopupSlice'
+import histSevipPopupReducer from '../features/history_map/slice/histSevipPopup';
+
 
 export const store = configureStore({
     reducer: {
@@ -34,14 +37,18 @@ export const store = configureStore({
         vpchart: vpchartReducer,
         vptschart: vptschartReducer,
         vtipchart: vtipchartReducer,
-        radaroption: radaroptionReducer,
+        // hist
         historymap: historymapReducer,
-        basemaphistory: basemaphistoryReducer,
+        hist_basemap: basemaphistoryReducer,
+        hist_classifpopup: histClassificationReducer,
+        hist_altitude: histAltitudeReducer,
+        hist_radarpopup: histRadarPopupReducer,
+        hist_sevippopup: histSevipPopupReducer,
+
 
         // Refactor
         sevippopup: sevippopupReducer,
         classificationpopup: classificationpopupReducer,
-        hist_classifPopup: histClassificationReducer,
         radarpopup: radarpopupReducer,
         vcrosspopup: vcrossPopupReducer,
         vcrossmap: vcrossMapReducer,

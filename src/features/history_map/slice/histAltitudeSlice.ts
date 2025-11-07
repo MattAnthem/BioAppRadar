@@ -1,0 +1,25 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+//altitude static options from 0 to 5000 meters step 100 meters
+const altitudeOptions: number[] = Array.from({length: 51}, (_, i) => i * 100);
+
+
+
+export const histAltitudeSlice = createSlice({
+    name: 'altitude',
+    initialState: {
+        altitudeOptions: altitudeOptions.slice().reverse(),
+        currentAltitudeIndex: altitudeOptions.length - 1    
+    },
+    reducers: {
+        changeHistAltitude: (state, action) => {
+            const newIndex = action.payload;
+            if (newIndex >= 0 && newIndex < state.altitudeOptions.length) {
+              state.currentAltitudeIndex = newIndex;
+            }
+          },
+    }
+});
+
+export const { changeHistAltitude } = histAltitudeSlice.actions;
+export default histAltitudeSlice.reducer;

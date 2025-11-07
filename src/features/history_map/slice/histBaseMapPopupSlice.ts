@@ -3,6 +3,7 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import { colormapOptions, mapbaseOptions } from "../../livemap/slice/baseMapPopupSlice";
 
 
+
 interface HistoryBaseMapState {
     isMapBasePopupOpen: boolean;
     mapBaseOptions: SelectOption[];

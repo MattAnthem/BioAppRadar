@@ -46,10 +46,10 @@ const Vcrossmap = () => {
             error = classiOvrlayError
             break;
         case isRadar:
-            console.log("WE ARE RADAR")
             data = radarOverlay as SpatialDataResponse;
             isLoading = radarOverlayLoading;
             error = radarOvrlayError;
+            break;
     }
 
     //#endregion

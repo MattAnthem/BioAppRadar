@@ -71,11 +71,11 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
         <div className="border-b border-b-gray-400"/>
 
         <div className="flex gap-2 justify-start items-center">
-            <small>{color0Legend} :</small>
+            <small>{color0Legend ?? availableVariables[0].id} :</small>
             <input onChange={handleColorZeroChange} value={color_0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
         </div>
         <div className="flex gap-2">
-            <small>{color1Legend} :</small>
+            <small>{color1Legend ?? availableVariables[1].id} :</small>
             <input onChange={handleColorOneChange} value={color_1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
         </div>
 
