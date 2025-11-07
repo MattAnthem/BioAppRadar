@@ -52,6 +52,21 @@ export interface VptsResponse {
     height: number[]
 }
 
+export const fetchImageVTIP = async (payload: VtipPayload) => {
+    const {data} = await axiosClient.post('/image_vtip', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching image')
+    } 
+    return data.data;
+}
+export const fetchImageVPTS = async (payload: VptsPayload) => {
+    const {data} = await axiosClient.post('/image_vpts', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching image')
+    } 
+    return data.data;
+}
+
 export const fetchVP = async (payload: VpPayload): Promise<VpResponse> => {
     const {data} = await axiosClient.post('/get_vp', payload);
     if (data.status !== 0) {

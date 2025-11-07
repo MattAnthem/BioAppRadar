@@ -63,7 +63,7 @@ export const usePrefetchAnimationData = ({
     
 
     // Getting The data 
-    const { data: classifData, isLoading: isClassifLoading, error: classifError  } = useClassificationDataQuery({
+    const { data: classifData, isLoading: isClassifLoading, error: classifError, isFetching: classifFectcing, isFetched: isClassifFetched  } = useClassificationDataQuery({
         class: classifPayload.class,
         time: currentTime,
         color_0: classifPayload.color_0,
@@ -71,14 +71,14 @@ export const usePrefetchAnimationData = ({
         height: altitude,
     }, isClassification);
 
-    const { data: sevipData, isLoading: isSevipLoading, error: sevipError } = useSevipDataQuery(
+    const { data: sevipData, isLoading: isSevipLoading, error: sevipError, isFetching: sevipFetching, isFetched: isSevipFetched } = useSevipDataQuery(
         sevipPayload
         ? { parameter: sevipPayload.parameter, colorbar: colormap, time: currentTime }
         : ({} as SevipPayload),
         isSevip && !!sevipPayload
     );
 
-    const { data: radarData, isLoading: isRadarLoading, error: radarError } = useRadarDataQuery(
+    const { data: radarData, isLoading: isRadarLoading, error: radarError, isFetching: radarFetching, isFetched: isRadarFetched } = useRadarDataQuery(
         radarPayload
         ? { ...radarPayload, time: currentTime }
         : ({} as RadarPayload),
@@ -100,27 +100,35 @@ export const usePrefetchAnimationData = ({
 
 
     let data: SpatialDataResponse | ClassificationDataResponse | null = null;
-    let isLoading = true;
+    let isLoading = false;
+    let isFetching = false;
+    let isFetched = false;
     let error: unknown = null;
 
     switch (true) {
         case isClassification:
             data = classifData ?? classifCached;
             isLoading = isClassifLoading;
+            isFetching = classifFectcing;
+            isFetched = isClassifFetched;
             error = classifError
             break;
     
         case isSevip  && !!sevipPayload:
             data = sevipData ?? sevipCached;
             isLoading = isSevipLoading;
+            isFetching = sevipFetching;
+            isFetched = isSevipFetched;
             error = sevipError;
             break;
         case isRadar && !!radarPayload: 
             data = radarData ?? radarCached;
             isLoading = isRadarLoading;
+            isFetching = radarFetching;
+            isFetched = isRadarFetched;
             error = radarError
             break;
     }
 
-    return { data, isLoading, error }
+    return { data, isLoading, error, isFetching, isFetched }
 }

@@ -7,7 +7,7 @@ import ButtonBorder from '../buttons/borderedbtn/ButtonBorder';
 type ModalProps = {
   title: string;
   children?: ReactNode;
-  handle_toggle_mdl: () => void;
+  handle_toggle_mdl?: () => void;
   isOpen: boolean;
   ariaLabelledBy?: string;
 
@@ -43,19 +43,19 @@ const Modal = (
 
             {/* Modal contents */}
               
-                <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] transition-all duration-300 ease-in-out p-2 flex-col`}>
+                <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] h-[85vh] transition-all duration-300 ease-in-out p-2 flex-col`}>
                   <div className="w-full flex justify-between items-baseline">
                     {/* Heading */}
                     <h1 className="p-2 font-semibold">{title}</h1>
 
-                    <ButtonBorder ariaLabel='Modal close' isDisabled={false} ariaExpanded={isOpen} ariaControls='Modal close' onClick={handle_toggle_mdl} className='w-7 h-7 flex items-center justify-center'>
+                    <ButtonBorder ariaLabel='Modal close' isDisabled={false} ariaExpanded={isOpen} ariaControls='Modal close' onClick={handle_toggle_mdl!} className='w-7 h-7 flex items-center justify-center'>
                       <X/>
                     </ButtonBorder>
 
                   </div>
-                  <div className="w-full border-b-2 border-gray-300" />
+                  <div className="w-full border-b border-gray-300" />
                   {/* Content */}
-                  <div className="w-full p-4">
+                  <div className="w-full h-[70vh]">
                     { children }
                   </div>
                 </SectionCard>

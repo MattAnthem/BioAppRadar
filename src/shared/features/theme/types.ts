@@ -15,6 +15,7 @@ export interface ThemeElements {
     cards: cards;
     texts: Texts;
     chartFontColor: string;
+    chartGridline: string;
 }
 
 

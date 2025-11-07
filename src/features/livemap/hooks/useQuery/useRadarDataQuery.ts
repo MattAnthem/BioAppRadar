@@ -33,6 +33,7 @@ export const useRadarDataQuery = (payload: RadarPayload, enabled?: boolean) => {
       },
       enabled: (enabled ?? true),
       staleTime: 1000 * 60 * 10,
+      refetchOnWindowFocus: false
     });
 };
   

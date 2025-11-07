@@ -9,7 +9,7 @@ const HistoricalExplorer = () => {
   return (
     <MainLayout>
 
-        <div id='livemap' className="xl:grid mb-2 h-full lg:h-[55vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2">
+        <div id='livemap' className="xl:grid mb-2 h-full lg:h-[55vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2 overflow-y-hidden">
 
                     
           <div className="h-full lg:col-span-6">

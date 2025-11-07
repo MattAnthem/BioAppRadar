@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HCHeatmap from 'highcharts/modules/heatmap';
-import type { CrossSectionBioClassResponse, CrossSectionRadarResponse, CrossSectionResponse } from '../../../api/endpoints/crossSectionAPI';
+import type { CrossSectionBioClassResponse, CrossSectionRadarResponse } from '../../../api/endpoints/crossSectionAPI';
 
 HCHeatmap(Highcharts);
 
@@ -28,12 +28,12 @@ const VcrossHeatmap: React.FC<VcrossHeatmapProps> = ({ data }) => {
   const options: Highcharts.Options = {
     chart: {
       type: 'heatmap',
-      backgroundColor: 'transparent', 
+      // backgroundColor: 'transparent', 
       plotBorderWidth: 0,
       margin: [60, 100, 80, 100],
       height: 600,
       style: {
-        fontFamily: 'Inter, sans-serif',
+        fontFamily: 'Work-sans, Inter, sans-serif',
       },
     },
     title: {
@@ -68,18 +68,21 @@ const VcrossHeatmap: React.FC<VcrossHeatmapProps> = ({ data }) => {
         style: { color: '#ffffff', fontSize: '13px' },
       },
       labels: { style: { color: '#cccccc', fontSize: '11px' } },
-      reversed: true,
+      reversed: false,
       gridLineColor: '#222',
+      min: 0,
+      max: 6000,
+      tickInterval: 500,
     },
     colorAxis: {
       min: Math.min(...heatmapData.map((p) => p[2])),
       max: Math.max(...heatmapData.map((p) => p[2])),
       stops: [
-        [0, '#001f3f'], // bleu foncé
-        [0.25, '#0074D9'], // bleu vif
-        [0.5, '#2ECC40'], // vert
-        [0.75, '#FFDC00'], // jaune
-        [1, '#FF4136'], // rouge
+        [0, '#001f3f'], 
+        [0.25, '#0074D9'],
+        [0.5, '#2ECC40'], 
+        [0.75, '#FFDC00'], 
+        [1, '#FF4136'], 
       ],
     },
     legend: {

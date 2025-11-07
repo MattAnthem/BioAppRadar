@@ -3,6 +3,7 @@ import type { ThemeElements } from "./types"
 
 export const light: ThemeElements = {
     chartFontColor: '#424242',
+    chartGridline: '#e0e0e0',
     cards: {
         background: 'bg-gray-100',
         border: 'border-gray-500',
@@ -101,6 +102,7 @@ export const light: ThemeElements = {
 
 
 export const dark: ThemeElements = {
+    chartGridline: '#444444',
     chartFontColor: '#adadad',
     cards: {
         background: 'bg-zinc-700',

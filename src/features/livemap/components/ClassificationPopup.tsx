@@ -36,7 +36,7 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
         if (colorZeroTimeout.current) window.clearTimeout(colorZeroTimeout.current);
         colorZeroTimeout.current = window.setTimeout(() => {
           onChangeClassifColorZero?.(color);
-        }, 900);
+        }, 1000);
     };
 
     const handleColorOneChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +46,7 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
         if (colorOneTimeout.current) window.clearTimeout(colorOneTimeout.current);
         colorOneTimeout.current = window.setTimeout(() => {
         onChangeClassifColorOne?.(color);
-        }, 900);
+        }, 1000);
     };
 
 
@@ -70,12 +70,12 @@ const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne,
         <small className='font-semibold'>Select colors </small>
         <div className="border-b border-b-gray-400"/>
 
-        <div className="flex gap-2 justify-start items-center">
-            <small>{color0Legend ?? availableVariables[0].id} :</small>
+        <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start capitalize items-center">
+            <small>{color0Legend ?? availableVariables[0].id}:</small>
             <input onChange={handleColorZeroChange} value={color_0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
         </div>
-        <div className="flex gap-2">
-            <small>{color1Legend ?? availableVariables[1].id} :</small>
+        <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start capitalize items-center">
+            <small>{color1Legend ?? availableVariables[1].id}:</small>
             <input onChange={handleColorOneChange} value={color_1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
         </div>
 

@@ -28,21 +28,35 @@ export function enableDrawLine(
   const drawControls = new L.Control.Draw({
     position: "topleft",
     draw: {
-      polyline: { shapeOptions: { color: "#00bfff", weight: 4 } },
+      polyline: { 
+        shapeOptions: { color: "#00bfff", weight: 4 },
+        allowIntersection: false,
+        repeatMode: false
+      },
       polygon: false,
       rectangle: false,
       circle: false,
       marker: false,
-      circleMarker: false,
+      circleMarker: false
     },
-    edit: { featureGroup: drawnItems },
+    edit: {
+      featureGroup: drawnItems,
+      edit: false,     
+      remove: true      
+    }
   });
 
-  map.addControl(drawControls);
+  map.addControl(drawControls); 
+
 
   const container: HTMLElement = drawControls._container;
   container.style.marginTop = "60px";
   container.style.marginLeft = "10px";
+
+  if (container) {
+    const circleMarkerBtn = container.querySelector(".leaflet-draw-draw-circlemarker");
+    circleMarkerBtn?.remove();
+  }
 
   const handleCreated = (event: L.LeafletEvent) => {
     const e = event as L.DrawEvents.Created;

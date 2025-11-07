@@ -1,5 +1,5 @@
 import SectionCard from "../../../shared/components/cards/SectionCard";
-import VerticalProfileChart from "../../../shared/components/charts/VerticalProfileChart";
+import VpChartHighcharts from "../../../shared/components/charts/HighchartsVP";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
@@ -19,7 +19,10 @@ type VpChartProps = {
 const VpHistChart = ({ className, showControls }: VpChartProps) => {
 
   // Redux
-  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vp_histchart)
+  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vp_histchart);
+  const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.hist_altitude);
+  const currentHeight = altitudeOptions[currentAltitudeIndex];
+
   const dispatch = useAppDispatch();
 
   const { isLoading, data, error, refetch } = useVpHistData();
@@ -56,7 +59,7 @@ const VpHistChart = ({ className, showControls }: VpChartProps) => {
         {/* Heading */}
         <div className="flex rounded-t-sm justify-between border-white/20 bg-gray-900/55 shadow-md ring-2 ring-black/5 p-1 w-full">
             <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
-
+            
             {/* controls */}
             {
               showControls && (
@@ -88,9 +91,10 @@ const VpHistChart = ({ className, showControls }: VpChartProps) => {
         <div className="flex-1 w-full h-full items-center justify-center ">
         {data && (
 
-            <VerticalProfileChart
-              data={data}
-            />
+          <VpChartHighcharts
+            data={data}
+            selectedHeight={currentHeight}
+          />
 
           )}
         </div>

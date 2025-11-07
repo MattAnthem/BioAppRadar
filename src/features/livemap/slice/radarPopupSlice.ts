@@ -3,13 +3,13 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 
 export const RadarTypeOptions: SelectOption[] = [
 
+            {
+            id: 'grid',
+            displayText: 'Cartesian Grid '
+            },
           {
             id: 'polar',
             displayText: 'Polar Volume'
-          },
-          {
-            id: 'grid',
-            displayText: 'Cartesian Grid '
           },
 ]
 

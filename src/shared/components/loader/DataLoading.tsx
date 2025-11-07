@@ -9,11 +9,11 @@ type Props = {
 
 const DataLoading = ({children}: Props) => {
   return (
-    <div className="relative w-full h-full rounded-sm p-1 z-25 bg-gray-500/50 left-0 top-0">
+    <div className=" w-full h-full rounded-sm p-1 z-20 bg-gray-500/50 left-0 top-0">
 
-        <GlassHeader className='absolute w-full top-0 p-1 flex justify-between items-center'>
+        <GlassHeader className='w-full top-0 p-1 flex justify-between items-center'>
           <span className='h-6 w-30 animate-pulse  bg-gray-400/45 rounded-sm'/>
-          <div className="flex gap-3">
+          <div className="flex z-10 gap-3">
             {children}
           </div>
         </GlassHeader>

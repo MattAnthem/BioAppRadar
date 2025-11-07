@@ -22,6 +22,7 @@ const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
   const {selectedCoverage, coverageOptions, coverageTypes, selectedCoverageType, isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
   const mapBasepopupRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
+  const { boundaryOptions, boundaryTypes, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
   
 
   // autohide 

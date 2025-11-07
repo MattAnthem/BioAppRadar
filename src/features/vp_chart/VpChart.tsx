@@ -1,5 +1,5 @@
 import SectionCard from "../../shared/components/cards/SectionCard";
-import VerticalProfileChart from "../../shared/components/charts/VerticalProfileChart";
+import VpChartHighcharts from "../../shared/components/charts/HighchartsVP";
 import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
 import SimpleSelect from "../../shared/components/selects/SimpleSelect";
@@ -18,7 +18,9 @@ type VpChartProps = {
 const VpChart = ({ className, showControls }: VpChartProps) => {
 
   // Redux
-  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vpchart)
+  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vpchart);
+  const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
+  const currentHeight = altitudeOptions[currentAltitudeIndex];
   const dispatch = useAppDispatch();
 
   const { isLoading, data, error, refetch } = useVpData();
@@ -87,9 +89,10 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
         <div className="flex-1 w-full h-full items-center justify-center ">
         {data && (
 
-            <VerticalProfileChart
-              data={data}
-            />
+              <VpChartHighcharts
+                data={data}
+                selectedHeight={currentHeight}
+              />
 
           )}
         </div>

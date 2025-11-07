@@ -46,7 +46,7 @@ const initialState: VcrossMapState = {
         segment: true
     },
     vcrossRadarOvrlayPayload: {
-        colorbar: 'BuGn_r',
+        colorbar: 'viridis',
         parameter: 'ref',
         time: '2020-11-10 12:00:33', 
         type: 'grid',

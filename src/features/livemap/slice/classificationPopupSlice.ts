@@ -25,7 +25,6 @@ interface ClassificationPopupState {
     color_1: string;
     height: number;
 
-    histClassifTime: string;
 }
 
 const initialState: ClassificationPopupState = {
@@ -34,7 +33,6 @@ const initialState: ClassificationPopupState = {
     color_0: '#dc3545',
     color_1: '#0d6efd',
     height: 0,
-    histClassifTime: '2020-11-10 12:00:33'
 }
 
 const classificationpopupSlice = createSlice({
@@ -49,12 +47,9 @@ const classificationpopupSlice = createSlice({
         },
         setClassificationColorOne: (state, action) => {
             state.color_1 = action.payload
-        },
-        setHistClassifTime: (state, action) => {
-            state.histClassifTime = action.payload
         }
     }
 })
 
-export const { setSelectedClassificationOption, setClassificationColorOne, setClassificationColorZero, setHistClassifTime } = classificationpopupSlice.actions;
+export const { setSelectedClassificationOption, setClassificationColorOne, setClassificationColorZero } = classificationpopupSlice.actions;
 export default classificationpopupSlice.reducer;

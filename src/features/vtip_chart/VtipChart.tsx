@@ -56,39 +56,46 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
   )
 
 
+
+
   return (
     <SectionCard className={`${className} p-1`}>
       
+
           {/* Heading */}
           <GlassHeader className="p-1 z-10 w-full">
               <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
-              {/* Controls */}
-              {
-                showControls && (
-                  <ChartParamsPopup
-                    hoverText="Select Options"
-                  >
 
-                    <div className="w-ful">
-                      <small>Select variable</small>
-                      <SimpleSelect
-                        options={parameterOptions}
-                        value={selectedParameter.displayText}
-                        onSelectValue={handleVariableChange}
-                        width="w-full"
-                      />
-                    </div>
+              <div className="flex gap-2 ">
+                
+                  {/* Controls */}
+                  {
+                    showControls && (
+                      <ChartParamsPopup
+                        hoverText="Select Options"
+                      >
 
-                    <div className="w-full mb-2 flex flex-col">
-                      <small>Select start Time</small>
-                      <input max={vtipPayload.endTime} onChange={handleStartTimeChange} value={vtipPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
-                      <small>Select end Time</small>
-                      <input min={vtipPayload.startTime} onChange={handleEndTimeChange} value={vtipPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
-                    </div>
+                        <div className="w-ful">
+                          <small>Select variable</small>
+                          <SimpleSelect
+                            options={parameterOptions}
+                            value={selectedParameter.displayText}
+                            onSelectValue={handleVariableChange}
+                            width="w-full"
+                          />
+                        </div>
 
-                  </ChartParamsPopup>
-                )
-              }
+                        <div className="w-full mb-2 flex flex-col">
+                          <small>Select start Time</small>
+                          <input max={vtipPayload.endTime} onChange={handleStartTimeChange} value={vtipPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
+                          <small>Select end Time</small>
+                          <input min={vtipPayload.startTime} onChange={handleEndTimeChange} value={vtipPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
+                        </div>
+
+                      </ChartParamsPopup>
+                    )
+                  }
+              </div>
           </GlassHeader>
 
           {/* Chart */}

@@ -25,6 +25,7 @@ import histSevipPopupReducer from '../features/history_map/slice/histSevipPopup'
 import vpHistChartReducer from '../features/history_charts/slices/vpHistChartSlice';
 import vptsHistChartReducer from '../features/history_charts/slices/vptsHistChartSlice';
 import vtipHistChartReducer from '../features/history_charts/slices/vtipHistChartSlice';
+import boundaryReducer from "../shared/slice/boundarySlice";
 
 
 export const store = configureStore({
@@ -50,6 +51,8 @@ export const store = configureStore({
         vp_histchart: vpHistChartReducer,
         vpts_histchart: vptsHistChartReducer,
         vtip_histchart: vtipHistChartReducer,
+
+        boundary: boundaryReducer,
 
 
         // Refactor

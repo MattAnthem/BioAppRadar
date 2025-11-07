@@ -17,7 +17,7 @@ import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
-import { setClassifPayloadHist, setMapModeHist, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
+import { setAltitudeForAll, setClassifPayloadHist, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
 
 const HistoryMap = () => {
 
@@ -120,57 +120,37 @@ const HistoryMap = () => {
 
     // Change overlay colorbar (Sevip and radar)
     const handleChangeColorbar = (colorname: string) => {
-        dispatch(setRadarPayloadHist({
-            colorbar: colorname
-        }))
-        dispatch(setSevipPayloadHist({
-            colorbar: colorname
-        }))
+        dispatch(setColorbarForAll(colorname));
+
     }
 
     // Altitude 
     const handleAltitudeChange = (altIndex: number) => {
         dispatch(changeHistAltitude(altIndex));
-
-        dispatch(setClassifPayloadHist({height: altitudeOptions[altIndex]}))
-        dispatch(setRadarPayloadHist({height: altitudeOptions[altIndex]}))
-
+        dispatch(setAltitudeForAll(altitudeOptions[altIndex]));
     }
 
-    const toggleSevipMode = () => {
-        dispatch(setMapModeHist('sevip'));
-    }
-
-    const toggleRadarMode = () => {
-        dispatch(setMapModeHist('radar'));
-    }
-
-    const toggleClassifMode = () => {
-        dispatch(setMapModeHist('classification'));
-    }
-    
 
     //#endregion
 
     if (isLoading) return (
-        <div className="relative w-full h-full col-span-6">
+        <div className=" w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
-                <SevipPopup toggleMode={toggleSevipMode} onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup toggleMode={toggleRadarMode} onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
-                <ClassificationPopup toggleMode={toggleClassifMode} onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
+                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <RadarOptionPopup  onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <ClassificationPopup  onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
             </DataLoading>
         </div>
     )
 
     if (error) return (
-        <SectionCard className="relative w-full h-full col-span-6">
+        <SectionCard className=" w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
-                <SevipPopup toggleMode={toggleSevipMode} onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup toggleMode={toggleRadarMode} onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
-                <ClassificationPopup toggleMode={toggleClassifMode} onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
-
+                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <RadarOptionPopup  onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <ClassificationPopup  onChangeClassifTime={handleChangeClassifTime} onChangeClassifVariable={handleChangeClassifVariable} onChangeClassifColorZero={handleChangeClassifColor0} onChangeClassifColorOne={handleChangeClassifColor1} />
             </FetchError>   
         </SectionCard>
     )
@@ -187,10 +167,9 @@ const HistoryMap = () => {
 
                 <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 
-                <SevipPopup toggleMode={toggleSevipMode} onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup toggleMode={toggleRadarMode} onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <SevipPopup onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <RadarOptionPopup  onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
                 <ClassificationPopup 
-                    toggleMode={toggleClassifMode} 
                     onChangeClassifTime={handleChangeClassifTime} 
                     onChangeClassifVariable={handleChangeClassifVariable} 
                     onChangeClassifColorZero={handleChangeClassifColor0} 
@@ -229,8 +208,22 @@ const HistoryMap = () => {
         }
 
 
-        {/* Classification legends */}
+        {/* Map Time */}
+        <div className={`absolute flex flex-col justify-center gap-1.5 z-10 w-1/5 ${isClassif ? 'bottom-2' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
 
+            <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
+            {
+                (mapModeHist === 'radar' && radarPayloadHist.type === 'grid' && data?.info.height) && (
+                    <small className='text-white tracking-wide'>Height: {data?.info.height} m</small>
+                )
+            }
+            {
+                (mapModeHist === 'radar' && radarPayloadHist.type === 'polar' && (data as SpatialDataResponse)?.info.elevation_angle) && (
+                    <small className='text-white tracking-wide'>Elevation angle: {(data as SpatialDataResponse)?.info.elevation_angle} deg</small>
+                )
+            }
+
+        </div>
 
         {/* Map Leaflet */}
         <LeafletMap

@@ -27,7 +27,7 @@ type LiveMapProps = {
 const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= false }: LiveMapProps) => {
 
     // Redux states
-    const { selectedCoverage, selectedMapTime, mapTimeRange, displayedData, classificationPayload, sevipPayload, radarPayload } = useAppSelector(state => state.livemap);
+    const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, sevipPayload, radarPayload } = useAppSelector(state => state.livemap);
     const { selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch()
@@ -99,7 +99,7 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
 
 
     // Prefetch classification only
-    const { data, isLoading, error } = usePrefetchAnimationData({
+    const { data, isLoading, error, isFetching, isFetched } = usePrefetchAnimationData({
         currentTime: selectedMapTime,
         displayedData: 'classification',
         timeRange: mapTimeRange,
@@ -111,7 +111,7 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
     })
 
 
-    if (isLoading) return (
+    if (!isFetched || isLoading || isFetching) return (
         <div className="relative w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
