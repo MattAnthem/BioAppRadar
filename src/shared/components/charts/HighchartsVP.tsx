@@ -108,12 +108,12 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
       legend: { enabled: false  },
       credits: { enabled: false },
       responsive: {
-        rules: [
-          {
-            condition: { maxWidth: 500 },
-            chartOptions: { chart: { height: 450 } }
-          }
-        ]
+        // rules: [
+        //   {
+        //     condition: { maxWidth: 300 },
+        //     chartOptions: { chart: { height: 300 } }
+        //   }
+        // ]
       }
     };
   };

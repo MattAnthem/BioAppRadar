@@ -7,8 +7,6 @@ import SwitchBtn from '../../buttons/switchbtn/SwitchBtn';
 import React from 'react';
 
 
-
-
 const TopBar = () => {
 
     const themes = useTheme();
@@ -32,7 +30,7 @@ const TopBar = () => {
       {/* Left Controls */}
       {/* Menu toggler button for smaller screen */}
       <button aria-labelledby='collapse sidebar' name='toggle_sidebar' onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.togller_color} lg:hidden rounded-sm p-1`}>
-        <Menu width={30}/>
+        <Menu width={20}/>
       </button>
       
       {/* Right controls */}

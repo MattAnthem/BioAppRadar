@@ -32,7 +32,7 @@ const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
   const { parameterOptions, selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
   const dispatch = useAppDispatch();
   const themes = useTheme();
-  const { bg, border, hover } = themes.theme.simpleSelect.
+  const { bg, border, hover } = themes.theme.simpleSelect;
 
   // Tanstack
 

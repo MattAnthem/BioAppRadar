@@ -11,7 +11,7 @@ const OverviewDashboard = () => {
 
         
         {/* Live map  */}
-        <div id='livemap' className="xl:grid mb-2 h-full lg:h-[54vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2">
+        <div id='livemap' className="xl:grid mb-2 h-full lg:h-[60vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2">
 
             
             <div className="h-full lg:col-span-6">
