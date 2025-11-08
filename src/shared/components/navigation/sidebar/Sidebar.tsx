@@ -1,12 +1,13 @@
 import {  Bell, CalendarClock, FlipHorizontal,  Home, SidebarIcon } from "lucide-react";
 import logo_svg from "../../../../assets/dark_logo.webp"
 import { useTheme } from "../../../hooks/useTheme";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import type { MenuNames } from "../../buttons/navbtn/MenuTypes";
 import { setActiveButton, setMinimized, toggleMinimize } from "./sidebarSlice";
 import NavButton from "../../buttons/navbtn/NavButton";
+
 
 
 
@@ -42,6 +43,15 @@ const Sidebar = () => {
             dispatch(setMinimized(true));
         }
     });
+
+    useEffect(() => {
+        const currentPath = location.pathname.replace('/', '') as MenuNames;
+        const pathKey = currentPath === '' ? '' : currentPath;
+
+        if (activeButton !== pathKey) {
+            dispatch(setActiveButton(pathKey));
+        }
+    }, [dispatch, activeButton])
 
   return (
     <div ref={sidebarRef} id="sidebar" role="menubar" aria-label="sidebar" className={`
@@ -79,7 +89,7 @@ const Sidebar = () => {
                 <NavButton 
                     handleActivate={handleActiveButton}
                     title="Overview Dashboard"
-                    menu_to="overview_dash"
+                    menu_to=""
                     active={activeButton}
                     icon={<Home width={30} />}
                     isNav_minimized={isMinimized}

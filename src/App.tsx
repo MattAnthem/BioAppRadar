@@ -22,7 +22,6 @@ function App() {
       <Routes>
         <Route element={<AppLayout/>}>
           <Route path='/' element={<OverviewDashboard/>} /> 
-          <Route path='/overview_dash' element={<OverviewDashboard/>}/>
           <Route path='/history_explorer' element={<HistoricalExplorer/>}/>
           <Route path='/cross_section' element={<CrossSection/>}/>
         </Route>

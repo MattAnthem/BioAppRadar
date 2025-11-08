@@ -58,14 +58,14 @@ const NavButton = (
 
   const handleNavigation = () => {
     if (subMenues && isNav_minimized) {
-      navigate("/"+menu_to);
+      navigate(menu_to);
       handleActivate(menu_to);
     }
     if (subMenues) {
       setShowSubMenu(!showSubMenu);
     } else {
       handleActivate(menu_to);
-      navigate("/"+menu_to);
+      navigate(menu_to);
     }
     
   }
@@ -115,7 +115,7 @@ const NavButton = (
     {/* Show submenus if this NavButton has some */}
     {
       (subMenues && showSubMenu && !isNav_minimized) && (
-        <div role='tree' className={`${navs.subnav_border} ml-6 p-1 border-l-1 flex flex-col items-start`}>
+        <div role='tree' className={`${navs.subnav_border} ml-6 p-1 border-l flex flex-col items-start`}>
           {
             subMenues?.map((sub) => (
               <SubnavBtn

@@ -47,8 +47,6 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
     };
 
 
-
-
     //#region Classification data handler 
     // Classification
     const handleClassificationVarsChange = (variable: SelectOption) => {

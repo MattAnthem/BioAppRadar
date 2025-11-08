@@ -1,4 +1,5 @@
 export type MenuNames = 
+    ""                      |
     "overview_dash"         | 
     "cross_section"         | 
     "forecast_dash"         | 
