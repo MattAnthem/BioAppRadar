@@ -62,10 +62,10 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
            {/* Timestamp indicator */}
            {currentFrame ? (
               <div className="">
-                <h2 className="lg:text-xl text-gray-50 font-semibold tracking-wide">
+                <h2 className=" text-gray-50 font-semibold tracking-wide">
                   {currentFrame.split(" ")[0]}
                 </h2>
-                <small className="text-normal text-gray-200 font-semibold tracking-wider">
+                <small className="text-normal text-gray-200 tracking-wider">
                   {currentFrame.split(" ")[1]}
                 </small>
               </div>
@@ -77,7 +77,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
           {/* Play/Pause */}
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-2"
+            className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-1"
           >
             {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}
           </button>
@@ -89,8 +89,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
               text="Step backward"
               display_condition={true}
             >
-              <button onClick={handleStepBackward} className="p-2 rounded-l-sm hover:bg-gray-700 text-gray-300">
-                <ChevronLeft width={20} height={20} className=" rounded-sm"/>
+              <button onClick={handleStepBackward} className="p-1 rounded-l-sm hover:bg-gray-700 text-gray-300">
+                <ChevronLeft width={17} height={17} className=" rounded-sm"/>
               </button>
 
             </Tooltip>
@@ -98,11 +98,11 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
             {/* Step forward to next frame */}
             <Tooltip
               position="top"
-              text="Step forward"
+              text="Step forward" 
               display_condition={true}
             >
-              <button onClick={handleStepForward} className="p-2 rounded-r-sm hover:bg-gray-700 text-gray-300">
-                <ChevronRight width={20} height={20} className=" rounded-sm"/>
+              <button onClick={handleStepForward} className="p-1 rounded-r-sm hover:bg-gray-700 text-gray-300">
+                <ChevronRight width={17} height={17} className=" rounded-sm"/>
               </button>
             </Tooltip>
 
@@ -120,7 +120,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
                   }}
                   className={`${
                     currentIndex === i ? "bg-blue-800" : "bg-gray-300"
-                    } hover:bg-blue-700 h-4 2xl:w-4 w-2 cursor-pointer 2xl:rounded-xs`}
+                    } hover:bg-blue-700 h-3 w-3  cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>
             ))}

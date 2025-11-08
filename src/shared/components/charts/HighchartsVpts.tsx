@@ -72,6 +72,7 @@ const VptsHeatmapChart: React.FC<VptsChartProps> = ({ data, radarAltitude = 1616
         backgroundColor: 'transparent',
         plotBorderWidth: 1,
         height: 200,
+        reflow: true,
         style: { fontFamily: 'Inter, sans-serif', color: chartFontColor }
       },
       title: { text: null },

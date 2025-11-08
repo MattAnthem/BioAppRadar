@@ -36,14 +36,24 @@ export const parameterOptions: SelectOption[] = [
 ]
 
 interface VpCharState {
+    isPopupOpen: boolean;
+
+    // UI State
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption; 
+    vpTime: string;
+
+    // Payload for the API call
     vpPayload: VpPayload;
 }
 
 const initialState: VpCharState = {
+    isPopupOpen: false,
+
     parameterOptions: parameterOptions,
     selectedParameter: parameterOptions[0],
+    vpTime: '2020-11-10 12:01:00',
+
     vpPayload: {
         parameter: parameterOptions[0].id as string,
         time: '2020-11-10 12:01:00'
@@ -59,13 +69,18 @@ const vpHistChartSlice = createSlice({
         },
         setSelectedVpHistParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
-            state.vpPayload = {
-                ...state.vpPayload,
-                parameter: action.payload.id,
-            };
         },
+        setVpHistTime: (state, action) => {
+            state.vpTime = action.payload
+        },
+        toggleVpHistPopup: (state) => {
+            state.isPopupOpen = !state.isPopupOpen
+        },
+        closeVpHistPopup: (state) => {
+            state.isPopupOpen = false;
+        }
     }
 }) 
 
-export const { changeVpHistPayload, setSelectedVpHistParameterOption } = vpHistChartSlice.actions;
+export const { changeVpHistPayload, setSelectedVpHistParameterOption,  closeVpHistPopup, setVpHistTime, toggleVpHistPopup } = vpHistChartSlice.actions;
 export default vpHistChartSlice.reducer;

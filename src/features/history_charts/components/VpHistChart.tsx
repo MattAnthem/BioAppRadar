@@ -1,91 +1,54 @@
+import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import VpChartHighcharts from "../../../shared/components/charts/HighchartsVP";
-import DataLoading from "../../../shared/components/loader/DataLoading";
-import FetchError from "../../../shared/components/loader/FetchError";
-import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../../shared/components/selects/types";
-import ChartParamsPopup from "../../../shared/features/chart-option-popups/ChartParamsPopup";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useVpHistData } from "../hooks/useVpHistData";
-import { changeVpHistPayload, setSelectedVpHistParameterOption } from "../slices/vpHistChartSlice";
+import { changeVpHistPayload } from "../slices/vpHistChartSlice";
+import VpHistPopup from "./popups/VpHistPopup";
+import loader from '../../../assets/loader.webp';
+import { Unplug } from "lucide-react";
 
 
 
 type VpChartProps = {
   className?: string;
-  showControls?: boolean;
 }
 
-const VpHistChart = ({ className, showControls }: VpChartProps) => {
+const VpHistChart = ({ className }: VpChartProps) => {
 
   // Redux
-  const { parameterOptions, selectedParameter, vpPayload } = useAppSelector(state => state.vp_histchart);
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.hist_altitude);
+  const { selectedParameter, vpTime } = useAppSelector(state => state.vp_histchart);
   const currentHeight = altitudeOptions[currentAltitudeIndex];
-
   const dispatch = useAppDispatch();
 
-  const { isLoading, data, error, refetch } = useVpHistData();
+  const { isLoading, data, error } = useVpHistData();
 
 
-  const handleDateChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const date = new Date(raw);
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    const formatted = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-    dispatch(changeVpHistPayload({time: formatted}))
-  }
-
-  const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVpHistParameterOption(option));
-    refetch();
+  const onSubmitVpPopup = () => {
+    dispatch(changeVpHistPayload({
+      parameter: selectedParameter.id as string,
+      time: vpTime,
+    }))
   }
 
 
-  if (isLoading) return (
-    <div className={`${className} p-1`}>
-      <DataLoading />
-    </div> 
-  )
-  if (error) return (
-    <div className={`${className} p-1`}>
-      <FetchError />
-    </div> 
-  )
+
+
 
   return (
-    <SectionCard className={`${className} flex flex-col h-[400px] p-1`}>
+    <SectionCard className={`${className} p-1`}>
 
         {/* Heading */}
-        <div className="flex rounded-t-sm justify-between border-white/20 bg-gray-900/55 shadow-md ring-2 ring-black/5 p-1 w-full">
-            <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
+        <GlassHeader className="p-1 z-20 w-full">
+            <h3 className='text-white tracking-wider text-sm'>{data?.name} ({data?.units})</h3>
             
             {/* controls */}
-            {
-              showControls && (
-                <ChartParamsPopup
-                  hoverText="Select Options"
-                >
-
-                  <div className="w-full">
-                    <small>Select Variable</small>
-                    <SimpleSelect
-                      options={parameterOptions}
-                      value={selectedParameter.displayText}
-                      onSelectValue={handleVariableChange}
-                      width="w-full"
-                    />
-                  </div>
-
-                  <div className="w-full mb-2">
-                    <small>Select Time</small>
-                    <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
-                  </div>
-                </ChartParamsPopup>
-              )
-            }
+            <VpHistPopup
+              onSubmitPopup={onSubmitVpPopup}
+            />
             
-        </div>           
+        </GlassHeader>           
 
         {/* Chart */}
         <div className="flex-1 w-full h-full items-center justify-center ">
@@ -96,7 +59,22 @@ const VpHistChart = ({ className, showControls }: VpChartProps) => {
             selectedHeight={currentHeight}
           />
 
-          )}
+        )}
+
+        {
+            isLoading && (
+                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                </div>
+            )
+        }
+        {         
+          error && (
+            <div className="absolute z-30 w-full h-full flex items-center justify-center">
+              <Unplug width={60} height={60} className='text-red-500'/>
+            </div> 
+        )}
+
         </div>
 
     </SectionCard>

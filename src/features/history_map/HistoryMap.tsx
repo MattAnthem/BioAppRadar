@@ -2,7 +2,6 @@ import type { ClassificationDataResponse } from '../../api/endpoints/classificat
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import SectionCard from '../../shared/components/cards/SectionCard';
-import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -123,7 +122,7 @@ const HistoryMap = () => {
     )
 
   return (
-    <SectionCard className='relative w-full h-full'>
+    <SectionCard className='relative w-full h-full p-0.5'>
 
 
         {
@@ -168,7 +167,7 @@ const HistoryMap = () => {
         {/* altitude slider */}
         {
             (mapModeHist === 'classification' || (mapModeHist === 'radar' && radarPayloadHist.type === 'grid')) && (
-                <div className="h-full absolute bottom-3 right-2 flex lg:items-center items-start">
+                <div className="h-full absolute bottom-4 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}

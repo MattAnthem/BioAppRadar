@@ -3,8 +3,6 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import type { VptsPayload } from "../../../api/endpoints/verticalProfilesAPI";
 
 
-
-
 // static
 export const parameterOptions: SelectOption[] = [
     {
@@ -38,14 +36,25 @@ export const parameterOptions: SelectOption[] = [
 ]
 
 interface VptsChartState {
+    // UI states
+    isPopupOpen: boolean;
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
+    vptsStartTime: string;
+    vptsEndTime: string;
+
     vptsPayload: VptsPayload;
 }
 
 const initialState: VptsChartState = {
+    isPopupOpen: false,
+    
+
     parameterOptions: parameterOptions,
     selectedParameter: parameterOptions[0],
+    vptsStartTime: '2020-11-10 12:01:00',
+    vptsEndTime: '2020-11-10 12:50:00',
+
     vptsPayload: {
         startTime: '2020-11-10 12:01:00',
         endTime: '2020-11-10 12:50:00',
@@ -62,13 +71,22 @@ const vptsHistChartSlice = createSlice({
         },
         setSelectedVptsHistParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
-            state.vptsPayload = {
-                ...state.vptsPayload,
-                parameter: action.payload.id,
-            }
         },
+        setVptsHistStartTime: (state, action) => {
+            state.vptsStartTime = action.payload
+        },
+        setVptsHistEndTime: (state, action) => {
+            state.vptsEndTime = action.payload
+        },
+        toggleVptsHistPopup: (state) => {
+            state.isPopupOpen = !state.isPopupOpen
+        },
+        closeVptsHistPopup: (state) => {
+            state.isPopupOpen = false;
+        }
+
     }
 });
 
-export const { changeVptsHistPayload, setSelectedVptsHistParameterOption } = vptsHistChartSlice.actions;
+export const { changeVptsHistPayload, setSelectedVptsHistParameterOption, closeVptsHistPopup, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } = vptsHistChartSlice.actions;
 export default vptsHistChartSlice.reducer;

@@ -1,8 +1,9 @@
-import React,{ useRef, useState, type ReactNode } from "react";
-import { useTheme } from "../../../hooks/useTheme";
+import React, { useState, useRef, useEffect, type ReactNode } from "react";
+import { Settings2 } from "lucide-react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import Tooltip from "../tooltip/Tooltip";
-import { Settings2 } from "lucide-react";
+import { useTheme } from "../../../hooks/useTheme";
+
 
 type ChartParamsPopupProps = {
   children?: ReactNode;
@@ -25,6 +26,7 @@ const OptionPopover = ({
   onClose
 }: ChartParamsPopupProps) => {
   const [localOpen, setLocalOpen] = useState(false);
+  const [openUpwards, setOpenUpwards] = useState(false); 
   const popupRef = useRef<HTMLDivElement | null>(null);
   const themes = useTheme();
   const { bg, border, hover, options_bg, text } = themes.theme.simpleSelect;
@@ -42,9 +44,7 @@ const OptionPopover = ({
       setLocalOpen(open);
     }
   };
-  
 
-  // autohide
   useClickOutside(popupRef, () => {
     if (isPopupOpen) handleSetOpen(false);
   });
@@ -54,8 +54,17 @@ const OptionPopover = ({
     handleSetOpen(!isPopupOpen);
   };
 
+  useEffect(() => {
+    if (isPopupOpen && popupRef.current) {
+      const rect = popupRef.current.getBoundingClientRect();
+      const popupHeight = 400; 
+      const spaceBelow = window.innerHeight - rect.bottom;
+      setOpenUpwards(spaceBelow < popupHeight); 
+    }
+  }, [isPopupOpen]);
+
   return (
-    <div ref={popupRef} className={text}>
+    <div ref={popupRef} className={`relative inline-block ${text}`}>
       <Tooltip
         position="bottom"
         display_condition={!isPopupOpen}
@@ -72,13 +81,10 @@ const OptionPopover = ({
       {/* Pop-over menu */}
       <div
         className={`
-          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center w-[400px] absolute right-0 top-full p-2 rounded-sm
-          ${
-            isPopupOpen
-              ? "scale-100 opacity-100"
-              : "scale-95 opacity-0 pointer-events-none"
-          }
-          transition-all duration-75 ease-out origin-top-right
+          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center w-[400px]
+          absolute right-0 ${openUpwards ? "bottom-full mb-1 origin-bottom-right" : "top-full mt-1 origin-top-right"}
+          p-2 rounded-sm transition-all duration-100 ease-out
+          ${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}
         `}
       >
         {children}

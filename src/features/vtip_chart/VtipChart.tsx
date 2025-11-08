@@ -1,4 +1,3 @@
-import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import DataLoading from "../../shared/components/loader/DataLoading";
@@ -63,8 +62,8 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
       
 
           {/* Heading */}
-          <GlassHeader className="p-1 z-10 w-full">
-              <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
+          <div className="p-1 z-10 w-full border-b">
+              <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
               <div className="flex gap-2 ">
                 
@@ -96,10 +95,10 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
                     )
                   }
               </div>
-          </GlassHeader>
+          </div>
 
           {/* Chart */}
-          <div className="flex-1 mt-8 w-full h-full items-center justify-center ">
+          <div className="flex-1 w-full h-full items-center justify-center ">
             {
               data && (
                 <HighchartVtip

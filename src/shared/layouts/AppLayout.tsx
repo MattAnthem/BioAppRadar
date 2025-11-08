@@ -14,17 +14,17 @@ const AppLayout = () => {
   const { mainBg } = themes.theme;
 
   return (
-    <div className={`${mainBg} w-full h-full flex`}>
+    <div className={`${mainBg} w-full p-0 h-screen flex overflow-hidden`}>
 
       {/* Sidebar */}
       <Sidebar />
       
       {/* Main content */}
-      <div className="flex-col relative w-full"> 
+      <div className="relative flex flex-col w-full h-full"> 
 
         {/* Topbar */}
         <TopBar/>
-
+        
         <Suspense 
           fallback={
             <div className='w-full h-full flex items-center justify-center'>

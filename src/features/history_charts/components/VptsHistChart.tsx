@@ -72,10 +72,10 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
     </div> 
   )
 
-      // handler to open the modal
-      const handleOpenModal = () => {
+  // handler to open the modal
+  const handleOpenModal = () => {
         setIsModalOpen(true);
-      }
+  }
 
   return (
     <SectionCard className={`${className} p-1`}>

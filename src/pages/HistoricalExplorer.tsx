@@ -9,22 +9,24 @@ const HistoricalExplorer = () => {
   return (
     <MainLayout>
 
-        <div id='livemap' className="xl:grid mb-4 h-full lg:h-[60vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2 overflow-y-hidden">
 
-                    
-          <div className="h-full lg:col-span-6">
-              <HistoryMap/>
-          </div>
+      <div className="w-full h-full px-4 py-2 grid grid-rows-[auto_fr] gap-2">
 
-          <VpHistChart showControls className="w-full lg:h-full xl:h-full  lg:col-span-2"/>
+            <div className="grid grid-cols-1 xl:grid-cols-8 gap-2">
+              <div className="col-span-1 xl:col-span-6 h-[55vh]">
+                <HistoryMap />
+              </div>
 
-        </div>
+              <div className="col-span-1 xl:col-span-2">
+                <VpHistChart className="w-full h-[55vh]" />
+              </div>
+            </div>
 
-        <div className="xl:grid lg:grid lg:grid-cols-2 grid-cols-1 w-full lg:h-1/3 gap-2">
 
-          <VtipHistChart className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
-
-          <VptsHistChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+              <VtipHistChart className="w-full h-[50vh] lg:h-full" />
+              <VptsHistChart className="w-full h-[50vh] lg:h-full" />
+            </div>
 
         </div>
         

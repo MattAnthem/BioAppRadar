@@ -29,9 +29,9 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
     return {
       chart: { 
         inverted: true, 
-        height: 400,  
         backgroundColor: 'transparent', 
         fontFamily: 'Work-sans, Inter, sans-serif',
+        reflow: true,
         fontColor: chartFontColor,
       },
       title: { text: null },
@@ -96,14 +96,7 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
       ],
       legend: { enabled: false  },
       credits: { enabled: false },
-      responsive: {
-        rules: [
-          {
-            condition: { maxWidth: 800 },
-            chartOptions: { chart: { height: 450 } }
-          }
-        ]
-      }
+
     };
   };
 

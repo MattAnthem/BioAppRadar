@@ -1,14 +1,13 @@
 import SectionCard from "../../shared/components/cards/SectionCard";
 import VpChartHighcharts from "../../shared/components/charts/HighchartsVP";
-import DataLoading from "../../shared/components/loader/DataLoading";
-import FetchError from "../../shared/components/loader/FetchError";
 import SimpleSelect from "../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../shared/components/selects/types";
 import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import { changeVpPayload, setSelectedVpParameterOption } from "./vpChartSlice";
-
+import loader from '../../assets/loader.webp'
+import { Unplug } from "lucide-react";
 
 type VpChartProps = {
   className?: string;
@@ -39,24 +38,12 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
     refetch();
   }
 
-
-  if (isLoading) return (
-    <div className={`${className} p-1`}>
-      <DataLoading />
-    </div> 
-  )
-  if (error) return (
-    <div className={`${className} p-1`}>
-      <FetchError />
-    </div> 
-  )
-
   return (
-    <SectionCard className={`${className} flex flex-col h-[400px] p-1`}>
+    <SectionCard className={`${className} h-full p-1`}>
 
         {/* Heading */}
-        <div className="flex rounded-t-sm justify-between border-white/20 bg-gray-900/55 shadow-md ring-2 ring-black/5 p-1 w-full">
-            <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
+        <div className="p-1 z-20 w-full border-b">
+            <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
             {/* controls */}
             {
@@ -86,7 +73,7 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="flex mt-2 w-full h-full items-center justify-center ">
+        <div className="flex w-full h-full items-center justify-center ">
         {data && (
 
               <VpChartHighcharts
@@ -96,6 +83,19 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
 
           )}
         </div>
+        {
+            isLoading && (
+                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                </div>
+            )
+        }
+        {         
+          error && (
+            <div className="absolute z-30 w-full h-full flex items-center justify-center">
+              <Unplug width={60} height={60} className='text-red-500'/>
+            </div> 
+        )}
 
     </SectionCard>
   )

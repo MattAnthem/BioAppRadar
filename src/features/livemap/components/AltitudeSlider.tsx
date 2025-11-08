@@ -38,14 +38,16 @@ const AltitudeSlider = (
     }
 
   return (
-    <div className={`${position_classes[position]} ${className}  z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[70vh] lg:h-[full] h-[35vh]  rounded-sm p-2 flex justify-center items-center`}>
+    <div className={`${position_classes[position]} ${className}  z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[80vh] lg:h-[full] h-[37vh]  rounded-sm  flex justify-center items-center`}>
       
 
       {/* Altitude band */}
       <div className="h-fit  flex flex-col justify-center items-center">
 
+        <small className='text-[10px] text-xs text-center font-light'>Altitude in meters</small>
+
         {/* Max altitude */}
-        <small>{altitudes[0]}m</small>
+        <small className='text-[10px] text-white'>{altitudes[0]}</small>
    
         {altitudes.map((alt: number, i: number) => (
             <Tooltip
@@ -66,9 +68,15 @@ const AltitudeSlider = (
             </Tooltip>
         ))}
 
-        {/* Min altitude */}     
-        <small>{altitudes[altitudes.length - 1]}m</small>
 
+        {/* Min altitude */}   
+        <Tooltip
+          position='left'
+          display_condition
+          text='Radar level'
+        >
+          <small className='text-[10px] text-white'>{altitudes[altitudes.length - 1]}</small>
+        </Tooltip>  
       </div>
 
 

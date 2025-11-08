@@ -6,7 +6,6 @@ import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setClassificationPayload, setSelectedTime } from './slice/livemapSlice';
 import type { SelectOption } from '../../shared/components/selects/types';
-import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
@@ -16,6 +15,7 @@ import { usePreloadClassificationFrames } from './hooks/usePreload/usePreloadCla
 import { useClassificationDataQuery } from './hooks/useQuery/useClassificationDataQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
+import loader from '../../assets/loader.webp';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -103,17 +103,6 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
 
 
-    if (isPreloading) return (
-        <div className="relative w-full h-full col-span-6">
-            <DataLoading
-                message={`Loading animation ${progress}%...`}
-            >
-                <MapbasePopup/>
-                <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
-            </DataLoading>
-        </div>
-    )
-
     if (error) return (
         <SectionCard className="relative w-full h-full col-span-6">
             <FetchError>
@@ -125,12 +114,22 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
 
   return (
-    <SectionCard className='relative w-full h-full p-1 col-span-6'>
+    <SectionCard className='relative w-full h-full p-0.5'>
+
+        
+        {
+            isPreloading && (
+                <div className="absolute z-30 w-full h-full flex flex-col items-center justify-center">
+                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                    <p className='text-gray-700'>{`Loading animation ${progress}%...`}</p>
+                </div>
+            )
+        }
 
         {/* Heading */}
         <GlassHeader className='z-20 p-1 flex justify-between items-center'>
 
-            <h3 className='text-white tracking-wider text-sm'>{data?.info.name}</h3>
+            <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-3 justify-center items-end">
@@ -170,7 +169,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         {/* Altitude slider */}
         {
             (displayedData === "classification" || radarPayload.type === 'grid') && (
-                <div className="h-full absolute bottom-3 right-2 flex lg:items-center items-start">
+                <div className="h-full absolute bottom-4 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}
@@ -193,20 +192,20 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         {/* Classification legends */}
         {
             (displayedData === "classification") && (
-                <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 py-2 right-2 bottom-1">
+                <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 py-2 right-2 bottom-0">
                     
                     {/* Color 0 */}
                     <div className="flex gap-2">
                         <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
-                        <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
+                        <small className='text-white text-xs tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
                     </div>
                     {/* Color 1 */}
                     <div className="flex gap-2">
                         <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
-                        <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
+                        <small className='text-white text-xs tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
                     </div>
 
-                    <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
+                    <small className='text-white tracking-wide text-xs'>Height: {data?.info.height}</small>
 
                 </div>
             )

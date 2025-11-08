@@ -1,4 +1,3 @@
-import GlassHeader from "../../shared/components/cards/GlassHeader";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import VptsHeatmapChart from "../../shared/components/charts/HighchartsVpts";
 import DataLoading from "../../shared/components/loader/DataLoading";
@@ -60,8 +59,8 @@ const VptsChart = ({className, showControls}: VptsChartProps) => {
     <SectionCard className={`${className} p-1`}>
 
         {/* Heading */}
-        <GlassHeader className="p-1 z-10 w-full">
-            <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
+        <div className="p-1 z-10 w-full border-b">
+            <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
             {/* Controls */}
             {
               showControls && (
@@ -88,10 +87,10 @@ const VptsChart = ({className, showControls}: VptsChartProps) => {
                 </ChartParamsPopup>
               )
             }
-        </GlassHeader>           
+        </div>           
 
         {/* Chart */}
-        <div className="flex mt-8 w-full h-full items-center justify-center ">
+        <div className="flex w-full h-full items-center justify-center ">
           {
             data && (
               <VptsHeatmapChart data={data}/>
