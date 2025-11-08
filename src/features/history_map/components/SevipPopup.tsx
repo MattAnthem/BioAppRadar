@@ -5,27 +5,24 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { setHistTimeSevip, setSelectedHistSevipOption } from '../slice/histSevipPopup';
 import { formatChartDateParam } from '../../../shared/utils/date_format';
+import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 
 type SevipPopupProps = {
-    onSevipVariableChange?: (type: SelectOption) => void;
-    onSevipTimeChange?: (time: string) => void;
-    toggleMode?: () => void;
+    onSubmitPopup?: () => void;
 }
 
-const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange, toggleMode }: SevipPopupProps) => {
+const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
 
     const { selectedVariable, availableVariables, histTimeSevip } = useAppSelector(state => state.hist_sevippopup);
     const dispatch = useAppDispatch();
 
     const handleSevipVaribleChange = (option: SelectOption) => {
-        onSevipVariableChange?.(option);
         dispatch(setSelectedHistSevipOption(option))
     }
 
     const handleSevipTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const raw = evt.target.value; 
         const formatted = formatChartDateParam(raw);
-        onSevipTimeChange?.(formatted);
         dispatch(setHistTimeSevip(formatted));
       }
 
@@ -33,7 +30,6 @@ const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange, toggleMode }: Se
     <OptionPopover
         hoverText='Vertical Integrated Profile Data'
         customIcon={<FlipVerticalIcon/>}   
-        onClickEvent={toggleMode}
     >
 
         <small>Select a variable</small>
@@ -50,6 +46,13 @@ const SevipPopup = ({ onSevipVariableChange, onSevipTimeChange, toggleMode }: Se
         <div className="border-b border-b-gray-400"/>
         <input onChange={handleSevipTimeChange} value={histTimeSevip} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="sevipHistTime" id="sevipHistTime" />
 
+        {/* Display data button */}
+        <ButtonBorder
+            onClick={onSubmitPopup!}
+            className='py-2 mt-2'
+        >
+             Display data
+        </ButtonBorder>
 
     </OptionPopover>
   )

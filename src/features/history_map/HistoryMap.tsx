@@ -5,7 +5,6 @@ import SectionCard from '../../shared/components/cards/SectionCard';
 import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
 import LeafletMap from '../../shared/components/map/LeafletMap';
-import type { SelectOption } from '../../shared/components/selects/types';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AltitudeSlider from '../livemap/components/AltitudeSlider';
 import Colorbar from '../livemap/components/Colorbar';
@@ -64,21 +63,6 @@ const HistoryMap = () => {
 
     //#region HANDLERS 
 
-    // Sevip
-    const handleSevipVariableChange = (variable: SelectOption) => {
-        dispatch(setSevipPayloadHist({
-            parameter: variable.id as string
-        }))
-    }
-
-    const handleSevipTimeChange = (time: string) => {
-        dispatch(setSevipPayloadHist({
-            time: time
-        }))
-    }
-
-
-
     // Change overlay colorbar (Sevip and radar)
     const handleChangeColorbar = (colorname: string) => {
         dispatch(setColorbarForAll(colorname));
@@ -116,13 +100,22 @@ const HistoryMap = () => {
         }))
     }
 
+    // sevip
+    const { selectedVariable: sevipSelVariable , histTimeSevip } = useAppSelector(state => state.hist_sevippopup);
+    const submitSevipPopupData = () => {
+        dispatch(setSevipPayloadHist({
+            parameter: sevipSelVariable.id as string,
+            time: histTimeSevip
+        }))
+    }
+
     //#endregion
 
     if (isLoading) return (
         <div className=" w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
-                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <SevipPopup />
                 <RadarOptionPopup />
                 <ClassificationPopup  />
             </DataLoading>
@@ -133,7 +126,7 @@ const HistoryMap = () => {
         <SectionCard className=" w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
-                <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <SevipPopup onSubmitPopup={submitSevipPopupData} />
                 <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
                 <ClassificationPopup onSubmitPopup={submitClassifPopupData} />
             </FetchError>   
@@ -152,7 +145,7 @@ const HistoryMap = () => {
 
                 <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 
-                <SevipPopup onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
+                <SevipPopup onSubmitPopup={submitSevipPopupData}/>
                 <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
                 <ClassificationPopup 
                     onSubmitPopup={submitClassifPopupData}
