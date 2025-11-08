@@ -3,6 +3,7 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import { RadarParameterOptions, RadarTypeOptions } from "../../livemap/slice/radarPopupSlice";
 
 interface RadarOptionsState {
+    isPopupOpen: boolean;
     selectedType: SelectOption;
     availableTypes: SelectOption[];
     selectedParameter: SelectOption;
@@ -12,6 +13,7 @@ interface RadarOptionsState {
 }
 
 const initialState: RadarOptionsState = {
+    isPopupOpen: false,
     availableParameters: RadarParameterOptions,
     availableTypes: RadarTypeOptions,
     selectedType: RadarTypeOptions[0],
@@ -31,9 +33,15 @@ const radarOptionSlice = createSlice({
         },
         setRadarTimeHist: (state, action) => {
             state.radarTimeHist = action.payload;
+        },
+        toggleRadarPopup: (state) => {
+            state.isPopupOpen = !state.isPopupOpen;
+        },
+        closeRadarPopup: (state) => {
+            state.isPopupOpen = false;
         }
     }
 });
 
-export const { setSelectedHistRadarParameter, setSelectedHistRadarType, setRadarTimeHist } = radarOptionSlice.actions;
+export const { setSelectedHistRadarParameter, setSelectedHistRadarType, setRadarTimeHist, closeRadarPopup, toggleRadarPopup } = radarOptionSlice.actions;
 export default radarOptionSlice.reducer;

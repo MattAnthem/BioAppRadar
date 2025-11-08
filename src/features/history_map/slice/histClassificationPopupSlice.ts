@@ -23,6 +23,7 @@ const ClassificationOptions: SelectOption[] = [
 ]
 
 interface HistClassificationPopupState {
+    isPopupOpen: boolean,
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
     color_0: string;
@@ -33,6 +34,7 @@ interface HistClassificationPopupState {
 }
 
 const initialState: HistClassificationPopupState = {
+    isPopupOpen: false,
     selectedVariable: Array.isArray(ClassificationOptions[0].availableType) ? ClassificationOptions[0].availableType[0] : null,
     availableVariables: Array.isArray(ClassificationOptions[0].availableType) ? ClassificationOptions[0].availableType : [],
     color_0: '#dc3545',
@@ -56,9 +58,15 @@ const HistclassificationpopupSlice = createSlice({
         },
         setHistClassifTime: (state, action) => {
             state.histClassifTime = action.payload
+        },
+        toggleClassifPopup: (state) => {
+            state.isPopupOpen = !state.isPopupOpen;
+        },
+        closeClassifPopup: (state) => {
+            state.isPopupOpen = false;
         }
     }
 })
 
-export const { setHistClassificationColorOne, setHistClassificationColorZero, setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
+export const { setHistClassificationColorOne, setHistClassificationColorZero,closeClassifPopup, toggleClassifPopup,  setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
 export default HistclassificationpopupSlice.reducer;

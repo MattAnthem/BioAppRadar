@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { VtipPayload, VtipResponse } from "../../api/endpoints/verticalProfilesAPI";
+import type { VtipPayload } from "../../api/endpoints/verticalProfilesAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
 
 // static
@@ -33,17 +33,23 @@ export const parameterOptions: SelectOption[] = [
 interface VtipChartState {
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
+    vtipStartTime: string;
+    vtipEndTime: string;
     vtipPayload: VtipPayload;
 }
 
 
 const initialState: VtipChartState = {
+
     parameterOptions: parameterOptions,
     selectedParameter: parameterOptions[0],
+    vtipStartTime: '2020-11-10 12:01:00',
+    vtipEndTime: '2020-11-10 12:50:00',
+
     vtipPayload: {
         startTime: '2020-11-10 12:01:00',
         endTime: '2020-11-10 12:50:00',
-        parameter: parameterOptions[0].id as string
+        parameter: 'mtr'
     }
 }
 
@@ -56,14 +62,13 @@ const vtipChartSlice = createSlice({
         },
         setSelectedVtipParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
-            state.vtipPayload = {
-                ...state.vtipPayload,
-                parameter: action.payload.id,
-            }
         },
+        setVtipParameter: (state, action) => {
+            state.selectedParameter = action.payload
+        }
 
     }
 });
 
-export const { changeVtipPayload, setSelectedVtipParameterOption, setVtipData } = vtipChartSlice.actions;
+export const { changeVtipPayload, setSelectedVtipParameterOption, setVtipParameter } = vtipChartSlice.actions;
 export default vtipChartSlice.reducer;

@@ -3,13 +3,9 @@ import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
-import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../../shared/components/selects/types";
-import ChartParamsPopup from "../../../shared/features/chart-option-popups/ChartParamsPopup";
-import { formatChartDateParam } from "../../../shared/utils/date_format";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useVtipHistData } from "../hooks/useVtipHistData";
-import { changeVtipHistPayload, setSelectedVtipHistParameterOption } from "../slices/vtipHistChartSlice";
+import { changeVtipHistPayload } from "../slices/vtipHistChartSlice";
 import ChartModal from "./ChartModal";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { Fullscreen, Unplug } from "lucide-react";
@@ -17,19 +13,19 @@ import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import { useVtipImageQuery } from "../hooks/useVtipImageQuery";
 import loader from '../../../assets/loader.webp';
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
+import VtipHistPopup from "./popups/VtipHistPopup";
 
 
 type VtipChartProps = {
   className?: string;
-  showControls?: boolean;
 }
 
-const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
+const VtipHistChart = ({ className }: VtipChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Redux 
-  const { parameterOptions, selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
+  const { selectedParameter, vtipPayload, vtipStartTime, vtipEndTime } = useAppSelector(state => state.vtip_histchart);
   const dispatch = useAppDispatch();
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
@@ -37,30 +33,26 @@ const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
   // Tanstack
 
   //#region  Data Fetching
-  const { isLoading, data, error, refetch } = useVtipHistData();
+  const { isLoading, data, error } = useVtipHistData();
 
   const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, isModalOpen);
 
   //#endregion
 
-  //#region  Event Handlers
-  const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(changeVtipHistPayload({startTime: formatted}));
+
+
+
+  // Submit Vtip Popup data
+  const submitVtipPopup = () => {
+      dispatch(changeVtipHistPayload(
+        {
+          startTime: vtipStartTime,
+          endTime: vtipEndTime,
+          parameter: selectedParameter.id as string
+        }
+      ))
   }
 
-  const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(changeVtipHistPayload({endTime: formatted}));
-  }
-
-  const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVtipHistParameterOption(option));
-    refetch();
-  } 
-  //#endregion
 
   if (isLoading) return (
     <div className={`${className} p-1`}>
@@ -69,6 +61,7 @@ const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
   )
   if (error) return (
     <div className={`${className} p-1`}>
+      <VtipHistPopup onSubmitPopup={submitVtipPopup}/>
       <FetchError />
     </div> 
   )
@@ -82,8 +75,6 @@ const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
 
   return (
     <SectionCard className={`${className} p-1`}>
-
-
 
 
 
@@ -122,49 +113,21 @@ const VtipHistChart = ({ className, showControls }: VtipChartProps) => {
                       
           </ChartModal>
 
-
-
       
           {/* Heading */}
           <GlassHeader className="p-1 z-10 w-full">
-              <h3 className='text-white tracking-wider text-sm'>{selectedParameter.displayText} ({data?.units})</h3>
+              <h3 className='text-white tracking-wider text-sm'>{data?.name} ({data?.units})</h3>
 
-
-              
 
               <div className="flex gap-2">
-                {/* Controls */}
-                {
-                  showControls && (
-                    <ChartParamsPopup
-                      hoverText="Select Options"
-                    >
 
-                      <div className="w-ful">
-                        <small>Select variable</small>
-                        <SimpleSelect
-                          options={parameterOptions}
-                          value={selectedParameter.displayText}
-                          onSelectValue={handleVariableChange}
-                          width="w-full"
-                        />
-                      </div>
-
-                      <div className="w-full mb-2 flex flex-col">
-                        <small>Select start Time</small>
-                        <input max={vtipPayload.endTime} onChange={handleStartTimeChange} value={vtipPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
-                        <small>Select end Time</small>
-                        <input min={vtipPayload.startTime} onChange={handleEndTimeChange} value={vtipPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
-                      </div>
-
-                    </ChartParamsPopup>
-                  )
-                }
+                {/* Controls popup */}
+                <VtipHistPopup onSubmitPopup={submitVtipPopup}/>
                 
                 {/* Open the modal */}
                 <Tooltip 
                   position="bottom" 
-                  display_condition={!isModalOpen}  // is popup open
+                  display_condition={!isModalOpen}  
                   text={"Open in fullscreen"}
                 >                  
                   <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>

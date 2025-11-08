@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType } from '../slice/histRadarPopupSlice';
+import { closeRadarPopup, setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType, toggleRadarPopup } from '../slice/histRadarPopupSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { RadarIcon } from 'lucide-react';
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
@@ -15,7 +15,7 @@ type RadarOptionPopupProps = {
 const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
 
     // Redux
-    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist } = useAppSelector(state => state.hist_radarpopup);
+    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, isPopupOpen } = useAppSelector(state => state.hist_radarpopup);
     const dispatch = useAppDispatch();
 
 
@@ -33,11 +33,18 @@ const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
         dispatch(setRadarTimeHist(formatted));
     }
   
+    const handleSubmit = () => {
+        onSubmitPopup?.();
+        dispatch(closeRadarPopup())
+    }
 
   return (
     <OptionPopover
         hoverText='Radar Data'
         customIcon={<RadarIcon/>}
+        isOpen={isPopupOpen}
+        onOpen={() => dispatch(toggleRadarPopup())}
+        onClose={() => dispatch(closeRadarPopup())}
     >
         <small className='font-semibold'>Select Radar Type</small>
         <div className="border-b border-b-gray-400"/>
@@ -66,7 +73,7 @@ const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
 
         {/* Display data  */}
         <ButtonBorder
-            onClick={onSubmitPopup!}
+            onClick={handleSubmit}
             className='py-2 mt-2'
         >
              Display data

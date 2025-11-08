@@ -17,6 +17,7 @@ import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
 import { setAltitudeForAll, setClassifPayloadHist, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
+import loader from '../../assets/loader.webp';
 
 const HistoryMap = () => {
 
@@ -110,17 +111,6 @@ const HistoryMap = () => {
 
     //#endregion
 
-    if (isLoading) return (
-        <div className=" w-full h-full col-span-6">
-            <DataLoading>
-                <MapbasePopup/>
-                <SevipPopup />
-                <RadarOptionPopup />
-                <ClassificationPopup  />
-            </DataLoading>
-        </div>
-    )
-
     if (error) return (
         <SectionCard className=" w-full h-full col-span-6">
             <FetchError>
@@ -134,6 +124,16 @@ const HistoryMap = () => {
 
   return (
     <SectionCard className='relative w-full h-full'>
+
+
+        {
+            isLoading && (
+                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                </div>
+            )
+        }
+
 
         {/* Heading */}
         <GlassHeader className='z-20  p-1 flex justify-between items-center'>

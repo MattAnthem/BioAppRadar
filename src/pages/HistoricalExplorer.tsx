@@ -22,7 +22,7 @@ const HistoricalExplorer = () => {
 
         <div className="xl:grid lg:grid lg:grid-cols-2 grid-cols-1 w-full lg:h-1/3 gap-2">
 
-          <VtipHistChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
+          <VtipHistChart className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
 
           <VptsHistChart showControls className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
 

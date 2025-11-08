@@ -31,15 +31,24 @@ export const parameterOptions: SelectOption[] = [
 ]
 
 interface VtipChartState {
+    isPopupOpen: boolean;
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
+    vtipStartTime: string;
+    vtipEndTime: string;
+
     vtipPayload: VtipPayload;
 }
 
 
 const initialState: VtipChartState = {
+    isPopupOpen: false,
+
     parameterOptions: parameterOptions,
     selectedParameter: parameterOptions[0],
+    vtipStartTime: '2020-11-10 12:01:00',
+    vtipEndTime: '2020-11-10 12:50:00',
+
     vtipPayload: {
         startTime: '2020-11-10 12:01:00',
         endTime: '2020-11-10 12:50:00',
@@ -56,14 +65,22 @@ const vtipHistChartSlice = createSlice({
         },
         setSelectedVtipHistParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
-            state.vtipPayload = {
-                ...state.vtipPayload,
-                parameter: action.payload.id,
-            }
         },
+        setVtipHistStartTime: (state, action) => {
+            state.vtipStartTime = action.payload
+        },
+        setVtipHistEndTime: (state, action) => {
+            state.vtipEndTime = action.payload
+        },
+        toggleVtipHistPopup: (state) => {
+            state.isPopupOpen = !state.isPopupOpen
+        },
+        closeVtipHistPopup: (state) => {
+            state.isPopupOpen = false;
+        }
 
     }
 });
 
-export const { changeVtipHistPayload, setSelectedVtipHistParameterOption } = vtipHistChartSlice.actions;
+export const { changeVtipHistPayload, setSelectedVtipHistParameterOption, closeVtipHistPopup, setVtipHistEndTime, setVtipHistStartTime,  toggleVtipHistPopup } = vtipHistChartSlice.actions;
 export default vtipHistChartSlice.reducer;

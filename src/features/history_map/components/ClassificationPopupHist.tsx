@@ -3,7 +3,7 @@ import { BirdIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
-import { setHistClassificationColorZero, setSelectedHistClassificationOption, setHistClassificationColorOne, setHistClassifTime } from '../slice/histClassificationPopupSlice'
+import { setHistClassificationColorZero, setSelectedHistClassificationOption, setHistClassificationColorOne, setHistClassifTime, closeClassifPopup, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
 import { formatChartDateParam } from '../../../shared/utils/date_format'
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
 
@@ -16,7 +16,7 @@ type ClassificationPopupProps = {
 const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
 
 
-  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime } = useAppSelector(state=> state.hist_classifpopup);
+  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, isPopupOpen } = useAppSelector(state=> state.hist_classifpopup);
 
   const dispatch = useAppDispatch();
 
@@ -44,12 +44,19 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
   }
   //#endregion
 
+  const handleSubmit = () => {
+    onSubmitPopup?.();
+    dispatch(closeClassifPopup())
+}
 
 return (
 
   <OptionPopover
       hoverText='Classification Data'
       customIcon={<BirdIcon/>}
+      isOpen={isPopupOpen}
+      onOpen={() => dispatch(toggleClassifPopup())}
+      onClose={() => dispatch(closeClassifPopup())}
   >
       <small className='font-semibold'>Select a variable</small>
       <div className="border-b border-b-gray-400"/>
@@ -80,7 +87,7 @@ return (
 
       {/* Display data btn */}
       <ButtonBorder
-        onClick={onSubmitPopup!}
+        onClick={handleSubmit}
         className='py-2 mt-2'
       >
         Display data

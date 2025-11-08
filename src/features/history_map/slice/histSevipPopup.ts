@@ -27,6 +27,7 @@ const SevipOptions: SelectOption[] = [
 ]
 
 interface SevipPopupState {
+    isPopupOpen: boolean;
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
 
@@ -34,6 +35,8 @@ interface SevipPopupState {
 }
 
 const initialState: SevipPopupState = {
+    isPopupOpen: false,
+
     selectedVariable: Array.isArray(SevipOptions[0].availableType) ? SevipOptions[0].availableType[0] : null,
     availableVariables: Array.isArray(SevipOptions[0].availableType) ? SevipOptions[0].availableType : [],
     histTimeSevip: '2020-11-10 12:00:33'
@@ -48,9 +51,15 @@ const histSevippopupSlice = createSlice({
         },
         setHistTimeSevip: (state, action) => {
           state.histTimeSevip = action.payload;
+        },
+        toggleSevipPopup: (state) => {
+          state.isPopupOpen = !state.isPopupOpen;
+        },
+        closeSevipPopup: (state) => {
+          state.isPopupOpen = false;
         }
     }
 })
 
-export const { setSelectedHistSevipOption, setHistTimeSevip } = histSevippopupSlice.actions;
+export const { setSelectedHistSevipOption, setHistTimeSevip, closeSevipPopup, toggleSevipPopup } = histSevippopupSlice.actions;
 export default histSevippopupSlice.reducer;
