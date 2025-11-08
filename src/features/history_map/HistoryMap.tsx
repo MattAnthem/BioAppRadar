@@ -75,7 +75,6 @@ const HistoryMap = () => {
         dispatch(setAltitudeForAll(altitudeOptions[altIndex]));
     }
 
-
     //#endregion
 
     //#region Popup Options submits
@@ -149,8 +148,6 @@ const HistoryMap = () => {
                 <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
                 <ClassificationPopup 
                     onSubmitPopup={submitClassifPopupData}
-                    color0Legend={(data as ClassificationDataResponse)?.legend?.class_0?.name}
-                    color1Legend={(data as ClassificationDataResponse)?.legend?.class_1?.name}
                 />
                 
             </div>

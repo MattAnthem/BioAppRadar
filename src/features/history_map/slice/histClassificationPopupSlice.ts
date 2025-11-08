@@ -8,11 +8,15 @@ const ClassificationOptions: SelectOption[] = [
         availableType: [
           {
             id: 'biometeo',
-            displayText: 'Biological vs Meteorological Classification'
+            displayText: 'Biological vs Meteorological Classification',
+            type0: 'Meteorological',
+            type1: 'Biological'
           },
           {
             id: 'species',
-            displayText: 'Bird vs Insect Classification'
+            displayText: 'Bird vs Insect Classification',
+            type0: 'Insects',
+            type1: 'Birds'
           }
         ]
     }

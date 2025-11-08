@@ -10,12 +10,10 @@ import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonB
 
 
 type ClassificationPopupProps = {
-  color0Legend?: string;
-  color1Legend?: string;
   onSubmitPopup?: () => void;
 }
 
-const ClassificationPopup = ({ onSubmitPopup, color0Legend, color1Legend }: ClassificationPopupProps) => {
+const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
 
 
   const { availableVariables, selectedVariable, color_0, color_1, histClassifTime } = useAppSelector(state=> state.hist_classifpopup);
@@ -67,11 +65,11 @@ return (
       <div className="border-b border-b-gray-400"/>
 
       <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
-          <small className='w-fit'>{color0Legend ?? availableVariables[0].id}:</small>
+          <small className='w-fit'>{ selectedVariable['type0'] as string}:</small>
           <input onChange={handleColorZeroChange} value={color_0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
       </div>
       <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
-          <small className='w-fit'>{color1Legend ?? availableVariables[1].id}:</small>
+          <small className='w-fit'>{ selectedVariable['type1'] as string}:</small>
           <input onChange={handleColorOneChange} value={color_1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
       </div>
 
