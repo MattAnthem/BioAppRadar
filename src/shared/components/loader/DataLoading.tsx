@@ -5,9 +5,10 @@ import GlassHeader from '../cards/GlassHeader';
 
 type Props = {
   children?: ReactNode;
+  message?: string;
 }
 
-const DataLoading = ({children}: Props) => {
+const DataLoading = ({children, message}: Props) => {
   return (
     <div className=" w-full h-full rounded-sm p-1 z-20 bg-gray-500/50 left-0 top-0">
 
@@ -29,7 +30,7 @@ const DataLoading = ({children}: Props) => {
               "
           >
               <img src={loader} className='w-8' alt="loader" />
-              <p className='font-semibold text-xs tracking-wider text-gray-300'>LOADING DATA</p>
+              <p className='font-semibold text-xs tracking-wider text-gray-300'>{message ?? 'LOADING DATA'}</p>
               
           </div>
         </div>

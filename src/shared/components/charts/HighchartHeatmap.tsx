@@ -39,7 +39,7 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
       chart: {
         type: 'heatmap',
         zoomType: 'x',
-        backgroundColor: 'transparent',
+        // backgroundColor: 'transparent',
         plotBorderWidth: 1,
         style: {
           fontFamily: 'Inter, sans-serif',

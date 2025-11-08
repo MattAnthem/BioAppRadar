@@ -10,30 +10,32 @@ const OverviewDashboard = () => {
     <MainLayout>
 
         
-        {/* Live map  */}
-        <div id='livemap' className="xl:grid mb-2 h-full lg:h-[60vh] flex flex-col w-full grid-cols-1 xl:grid-cols-8 gap-2">
+      <div className="w-full h-screen px-4 py-4 grid grid-rows-[auto_1fr] gap-2">
 
-            
-            <div className="h-full lg:col-span-6">
-                <LiveMap
-                  drawable={false}
-                  enableLineDraw={false}
-                  displayTimeline={true}
-                />
-            </div>
-            
-            
-            <VpChart className="w-full lg:h-full xl:h-full  lg:col-span-2"/>
+        {/* Première ligne : LiveMap + VpChart */}
+        <div className="grid grid-cols-1 xl:grid-cols-8 gap-2 h-1/2">
+          {/* Carte */}
+          <div className="col-span-1 xl:col-span-6 h-full">
+            <LiveMap drawable={false} enableLineDraw={false} />
+          </div>
 
+          {/* Graphique vertical */}
+          <div className="col-span-1 xl:col-span-2 h-full">
+            <VpChart className="w-full h-full" />
+          </div>
         </div>
 
-        <div className="xl:grid lg:grid lg:grid-cols-2 grid-cols-1 w-full lg:h-1/3 gap-2">
-
-            <VtipChart className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
-            
-            <VptsChart className="lg:col-span-1 w-full lg:h-full xl:h-full h-[60vh]"/>
-
+        {/* Deuxième ligne : deux graphiques */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 h-1/2">
+          <div className="h-full">
+            <VtipChart className="w-full h-full" />
+          </div>
+          <div className="h-full">
+            <VptsChart className="w-full h-full" />
+          </div>
         </div>
+
+      </div>
 
 
     </MainLayout>

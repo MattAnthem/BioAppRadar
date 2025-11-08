@@ -1,34 +1,33 @@
 import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import MapbasePopup from './components/MapbasePopup';
-import RadarPopup from './components/RadarPopup';
-import SevipPopup from './components/SevipPopup';
 import ClassificationPopup from './components/ClassificationPopup';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setClassificationPayload, setRadarPayload, setSelectedTime, setSevipPayload } from './slice/livemapSlice';
+import { setClassificationPayload, setSelectedTime } from './slice/livemapSlice';
 import type { SelectOption } from '../../shared/components/selects/types';
-import { usePrefetchAnimationData } from './hooks/prefetchLive/prefetchAnimationData';
 import DataLoading from '../../shared/components/loader/DataLoading';
 import FetchError from '../../shared/components/loader/FetchError';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
 import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
+import { usePreloadClassificationFrames } from './hooks/usePreload/usePreloadClassificationFrames';
+import { useClassificationDataQuery } from './hooks/useQuery/useClassificationDataQuery';
+import { useQueryClient } from '@tanstack/react-query';
+import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 
 type LiveMapProps = {
     drawable: boolean;
     enableLineDraw: boolean;
-    displayTimeline: boolean;
-    showControls?: boolean;
 }
 
 
-const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= false }: LiveMapProps) => {
+const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
     // Redux states
-    const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, sevipPayload, radarPayload } = useAppSelector(state => state.livemap);
-    const { selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
+    const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, radarPayload } = useAppSelector(state => state.livemap);
+    const { selectedMapBase } = useAppSelector(state => state.basemappopup);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch()
 
@@ -47,36 +46,8 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
         dispatch(setSelectedTime(newTime));
     };
 
-    //#region radar data handler
-    // Radar
-    const handleRadarTypeChange = (option: SelectOption) => {
-        dispatch(
-          setRadarPayload({
-            type: option.id as "polar" | "grid",
-            colorbar: selectedColormap.id as string,
-          })
-        );
-    };
-      
-    const handleRadarParameterChange = (option: SelectOption) => {
-        dispatch(
-          setRadarPayload({
-            parameter: option.id as string,
-            colorbar: selectedColormap.id as string,
-          })
-        );
-    };
-    //#endregion
 
 
-    //#region sevip data handler
-    // Sevip
-    const handleSevipVarChange = (option: SelectOption) => {
-        dispatch(setSevipPayload({
-            parameter: option.id as string
-        }))
-    }
-    //#endregion
 
     //#region Classification data handler 
     // Classification
@@ -98,23 +69,49 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
     //#endregion
 
 
-    // Prefetch classification only
-    const { data, isLoading, error, isFetching, isFetched } = usePrefetchAnimationData({
-        currentTime: selectedMapTime,
-        displayedData: 'classification',
-        timeRange: mapTimeRange,
-        sevipPayload,
-        radarPayload, 
-        classifPayload: classificationPayload,
-        colormap: selectedColormap.id as string,
-        altitude: currentHeight,
-    })
+    // Prefetch classification frames
+    const { isPreloading, progress } = usePreloadClassificationFrames(
+        mapTimeRange,
+        classificationPayload.class,
+        classificationPayload.color_0,
+        classificationPayload.color_1,
+        currentHeight,
+        {enabled: true}
+    )
+
+    const { data: classifData, error } = useClassificationDataQuery({
+        class: classificationPayload.class,
+        time: selectedMapTime,
+        color_0: classificationPayload.color_0,
+        color_1: classificationPayload.color_1,
+        height: currentHeight,
+    }, true)
+
+    const queryKey = [
+        "classification_data", 
+        selectedMapTime, 
+        classificationPayload.class, 
+        classificationPayload.color_0, 
+        classificationPayload.color_1,
+        currentHeight,
+    ]
+
+    // Check if already cached
+    const queryClient = useQueryClient();
+    const cachedFrame = queryClient.getQueryData<SpatialDataResponse>(queryKey);
+    
+    const data = cachedFrame ?? classifData
 
 
-    if (!isFetched || isLoading || isFetching) return (
+
+
+    if (isPreloading) return (
         <div className="relative w-full h-full col-span-6">
-            <DataLoading>
+            <DataLoading
+                message={`Loading animation ${progress}%...`}
+            >
                 <MapbasePopup/>
+                <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
             </DataLoading>
         </div>
     )
@@ -141,17 +138,6 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
             <div className="z-5 flex gap-3 justify-center items-end">
 
                 <MapbasePopup displayColorbarOption={false}/>
-
-                {
-                    showControls && (
-                        <>
-                            <RadarPopup onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
-                            <SevipPopup onSevipVariableChange={handleSevipVarChange}/>
-                        </>
-                    )
-                }
-
-
                 <ClassificationPopup 
                     color0Legend={(data as ClassificationDataResponse)?.legend?.class_0?.name} 
                     color1Legend={(data as ClassificationDataResponse)?.legend?.class_1?.name} 
@@ -197,16 +183,13 @@ const LiveMap = ({ displayTimeline, drawable, enableLineDraw, showControls= fals
             )
         }
         {/* Timeline */}
-        {
-            displayTimeline && (
-                <TimelineSlider 
-                    frames={mapTimeRange}
-                    animSpeed={900}
-                    currentIndex={currentIndex}
-                    onFrameChange={handleFrameChange}
-                />
-            )
-        }
+
+        <TimelineSlider 
+            frames={mapTimeRange}
+            animSpeed={900}
+            currentIndex={currentIndex}
+            onFrameChange={handleFrameChange}
+        />
 
 
         {/* Classification legends */}
