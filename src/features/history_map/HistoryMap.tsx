@@ -77,24 +77,6 @@ const HistoryMap = () => {
         }))
     }
 
-    // Radar
-    const handleRadarParameterChange = (param: SelectOption) => {
-        dispatch(setRadarPayloadHist({
-            parameter: param.id as string
-        }))
-    }
-    const handleRadarTypeChange = (type: SelectOption) => {
-        dispatch(setRadarPayloadHist({
-            type: type.id as 'grid' | 'polar'
-        }))
-    }
-    const handleRadarTimeChange = (time: string) => {
-        dispatch(setRadarPayloadHist({
-            time: time
-        }))
-    }
-
-    // Classification
 
 
     // Change overlay colorbar (Sevip and radar)
@@ -112,8 +94,10 @@ const HistoryMap = () => {
 
     //#endregion
 
+    //#region Popup Options submits
+    // classification
     const { selectedVariable, color_0, color_1, histClassifTime } = useAppSelector(state => state.hist_classifpopup)
-    const submitClassifPopup = () => {
+    const submitClassifPopupData = () => {
         dispatch(setClassifPayloadHist({
             class: selectedVariable.id as string,
             color_0: color_0,
@@ -122,12 +106,24 @@ const HistoryMap = () => {
         }))
     }
 
+    // Radar
+    const { selectedType, selectedParameter, radarTimeHist } = useAppSelector(state => state.hist_radarpopup);
+    const submitRadarPopupData = () => {
+        dispatch(setRadarPayloadHist({
+            type: selectedType.id as 'grid' | 'polar',
+            parameter: selectedParameter.id as string,
+            time: radarTimeHist
+        }))
+    }
+
+    //#endregion
+
     if (isLoading) return (
         <div className=" w-full h-full col-span-6">
             <DataLoading>
                 <MapbasePopup/>
                 <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup  onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <RadarOptionPopup />
                 <ClassificationPopup  />
             </DataLoading>
         </div>
@@ -138,8 +134,8 @@ const HistoryMap = () => {
             <FetchError>
                 <MapbasePopup/>
                 <SevipPopup  onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup  onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
-                <ClassificationPopup  />
+                <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
+                <ClassificationPopup onSubmitPopup={submitClassifPopupData} />
             </FetchError>   
         </SectionCard>
     )
@@ -157,9 +153,9 @@ const HistoryMap = () => {
                 <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 
                 <SevipPopup onSevipTimeChange={handleSevipTimeChange} onSevipVariableChange={handleSevipVariableChange}/>
-                <RadarOptionPopup  onChangeRadarTime={handleRadarTimeChange} onChangeRadarType={handleRadarTypeChange} onChangeRadarParameter={handleRadarParameterChange} />
+                <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
                 <ClassificationPopup 
-                    onSubmitPopup={submitClassifPopup}
+                    onSubmitPopup={submitClassifPopupData}
                     color0Legend={(data as ClassificationDataResponse)?.legend?.class_0?.name}
                     color1Legend={(data as ClassificationDataResponse)?.legend?.class_1?.name}
                 />
