@@ -3,62 +3,48 @@ import { BirdIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
-import { useRef } from 'react'
 import { setHistClassificationColorZero, setSelectedHistClassificationOption, setHistClassificationColorOne, setHistClassifTime } from '../slice/histClassificationPopupSlice'
 import { formatChartDateParam } from '../../../shared/utils/date_format'
+import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
 
 
 
 type ClassificationPopupProps = {
-  onChangeClassifVariable?: (option: SelectOption) => void;
-  onChangeClassifColorZero?: (color: string) => void;
-  onChangeClassifColorOne?: (color: string) => void;
   color0Legend?: string;
   color1Legend?: string;
-  onChangeClassifTime?: (time: string) => void;
-  toggleMode?: () => void;
+  onSubmitPopup?: () => void;
 }
 
-const ClassificationPopup = ({ onChangeClassifVariable, onChangeClassifColorOne, onChangeClassifColorZero, color0Legend, color1Legend, onChangeClassifTime, toggleMode }: ClassificationPopupProps) => {
+const ClassificationPopup = ({ onSubmitPopup, color0Legend, color1Legend }: ClassificationPopupProps) => {
+
 
   const { availableVariables, selectedVariable, color_0, color_1, histClassifTime } = useAppSelector(state=> state.hist_classifpopup);
 
   const dispatch = useAppDispatch();
 
-  const colorZeroTimeout = useRef<number | null>(null);
-  const colorOneTimeout = useRef<number | null>(null);
 
+  //#region  Handlers to update REDUX popup State
   const handleClassificationVariableChange = (option: SelectOption) => {
-      onChangeClassifVariable?.(option);
       dispatch(setSelectedHistClassificationOption(option));
   }
 
   const handleColorZeroChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
       const color = evt.target.value;
       dispatch(setHistClassificationColorZero(color)); 
-      if (colorZeroTimeout.current) window.clearTimeout(colorZeroTimeout.current);
-      colorZeroTimeout.current = window.setTimeout(() => {
-        onChangeClassifColorZero?.(color);
-      }, 1000);
+
   };
 
   const handleColorOneChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
       const color = evt.target.value;
       dispatch(setHistClassificationColorOne(color));
-
-      if (colorOneTimeout.current) window.clearTimeout(colorOneTimeout.current);
-      colorOneTimeout.current = window.setTimeout(() => {
-      onChangeClassifColorOne?.(color);
-      }, 1000);
   };
 
   const handleClassifTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
     const formatted = formatChartDateParam(raw);
-    onChangeClassifTime?.(formatted);
     dispatch(setHistClassifTime(formatted))
   }
-
+  //#endregion
 
 
 return (
@@ -66,7 +52,6 @@ return (
   <OptionPopover
       hoverText='Classification Data'
       customIcon={<BirdIcon/>}
-      onClickEvent={toggleMode}
   >
       <small className='font-semibold'>Select a variable</small>
       <div className="border-b border-b-gray-400"/>
@@ -90,11 +75,18 @@ return (
           <input onChange={handleColorOneChange} value={color_1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
       </div>
 
-              {/* Time */}
-        <small className='font-semibold'>Select time</small>
-        <div className="border-b border-b-gray-400"/>
-        <input onChange={handleClassifTimeChange} value={histClassifTime} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="classifHistTime" id="classifHistTime" />
+      {/* Time */}
+      <small className='font-semibold'>Select time</small>
+      <div className="border-b border-b-gray-400"/>
+      <input onChange={handleClassifTimeChange} value={histClassifTime} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="classifHistTime" id="classifHistTime" />
 
+      {/* Display data btn */}
+      <ButtonBorder
+        onClick={onSubmitPopup!}
+        className='py-2 mt-2'
+      >
+        Display data
+      </ButtonBorder>
 
   </OptionPopover>
 

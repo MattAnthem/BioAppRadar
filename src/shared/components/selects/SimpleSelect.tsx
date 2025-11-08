@@ -61,7 +61,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
 
                 <span className={`${text} flex gap-3`}>
                 {icon && <span className={text}>{icon}</span>}
-                    <span className={`${responsive? 'hidden 2xl:block xl:block md:block lg:block' : ''}`}>
+                    <span className={`${responsive? 'hidden 2xl:block xl:block md:block lg:block text-sm' : ''}`}>
                         {value}
                     </span>
                 </span>

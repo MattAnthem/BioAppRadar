@@ -31,7 +31,7 @@ const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled, ari
       aria-haspopup={ariaHasPopup}
       disabled={isDisabled}
       onClick={!isDisabled ?  onClick : undefined}  
-      className={`${className} ${border} ${hover_bg} ${text} border rounded-sm focus-visible:outline-2 outline-offset-1 outline-blue-800`}
+      className={`${className} ${border} ${hover_bg} ${text} text-sm border rounded-sm focus-visible:outline-2 outline-offset-1 outline-blue-800`}
     >
       { children }
     </button>
