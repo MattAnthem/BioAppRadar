@@ -143,9 +143,9 @@ const initialState: VarPopupState = {
     isMapBasePopupOpen: false,
     mapBaseOptions: mapbaseOptions,
     selectedMapBase: {
-      id: 'openstreet',
-      displayText: 'Openstreet',
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      id: 'carto_light',
+      displayText: 'CARTO Light',
+      url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
     },
     colormapOptions: colormapOptions,
     selectedColormap: colormapOptions[0],
