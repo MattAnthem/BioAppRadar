@@ -112,7 +112,7 @@ const VptsChart = ({className, showControls}: VptsChartProps) => {
 
 
         {/* Heading */}
-        <div className="p-1 w-full flex justify-between items-center border-b">
+        <div className="p-1 w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
             {/* Controls */}
             {

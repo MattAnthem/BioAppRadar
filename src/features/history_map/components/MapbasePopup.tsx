@@ -14,6 +14,7 @@ type BaseMapProps = {
   displayColorbarOption?: boolean;
   onChangeOverlayColor?: (colorname: string) => void;
 }
+const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: BaseMapProps) => {
 
@@ -60,7 +61,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
       >
         
         <button onClick={() => dispatch(toggleShowHistMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Map/>
+            <Map className={iconSize}/>
         </button>
 
       </Tooltip>

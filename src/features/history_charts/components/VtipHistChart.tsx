@@ -114,8 +114,8 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
 
       
           {/* Heading */}
-          <div className="p-1 z-10 w-full">
-              <h3 className='text-white tracking-wider text-sm'>{data?.name} ({data?.units})</h3>
+          <div className="p-1 z-10 w-full flex justify-between">
+              <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
 
 
               <div className="flex gap-2">
@@ -139,7 +139,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
           </div>
 
           {/* Chart */}
-          <div className="flex-1 mt-8 w-full h-full items-center justify-center ">
+          <div className="flex w-full h-full items-center justify-center">
             {
               data && (
                 <HighchartVtip

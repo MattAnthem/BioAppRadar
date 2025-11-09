@@ -137,7 +137,7 @@ const HistoryMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20  p-1 flex justify-between items-center'>
 
-            <h3 className='text-white tracking-wider text-sm'>{data?.info.name}</h3>
+            <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
 
             <div className="z-5 flex gap-3 justify-center items-end">
 
@@ -167,7 +167,7 @@ const HistoryMap = () => {
         {/* altitude slider */}
         {
             (mapModeHist === 'classification' || (mapModeHist === 'radar' && radarPayloadHist.type === 'grid')) && (
-                <div className="h-full absolute bottom-4 right-2 flex lg:items-center items-start">
+                <div className="h-full absolute bottom-6 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}
@@ -180,19 +180,9 @@ const HistoryMap = () => {
 
 
         {/* Map Time */}
-        <div className={`absolute flex flex-col justify-center gap-1.5 z-10 w-1/5 ${isClassif ? 'bottom-2' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+        <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 w-1/6 ${isClassif ? 'bottom-2' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
 
             <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
-            {
-                (mapModeHist === 'radar' && radarPayloadHist.type === 'grid' && data?.info.height) && (
-                    <small className='text-white tracking-wide'>Height: {data?.info.height} m</small>
-                )
-            }
-            {
-                (mapModeHist === 'radar' && radarPayloadHist.type === 'polar' && (data as SpatialDataResponse)?.info.elevation_angle) && (
-                    <small className='text-white tracking-wide'>Elevation angle: {(data as SpatialDataResponse)?.info.elevation_angle} deg</small>
-                )
-            }
 
         </div>
 
@@ -217,20 +207,22 @@ const HistoryMap = () => {
         {/* Classification legends */}
         {
             (mapModeHist === "classification") && (
-                <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
+                <div className=" absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
                     
                     {/* Color 0 */}
-                    <div className="flex gap-2">
+                    <div className="flex justify-start items-center gap-2 text-xs">
                         <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
                         <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
                     </div>
                     {/* Color 1 */}
-                    <div className="flex gap-2">
+                    <div className="flex justify-start items-center gap-2 text-xs">
                         <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
                         <small className='text-white tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
                     </div>
 
-                    <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
+                    <div className="text-xs">
+                        <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
+                    </div>
 
                 </div>
             )

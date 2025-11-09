@@ -18,7 +18,9 @@ const VpHistPopup = ({ onSubmitPopup }:Props) => {
   const handleDateChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const raw = evt.target.value; 
     const formatted =  formatChartDateParam(raw);
-    dispatch(setVpHistTime({time: formatted}))
+
+    console.log("FORMATTED ", formatted)
+    dispatch(setVpHistTime(formatted))
   }
 
   const handleVariableChange = (option: SelectOption) => {
@@ -49,7 +51,7 @@ const VpHistPopup = ({ onSubmitPopup }:Props) => {
 
                   <div className="w-full mb-2">
                     <small>Select Time</small>
-                    <input onChange={handleDateChange} value={vpTime} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
+                    <input onChange={handleDateChange} value={vpTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
                   </div>
 
         {/* Display data button */}

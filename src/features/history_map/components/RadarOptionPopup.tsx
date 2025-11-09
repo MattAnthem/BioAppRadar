@@ -10,7 +10,7 @@ import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonB
 type RadarOptionPopupProps = {
     onSubmitPopup?: () => void;
 }
-
+const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
 
@@ -41,7 +41,7 @@ const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
   return (
     <OptionPopover
         hoverText='Radar Data'
-        customIcon={<RadarIcon/>}
+        customIcon={<RadarIcon className={iconSize}/>}
         isOpen={isPopupOpen}
         onOpen={() => dispatch(toggleRadarPopup())}
         onClose={() => dispatch(closeRadarPopup())}

@@ -52,7 +52,7 @@ const initialState: VpCharState = {
 
     parameterOptions: parameterOptions,
     selectedParameter: parameterOptions[0],
-    vpTime: '2020-11-10 12:01:00',
+    vpTime: '2020-11-10 12:50:00',
 
     vpPayload: {
         parameter: parameterOptions[0].id as string,

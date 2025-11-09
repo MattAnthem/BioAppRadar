@@ -37,21 +37,21 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
 
   return (
-    <SectionCard className={`${className} p-1`}>
+    <SectionCard className={`${className} h-full flex flex-col`}>
 
         {/* Heading */}
-        <GlassHeader className="p-1 z-20 w-full">
-            <h3 className='text-white tracking-wider text-sm'>{data?.name} ({data?.units})</h3>
+        <div className="px-1 w-full flex justify-between items-center">
+            <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
             
             {/* controls */}
             <VpHistPopup
               onSubmitPopup={onSubmitVpPopup}
             />
             
-        </GlassHeader>           
+        </div>           
 
         {/* Chart */}
-        <div className="flex-1 w-full h-full items-center justify-center ">
+        <div className="flex-1 w-full min-h-0 overflow-hidden">
         {data && (
 
           <VpChartHighcharts
@@ -63,7 +63,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
         {
             isLoading && (
-                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                <div className="absolute z-40 w-full h-full flex items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
                 </div>
             )

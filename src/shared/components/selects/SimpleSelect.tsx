@@ -59,9 +59,9 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                 className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border p-2 flex justify-between items-center gap-2 cursor-pointer`}
             >
 
-                <span className={`${text} flex gap-3`}>
+                <span className={`${text} flex gap-3 text-xs lg:text-sm xl:text-sm`}>
                 {icon && <span className={text}>{icon}</span>}
-                    <span className={`${responsive? 'hidden 2xl:block xl:block md:block lg:block text-sm' : ''}`}>
+                    <span className={`${responsive? 'hidden 2xl:block xl:block md:block lg:block ' : ''}`}>
                         {value}
                     </span>
                 </span>
@@ -70,7 +70,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
 
             </button>
             {isOpen && (
-                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} custom_select border shadow-lg  absolute max-h-[150px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-1.5 `} style={{zIndex: 300}}>
+                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} text-xs lg:text-sm xl:text-sm custom_select border shadow-lg  absolute max-h-[150px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-1.5 `} style={{zIndex: 300}}>
                     <div className='w-full'>
                         {
                             options?.map((option, i) => (

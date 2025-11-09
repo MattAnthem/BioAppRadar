@@ -11,6 +11,8 @@ type SevipPopupProps = {
     onSubmitPopup?: () => void;
 }
 
+const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
+
 const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
 
     const { selectedVariable, availableVariables, histTimeSevip, isPopupOpen } = useAppSelector(state => state.hist_sevippopup);
@@ -34,7 +36,7 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
   return (
     <OptionPopover
         hoverText='Vertical Integrated Profile Data'
-        customIcon={<FlipVerticalIcon/>}   
+        customIcon={<FlipVerticalIcon className={iconSize}/>}   
         isOpen={isPopupOpen}
         onOpen={() => dispatch(toggleSevipPopup())}
         onClose={() => dispatch(closeSevipPopup())}

@@ -19,7 +19,7 @@ interface VptsChartProps {
 const VptsHeatmapChart: React.FC<VptsChartProps> = ({ data, radarAltitude = 1616 }) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const { theme } = useTheme();
-  const { chartFontColor, chartGridline } = theme;
+  const { chartFontColor, chartGridline, chartLegendColor } = theme;
 
   const options = useMemo(() => {
     const times = data.times.map(t => new Date(t).getTime());
@@ -73,7 +73,7 @@ const VptsHeatmapChart: React.FC<VptsChartProps> = ({ data, radarAltitude = 1616
         plotBorderWidth: 1,
         height: 200,
         reflow: true,
-        style: { fontFamily: 'Inter, sans-serif', color: chartFontColor }
+        style: { fontFamily: 'Inter, sans-serif', color: chartFontColor, fontSize: 14 }
       },
       title: { text: null },
       xAxis: {

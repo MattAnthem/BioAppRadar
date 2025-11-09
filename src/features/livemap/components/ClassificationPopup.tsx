@@ -11,6 +11,8 @@ type ClassificationPopupProps = {
     onSubmitPopup?: () => void;
 }
 
+const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
+
 const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
 
     const { availableVariables, selectedVariable, color_0, color_1, isPopupOpen } = useAppSelector(state=> state.classificationpopup);
@@ -43,7 +45,7 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
 
     <OptionPopover
         hoverText='Classification Data'
-        customIcon={<BirdIcon width={20} height={20}/>}
+        customIcon={<BirdIcon className={iconSize}/>}
         isOpen={isPopupOpen}
         onClose={() => dispatch(closeClassifPopup())}
         onOpen={() => dispatch(toggleClassifPopup())}

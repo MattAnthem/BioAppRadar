@@ -59,7 +59,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
   return (
     <div className="z-5 absolute bottom-0 left-0 w-full">
-      <div className="relative w-full p-1">
+      <div className="relative w-full p-0.5">
 
 
         {/* Timeline controls */}
@@ -68,10 +68,10 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
            {/* Timestamp indicator */}
            {currentFrame ? (
               <div className="">
-                <h2 className=" text-gray-50 font-semibold tracking-wide">
+                <h2 className=" text-gray-50  tracking-wide">
                   {currentFrame.split(" ")[0]}
                 </h2>
-                <small className="text-normal text-gray-200 tracking-wider">
+                <small className="text-normal text-gray-200 tracking-wide">
                   {currentFrame.split(" ")[1]}
                 </small>
               </div>

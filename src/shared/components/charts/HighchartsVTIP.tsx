@@ -21,7 +21,7 @@ interface VtipChartProps {
 const HighchartVtip: React.FC<VtipChartProps> = ({ data }) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const { theme } = useTheme();
-  const { chartFontColor, chartGridline } = theme;
+  const { chartFontColor, chartGridline, chartLegendColor } = theme;
 
   const options = useMemo(() => {
     if (!data || !data.times?.length) return {};
@@ -58,10 +58,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data }) => {
         zoomType: 'x',
         backgroundColor: 'transparent',
         height: 200,
-        style: {
-          fontFamily: 'Inter, sans-serif',
-          color: chartFontColor
-        }
+        style: { fontFamily: 'Inter, sans-serif', color: chartFontColor, fontSize: 14 }
       },
       title: { text: null },
       xAxis: {
@@ -69,15 +66,15 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data }) => {
         lineWidth: 1,
         tickLength: 5,
         gridLineColor: chartGridline,
-        labels: { style: { color: chartFontColor } }
+        labels: { style: { color: chartFontColor, fontSize: 11 } }
       },
       yAxis: {
         min: pmin,
         max: ymax,
-        title: { text: `${data.name} (${data.units})` },
+        title: { text: `${data.name} (${data.units})`, style: { color: chartLegendColor, fontSize: 11 } },
         gridLineWidth: 1,
         gridLineColor: chartGridline,
-        labels: { style: { color: chartFontColor } }
+        labels: { style: { color: chartFontColor, fontSize: 11 } }
       },
       tooltip: {
         shared: true,

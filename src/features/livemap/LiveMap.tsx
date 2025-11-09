@@ -125,7 +125,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
             <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
 
             {/* Overlay controller */}
-            <div className="z-5 flex gap-3 justify-center items-end">
+            <div className="z-5 flex gap-2 justify-center items-end">
 
                 <MapbasePopup displayColorbarOption={false}/>
                 <ClassificationPopup 
@@ -158,7 +158,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         {/* Altitude slider */}
         {
             (displayedData === "classification" || radarPayload.type === 'grid') && (
-                <div className="h-full absolute bottom-4 right-2 flex lg:items-center items-start">
+                <div className="h-full absolute bottom-4.5 right-2 flex lg:items-center items-start">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}
@@ -184,18 +184,18 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
                 <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 py-2 right-2 bottom-0">
                     
                     {/* Color 0 */}
-                    <div className="flex gap-2">
+                    <div className="flex justify-start items-center gap-2 text-xs">
                         <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
-                        <small className='text-white text-xs tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
+                        <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
                     </div>
                     {/* Color 1 */}
-                    <div className="flex gap-2">
+                    <div className="flex justify-start items-center gap-2 text-xs">
                         <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
-                        <small className='text-white text-xs tracking-widest'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
+                        <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
                     </div>
-
-                    <small className='text-white tracking-wide text-xs'>Height: {data?.info.height}</small>
-
+                    <div className="text-xs">
+                        <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
+                    </div>
                 </div>
             )
         }

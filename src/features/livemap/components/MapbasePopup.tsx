@@ -15,6 +15,7 @@ import { changeBaseMap, changeColormap, hideMapBasePopup, setSelectedCoverageGen
 type BaseMapProps = {
   displayColorbarOption?: boolean;
 }
+const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
 
@@ -65,7 +66,7 @@ const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
       >
         
         <button onClick={() => dispatch(toggleShowMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Map width={20} height={20}/>
+            <Map className={iconSize}/>
         </button>
 
       </Tooltip>

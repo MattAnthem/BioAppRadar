@@ -19,7 +19,7 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
   const chartRef = useRef<HighchartsReact>(null);
 
   const themes = useTheme();
-  const { chartFontColor, chartGridline } = themes.theme;
+  const { chartFontColor, chartGridline, chartLegendColor } = themes.theme;
 
   const getChartOptions = () => {
     const seriesData = data.height.map((h, i) => [h, data.parameter[i]]);
@@ -33,16 +33,17 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
         fontFamily: 'Work-sans, Inter, sans-serif',
         reflow: true,
         fontColor: chartFontColor,
+        style: { fontFamily: 'Inter, sans-serif', color: chartFontColor, fontSize: 14 }
       },
       title: { text: null },
       xAxis: [
         {
           reversed: false,
-          title: { text: 'Altitude in [m]' },
-          labels: { format: '{value}', style: { color: chartFontColor } },
+          title: { text: 'Altitude in [m]', style: {fontSize: 11,  color: chartLegendColor,} },
+          labels: { format: '{value}', style: { color: chartFontColor, fontSize: 11 } },
           lineWidth: 1,
           showLastLabel: true,
-          tickInterval: 500,
+          tickInterval: 700,
           gridLineWidth: 1,
           max: 7000,
           gridLineColor: chartGridline,
@@ -62,7 +63,7 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
       ],
       yAxis: {
         title: { text: `${data.name} [${data.units}]` },
-        labels: { format: '{value}', style: { color: chartFontColor } },
+        labels: { format: '{value}', style: { color: chartFontColor, fontSize: 11 } },
         lineWidth: 1,    
         gridLineColor: chartGridline,
       },
@@ -73,10 +74,10 @@ const VpChartHighcharts: React.FC<VpChartProps> = ({ data, radarAltitude = 1616,
           name: data.name,
           color: '#0077cc',
           lineWidth: 2,
-          marker: { enabled: true, radius: 3 },
+          marker: { enabled: true, radius: 2.5 },
           tooltip: {
             headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: `Value: {point.y:.2f} ${data.units}<br>Altitude: {point.x} m<br>Date: {point.x:%Y-%m-%d %H:%M:%S}`
+            pointFormat: `Value: {point.y:.2f} ${data.units}<br>Altitude: {point.x} m<br>Date: {point.x:%Y-%m-%d %H:%M:%S}`,
           }
         },
         {

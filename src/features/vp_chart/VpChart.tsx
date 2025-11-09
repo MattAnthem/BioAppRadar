@@ -39,10 +39,10 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
   }
 
   return (
-    <SectionCard className={`${className} p-1`}>
+    <SectionCard className={`${className} h-full flex flex-col`}>
 
         {/* Heading */}
-        <div className="p-1 w-full border-b">
+        <div className="p-1 w-full">
             <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
             {/* controls */}
@@ -73,7 +73,7 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="flex w-full h-full items-center justify-center ">
+        <div className="flex-1 w-full min-h-0 overflow-hidden">
         {data && (
 
               <VpChartHighcharts

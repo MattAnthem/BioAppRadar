@@ -88,7 +88,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
       
 
           {/* Heading */}
-          <div className="p-1 w-full flex items-center justify-between border-b">
+          <div className="p-1 w-full flex items-center justify-between">
               <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
                 {/* Open the modal */}

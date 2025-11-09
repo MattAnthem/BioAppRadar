@@ -16,6 +16,7 @@ export interface ThemeElements {
     texts: Texts;
     chartFontColor: string;
     chartGridline: string;
+    chartLegendColor: string;
 }
 
 
