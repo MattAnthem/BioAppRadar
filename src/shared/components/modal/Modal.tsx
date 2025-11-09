@@ -49,7 +49,7 @@ const Modal = (
                     <h1 className="p-2 text-sm font-semibold">{title}</h1>
 
                     <ButtonBorder ariaLabel='Modal close' isDisabled={false} ariaExpanded={isOpen} ariaControls='Modal close' onClick={handle_toggle_mdl!} className=' flex items-center justify-center'>
-                      <X/>
+                      <X className='w-4 h-4'/>
                     </ButtonBorder>
 
                   </div>

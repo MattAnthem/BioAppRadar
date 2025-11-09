@@ -14,6 +14,7 @@ interface VpHeatmapChartProps {
     radarAltitude?: number;
     legend?: boolean;
     title?: boolean;
+    chartHeight?: number;
 }
 
 interface DayNightChart extends Highcharts.Chart {
@@ -24,7 +25,8 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
     data,
     radarAltitude = 1616,
     legend = false,
-    title = false
+    title = false,
+    chartHeight,
 }) => {
     const chartRef = useRef<HighchartsReact>(null);
     const { theme } = useTheme();
@@ -115,7 +117,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
         const colsize = (xmax - xmin) / (nTimes - 1);
         const rowsize = heights[1] - heights[0];
 
-        const heightPb = (ymax - ymin) * 0.09; 
+        const heightPb = (ymax - ymin) * 0.03; 
         const startPb: number[] = [times[0]];
         let isDay0 = times[0] >= sunrise[0] && times[0] <= sunset[0];
         const colorPb: string[] = [isDay0 ? '#f7f78f' : '#162c54'];
@@ -184,7 +186,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
             chart: {
                 plotBorderWidth: 1,
                 backgroundColor: 'transparent',
-                height: 200,
+                height: chartHeight || 200,
                 style: { fontFamily: 'Inter, sans-serif', color: chartFontColor, fontSize: '14' },
                 events: {
                     load() { drawDayNightBar(this as DayNightChart); },
@@ -193,7 +195,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 },
                 zooming: { type: 'x' }
             },
-            title: { text: title ? `${data.name} [${data.units}]` : undefined },
+            title: { text: title ? `${data.name} [${data.units}]` : undefined, style: { color: chartFontColor, fontSize: '12px' } },
             xAxis: {
                 type: 'datetime',
                 tickLength: 13,

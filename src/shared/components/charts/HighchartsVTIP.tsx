@@ -86,7 +86,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
       },
       title: {
         text: displayTitle ? `${data.name} [${data.units}]` : undefined,
-        style: { color: chartLegendColor },
+        style: { color: chartLegendColor, fontSize: "13px" },
       },
       xAxis: {
         type: "datetime",

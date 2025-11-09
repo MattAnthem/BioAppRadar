@@ -119,6 +119,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
                   <div className="flex w-full h-full justify-center items-center">
                     <HighchartVtip
                       data={data}
+                      displayTitle
                       chartHeight={500}
                     />
                   </div>
