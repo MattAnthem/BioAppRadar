@@ -5,7 +5,11 @@ import { useVpHistData } from "../hooks/useData/useVpHistData";
 import { changeVpHistPayload } from "../slices/vpHistChartSlice";
 import VpHistPopup from "./popups/VpHistPopup";
 import loader from '../../../assets/loader.webp';
-import { Unplug } from "lucide-react";
+import { Fullscreen, Unplug } from "lucide-react";
+import { useState } from "react";
+import ChartModal from "./ChartModal";
+import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
+import { useTheme } from "../../../shared/hooks/useTheme";
 
 
 
@@ -15,11 +19,15 @@ type VpChartProps = {
 
 const VpHistChart = ({ className }: VpChartProps) => {
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Redux
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.hist_altitude);
   const { selectedParameter, vpTime } = useAppSelector(state => state.vp_histchart);
   const currentHeight = altitudeOptions[currentAltitudeIndex];
   const dispatch = useAppDispatch();
+  const themes = useTheme();
+  const { bg, border, hover } = themes.theme.simpleSelect;
 
   const { isLoading, data, error } = useVpHistData();
 
@@ -32,20 +40,72 @@ const VpHistChart = ({ className }: VpChartProps) => {
   }
 
 
-
-
+      // handler to open the modal
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    }
 
   return (
     <SectionCard className={`${className} h-full flex flex-col`}>
+
+
+          {/* Modal chart */}
+          <ChartModal
+              isModalOpen={isModalOpen}
+              modalTitle={`${selectedParameter.displayText} Chart`}
+              mdlToggler_func={() => setIsModalOpen(false)}
+          >
+
+
+              {data && (
+
+                  <VpChartHighcharts
+                    data={data}
+                    displayTitle
+                    chartHeight={500}
+                    selectedHeight={currentHeight}
+                  />
+
+              )}
+              {
+                  isLoading && (
+                      <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                          <img src={loader} alt="loading-data" width={35} height={35}  />
+                      </div>
+                  )
+              }
+              {         
+                error && (
+                  <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                    <Unplug width={60} height={60} className='text-red-500'/>
+                  </div> 
+              )}
+
+                      
+          </ChartModal>
+
 
         {/* Heading */}
         <div className="px-1 w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
             
-            {/* controls */}
-            <VpHistPopup
-              onSubmitPopup={onSubmitVpPopup}
-            />
+            <div className="flex justify-center">
+              {/* controls */}
+              <VpHistPopup
+                onSubmitPopup={onSubmitVpPopup}
+              />
+
+                          {/* Open the modal */}
+              <Tooltip 
+                    position="bottom" 
+                    display_condition={!isModalOpen}  
+                    text={"Open in fullscreen"}
+              >                  
+                  <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
+                      <Fullscreen width={15} height={15}/>
+                  </button>
+              </Tooltip>
+            </div>
             
         </div>           
 
