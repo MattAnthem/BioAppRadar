@@ -1,5 +1,4 @@
 import { useState } from "react";
-import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
@@ -115,7 +114,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
 
       
           {/* Heading */}
-          <GlassHeader className="p-1 z-10 w-full">
+          <div className="p-1 z-10 w-full">
               <h3 className='text-white tracking-wider text-sm'>{data?.name} ({data?.units})</h3>
 
 
@@ -137,7 +136,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
 
               </div>
 
-          </GlassHeader>
+          </div>
 
           {/* Chart */}
           <div className="flex-1 mt-8 w-full h-full items-center justify-center ">

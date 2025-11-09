@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import DataLoading from "../../shared/components/loader/DataLoading";
@@ -9,6 +10,12 @@ import { formatChartDateParam } from "../../shared/utils/date_format";
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
 import { changeVtipPayload, setSelectedVtipParameterOption } from "./vtipChartSlice";
+import { useVtipImageQuery } from "../history_charts/hooks/useVtipImageQuery";
+import ChartModal from "../history_charts/components/ChartModal";
+import { Fullscreen, Unplug } from "lucide-react";
+import loader from '../../assets/loader.webp';
+import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
+import { useTheme } from "../../shared/hooks/useTheme";
 
 
 type VtipChartProps = {
@@ -18,29 +25,18 @@ type VtipChartProps = {
 
 const VtipChart = ({ className, showControls }: VtipChartProps) => {
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   // Redux 
-  const { parameterOptions, selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
-  const dispatch = useAppDispatch();
+  const {  selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
+  const themes = useTheme();
+  const { bg, border, hover } = themes.theme.simpleSelect;
 
   // Tanstack
-  const { isLoading, data, error, refetch } = useVtipData();
+  const { isLoading, data, error } = useVtipData();
+  const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, isModalOpen);
 
-  const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(changeVtipPayload({startTime: formatted}));
-  }
 
-  const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(changeVtipPayload({endTime: formatted}));
-  }
-
-  const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVtipParameterOption(option));
-    refetch();
-  } 
 
 
   if (isLoading) return (
@@ -55,46 +51,68 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
   )
 
 
+      // handler to open the modal
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  }
+
 
 
   return (
     <SectionCard className={`${className} p-1`}>
+
+          {/* Modal chart */}
+          <ChartModal
+              isModalOpen={isModalOpen}
+              modalTitle={`${selectedParameter.displayText} Chart`}
+              mdlToggler_func={() => setIsModalOpen(false)}
+          >
+
+              {
+                  vtipImageLoading && (
+                      <div className="w-full h-full flex flex-col items-center justify-center">
+                          <img width={35} height={35}  src={loader} alt="loader" />
+                          <p className='font-semibold text-xs tracking-wider text-blue-600'>Loading data...</p>
+                      </div>
+                  )
+              }
+                  
+              {
+                vtipImageError && (
+                  <div className="w-full h-full flex flex-col items-center justify-center">
+                    <Unplug width={30} height={30} className='text-red-500'/>
+                    <p className='font-semibold text-xs tracking-wider text-red-600'>Error fetching data</p>
+                  </div>
+                )
+              }
+
+              {
+                  vtipImageData && !vtipImageLoading && !vtipImageError && (
+                      <div className="w-full h-full flex items-center justify-center">
+                          <img src={vtipImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                      </div>
+                  )
+              }
+                      
+          </ChartModal>
       
 
           {/* Heading */}
-          <div className="p-1 z-10 w-full border-b">
+          <div className="p-1 w-full flex items-center justify-between border-b">
               <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
-              <div className="flex gap-2 ">
-                
-                  {/* Controls */}
-                  {
-                    showControls && (
-                      <ChartParamsPopup
-                        hoverText="Select Options"
-                      >
+                {/* Open the modal */}
+                <Tooltip 
+                  position="bottom" 
+                  display_condition={!isModalOpen}  
+                  text={"Open in fullscreen"}
+                >                  
+                  <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
+                      <Fullscreen width={15} height={15}/>
+                  </button>
+                </Tooltip>
 
-                        <div className="w-ful">
-                          <small>Select variable</small>
-                          <SimpleSelect
-                            options={parameterOptions}
-                            value={selectedParameter.displayText}
-                            onSelectValue={handleVariableChange}
-                            width="w-full"
-                          />
-                        </div>
 
-                        <div className="w-full mb-2 flex flex-col">
-                          <small>Select start Time</small>
-                          <input max={vtipPayload.endTime} onChange={handleStartTimeChange} value={vtipPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
-                          <small>Select end Time</small>
-                          <input min={vtipPayload.startTime} onChange={handleEndTimeChange} value={vtipPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
-                        </div>
-
-                      </ChartParamsPopup>
-                    )
-                  }
-              </div>
           </div>
 
           {/* Chart */}
@@ -112,4 +130,4 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
   )
 }
 
-export default VtipChart
+export default VtipChart;
