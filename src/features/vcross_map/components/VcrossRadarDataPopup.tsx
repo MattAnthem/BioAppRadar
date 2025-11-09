@@ -12,6 +12,8 @@ type Props = {
     onChangeVcrossRadarTime?: (time: string) => void;
 }   
 
+
+
 const VcrossRadarDataPopup = ({ onChangeVcrossRadarParam, onChangeVcrossRadarType, onChangeVcrossRadarTime }: Props) => {
 
     // Redux states
@@ -41,7 +43,7 @@ const VcrossRadarDataPopup = ({ onChangeVcrossRadarParam, onChangeVcrossRadarTyp
   return (
     <OptionPopover
         hoverText="Select Radar Data"
-        customIcon={<RadarIcon/>}
+        customIcon={<RadarIcon className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4"/>}
     >
 
         {/* Data */}

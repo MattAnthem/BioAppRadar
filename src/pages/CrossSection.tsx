@@ -8,11 +8,11 @@ const CrossSection = () => {
 
 
   return (
-    <MainLayout className=''>
+    <MainLayout className='w-full h-full'>
         
-        <div className="xl:grid flex flex-col xl:grid-cols-9 grid-cols-1 lg:h-[80vh] h-full w-full gap-2">
+        <div className="xl:grid flex flex-col xl:grid-cols-9 px-4 lg:px-8 xl:px-10 py-2 grid-cols-1 lg:h-[80vh] h-full w-full gap-2">
 
-          <div className="lg:col-span-5 h-full">
+          <div className="lg:col-span-5 h-[50vh] lg:h-full">
 
             {/* Vcross Map */}
             <Vcrossmap/>

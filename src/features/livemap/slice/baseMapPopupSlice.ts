@@ -85,14 +85,14 @@ export const colormapOptions: SelectOption[] = [
 
 export const mapbaseOptions: SelectOption[] = [
   {
-    id: 'openstreet',
-    displayText: 'Openstreet',
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-  },
-  {
     id: 'carto_light',
     displayText: 'CARTO Light',
     url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
+  },
+  {
+    id: 'openstreet',
+    displayText: 'Openstreet',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
   },
   {
     id: 'carto_dark',

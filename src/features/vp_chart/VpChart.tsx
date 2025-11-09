@@ -72,7 +72,7 @@ const VpChart = ({ className }: VpChartProps) => {
           </ChartModal>
 
         {/* Heading */}
-        <div className="px-1 w-full flex justify-between items-center">
+        <div className="p-1 w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
             {/* Open the modal */}

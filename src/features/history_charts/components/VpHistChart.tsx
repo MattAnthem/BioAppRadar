@@ -86,7 +86,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
 
         {/* Heading */}
-        <div className="px-1 w-full flex justify-between items-center">
+        <div className="p-1 w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
             
             <div className="flex justify-center">

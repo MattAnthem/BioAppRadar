@@ -33,7 +33,7 @@ const VcrossBioClsDataPopup = ({ onChangeBioclass, onChangeBioclassTime }: Props
   return (
     <OptionPopover
         hoverText='Select Classification Data'
-        customIcon={<BirdIcon/>}
+        customIcon={<BirdIcon className='w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4'/>}
     >
 
       <small>Available classification data</small>
