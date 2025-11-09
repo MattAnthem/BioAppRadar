@@ -98,9 +98,9 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
           rotation: 0,
           align: "center",
           style: {
-            whiteSpace: "normal",
             fontSize: "11px",
             color: chartFontColor,
+            whiteSpace: "nowrap", // <- empêche le wrapping automatique
           },
           formatter: function (this: any) {
             const tickTime = new Date(this.value);
@@ -109,15 +109,23 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
             const prev = idx > 0 ? new Date(this.axis.tickPositions[idx - 1]) : null;
             const isFirst = idx === 0;
             const isNewDay = prev && parseParts(prev).day !== p.day;
-
+        
+            const dateStr = `${p.year}-${p.month}-${p.day}`;
+            const timeStr = `${p.hour}:${p.minute}`;
+        
             if (isFirst || isNewDay) {
-              const dateStr = `${p.year}-${p.month}-${p.day}`;
-              const timeStr = `${p.hour}:${p.minute}`;
-              return `<span style="color:#666;">${dateStr}</span><br><span style="color:${chartFontColor}">${timeStr}</span>`;
+              // div parent avec deux spans pour couleurs différentes
+              return `
+                <div style="text-align:center; display:inline-block;">
+                  <span style="color:#666; display:block;">${dateStr}</span>
+                  <span style="color:${chartFontColor}; display:block;">${timeStr}</span>
+                </div>
+              `;
             }
-            return `<span style="color:${chartFontColor}">${p.hour}:${p.minute}</span>`;
+            return `<span style="color:${chartFontColor}">${timeStr}</span>`;
           },
         },
+        
       },
       yAxis: {
         min: pmin,

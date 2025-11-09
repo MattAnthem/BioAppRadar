@@ -19,7 +19,7 @@ type VptsChartProps = {
 
 const VptsChart = ({className}: VptsChartProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('png');
+  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux
   const { selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);

@@ -17,12 +17,12 @@ import { useVptsImageQuery } from "../hooks/useQuery/useVptsImageQuery";
 
 type VptsChartProps = {
   className?: string;
-  showControls?: boolean;
 }
 
-const VptsHistChart = ({className, showControls}: VptsChartProps) => {
+const VptsHistChart = ({className}: VptsChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux
   const { selectedParameter, vptsPayload, vptsStartTime, vptsEndTime } = useAppSelector(state => state.vpts_histchart);
@@ -34,7 +34,7 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
   // Tanstack
   const { isLoading, data, error } = useVptsHistData();
 
-  const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, isModalOpen);
+  const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, displayMode === 'png');
 
 
 
@@ -67,6 +67,10 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
         setIsModalOpen(true);
   }
 
+  const handleDisplayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDisplayMode(e.target.value as 'png' | 'interactive');
+  }
+
   return (
     <SectionCard className={`${className} p-1`}>
 
@@ -78,8 +82,33 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
+              {/* Handle display mode */}
+              <div className="w-full flex justify-center items-center p-1 gap-2">
+                <p className="text-sm">Display as :</p>
+
+                <input
+                  type="radio"
+                  name="display"
+                  value="png"
+                  checked={displayMode === 'png'}
+                  onChange={handleDisplayChange}
+                  id="disp_image"
+                />
+                <label htmlFor="disp_image" className="text-xs">PNG</label>
+
+                <input
+                  type="radio"
+                  name="display"
+                  value="interactive"
+                  checked={displayMode === 'interactive'}
+                  onChange={handleDisplayChange}
+                  id="disp_interactive"
+                />
+                <label htmlFor="disp_interactive" className="text-xs">Interactive Chart</label>
+              </div>
+
               {
-                  vptsImageLoading && (
+                  (vptsImageLoading || isLoading) && (
                       <div className="w-full h-full flex flex-col items-center justify-center">
                           <img width={35} height={35}  src={loader} alt="loader" />
                           <p className='font-semibold text-xs tracking-wider text-blue-600'>Loading data...</p>
@@ -88,7 +117,7 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
               }
                   
               {
-                vptsImageError && (
+                (vptsImageError || error) && (
                   <div className="w-full h-full flex flex-col items-center justify-center">
                     <Unplug width={30} height={30} className='text-red-500'/>
                     <p className='font-semibold text-xs tracking-wider text-red-600'>Error fetching data</p>
@@ -97,12 +126,24 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
               }
 
               {
-                  vptsImageData && !vptsImageLoading && !vptsImageError && (
+                  vptsImageData && !vptsImageLoading && !vptsImageError && (displayMode === 'png') && (
                       <div className="w-full h-full flex items-center justify-center">
                           <img src={vptsImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
                       </div>
                   )
-              }
+            }
+			{
+                (displayMode === 'interactive' && data) && (
+                  <div className="flex w-full h-full justify-center items-center">
+                      <VptsHeatmapChart 
+                        data={data} 
+                        title
+                        legend
+                        chartHeight={500}
+                      />
+                  </div>
+                )
+            }
                       
           </ChartModal>
 

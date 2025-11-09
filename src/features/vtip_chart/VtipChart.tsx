@@ -20,7 +20,7 @@ type VtipChartProps = {
 const VtipChart = ({ className }: VtipChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('png');
+  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux 
   const {  selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
