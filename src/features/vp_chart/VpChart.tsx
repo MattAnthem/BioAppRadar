@@ -16,6 +16,7 @@ type VpChartProps = {
 const VpChart = ({ className }: VpChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('png');
 
   // Redux
   const { selectedParameter } = useAppSelector(state => state.vpchart);
@@ -42,6 +43,30 @@ const VpChart = ({ className }: VpChartProps) => {
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
+
+              {data && (
+
+                  <VpChartHighcharts
+                    data={data}
+                    displayTitle
+                    chartHeight={500}
+                    selectedHeight={currentHeight}
+                  />
+
+              )}
+              {
+                  isLoading && (
+                      <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                          <img src={loader} alt="loading-data" width={35} height={35}  />
+                      </div>
+                  )
+              }
+              {         
+                error && (
+                  <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                    <Unplug width={60} height={60} className='text-red-500'/>
+                  </div> 
+              )}
 
                       
           </ChartModal>

@@ -11,14 +11,16 @@ interface VpChartHighchartsProps {
   data: VpResponse;
   radarAltitude?: number;      
   selectedHeight?: number;
-  displayTitle?: boolean;    
+  displayTitle?: boolean;   
+  chartHeight?: number; 
 }
 
 const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
   data,
   radarAltitude = 1616,
   selectedHeight = 0,
-  displayTitle
+  displayTitle,
+  chartHeight,
 }) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const theme = useTheme();
@@ -33,6 +35,7 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
       chart: {
         inverted: true,
         backgroundColor: 'transparent',
+        height: chartHeight || 365,
         events: {
           load: function () {
             const chart = this;
@@ -82,7 +85,8 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
         },
       },
       title: { 
-        text: displayTitle ? `${data.name} [${data.units}]` : undefined,
+        text: displayTitle ? `${data.name} [${data.units}]` : undefined, 
+        style: { color: chartFontColor, fontSize: '13px' },
       },
       xAxis: [
         {
