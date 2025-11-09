@@ -3,55 +3,33 @@ import SectionCard from "../../shared/components/cards/SectionCard";
 import VptsHeatmapChart from "../../shared/components/charts/HighchartsVpts";
 import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
-import SimpleSelect from "../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../shared/components/selects/types";
-import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
-import { formatChartDateParam } from "../../shared/utils/date_format";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import { useVptsData } from "./hooks/useVptsData";
-import { changeVptsPayload, setSelectedVptsParameterOption } from "./vptsChartSlice";
 import ChartModal from "../history_charts/components/ChartModal";
 import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
 import { Fullscreen, Unplug } from "lucide-react";
 import { useTheme } from "../../shared/hooks/useTheme";
-import { useVptsImageQuery } from "../history_charts/hooks/useVptsImageQuery";
 import loader from '../../assets/loader.webp';
+import { useVptsImageQuery } from "../history_charts/hooks/useQuery/useVptsImageQuery";
 
 
 type VptsChartProps = {
   className?: string;
-  showControls?: boolean;
 }
 
-const VptsChart = ({className, showControls}: VptsChartProps) => {
+const VptsChart = ({className}: VptsChartProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Redux
-  const { parameterOptions, selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
-  const dispatch = useAppDispatch();
+  const { selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
 
   // Tanstack
-  const { isLoading, data, error, refetch } = useVptsData();
+  const { isLoading, data, error } = useVptsData();
   const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, isModalOpen);
 
-  const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(changeVptsPayload({startTime: formatted}));
-  }
 
-  const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(changeVptsPayload({endTime: formatted}));
-  }
-
-  const handleVariableChange = (option: SelectOption) => {
-    dispatch(setSelectedVptsParameterOption(option));
-    refetch();
-  } 
 
   
 
@@ -112,34 +90,9 @@ const VptsChart = ({className, showControls}: VptsChartProps) => {
 
 
         {/* Heading */}
-        <div className="p-1 w-full flex justify-between items-center">
+        <div className="px-1 w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
             {/* Controls */}
-            {
-              showControls && (
-                <ChartParamsPopup hoverText="Select Options">
-
-                  <div className="w-ful">
-                    <small>Select variable</small>
-                    <SimpleSelect
-                      options={parameterOptions}
-                      value={selectedParameter.displayText}
-                      onSelectValue={handleVariableChange}
-                      width="w-full"
-                    />
-                  </div>
-
-                  <div className="w-full mb-2 flex flex-col">
-                    <small>Select start Time</small>
-                    <input max={vptsPayload.endTime} onChange={handleStartTimeChange} value={vptsPayload.startTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
-                    <small>Select end Time</small>
-                    <input min={vptsPayload.startTime} onChange={handleEndTimeChange} value={vptsPayload.endTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
-                  </div>
-
-
-                </ChartParamsPopup>
-              )
-            }
 
             {/* Open the modal */}
             <Tooltip 

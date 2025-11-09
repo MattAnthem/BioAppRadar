@@ -57,7 +57,7 @@ const OptionPopover = ({
   useEffect(() => {
     if (isPopupOpen && popupRef.current) {
       const rect = popupRef.current.getBoundingClientRect();
-      const popupHeight = 400; 
+      const popupHeight = 300; 
       const spaceBelow = window.innerHeight - rect.bottom;
       setOpenUpwards(spaceBelow < popupHeight); 
     }

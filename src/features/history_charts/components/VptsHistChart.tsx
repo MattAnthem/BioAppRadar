@@ -1,23 +1,18 @@
 import { useState } from "react";
-import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
-import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../../shared/components/selects/types";
-import ChartParamsPopup from "../../../shared/features/chart-option-popups/ChartParamsPopup";
 import { useTheme } from "../../../shared/hooks/useTheme";
-import { formatChartDateParam } from "../../../shared/utils/date_format";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useVptsHistData } from "../hooks/useVptsHistData";
-import { useVptsImageQuery } from "../hooks/useVptsImageQuery";
-import { changeVptsHistPayload, setSelectedVptsHistParameterOption } from "../slices/vptsHistChartSlice";
+import { changeVptsHistPayload } from "../slices/vptsHistChartSlice";
 import ChartModal from "./ChartModal";
 import { Fullscreen, Unplug } from "lucide-react";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import loader from '../../../assets/loader.webp';
 import VptsHeatmapChart from "../../../shared/components/charts/HighchartsVpts";
 import VptsHistPopup from "./popups/VptsHistPopup";
+import { useVptsHistData } from "../hooks/useData/useVptsHistData";
+import { useVptsImageQuery } from "../hooks/useQuery/useVptsImageQuery";
 
 
 type VptsChartProps = {
@@ -37,7 +32,7 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
   const { bg, border, hover } = themes.theme.simpleSelect;
 
   // Tanstack
-  const { isLoading, data, error, refetch } = useVptsHistData();
+  const { isLoading, data, error } = useVptsHistData();
 
   const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, isModalOpen);
 
@@ -46,6 +41,7 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
   
     // Submit Vtip Popup data
     const submitVptsPopup = () => {
+
       dispatch(changeVptsHistPayload(
         {
           startTime: vptsStartTime,
@@ -53,7 +49,7 @@ const VptsHistChart = ({className, showControls}: VptsChartProps) => {
           parameter: selectedParameter.id as string
         }
       ))
-  }
+    }
 
   if (isLoading) return (
     <div className={`${className}  p-1`}>

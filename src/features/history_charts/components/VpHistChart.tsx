@@ -1,8 +1,7 @@
-import GlassHeader from "../../../shared/components/cards/GlassHeader";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import VpChartHighcharts from "../../../shared/components/charts/HighchartsVP";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useVpHistData } from "../hooks/useVpHistData";
+import { useVpHistData } from "../hooks/useData/useVpHistData";
 import { changeVpHistPayload } from "../slices/vpHistChartSlice";
 import VpHistPopup from "./popups/VpHistPopup";
 import loader from '../../../assets/loader.webp';

@@ -5,12 +5,12 @@ import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
 import { useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
-import { useVtipImageQuery } from "../history_charts/hooks/useVtipImageQuery";
 import ChartModal from "../history_charts/components/ChartModal";
 import { Fullscreen, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
 import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
 import { useTheme } from "../../shared/hooks/useTheme";
+import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
 
 
 type VtipChartProps = {
@@ -20,6 +20,7 @@ type VtipChartProps = {
 const VtipChart = ({ className }: VtipChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('png');
 
   // Redux 
   const {  selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
@@ -28,7 +29,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
 
   // Tanstack
   const { isLoading, data, error } = useVtipData();
-  const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, isModalOpen);
+  const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, displayMode === 'png');
 
 
   if (isLoading) return (
@@ -47,6 +48,10 @@ const VtipChart = ({ className }: VtipChartProps) => {
     setIsModalOpen(true);
   }
 
+  const handleDisplayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDisplayMode(e.target.value as 'png' | 'interactive');
+  }
+
 
   return (
     <SectionCard className={`${className} p-1`}>
@@ -57,9 +62,34 @@ const VtipChart = ({ className }: VtipChartProps) => {
               modalTitle={`${selectedParameter.displayText} Chart`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
+            
+            {/* Handle display mode */}
+            <div className="w-full flex justify-center items-center p-1 gap-2">
+                <p className="text-sm">Display as :</p>
+
+                <input
+                  type="radio"
+                  name="display"
+                  value="png"
+                  checked={displayMode === 'png'}
+                  onChange={handleDisplayChange}
+                  id="disp_image"
+                />
+                <label htmlFor="disp_image" className="text-xs">PNG</label>
+
+                <input
+                  type="radio"
+                  name="display"
+                  value="interactive"
+                  checked={displayMode === 'interactive'}
+                  onChange={handleDisplayChange}
+                  id="disp_interactive"
+                />
+                <label htmlFor="disp_interactive" className="text-xs">Interactive Chart</label>
+              </div>
 
               {
-                  vtipImageLoading && (
+                  (vtipImageLoading || isLoading)  && (
                       <div className="w-full h-full flex flex-col items-center justify-center">
                           <img width={35} height={35}  src={loader} alt="loader" />
                           <p className='font-semibold text-xs tracking-wider text-blue-600'>Loading data...</p>
@@ -68,7 +98,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
               }
                   
               {
-                vtipImageError && (
+                (vtipImageError || error) && (
                   <div className="w-full h-full flex flex-col items-center justify-center">
                     <Unplug width={30} height={30} className='text-red-500'/>
                     <p className='font-semibold text-xs tracking-wider text-red-600'>Error fetching data</p>
@@ -77,18 +107,29 @@ const VtipChart = ({ className }: VtipChartProps) => {
               }
 
               {
-                  vtipImageData && !vtipImageLoading && !vtipImageError && (
+                  vtipImageData && !vtipImageLoading && !vtipImageError && (displayMode === 'png') && (
                       <div className="w-full h-full flex items-center justify-center">
                           <img src={vtipImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
                       </div>
                   )
+              }
+
+              {
+                (displayMode === 'interactive' && data) && (
+                  <div className="flex w-full h-full justify-center items-center">
+                    <HighchartVtip
+                      data={data}
+                      chartHeight={500}
+                    />
+                  </div>
+                )
               }
                       
           </ChartModal>
       
 
           {/* Heading */}
-          <div className="p-1 w-full flex items-center justify-between">
+          <div className="px-1 w-full flex items-center justify-between">
               <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
                 {/* Open the modal */}

@@ -3,16 +3,16 @@ import SectionCard from "../../../shared/components/cards/SectionCard";
 import DataLoading from "../../../shared/components/loader/DataLoading";
 import FetchError from "../../../shared/components/loader/FetchError";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useVtipHistData } from "../hooks/useVtipHistData";
 import { changeVtipHistPayload } from "../slices/vtipHistChartSlice";
 import ChartModal from "./ChartModal";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { Fullscreen, Unplug } from "lucide-react";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
-import { useVtipImageQuery } from "../hooks/useVtipImageQuery";
 import loader from '../../../assets/loader.webp';
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 import VtipHistPopup from "./popups/VtipHistPopup";
+import { useVtipHistData } from "../hooks/useData/useVtipHistData";
+import { useVtipImageQuery } from "../hooks/useQuery/useVtipImageQuery";
 
 
 type VtipChartProps = {
@@ -73,7 +73,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
     }
 
   return (
-    <SectionCard className={`${className} p-1`}>
+    <SectionCard className={`${className} p-1 `}>
 
 
 
@@ -114,7 +114,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
 
       
           {/* Heading */}
-          <div className="p-1 z-10 w-full flex justify-between">
+          <div className="p-1 w-full flex items-center justify-between">
               <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
 
 

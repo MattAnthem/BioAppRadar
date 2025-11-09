@@ -14,7 +14,7 @@ export const parameterOptions: SelectOption[] = [
         displayText: 'Reflectivity factor'
     },
     {
-        id: 'dens',
+        id: 'eta',
         displayText: 'Reflectivity eta'
     },
     {

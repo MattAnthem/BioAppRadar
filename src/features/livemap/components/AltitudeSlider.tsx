@@ -44,7 +44,7 @@ const AltitudeSlider = (
       {/* Altitude band */}
       <div className="h-fit  flex flex-col justify-center items-center">
 
-        <small className='text-[10px] text-xs text-center font-light'>Altitude in meters</small>
+        <small className='text-[10px] text-xs text-center font-light'>Height in meters</small>
 
         {/* Max altitude */}
         <small className='text-[10px] text-white'>{altitudes[0]}</small>

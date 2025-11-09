@@ -27,8 +27,8 @@ const OverviewDashboard = () => {
 
             <div className="xl:grid flex flex-col grid-cols-1 lg:grid-cols-2 gap-2 lg:min-h-[10vh]">
 
-              <VtipChart className="col-span-1 w-full h-full" />
-              <VptsChart className="col-span-1 w-full h-full" />
+              <VtipChart className="col-span-1 w-full h-[30vh]" />
+              <VptsChart className="col-span-1 w-full h-[30vh]" />
             </div>
 
         </div>
