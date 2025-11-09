@@ -9,7 +9,7 @@ import { setActiveButton, setMinimized, toggleMinimize } from "./sidebarSlice";
 import NavButton from "../../buttons/navbtn/NavButton";
 
 
-
+const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const Sidebar = () => {
     const sidebarRef = useRef<HTMLDivElement | null>(null);
@@ -57,22 +57,23 @@ const Sidebar = () => {
     <div ref={sidebarRef} id="sidebar" role="menubar" aria-label="sidebar" className={`
                     ${main.background} 
                     fixed z-60 h-screen lg:flex lg:sticky lg:flex-col max-h-screen p-2 shadow-[2px] 
-                    ${isMinimized ? 'lg:w-[60px] hidden' : 'lg:w-[300px]'} 
-                    transition-all duration-200 ease-out drop-shadow-xs antialiased
+                    ${isMinimized ? 'lg:w-[60px] hidden' : 'lg:w-[260px]'} 
+                    transition-all duration-200 ease-out drop-shadow-xs antialiased 
+                    text-xs md:text-sm lg:text-sm 
         `}
     >
 
         {/* AppLogo */}
         <div className={`mb-2 flex ${isMinimized ? 'items-start justify-center' : 'justify-between items-center'}  gap-1 p-1 w-full`}>
 
-            <div className="flex justify-start gap-2 items-center">
-                <img src={logo_svg} className="w-10 h-10" alt="appicon" />
-                <h1 className={`text-xl font-semibold ${isMinimized ? 'hidden' : navs.text} transition-opacity duration-100 ease-in-out tracking-wider`}>BioAppRadar</h1>
+            <div className="flex justify-center gap-2 items-center">
+                <img src={logo_svg} className={`${isMinimized ? 'hidden' : ''} w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-6 lg:h-6`} alt="appicon"  />
+                <h1 className={`text-sm sm:text-sm md:text-base lg:text-lg ${isMinimized ? 'hidden' : navs.text}`}>BioAppRadar</h1>
             </div>
 
             {/* Toggle minimize sidebar */}
             <button aria-label="toggle-minimize-sidebar" aria-controls="sidebar" onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.togller_color}  rounded-sm p-1 cursor-ew-resize focus-visible:outline-2 outline-offset-1 outline-blue-800`}>
-                <SidebarIcon />
+                <SidebarIcon className={iconSize} />
             </button>
 
         </div>
@@ -91,7 +92,7 @@ const Sidebar = () => {
                     title="Overview Dashboard"
                     menu_to=""
                     active={activeButton}
-                    icon={<Home width={30} />}
+                    icon={<Home  className={iconSize}/>}
                     isNav_minimized={isMinimized}
                     ariaLabel="Overview Dashboard NavLink"
                     ariaControls="Overview Dashboard page"
@@ -103,7 +104,7 @@ const Sidebar = () => {
                     title="Cross Section"
                     menu_to="cross_section"
                     active={activeButton}
-                    icon={<FlipHorizontal width={30}/>}
+                    icon={<FlipHorizontal className={iconSize}/>}
                     isNav_minimized={isMinimized}
                     ariaLabel="Vertical transect NavLink"
                     ariaControls="Vertical transect page"
@@ -115,7 +116,7 @@ const Sidebar = () => {
                     title="Historical Explorer"
                     menu_to="history_explorer"
                     active={activeButton}
-                    icon={<CalendarClock  width={30}/>}
+                    icon={<CalendarClock className={iconSize}/>}
                     isNav_minimized={isMinimized}
                     ariaLabel="Historical explorer NavLink"
                     ariaControls="Historical explorer page"
@@ -135,7 +136,7 @@ const Sidebar = () => {
             title="Notifications"
             menu_to="notification_center"
             active={activeButton}
-            icon={<Bell width={30}/>}
+            icon={<Bell className={iconSize}/>}
             isNav_minimized={isMinimized}
             ariaLabel="Notification center NavLink"
             ariaControls="Notification center page"

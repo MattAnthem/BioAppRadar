@@ -30,13 +30,13 @@ const TopBar = () => {
       {/* Left Controls */}
       {/* Menu toggler button for smaller screen */}
       <button aria-labelledby='collapse sidebar' name='toggle_sidebar' onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.togller_color} lg:hidden rounded-sm p-1`}>
-        <Menu width={20}/>
+        <Menu className='w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4'/>
       </button>
       
       {/* Right controls */}
-      <div className="flex relative w-full justify-end items-center gap-3 opacity-100">
+      <div className="flex relative w-full justify-end items-center gap-2 opacity-100">
 
-        <Sun className={topbar.contents.togller_color} width={20}/>
+        <Sun className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.togller_color}`}/>
 
         {/* Switch button */}
         <SwitchBtn 
@@ -48,7 +48,7 @@ const TopBar = () => {
             ariaControls='App theme'
         />
         
-        <Moon className={topbar.contents.togller_color} width={20}/>
+        <Moon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.togller_color}`}/>
 
       </div>
     </div>

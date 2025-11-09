@@ -3,13 +3,8 @@ import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import DataLoading from "../../shared/components/loader/DataLoading";
 import FetchError from "../../shared/components/loader/FetchError";
-import SimpleSelect from "../../shared/components/selects/SimpleSelect";
-import type { SelectOption } from "../../shared/components/selects/types";
-import ChartParamsPopup from "../../shared/features/chart-option-popups/ChartParamsPopup";
-import { formatChartDateParam } from "../../shared/utils/date_format";
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
-import { changeVtipPayload, setSelectedVtipParameterOption } from "./vtipChartSlice";
 import { useVtipImageQuery } from "../history_charts/hooks/useVtipImageQuery";
 import ChartModal from "../history_charts/components/ChartModal";
 import { Fullscreen, Unplug } from "lucide-react";
@@ -20,10 +15,9 @@ import { useTheme } from "../../shared/hooks/useTheme";
 
 type VtipChartProps = {
   className?: string;
-  showControls?: boolean;
 }
 
-const VtipChart = ({ className, showControls }: VtipChartProps) => {
+const VtipChart = ({ className }: VtipChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,8 +31,6 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
   const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, isModalOpen);
 
 
-
-
   if (isLoading) return (
     <div className={`${className} p-1`}>
       <DataLoading />
@@ -50,12 +42,10 @@ const VtipChart = ({ className, showControls }: VtipChartProps) => {
     </div> 
   )
 
-
-      // handler to open the modal
+  // handler to open the modal
   const handleOpenModal = () => {
     setIsModalOpen(true);
   }
-
 
 
   return (

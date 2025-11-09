@@ -35,22 +35,22 @@ const NavContent = (
         <div className={`${isNav_minimized ? '' : 'w-full'} flex relative items-center justify-between`}>
 
             {/* Menu icon + title */}
-            <div className="flex gap-2 items-start">
+            <div className="flex gap-1.5 items-center justify-between">
 
-            {icon}
+                {icon}
 
-            <h1 
-                className={`${isNav_minimized ? 'hidden' : '' } font-normal text-start text-nowrap`}
-            >
-                {title}
-            </h1>
+                <h1 
+                    className={`${isNav_minimized ? 'hidden' : '' } font-normal text-start text-nowrap`}
+                >
+                    {title}
+                </h1>
 
             </div>
 
             {/* Badge if have some */}
             {
                 badge && (
-                    <small className={`${isNav_minimized ? 'absolute -top-4 -right-2' : ''} p-1 h-6 flex items-center justify-center text-center bg-red-500 text-white rounded-sm`}>{badge}</small>
+                    <small className={`${isNav_minimized ? 'absolute -top-4 -right-2' : ''} p-1 h-6 text-[11px] flex items-center justify-center text-center bg-red-500 text-white rounded-sm`}>{badge}</small>
                 )
             }
         

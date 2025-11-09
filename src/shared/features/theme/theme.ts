@@ -123,9 +123,9 @@ export const dark: ThemeElements = {
             toogler_hover: 'hover:bg-zinc-600'
         },
         navs: {
-            text: 'text-zinc-400',
-            text_hover: 'hover:text-zinc-400',
-            text_active: 'text-zinc-400',
+            text: 'text-zinc-300',
+            text_hover: 'hover:text-zinc-300',
+            text_active: 'text-zinc-300',
             bg_active: 'bg-zinc-600',
             bg_hover: 'hover:bg-zinc-700',
             subnav_border: 'border-zinc-700',
