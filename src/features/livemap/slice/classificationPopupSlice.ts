@@ -8,17 +8,23 @@ const ClassificationOptions: SelectOption[] = [
         availableType: [
           {
             id: 'biometeo',
-            displayText: 'Biological vs Meteorological Classification'
+            displayText: 'Biological vs Meteorological Classification',
+            type0: 'Meteorological',
+            type1: 'Biological'
           },
           {
             id: 'species',
-            displayText: 'Bird vs Insect Classification'
+            displayText: 'Bird vs Insect Classification',
+            type0: 'Insects',
+            type1: 'Birds'
           }
         ]
     }
 ]
 
 interface ClassificationPopupState {
+    isPopupOpen: boolean;
+
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
     color_0: string;
@@ -28,6 +34,8 @@ interface ClassificationPopupState {
 }
 
 const initialState: ClassificationPopupState = {
+    isPopupOpen: false,
+
     selectedVariable: Array.isArray(ClassificationOptions[0].availableType) ? ClassificationOptions[0].availableType[0] : null,
     availableVariables: Array.isArray(ClassificationOptions[0].availableType) ? ClassificationOptions[0].availableType : [],
     color_0: '#dc3545',
@@ -47,9 +55,15 @@ const classificationpopupSlice = createSlice({
         },
         setClassificationColorOne: (state, action) => {
             state.color_1 = action.payload
+        },
+        closeClassifPopup: (state) => {
+            state.isPopupOpen = false
+        },
+        toggleClassifPopup: (state) => {
+            state.isPopupOpen = !state.isPopupOpen;
         }
     }
 })
 
-export const { setSelectedClassificationOption, setClassificationColorOne, setClassificationColorZero } = classificationpopupSlice.actions;
+export const { setSelectedClassificationOption, setClassificationColorOne, setClassificationColorZero, closeClassifPopup, toggleClassifPopup } = classificationpopupSlice.actions;
 export default classificationpopupSlice.reducer;

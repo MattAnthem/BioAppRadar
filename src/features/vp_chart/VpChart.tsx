@@ -39,10 +39,10 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
   }
 
   return (
-    <SectionCard className={`${className} h-full p-1`}>
+    <SectionCard className={`${className} p-1`}>
 
         {/* Heading */}
-        <div className="p-1 z-20 w-full border-b">
+        <div className="p-1 w-full border-b">
             <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
 
             {/* controls */}
@@ -62,7 +62,7 @@ const VpChart = ({ className, showControls }: VpChartProps) => {
                     />
                   </div>
 
-                  <div className="w-full mb-2">
+                  <div className="w-full">
                     <small>Select Time</small>
                     <input onChange={handleDateChange} value={vpPayload.time} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="date" id="" />
                   </div>

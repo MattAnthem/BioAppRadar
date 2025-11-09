@@ -5,7 +5,6 @@ import ClassificationPopup from './components/ClassificationPopup';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setClassificationPayload, setSelectedTime } from './slice/livemapSlice';
-import type { SelectOption } from '../../shared/components/selects/types';
 import FetchError from '../../shared/components/loader/FetchError';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
@@ -48,22 +47,16 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
 
     //#region Classification data handler 
-    // Classification
-    const handleClassificationVarsChange = (variable: SelectOption) => {
+
+    const { selectedVariable, color_0, color_1 } = useAppSelector(state=> state.classificationpopup);
+    const handleSubmitPopupData = () => {
         dispatch(setClassificationPayload({
-            class: variable.id as string
+            class: selectedVariable.id as string,
+            color_0,
+            color_1,
         }))
     }
-    const handleClassificationColor0Change = (color: string) => {
-        dispatch(setClassificationPayload({
-            color_0: color
-        }))
-    }
-    const handleClassificationColor1Change = (color: string) => {
-        dispatch(setClassificationPayload({
-            color_1: color
-        }))
-    }
+
     //#endregion
 
 
@@ -107,7 +100,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         <SectionCard className="relative w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
-                <ClassificationPopup onChangeClassifVariable={handleClassificationVarsChange} onChangeClassifColorOne={handleClassificationColor1Change} onChangeClassifColorZero={handleClassificationColor0Change}/>
+                <ClassificationPopup onSubmitPopup={handleSubmitPopupData}/>
             </FetchError>   
         </SectionCard>
     )
@@ -136,11 +129,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
                 <MapbasePopup displayColorbarOption={false}/>
                 <ClassificationPopup 
-                    color0Legend={(data as ClassificationDataResponse)?.legend?.class_0?.name} 
-                    color1Legend={(data as ClassificationDataResponse)?.legend?.class_1?.name} 
-                    onChangeClassifVariable={handleClassificationVarsChange} 
-                    onChangeClassifColorOne={handleClassificationColor1Change} 
-                    onChangeClassifColorZero={handleClassificationColor0Change}
+                    onSubmitPopup={handleSubmitPopupData}
                 />
 
             </div>
@@ -183,9 +172,9 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
         <TimelineSlider 
             frames={mapTimeRange}
-            animSpeed={900}
             currentIndex={currentIndex}
             onFrameChange={handleFrameChange}
+            preloadingFrames = {isPreloading}
         />
 
 

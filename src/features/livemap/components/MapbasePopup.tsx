@@ -56,7 +56,7 @@ const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
   const { bg, border, hover, options_bg } = themes.theme.simpleSelect;
 
   return (
-    <div ref={mapBasepopupRef} className="">
+    <div ref={mapBasepopupRef} className="relative">
 
       <Tooltip 
         position="bottom" 
@@ -65,14 +65,14 @@ const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
       >
         
         <button onClick={() => dispatch(toggleShowMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Map/>
+            <Map width={20} height={20}/>
         </button>
 
       </Tooltip>
 
       {/* Pop-over menu */}
       <div className={`
-          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center  w-90 absolute right-0  top-full p-2 rounded-sm
+          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center  w-90 absolute right-0  top-full p-2  rounded-sm
           ${isMapBasePopupOpen ? 
               "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
           }

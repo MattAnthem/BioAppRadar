@@ -10,22 +10,23 @@ const OverviewDashboard = () => {
     <MainLayout>
 
 
-        <div className="w-full h-full px-4 py-2 grid grid-rows-[auto_1fr] gap-2">
+        <div className="w-full h-full px-4 py-2 grid grid-rows-[auto_1fr] gap-4">
 
-            <div className="grid grid-cols-1 xl:grid-cols-8 gap-2">
-              <div className="col-span-1 xl:col-span-6 h-[55vh] lg:h-full">
+            <div className="grid grid-cols-1 xl:grid-cols-8 gap-4 h-[54vh]">
+
+              <div className="col-span-1 xl:col-span-6 h-[54vh]">
                 <LiveMap drawable={false} enableLineDraw={false}/>
               </div>
 
-              <div className="col-span-1 xl:col-span-2">
-                <VpChart className="w-full h-[55vh]" />
+              <div className="col-span-1 xl:col-span-2 h-[54vh]">
+                <VpChart className="w-full h-full" />
               </div>
             </div>
 
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-              <VtipChart className="w-full h-[50vh] lg:h-full" />
-              <VptsChart className="w-full h-[50vh] lg:h-full" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 h-[15vh]">
+              <VtipChart className="w-full h-full" />
+              <VptsChart className="w-full h-full" />
             </div>
 
         </div>

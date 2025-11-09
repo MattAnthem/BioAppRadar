@@ -6,7 +6,7 @@ type TimelineProps = {
   frames: string[];
   currentIndex: number;
   onFrameChange: (index: number) => void;
-  animSpeed?: number; // en ms
+  preloadingFrames: boolean
 };
 
 
@@ -16,7 +16,7 @@ type TimelineProps = {
  * @param animSpeed: Animation sequence speed in ms
  * @returns React.JSX.Element
  */
-const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }: TimelineProps) => {
+const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames }: TimelineProps) => {
 
   const [isPlaying, setIsPlaying] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -25,6 +25,12 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
 
   // Gestion de l’animation
   useEffect(() => {
+
+    if (preloadingFrames) {
+      onFrameChange(0);
+      return;
+    };
+
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
         onFrameChange((currentIndex + 1) % frames.length);
@@ -36,7 +42,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, animSpeed = 900 }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, frames.length, onFrameChange, currentIndex]);
+  }, [isPlaying, frames.length, onFrameChange, currentIndex, preloadingFrames]);
 
   const handleStepBackward = () => {
     if (currentIndex > 0) {
