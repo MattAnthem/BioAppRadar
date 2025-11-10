@@ -3,7 +3,7 @@ import { fetchBoundaryData, type BoundaryPayload } from "../../../api/endpoints/
 
 export const useBoundariesQuery = (payload: BoundaryPayload, enabled?: boolean) => {
     const key = ["boundary_data", payload.type, JSON.stringify(payload.json)];
-    return useQuery<GeoJSON.Feature>({
+    return useQuery<GeoJSON.FeatureCollection>({
         queryKey: key,
         queryFn: async () => {
             try {

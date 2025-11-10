@@ -4,57 +4,6 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 
 // statics 
 
-export const CoverageOptions: SelectOption[] =  [
-  {
-    id: 'administrative',
-    displayText: 'Administrative',
-    availableType: [
-      {
-          id: 'country',
-          displayText: 'Country',
-      },
-      {
-          id: 'province',
-          displayText: 'Province',
-      },
-      {
-          id: 'district',
-          displayText: 'District',
-      },
-      {
-          id: 'sector',
-          displayText: 'Sector',
-      },
-      {
-          id: 'cell',
-          displayText: 'Cell',
-      },
-      {
-          id: 'village',
-          displayText: 'Village',
-      },
-    ]
-  },
-  {
-    id: 'special_zones',
-    displayText: 'Special Zones',
-    availableType: [
-      {
-          id: 'protected_areas',
-          displayText: 'Protected Areas'
-      },
-      {
-          id: 'wetland_zones',
-          displayText: 'Wetland Zones',
-      },
-      {
-          id: 'airports',
-          displayText: 'Airports'
-      }
-    ]
-  },
-]
-
 export const colormapOptions: SelectOption[] = [
   {
     id: 'viridis',
@@ -132,10 +81,7 @@ interface VarPopupState {
     selectedMapBase: SelectOption;
     colormapOptions: SelectOption[];
     selectedColormap: SelectOption;
-    coverageOptions: SelectOption[];
-    selectedCoverage: SelectOption;
-    coverageTypes: SelectOption[];
-    selectedCoverageType: SelectOption;
+
 }
 
 const initialState: VarPopupState = {
@@ -149,11 +95,6 @@ const initialState: VarPopupState = {
     },
     colormapOptions: colormapOptions,
     selectedColormap: colormapOptions[0],
-    coverageOptions: CoverageOptions,
-    selectedCoverage: CoverageOptions[0],
-    coverageTypes: Array.isArray(CoverageOptions[0].availableType) ? CoverageOptions[0].availableType : [],
-    selectedCoverageType: Array.isArray(CoverageOptions[0].availableType) ? CoverageOptions[0].availableType[0] : null,
-
 }
 
 const baseMapPopupSlice = createSlice({
@@ -180,22 +121,11 @@ const baseMapPopupSlice = createSlice({
         hideMapBasePopup: (state) => {
             state.isMapBasePopupOpen = false;
         },
-        
-        setSelectedCoverageGenre: (state, action) => {
-          state.coverageTypes = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
-          state.selectedCoverageType = action.payload.availableType[0];
-          state.selectedCoverage = action.payload;
-        },
-        setSelectedCoverageType: (state, action) => {
-          state.selectedCoverageType = action.payload;
-        }
 
     }
 })
 
 export const { 
-  setSelectedCoverageType,
-  setSelectedCoverageGenre,
   hideVarPopup, 
   toggleShowVarPopup, 
   hideMapBasePopup, 

@@ -5,7 +5,7 @@ const boundarieOptions: SelectOption[] = [
     {
         id: 'administrative',
         displayText: 'Administrative Boundaries',
-        availableTypes: [
+        availableType: [
             {
                 id: 'country',
                 displayText: 'Country'
@@ -35,7 +35,7 @@ const boundarieOptions: SelectOption[] = [
     {
         id: 'special_zones',
         displayText: 'Special Zones',
-        availableTypes: [
+        availableType: [
             {
                 id: 'protected_areas',
                 displayText: 'Protected Areas'
@@ -71,9 +71,9 @@ const boundarySlice = createSlice({
     initialState,
     reducers: {
         setSelectedBoundary: (state, action) => {
-            state.selectedBoundary = action.payload;
             state.boundaryTypes = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
-            state.selectedBoundaryType = state.boundaryTypes[0] || {id: '', displayText: ''};
+            state.selectedBoundaryType = state.boundaryTypes[0];
+            state.selectedBoundary = action.payload;
         },
         setSelectedBoundaryType: (state, action) => {
             state.selectedBoundaryType = action.payload;

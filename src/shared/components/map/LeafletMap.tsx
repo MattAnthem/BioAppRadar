@@ -19,7 +19,7 @@ type MapProps = {
     opacity?: number;
     interactive?: boolean;
   };
-  overlayShapes?: GeoJSON.Feature[]; 
+  overlayShapes?: GeoJSON.FeatureCollection; 
   onShapeClicked?: (geosjon: GeoJSON.Feature) => void;
   drawable: boolean;
   enableLineDraw: boolean
@@ -115,31 +115,29 @@ const LeafletMap = ({
   // Add GeoJSON layers according to users parameters
   const overlayShapesRef = useRef<L.GeoJSON[]>([]);
   useEffect(() => {
-
     const map = mapRef.current;
     if (!map || !overlayShapes) return;
-
-    // Remove old shapes
-    if (overlayShapesRef.current) overlayShapesRef.current.forEach((ovrl) => map.removeLayer(ovrl));
+  
+    overlayShapesRef.current.forEach((layer) => map.removeLayer(layer));
     overlayShapesRef.current = [];
+  
+    const layer = L.geoJSON(overlayShapes, {
+      style: {
+        color: 'blue',
+        weight: 1,
+        fillOpacity: 0.0,
+      },
+      onEachFeature: (_, layer) => {
+        layer.on('click', () => {
+          if (onShapeClicked) onShapeClicked(_);
+        });
+      },
+    }).addTo(map);
 
-    // Add coverage overlays
-    const ovrls = overlayShapes.map((shape) => {
-      const layer = L.geoJSON(shape, {style: {color: 'blue',  stroke: true, weight: 1, fillOpacity: 0.0}});
-      layer.addTo(map);
-      // Retrieve coordinates while we click on this shape
-      layer.on('click', () => {
-        if (onShapeClicked) onShapeClicked(shape);
-      })
-
-      return layer;
-    })
-
-
-    overlayShapesRef.current = ovrls;
-
-
-  }, [onShapeClicked, overlayShapes]);
+    // map.fitBounds(layer.getBounds());
+  
+    overlayShapesRef.current = [layer];
+  }, [overlayShapes, onShapeClicked]);
 
 
   // Add/update overlays when props.overlays changes

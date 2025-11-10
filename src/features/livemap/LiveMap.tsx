@@ -15,6 +15,7 @@ import { useClassificationDataQuery } from './hooks/useQuery/useClassificationDa
 import { useQueryClient } from '@tanstack/react-query';
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import loader from '../../assets/loader.webp';
+import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -26,9 +27,19 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
     // Redux states
     const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, radarPayload } = useAppSelector(state => state.livemap);
+    // Coverage
+    const { selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary)
     const { selectedMapBase } = useAppSelector(state => state.basemappopup);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch()
+
+
+    // Fetch Map Boundary
+    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
+        type: selectedBoundary.id as string,
+        json: selectedBoundaryType.id as string
+    })
+
 
 
     // ALtitude
@@ -96,7 +107,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
 
 
-    if (error) return (
+    if (error || coverageError) return (
         <SectionCard className="relative w-full h-full col-span-6">
             <FetchError>
                 <MapbasePopup/>
@@ -111,10 +122,18 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
         
         {
-            isPreloading && (
-                <div className="absolute z-30 w-full h-full flex flex-col items-center justify-center">
+            (isPreloading) && (
+                <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
                     <p className='text-gray-700'>{`Loading animation ${progress}%...`}</p>
+                </div>
+            )
+        }
+        {
+            ( coverageLoading ) && (
+                <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
+                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                    <p className='text-gray-700'>Loading coverage</p>
                 </div>
             )
         }
@@ -152,7 +171,10 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
                     bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
                 }
             }
-            // overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
+            overlayShapes={coverageJson}
+            onShapeClicked={(geojson) => {
+                console.log('Clicked shape:', geojson);
+            }}
         />
 
         {/* Altitude slider */}
