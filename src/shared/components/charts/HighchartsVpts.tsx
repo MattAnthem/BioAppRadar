@@ -46,16 +46,17 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
    
     const { colorPalette } = useMemo(() => {
         const paletteVpts = [
-            "#ffffffff","#ffffd3ff","#ffffa8ff","#ffff7cff","#ffff51ff","#e6ec26ff",
-            "#a6a300ff","#ffa300ff","#ffa33fff","#ff6e1fff","#ff2900ff","#f20000ff",
-            "#a70007ff","#5d004fff","#510097ff","#2300e0ff","#0000d5ff","#00008fff",
-            "#00004aff","#000005ff"
+            "#ffffffff", "#ffffd3ff", "#ffffa8ff", "#ffff7cff",
+            "#ffff51ff", "#e6ec26ff", "#a6a300ff", "#ffa300ff",
+            "#ffa33fff", "#ff6e1fff", "#ff2900ff", "#f20000ff",
+            "#a70007ff", "#5d004fff", "#510097ff", "#2300e0ff",
+            "#0000d5ff", "#00008fff", "#00004aff", "#000005ff"
         ];
         const paletteViridis = [
-            "#fde725ff","#dce318ff","#b8de29ff","#94d840ff","#74d055ff","#56c667ff",
-            "#3cbc75ff","#29af7fff","#20a386ff","#1f968bff","#238a8dff","#287d8eff",
-            "#2d718eff","#32648eff","#39558cff","#3f4788ff","#453781ff","#482677ff",
-            "#481568ff","#440154ff"
+            "#fde725ff", "#dce318ff", "#b8de29ff", "#94d840ff", "#74d055ff",
+            "#56c667ff", "#3cbc75ff", "#29af7fff", "#20a386ff", "#1f968bff",
+            "#238a8dff", "#287d8eff", "#2d718eff", "#32648eff", "#39558cff",
+            "#3f4788ff", "#453781ff", "#482677ff", "#481568ff", "#440154ff"
         ];
 
         let palette: string[];
@@ -64,13 +65,16 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
 
         if (['dens', 'eta'].includes(parLower)) {
             palette = paletteVpts;
-            ticks = [1,2,5,10,15,20,25,30,50,70,100,150,200,250,300,400,500,600,800,1000];
+            ticks = [1, 2, 5, 10, 15, 20, 25,
+                30, 50, 70, 100, 150, 200, 250,
+                300, 400, 500, 600, 800, 1000
+            ];
         } else if (parLower === 'dbz') {
             palette = paletteVpts;
             for (let i=-20; i<=27.5; i+=2.5) ticks.push(i);
         } else {
             palette = paletteViridis;
-            ticks = Array.from({length:20}, (_, i)=>i+1);
+            ticks = Array.from({length:20}, (_, i) => i + 1);
         }
 
         const tckn = Math.min(...ticks);
@@ -78,6 +82,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
         const stick = ticks.map(x => (x - tckn)/(tckx - tckn));
 
         const colorPalette: [number,string][] = palette.map((c,j) => [stick[j], c] as [number,string]);
+        
         return { colorPalette, ticks };
     }, [data]);
 
@@ -266,15 +271,17 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
             }],
             tooltip:{enabled:true},
             colorAxis:{
-                min:0,
+                reversed: false,
+                min: 0,
                 stops:colorPalette,
                 labels:{format:'{value:.1f}'}
             },
             legend:legend ? {
-                align:'right',
-                layout:'vertical',
-                verticalAlign:'middle',
-                symbolHeight:250
+                align: 'right',
+                layout: 'vertical',
+                margin: 0,
+                verticalAlign: 'middle',
+                symbolHeight: 250,
             }:{enabled:false},
             credits:{enabled:false}
         };
