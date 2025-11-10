@@ -24,6 +24,7 @@ export interface VtipResponse {
     day: boolean[];
     sunrise: string[];
     sunset: string[];
+    query_par: string;
 }
 
 export interface VpResponse {
@@ -49,7 +50,8 @@ export interface VptsResponse {
     day: boolean[];
     dd: (null | number)[];
     ff: (null | number)[];
-    height: number[]
+    height: number[];
+    query_par: string;
 }
 
 export const fetchImageVTIP = async (payload: VtipPayload) => {

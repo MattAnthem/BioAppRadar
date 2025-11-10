@@ -13,25 +13,33 @@ HCWindbarb(Highcharts);
 HCAnnotations(Highcharts);
 HCAccessibility(Highcharts);
 
-interface VtipChartProps {
-  data: VtipResponse;
-  displayTitle?: boolean; 
-  chartHeight?: number; 
+interface DayNightChart extends Highcharts.Chart {
+  dayNightRects?: Highcharts.SVGElement[];
 }
 
-const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, chartHeight }) => {
+interface VtipChartProps {
+  data: VtipResponse;
+  displayTitle?: boolean;
+  chartHeight?: number;
+}
+
+const HighchartVtip: React.FC<VtipChartProps> = ({
+  data,
+  displayTitle = false,
+  chartHeight = 200,
+}) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const { theme } = useTheme();
   const { chartFontColor, chartGridline, chartLegendColor } = theme;
 
   useEffect(() => {
     if (!chartRef.current || !data?.times?.length) return;
-    const chart = chartRef.current.chart;
+    const chart = chartRef.current.chart as DayNightChart;
     drawDayNightBar(chart, data);
   }, [data]);
 
-  const options = useMemo(() => {
-    if (!data || !data.times?.length) return {};
+  const options = useMemo<Highcharts.Options>(() => {
+    if (!data?.times?.length) return {};
 
     Highcharts.setOptions({
       time: {
@@ -51,7 +59,9 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
     });
 
     const parseParts = (dt: Date) =>
-      Object.fromEntries(kigaliFormatter.formatToParts(dt).map((p) => [p.type, p.value]));
+      Object.fromEntries(
+        kigaliFormatter.formatToParts(dt).map((p) => [p.type, p.value])
+      ) as Record<string, string>;
 
     const formatKigaliFull = (dt: Date) => {
       const p = parseParts(dt);
@@ -59,11 +69,15 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
     };
 
     const times = data.times.map((t) => Date.parse(t.replace(" ", "T") + "Z"));
-    const sunrise = data.sunrise.map((t) => Date.parse(t.replace(" ", "T") + "Z"));
-    const sunset = data.sunset.map((t) => Date.parse(t.replace(" ", "T") + "Z"));
-
-    const seriesData = times.map((t, i) => [t, data.parameter[i]]);
-    const seriesWind = times.map((t, i) => [t, data.ff[i], data.dd[i]]);
+    const seriesData = times.map<[number, number]>((t, i) => [
+      t,
+      data.parameter[i],
+    ]);
+    const seriesWind = times.map<[number, number, number]>((t, i) => [
+      t,
+      data.ff[i],
+      data.dd[i],
+    ]);
 
     const pmin = Math.min(...data.parameter);
     const pmax = Math.max(...data.parameter);
@@ -72,15 +86,15 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
     return {
       chart: {
         zoomType: "x",
-        plotBorderWidth: 1,
+        plotBorderWidth: 0,
         backgroundColor: "transparent",
         height: chartHeight || 200,
         events: {
           load: function () {
-            drawDayNightBar(this, data);
+            drawDayNightBar(this as DayNightChart, data);
           },
           render: function () {
-            drawDayNightBar(this, data);
+            drawDayNightBar(this as DayNightChart, data);
           },
         },
       },
@@ -100,41 +114,41 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
           style: {
             fontSize: "11px",
             color: chartFontColor,
-            whiteSpace: "nowrap", // <- empêche le wrapping automatique
           },
-          formatter: function (this: any) {
-            const tickTime = new Date(this.value);
+          formatter: function (this: Highcharts.AxisLabelsFormatterContextObject) {
+            const tickTime = new Date(this.value as number);
             const p = parseParts(tickTime);
-            const idx = this.axis.tickPositions.indexOf(this.value);
-            const prev = idx > 0 ? new Date(this.axis.tickPositions[idx - 1]) : null;
+            const axis = this.axis as Highcharts.Axis;
+            const idx = axis.tickPositions?.indexOf(this.value as number) ?? 0;
+            const prev =
+              idx > 0 ? new Date(axis.tickPositions![idx - 1]) : undefined;
+
             const isFirst = idx === 0;
             const isNewDay = prev && parseParts(prev).day !== p.day;
-        
+
             const dateStr = `${p.year}-${p.month}-${p.day}`;
             const timeStr = `${p.hour}:${p.minute}`;
-        
+
             if (isFirst || isNewDay) {
-              // div parent avec deux spans pour couleurs différentes
               return `
-                <div style="text-align:center; display:inline-block;">
-                  <span style="color:#666; display:block;">${dateStr}</span>
-                  <span style="color:${chartFontColor}; display:block;">${timeStr}</span>
-                </div>
-              `;
+                <div style="text-align:center;">
+                  <span style="color:#666;">${dateStr}</span><br/>
+                  <span style="color:${chartFontColor};">${timeStr}</span>
+                </div>`;
             }
-            return `<span style="color:${chartFontColor}">${timeStr}</span>`;
+            return `<span style="color:${chartFontColor};">${timeStr}</span>`;
           },
         },
-        
       },
       yAxis: {
         min: pmin,
         max: ymax,
         title: {
           text: null,
-          style: { color: chartLegendColor, fontSize: "11px" },
         },
-        labels: { style: { color: chartFontColor, fontSize: '11px' } },
+        labels: {
+          style: { color: chartFontColor, fontSize: "11px" },
+        },
         gridLineColor: chartGridline,
       },
       series: [
@@ -157,24 +171,41 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
         },
       ],
       tooltip: {
-        shared: false,
+        shared: true,
         useHTML: true,
         backgroundColor: "rgba(255,255,255,0.95)",
         borderColor: "#aaa",
         borderWidth: 1,
-        formatter: function (this: any) {
-          if (this.series.type === "area") {
-            return `<b>${this.series.name}</b><br/>Value: ${Highcharts.numberFormat(this.y, 2)} ${data.units}<br/><hr><b>Date</b><br/>${formatKigaliFull(new Date(this.x))}`;
-          }
-          if (this.series.type === "windbarb") {
-            return `<b>${this.series.name}</b><br/>Speed: ${this.point.value.toFixed(1)} m/s<br>Direction: ${this.point.direction.toFixed(0)}°<br><hr><b>Date</b><br/>${formatKigaliFull(new Date(this.x))}`;
-          }
+        formatter: function (this: Highcharts.TooltipFormatterContextObject) {
+          let tooltip = "";
+          this.points?.forEach((p) => {
+            if (p.series.type === "area") {
+              tooltip += `<b>${p.series.name}</b><br/>Value: ${Highcharts.numberFormat(
+                p.y as number,
+                2
+              )} ${data.units}<br/><hr>`;
+            } else if (p.series.type === "windbarb") {
+              const point = p.point as unknown as {
+                value: number;
+                direction: number;
+              };
+              tooltip += `<b>${p.series.name}</b><br/>Speed: ${point.value.toFixed(
+                1
+              )} m/s<br>Direction: ${point.direction.toFixed(
+                0
+              )}°<br/><hr>`;
+            }
+          });
+          tooltip += `<b>Date</b><br/>${formatKigaliFull(
+            new Date(this.x as number)
+          )}`;
+          return tooltip;
         },
       },
       legend: { enabled: false },
       credits: { enabled: false },
     };
-  }, [data, displayTitle, chartLegendColor, chartFontColor, chartGridline, chartHeight]);
+  }, [data, displayTitle, chartHeight, chartFontColor, chartGridline, chartLegendColor]);
 
   return (
     <div className="w-full h-full">
@@ -190,13 +221,13 @@ const HighchartVtip: React.FC<VtipChartProps> = ({ data, displayTitle=false, cha
 
 export default HighchartVtip;
 
-
-function drawDayNightBar(chart: Highcharts.Chart, json: VtipResponse) {
-  if (!chart || !json?.times?.length) return;
-
+// --- Jour/Nuit ---
+function drawDayNightBar(chart: DayNightChart, json: VtipResponse) {
+  if (!chart || !json?.times?.length) return
   const times = json.times.map((t) => Date.parse(t.replace(" ", "T") + "Z"));
   const sunrise = json.sunrise.map((t) => Date.parse(t.replace(" ", "T") + "Z"));
   const sunset = json.sunset.map((t) => Date.parse(t.replace(" ", "T") + "Z"));
+
   const pmin = Math.min(...json.parameter);
   const pmax = Math.max(...json.parameter);
   const heightPb = (pmax - pmin) * 0.03;
@@ -220,13 +251,13 @@ function drawDayNightBar(chart: Highcharts.Chart, json: VtipResponse) {
   }
   if (endPb.length !== startPb.length) endPb.push(times[nTimes - 1]);
 
-  if ((chart as any).dayNightRects) (chart as any).dayNightRects.forEach((r: any) => r.destroy());
-  (chart as any).dayNightRects = [];
+  chart.dayNightRects?.forEach((r) => r.destroy());
+  chart.dayNightRects = [];
 
   for (let i = 0; i < startPb.length; i++) {
     const xs = startPb[i];
     const xe = endPb[i];
-    const ys = chart?.yAxis[0]?.min - 1.15 * heightPb;
+    const ys = chart.yAxis[0].min! - 1.15 * heightPb;
 
     const xP = chart.xAxis[0].toPixels(xs);
     const wP = chart.xAxis[0].toPixels(xe) - xP;
@@ -239,15 +270,15 @@ function drawDayNightBar(chart: Highcharts.Chart, json: VtipResponse) {
       .add();
 
     const tooltip = chart.renderer
-      .label(labelPb[i], xP + wP / 2 - 40, yP + hP - 25, "rect", 0, 0, true)
+      .label(labelPb[i], xP + wP / 2 - 70, yP + hP - 30, "rect", 0, 0, true)
       .attr({
-        padding: 6,
+        padding: 8,
         fill: "rgba(0,0,0,0.75)",
         zIndex: 9,
       })
       .css({
         color: "#fff",
-        fontSize: "10px",
+        fontSize: "11px",
         pointerEvents: "none",
       })
       .hide()
@@ -256,7 +287,6 @@ function drawDayNightBar(chart: Highcharts.Chart, json: VtipResponse) {
     rect.element.addEventListener("mouseover", () => tooltip.show());
     rect.element.addEventListener("mouseout", () => tooltip.hide());
 
-    (chart as any).dayNightRects.push(rect);
-    (chart as any).dayNightRects.push(tooltip);
+    chart.dayNightRects.push(rect, tooltip);
   }
 }

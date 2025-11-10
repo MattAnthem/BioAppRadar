@@ -149,7 +149,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{data?.name} ({data?.units})</h3>
             
             <div className="flex gap-2">
               

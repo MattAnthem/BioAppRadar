@@ -60,9 +60,11 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
     </div> 
   )
   if (error) return (
-    <div className={`${className} p-1`}>
-      <VtipHistPopup onSubmitPopup={submitVtipPopup}/>
-      <FetchError />
+    <div className={`${className} p-1 h-full`}>
+      <FetchError>
+        <VtipHistPopup onSubmitPopup={submitVtipPopup}/>
+
+      </FetchError>
     </div> 
   )
 
@@ -157,7 +159,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
       
           {/* Heading */}
           <div className="p-1 w-full flex items-center justify-between">
-              <h3 className='tracking-wider text-xs'>{data?.name} ({data?.units})</h3>
+              <h3 className='tracking-wider text-xs font-semibold'>{data?.name} ({data?.units})</h3>
 
 
               <div className="flex gap-2">

@@ -17,6 +17,7 @@
     "@tanstack/react-query-devtools": "^5.90.2",
     "@tanstack/react-query-persist-client": "^5.90.7",
     "axios": "^1.13.1",
+    "dayjs": "^1.11.19",
     "highcharts": "^11.4.8",
     "highcharts-react-official": "^3.2.3",
     "idb-keyval": "^6.2.2",

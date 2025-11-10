@@ -192,7 +192,7 @@ export const dark: ThemeElements = {
     },
     btnBorder: {
         border: 'border-zinc-500',
-        hover_bg: 'hover:bg-zinc-600',
+        hover_bg: 'hover:bg-zinc-500',
         text: 'text-gray-300'
     },
     charts: {

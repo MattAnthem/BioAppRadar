@@ -1,10 +1,10 @@
 import SimpleSelect from '../../../../shared/components/selects/SimpleSelect'
 import ButtonBorder from '../../../../shared/components/buttons/borderedbtn/ButtonBorder'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { formatChartDateParam } from '../../../../shared/utils/date_format';
 import { closeVtipHistPopup, setSelectedVtipHistParameterOption, setVtipHistEndTime, setVtipHistStartTime, toggleVtipHistPopup } from '../../slices/vtipHistChartSlice';
 import type { SelectOption } from '../../../../shared/components/selects/types';
 import OptionPopover from '../../../../shared/components/popups/option/OptionPopover';
+import { useKigaliDate } from '../../../../shared/hooks/dates/useKigaliDate';
 
 type Props = {
     onSubmitPopup?: () => void;
@@ -14,15 +14,19 @@ const VtipHistPopup = ({ onSubmitPopup }:Props) => {
     const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen } = useAppSelector(state => state.vtip_histchart);
     const dispatch = useAppDispatch()
 
+    // Format the input values to locale Kigali
+    const { toInputValue, formatInputValue } = useKigaliDate();
+
     const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const raw = evt.target.value; 
-        const formatted = formatChartDateParam(raw);
+        const formatted = formatInputValue(raw);
+        dispatch(setVtipHistEndTime(formatted));
         dispatch(setVtipHistStartTime(formatted));
     }
     
     const handleEndTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const raw = evt.target.value; 
-        const formatted = formatChartDateParam(raw);
+        const formatted = formatInputValue(raw);
         dispatch(setVtipHistEndTime(formatted));
     }
     
@@ -54,11 +58,31 @@ const VtipHistPopup = ({ onSubmitPopup }:Props) => {
         </div>
 
         <div className="w-full mb-2 flex flex-col">
-        <small>Select start Time</small>
-        <input onChange={handleStartTimeChange} value={vtipStartTime} step={1} className="w-full p-2 mb-2 rounded-sm border" type="datetime-local" name="date" id="start-time" />
-        <small>Select end Time</small>
-        <input min={vtipStartTime} onChange={handleEndTimeChange} value={vtipEndTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
+            <small>Select start Time</small>
+            <input 
+                onChange={handleStartTimeChange} 
+                value={toInputValue(vtipStartTime)} 
+                step={1} 
+                className="w-full p-2 mb-2 rounded-sm border" 
+                type="datetime-local" 
+                name="date" 
+                id="start-time-vtiph" 
+                pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+            />
+            <small>Select end Time</small>
+            <input 
+                min={toInputValue(vtipStartTime)} 
+                onChange={handleEndTimeChange} 
+                value={toInputValue(vtipEndTime)} 
+                step={1} 
+                className="w-full p-2 rounded-sm border" 
+                type="datetime-local" 
+                name="date" 
+                id="end-time-vtiph" 
+                pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+            />
         </div>
+
 
         {/* Display data button */}
         <ButtonBorder

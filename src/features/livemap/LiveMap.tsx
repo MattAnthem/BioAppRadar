@@ -181,7 +181,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         {/* Classification legends */}
         {
             (displayedData === "classification") && (
-                <div className="absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 py-2 right-2 bottom-0">
+                <div className="absolute flex flex-col gap-0.5 z-10 w-1/5 h-10  right-2 bottom-4">
                     
                     {/* Color 0 */}
                     <div className="flex justify-start items-center gap-2 text-xs">

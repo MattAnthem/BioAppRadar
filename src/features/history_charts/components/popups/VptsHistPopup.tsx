@@ -18,6 +18,7 @@ const VptsHistPopup = ({onSubmitPopup}: Props) => {
     const handleStartTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const raw = evt.target.value; 
         const formatted = formatChartDateParam(raw);
+        dispatch(setVptsHistEndTime(formatted));
         dispatch(setVptsHistStartTime(formatted));
     }
     
