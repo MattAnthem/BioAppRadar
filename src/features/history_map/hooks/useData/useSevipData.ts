@@ -1,8 +1,8 @@
 import { useAppSelector } from "../../../../store/hooks";
-import { useSevipDataQuery } from "../../../livemap/hooks/useQuery/useSevipQuery";
+import { useSevipHistDataQuery } from "../useQuery/useSevipHistDataQuery";
 
 export function useSevipData (enabled?: boolean) {
     const payload = useAppSelector(state=> state.historymap.sevipPayloadHist);
-    const query = useSevipDataQuery(payload, enabled);
+    const query = useSevipHistDataQuery(payload, enabled);
     return query;
 }

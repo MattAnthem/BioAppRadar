@@ -2,7 +2,6 @@ import type { ClassificationDataResponse } from '../../api/endpoints/classificat
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import SectionCard from '../../shared/components/cards/SectionCard';
-import FetchError from '../../shared/components/loader/FetchError';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import AltitudeSlider from '../livemap/components/AltitudeSlider';
@@ -17,29 +16,37 @@ import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
 import { setAltitudeForAll, setClassifPayloadHist, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
 import loader from '../../assets/loader.webp';
+import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQuery';
+import { useEffect, useMemo, useState } from 'react';
+import { Unplug } from 'lucide-react';
+import ElevationSlider from './components/ElevationSlider';
 
 const HistoryMap = () => {
+    const [currentElevationIndex, setCurrentElevationIndex] = useState<number>(0);
 
     // Redux call
     // Selected Radar type and Radar Parameter
     const { selectedMapBase, selectedColormap, selectedCoverage } = useAppSelector(state => state.hist_basemap);
     const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
-    const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap)
+    const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
 
+
+    
     //#region  Overlay fetching
     const isRadar = mapModeHist === 'radar';
     const isSevip = mapModeHist === 'sevip';
     const isClassif = mapModeHist === 'classification';
-
+     
+    
     const { data: radarData, isLoading: radarDataLoading, error: radarError } = useRadarData(isRadar);
     const { data: sevipData, isLoading: sevipDataLoading, error: sevipError } = useSevipData(isSevip);
     const { data: classifData, isLoading: classifDataLoading, error: classifError } = useClassifData(isClassif);
     
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
-    let error: unknown = null;
-
+    let error = null;
+    
     switch (true) {
         case isRadar: 
             data = radarData as SpatialDataResponse
@@ -57,22 +64,46 @@ const HistoryMap = () => {
             error = classifError;
             break;
     }
+            
+    //#endregion
+            
+    //#region Fetch default elevations for polar radar mode
+    const { data: defaultElevations } = useElevationsQuery(isRadar && radarPayloadHist.type === 'polar');
+
+    const elevations = useMemo(() => {
+        if (!defaultElevations) return [];
+        return [...defaultElevations].reverse();
+    }, [defaultElevations]);
+
+    useEffect(() => {
+        if (elevations.length > 0) {
+          setCurrentElevationIndex(elevations.length - 1); 
+        }
+    }, [elevations]);
 
     //#endregion
-
-
-    //#region HANDLERS 
-
+      
+    
+    //#region HANDLERS         
     // Change overlay colorbar (Sevip and radar)
     const handleChangeColorbar = (colorname: string) => {
         dispatch(setColorbarForAll(colorname));
 
     }
 
-    // Altitude 
+    // Altitude change for classification and radar grid
     const handleAltitudeChange = (altIndex: number) => {
         dispatch(changeHistAltitude(altIndex));
         dispatch(setAltitudeForAll(altitudeOptions[altIndex]));
+    }
+
+    // Elevation change for polar radar
+    const handleElevationChange = (elevIndex: number) => {
+        setCurrentElevationIndex(elevIndex);
+        const selectedElevation = elevations[elevIndex];
+        dispatch(setRadarPayloadHist({
+            elevation_angle: selectedElevation
+        }));
     }
 
     //#endregion
@@ -95,7 +126,7 @@ const HistoryMap = () => {
         dispatch(setRadarPayloadHist({
             type: selectedType.id as 'grid' | 'polar',
             parameter: selectedParameter.id as string,
-            time: radarTimeHist
+            time: radarTimeHist,
         }))
     }
 
@@ -110,24 +141,22 @@ const HistoryMap = () => {
 
     //#endregion
 
-    if (error) return (
-        <SectionCard className=" w-full h-full col-span-6">
-            <FetchError>
-                <MapbasePopup/>
-                <SevipPopup onSubmitPopup={submitSevipPopupData} />
-                <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
-                <ClassificationPopup onSubmitPopup={submitClassifPopupData} />
-            </FetchError>   
-        </SectionCard>
-    )
 
   return (
     <SectionCard className='relative w-full h-full p-0.5'>
 
+        
+        {
+            (error) && (
+                <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                    <Unplug width={35} height={35} className='text-red-500'/>
+                </div>
+            )
+        }
 
         {
             isLoading && (
-                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                <div className="absolute z-10 w-full h-full flex items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
                 </div>
             )
@@ -167,7 +196,7 @@ const HistoryMap = () => {
         {/* altitude slider */}
         {
             (mapModeHist === 'classification' || (mapModeHist === 'radar' && radarPayloadHist.type === 'grid')) && (
-                <div className="h-full absolute bottom-6 right-2 flex lg:items-center items-start">
+                <div className="h-full absolute bottom-0 right-2 flex pt-10 items-start">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}
@@ -177,6 +206,19 @@ const HistoryMap = () => {
                 </div>
             )
         }
+
+        {/* Elevation angles */}
+        <div className="h-full absolute right-2 bottom-0 flex items-end justify-center py-10">
+            {
+                (mapModeHist === 'radar' && radarPayloadHist.type === 'polar') && (
+                    <ElevationSlider
+                        currentIdx={currentElevationIndex}
+                        elevations={elevations}
+                        handleChange={handleElevationChange}
+                    />
+                )
+            } 
+        </div>
 
 
         {/* Map Time */}
@@ -207,7 +249,7 @@ const HistoryMap = () => {
         {/* Classification legends */}
         {
             (mapModeHist === "classification") && (
-                <div className=" absolute flex flex-col gap-1.5 z-10 w-1/5 h-20 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
+                <div className=" absolute flex flex-col gap-1.5 z-10 lg:w-1/5 h-20 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
                     
                     {/* Color 0 */}
                     <div className="flex justify-start items-center gap-2 text-xs">

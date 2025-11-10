@@ -87,9 +87,14 @@ const historymapSlice = createSlice({
                 (state.radarPayloadHist as RadarGridPayload).height = height;
             }
             state.classifPayloadHist.height = height;
+        },
+        setElevation: (state, action: PayloadAction<number>) => {
+            if (state.mapModeHist === 'radar' && state.radarPayloadHist.type === 'polar') {
+                (state.radarPayloadHist as RadarPolarPayload).elevation_angle = action.payload;
+            }
         }
     }
 });
 
-export const { setMapModeHist, setSevipPayloadHist, setClassifPayloadHist, setRadarPayloadHist, setColorbarForAll, setAltitudeForAll } = historymapSlice.actions;
+export const { setMapModeHist, setSevipPayloadHist, setClassifPayloadHist, setRadarPayloadHist, setColorbarForAll, setAltitudeForAll, setElevation } = historymapSlice.actions;
 export default historymapSlice.reducer;

@@ -10,7 +10,8 @@ type ButtonBorderProps = {
   ariaExpanded?: boolean;
   isDisabled?: boolean;
   ariaHasPopup?: boolean;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  stopPropagation?: boolean;
 }
 
 /**
@@ -19,9 +20,13 @@ type ButtonBorderProps = {
  * @param className  
  * @returns 
  */
-const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled, ariaControls, ariaExpanded, ariaHasPopup }: ButtonBorderProps) => {
+const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled=false, ariaControls, ariaExpanded, ariaHasPopup, stopPropagation=false }: ButtonBorderProps) => {
   const themes = useTheme();
   const { border, hover_bg, text } = themes.theme.btnBorder;
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (stopPropagation) e.stopPropagation(); 
+    if (!isDisabled && onClick) onClick(e);
+  };
   return (
     <button 
       type='button' 
@@ -30,8 +35,8 @@ const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled, ari
       aria-expanded={ariaExpanded}
       aria-haspopup={ariaHasPopup}
       disabled={isDisabled}
-      onClick={!isDisabled ?  onClick : undefined}  
-      className={`${className} ${border} ${hover_bg} ${text} text-sm border rounded-sm focus-visible:outline-2 outline-offset-1 outline-blue-800`}
+      onClick={handleClick}  
+      className={`${className} ${border} ${hover_bg} ${text}  text-sm border-2 rounded-sm focus-visible:outline-2 outline-offset-1 outline-blue-800`}
     >
       { children }
     </button>

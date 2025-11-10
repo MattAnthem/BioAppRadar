@@ -1,8 +1,8 @@
 import { useAppSelector } from "../../../../store/hooks";
-import { useRadarDataQuery } from "../../../livemap/hooks/useQuery/useRadarDataQuery";
+import { useRadarHistDataQuery } from "../useQuery/useRadarHistDataQuery";
 
 export function useRadarData(enabled?: boolean) {
     const payload = useAppSelector(state => state.historymap.radarPayloadHist);
-    const query = useRadarDataQuery(payload, enabled);
+    const query = useRadarHistDataQuery(payload, enabled);
     return query;
 } 

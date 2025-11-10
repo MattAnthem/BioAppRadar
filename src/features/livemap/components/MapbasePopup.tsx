@@ -1,127 +1,100 @@
-import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useClickOutside } from "../../../shared/hooks/useClickOutside";
-import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
-import { useTheme } from "../../../shared/hooks/useTheme";
-import { Map } from "lucide-react";
+import { MapIcon } from "lucide-react";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import Colorbar from "./Colorbar";
 import { setSevipPayload } from "../slice/livemapSlice";
-import { changeBaseMap, changeColormap, hideMapBasePopup, setSelectedCoverageGenre, setSelectedCoverageType, toggleShowMapBasePopup } from "../slice/baseMapPopupSlice";
+import { changeBaseMap, changeColormap } from "../slice/baseMapPopupSlice";
+import OptionPopover from "../../../shared/components/popups/option/OptionPopover";
+import { setSelectedBoundary, setSelectedBoundaryType } from "../../../shared/slice/boundarySlice";
 
 
 
 type BaseMapProps = {
   displayColorbarOption?: boolean;
+  onChangeColormap?: () => void;
 }
-const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
-const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
+const MapbasePopup = ({ displayColorbarOption, onChangeColormap }: BaseMapProps) => {
 
   // redux 
-  const {selectedCoverage, coverageOptions, coverageTypes, selectedCoverageType, isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap } = useAppSelector(state => state.basemappopup);
-  const mapBasepopupRef = useRef<HTMLDivElement | null>(null);
+  const {
+    mapBaseOptions, 
+    colormapOptions, 
+    selectedMapBase, 
+    selectedColormap 
+  } = useAppSelector(state => state.basemappopup);
   const dispatch = useAppDispatch();
   const { boundaryOptions, boundaryTypes, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
   
 
-  // autohide 
-  useClickOutside(mapBasepopupRef, () => {
-    if (isMapBasePopupOpen) {
-      dispatch(hideMapBasePopup())
-    }
-  })
 
-
-  // handlers
+  //#region  handlers
   const handleChangeBase = (option: SelectOption) => {
     dispatch(changeBaseMap(option))
   }
 
   // Coverage
   const handleChangeCoverageGenre = (option: SelectOption) => {
-    dispatch(setSelectedCoverageGenre(option));
+    dispatch(setSelectedBoundary(option));
   }
   const handleChangeCoverageType = (option: SelectOption) => {
-    dispatch(setSelectedCoverageType(option));
+    dispatch(setSelectedBoundaryType(option));
   }
   
   const handleChangeColormap = (option: SelectOption) => {
+    onChangeColormap?.();
     dispatch(changeColormap(option));
     dispatch(setSevipPayload({colorbar: option.id as string}))
   }
+  //#endregion
 
-  // theme
-  const themes = useTheme();
-  const { bg, border, hover, options_bg } = themes.theme.simpleSelect;
+
 
   return (
-    <div ref={mapBasepopupRef} className="relative">
-
-      <Tooltip 
-        position="bottom" 
-        display_condition={!isMapBasePopupOpen}  // is popup open
-        text="Change Base Map"
-      >
-        
-        <button onClick={() => dispatch(toggleShowMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
-            <Map className={iconSize}/>
-        </button>
-
-      </Tooltip>
-
-      {/* Pop-over menu */}
-      <div className={`
-          ${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center  w-90 absolute right-0  top-full p-2  rounded-sm
-          ${isMapBasePopupOpen ? 
-              "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
-          }
-          transition-all duration-75 ease-out
-          origin-top-right
-        `}
-      >
-
-        {/* Select map base */}
-        <small>Base Map</small>
+    <OptionPopover
+      customIcon={<MapIcon className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4"/>}
+      hoverText="Change Base Map"
+    >
+       {/* Select map base */}
+       <small className="font-semibold">Base Map</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
           onSelectValue={handleChangeBase}
           options={mapBaseOptions}
-          width="w-85"
+          width="w-95"
           value={selectedMapBase.displayText}
           className="border-0! bg-none!"
         />
 
 
-        <small>Coverages</small>
+        <small className="font-semibold">Coverages</small>
         <div className="border-b border-b-gray-400"/>
 
         {/* Select coverage Genre */}
         <SimpleSelect
-          onSelectValue={handleChangeCoverageType}
-          options={coverageOptions}
-          width="w-85"
-          value={selectedCoverage.displayText}
+          onSelectValue={handleChangeCoverageGenre}
+          options={boundaryOptions}
+          width="w-95"
+          value={selectedBoundary.displayText}
           className="border-0! bg-none!"
         />
         {/* Select coverage Types */}
         <SimpleSelect
-          onSelectValue={handleChangeCoverageGenre}
-          options={coverageTypes}
-          width="w-85"
-          value={selectedCoverageType.displayText}
+          onSelectValue={handleChangeCoverageType}
+          options={boundaryTypes}
+          width="w-95"
+          value={selectedBoundaryType.displayText}
           className="border-0! bg-none!"
         />
         
 
 
-        {/* Select colormap */}
         {/* Colormap preview */}
         {
           displayColorbarOption && (
             <>
-              <small>Colorbar</small>
+              <small className="font-semibold">Colorbar</small>
               <div className="border-b border-b-gray-400"/>
               <SimpleSelect
                 onSelectValue={handleChangeColormap}
@@ -144,10 +117,7 @@ const MapbasePopup = ({ displayColorbarOption }: BaseMapProps) => {
             </>
           )
         }
-
-      </div>
-
-    </div>
+    </OptionPopover>
   )
 }
 

@@ -1,5 +1,7 @@
 import { formatBigNumber } from '../../../shared/utils/number_format';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
+import radarIcon from '../../../assets/radarIcon.webp';
+
 
 
 type Position = "left" | "right"
@@ -33,7 +35,7 @@ const AltitudeSlider = (
 ) => {
 
     const position_classes: Record<Position, string> = {
-        right: "right-2 lg:bottom-[25%] bottom-[25%]",
+        right: "right-2 lg:bottom-[25%] bottom-0",
         left: "left-2 lg:bottom-[20%] bottom-[25%]"
     }
 
@@ -70,13 +72,18 @@ const AltitudeSlider = (
 
 
         {/* Min altitude */}   
-        <Tooltip
-          position='left'
-          display_condition
-          text='Radar level'
-        >
-          <small className='text-[10px] text-white'>{altitudes[altitudes.length - 1]}</small>
-        </Tooltip>  
+          <div className="flex items-center justify-center gap-0.5">
+            {/* <small className='text-[10px] text-white'>{altitudes[altitudes.length - 1]}</small> */}
+            <Tooltip
+              position='right'
+              text="Radar altitude: 1616m"
+              display_condition={true}
+            >
+
+              <img src={radarIcon} className='w-5 h-5 hover:bg-gray-400 p-0.5 rounded-sm' alt="" />  
+            </Tooltip>
+          </div>
+
       </div>
 
 

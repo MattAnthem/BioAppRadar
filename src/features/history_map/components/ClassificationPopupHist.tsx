@@ -48,7 +48,7 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
 
   const handleSubmit = () => {
     onSubmitPopup?.();
-    dispatch(closeClassifPopup())
+    dispatch(closeClassifPopup());
 }
 
 return (
@@ -92,7 +92,7 @@ return (
         onClick={handleSubmit}
         className='py-2 mt-2'
       >
-        Display data
+        Display Data
       </ButtonBorder>
 
   </OptionPopover>
