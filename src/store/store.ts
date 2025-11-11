@@ -26,6 +26,7 @@ import vpHistChartReducer from '../features/history_charts/slices/vpHistChartSli
 import vptsHistChartReducer from '../features/history_charts/slices/vptsHistChartSlice';
 import vtipHistChartReducer from '../features/history_charts/slices/vtipHistChartSlice';
 import boundaryReducer from "../shared/slice/boundarySlice";
+import basemapvcrossReducer from '../features/vcross_map/slice/vcrossMapbaseSlice';
 
 
 export const store = configureStore({
@@ -53,6 +54,9 @@ export const store = configureStore({
         vtip_histchart: vtipHistChartReducer,
 
         boundary: boundaryReducer,
+
+        // vcross
+        vcross_basemap: basemapvcrossReducer,
 
 
         // Refactor

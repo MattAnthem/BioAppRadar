@@ -5,7 +5,6 @@ import ClassificationPopup from './components/ClassificationPopup';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setClassificationPayload, setSelectedTime } from './slice/livemapSlice';
-import FetchError from '../../shared/components/loader/FetchError';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
@@ -16,6 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import loader from '../../assets/loader.webp';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
+import { Unplug } from 'lucide-react';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -106,19 +106,16 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
 
 
 
-    if (error || coverageError) return (
-        <SectionCard className="relative w-full h-full">
-            <FetchError>
-                <MapbasePopup/>
-                <ClassificationPopup onSubmitPopup={handleSubmitPopupData}/>
-            </FetchError>   
-        </SectionCard>
-    )
-
-
   return (
     <SectionCard className='relative w-full h-full p-0.5'>
 
+        {
+            (error || coverageError) && (
+                <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                    <Unplug width={35} height={35} className='text-red-500'/>
+                </div>
+            )
+        }
         
         {
             (isPreloading) && (

@@ -4,20 +4,22 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
 import VcrossBioClsDataPopup from './components/VcrossBioClsDataPopup'
 import VcrossRadarDataPopup from './components/VcrossRadarDataPopup'
-import { setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload } from './slice/vcrossMapSlice'
-import type { SelectOption } from '../../shared/components/selects/types'
-import MapbasePopup from '../livemap/components/MapbasePopup'
+import { changeVcrossRadarColorbar, setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload } from './slice/vcrossMapSlice'
+import type { SelectOption } from '../../shared/components/selects/types';
 import { useEffect, useRef } from 'react'
-import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData'
-import DataLoading from '../../shared/components/loader/DataLoading'
-import FetchError from '../../shared/components/loader/FetchError'
+import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
 import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData'
 import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI'
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI'
+import { Unplug } from 'lucide-react';
+import loader from '../../assets/loader.webp';
+import MapbaseVcrossPopup from './components/MapbaseVcrossPopup'
+import Colorbar from '../livemap/components/Colorbar'
+import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery'
 
 const Vcrossmap = () => {
 
-    const { selectedMapBase } = useAppSelector(state => state.basemappopup);
+    const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
     const { mapMode } = useAppSelector(state => state.vcrossmap)
     const dispatch = useAppDispatch();
 
@@ -26,6 +28,12 @@ const Vcrossmap = () => {
     useEffect(() => {
         mapModeRef.current = mapMode;
     }, [mapMode]);
+
+    // Map boundary GeoJson
+    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
+            type: selectedBoundary.id as string,
+            json: selectedBoundaryType.id as string
+    })
 
     //#region Overlay FETCHING
     // Fetching overlay for the map
@@ -37,7 +45,7 @@ const Vcrossmap = () => {
 
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
-    let error: unknown = null;
+    let error = null;
 
     switch (true) {
         case isBioclass: 
@@ -55,6 +63,12 @@ const Vcrossmap = () => {
     //#endregion
 
     //#region HANDLERS 
+
+    // Change overlay colorbar (Sevip and radar)
+    const handleChangeColorbar = (colorname: string) => {
+            dispatch(changeVcrossRadarColorbar(colorname));
+    }
+
     // Handling BIOCLASS/RADAR Payload elements
     // coordinates
     const handleTransectLineDrawn = (start: L.LatLng, end: L.LatLng) => {
@@ -119,25 +133,37 @@ const Vcrossmap = () => {
     }
 //#endregion
 
-    if (isLoading) return (
-        <div className="relative w-full h-full col-span-6">
-            <DataLoading>
-                <MapbasePopup/>
-            </DataLoading>
-        </div>
-    )
 
-    if (error) return (
-        <SectionCard className="relative w-full h-full col-span-6">
-            <FetchError>
-                <MapbasePopup/>
-            </FetchError>   
-        </SectionCard>
-    )
 
 
   return (
-    <SectionCard className='w-full h-full'>
+    <SectionCard className='relative w-full h-full p-0.5'>
+
+            {
+                (error || coverageError ) && (
+                    <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                        <Unplug width={35} height={35} className='text-red-500'/>
+                    </div>
+                )
+            }
+
+            {
+                isLoading && (
+                    <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                        <img src={loader} alt="loading-data" width={35} height={35}  />
+                    </div>
+                )
+            }
+
+            {
+                ( coverageLoading ) && (
+                    <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
+                        <img src={loader} alt="loading-data" width={35} height={35}  />
+                        <p className='text-gray-700'>Loading coverage</p>
+                    </div>
+                )
+            }
+
       
             {/* Header: Options */}
             <GlassHeader
@@ -147,14 +173,27 @@ const Vcrossmap = () => {
                 <h3 className='text-white tracking-wider text-sm'>{data?.info.name} {data?.info.time}</h3>
 
                 {/* Data popover Options */}
-                <div className="z-5 flex gap-3 justify-center items-end">
-                    <MapbasePopup/>
-
+                <div className="z-5 flex gap-2 justify-center items-end">
+                    <MapbaseVcrossPopup 
+                        onChangeOverlayColor={handleChangeColorbar}
+                        displayColorbarOption= {mapMode == 'vcross_radar'}
+                    />
                     <VcrossRadarDataPopup onChangeVcrossRadarType={handleChangeVcrossRadarType} onChangeVcrossRadarParam={handleChangeVcrossRadarParam} onChangeVcrossRadarTime={handleChangeVcrossRadarTime}/>
                     <VcrossBioClsDataPopup onChangeBioclass={handleChangeVcrossBioclass} onChangeBioclassTime={handleChangeVcrossBioclassTime}/>
                 </div>
 
             </GlassHeader>
+
+            {/* Colorbar */}
+            {
+                (mapMode !== 'vcross_bioclass') && (
+                    <Colorbar
+                        colorCodes={(data as SpatialDataResponse)?.ckeys?.colors ?? []}
+                        valueScale={(data as SpatialDataResponse)?.ckeys?.labels.map(Number)  ?? []}
+                        className='absolute bottom-0 left-0 z-10'
+                    />
+                )
+            }
 
 
             {/* Cross section Map */}
@@ -172,7 +211,10 @@ const Vcrossmap = () => {
                         bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
                     }
                 }
-                // overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
+                overlayShapes={coverageJson}
+                onShapeClicked={(geojson) => {
+                    console.log('Clicked shape:', geojson);
+                }}
             />
 
     </SectionCard>

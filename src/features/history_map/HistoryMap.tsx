@@ -27,7 +27,7 @@ const HistoryMap = () => {
 
     // Redux call
     // Selected Radar type and Radar Parameter
-    const { selectedMapBase, selectedColormap, selectedCoverage, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
+    const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
     const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
     const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
@@ -96,7 +96,6 @@ const HistoryMap = () => {
     // Change overlay colorbar (Sevip and radar)
     const handleChangeColorbar = (colorname: string) => {
         dispatch(setColorbarForAll(colorname));
-
     }
 
     // Altitude change for classification and radar grid

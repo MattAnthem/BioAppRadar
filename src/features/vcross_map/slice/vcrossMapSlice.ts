@@ -96,9 +96,12 @@ const vcrossMapSlice = createSlice({
                     ...(incoming as Partial<RadarPolarPayload>)
                 }
             }
+        },
+        changeVcrossRadarColorbar: (state, action: PayloadAction<string>) => {
+            state.vcrossRadarOvrlayPayload.colorbar = action.payload
         }
     }
 });
 
-export const { setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossRadarPayload, setVcrossCoordinates, setMapMode, setOverlayRadarPayload } = vcrossMapSlice.actions;
+export const { setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossRadarPayload, setVcrossCoordinates, setMapMode, setOverlayRadarPayload, changeVcrossRadarColorbar } = vcrossMapSlice.actions;
 export default vcrossMapSlice.reducer;

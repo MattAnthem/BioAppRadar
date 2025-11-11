@@ -3,7 +3,7 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import { colormapOptions, mapbaseOptions } from "../../livemap/slice/baseMapPopupSlice";
 
 
-const boundarieOptionsHist: SelectOption[] = [
+export const boundarieOptionsHist: SelectOption[] = [
     {
         id: 'administrative',
         displayText: 'Administrative Boundaries',
