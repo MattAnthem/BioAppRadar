@@ -1,8 +1,6 @@
 import { useState } from "react";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
-import DataLoading from "../../shared/components/loader/DataLoading";
-import FetchError from "../../shared/components/loader/FetchError";
 import { useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
 import ChartModal from "../history_charts/components/ChartModal";
@@ -32,16 +30,6 @@ const VtipChart = ({ className }: VtipChartProps) => {
   const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, displayMode === 'png');
 
 
-  if (isLoading) return (
-    <div className={`${className} p-1`}>
-      <DataLoading />
-    </div> 
-  )
-  if (error) return (
-    <div className={`${className} p-1`}>
-      <FetchError />
-    </div> 
-  )
 
   // handler to open the modal
   const handleOpenModal = () => {
@@ -54,7 +42,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
 
 
   return (
-    <SectionCard className={`${className} p-1`}>
+    <SectionCard className={`${className} w-full h-full flex flex-col`}>
 
           {/* Modal chart */}
           <ChartModal
@@ -130,8 +118,8 @@ const VtipChart = ({ className }: VtipChartProps) => {
       
 
           {/* Heading */}
-          <div className="px-1 w-full flex items-center justify-between">
-              <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
+          <div className="p-1 w-full flex items-center justify-between">
+              <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
 
                 {/* Open the modal */}
                 <Tooltip 
@@ -148,7 +136,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
           </div>
 
           {/* Chart */}
-          <div className="flex-1 w-full h-full items-center justify-center ">
+          <div className="h-full grid">
             {
               data && (
                 <HighchartVtip
@@ -156,6 +144,19 @@ const VtipChart = ({ className }: VtipChartProps) => {
                 />
               )
             }
+            {
+              isLoading && (
+                  <div className="w-full h-full flex items-center justify-center">
+                      <img src={loader} alt="loading-vphist" width={35} height={35}  />
+                  </div>
+            )
+            }
+            {         
+              error && (
+                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                  <Unplug width={60} height={60} className='text-red-500'/>
+                </div> 
+            )}
           </div>
 
     </SectionCard>

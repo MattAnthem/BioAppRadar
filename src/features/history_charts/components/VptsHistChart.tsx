@@ -1,7 +1,5 @@
 import { useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
-import DataLoading from "../../../shared/components/loader/DataLoading";
-import FetchError from "../../../shared/components/loader/FetchError";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { changeVptsHistPayload } from "../slices/vptsHistChartSlice";
@@ -51,16 +49,6 @@ const VptsHistChart = ({className}: VptsChartProps) => {
       ))
     }
 
-  if (isLoading) return (
-    <div className={`${className}  p-1`}>
-      <DataLoading />
-    </div> 
-  )
-  if (error) return (
-    <div className={`${className}  p-1`}>
-      <FetchError />
-    </div> 
-  )
 
   // handler to open the modal
   const handleOpenModal = () => {
@@ -72,13 +60,13 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   }
 
   return (
-    <SectionCard className={`${className} p-1`}>
+    <SectionCard className={`${className} w-full h-full flex flex-col`}>
 
 
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${selectedParameter.displayText} Chart`}
+              modalTitle={`${data?.name} chart`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
@@ -132,14 +120,13 @@ const VptsHistChart = ({className}: VptsChartProps) => {
                       </div>
                   )
             }
-			{
+			      {
                 (displayMode === 'interactive' && data) && (
                   <div className="flex w-full h-full justify-center items-center">
                       <VptsHeatmapChart 
                         data={data} 
                         title
                         legend
-                        chartHeight={500}
                       />
                   </div>
                 )
@@ -149,7 +136,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs font-semibold'>{data?.name} ({data?.units})</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'}) `}</h3>
             
             <div className="flex gap-2">
               
@@ -171,12 +158,25 @@ const VptsHistChart = ({className}: VptsChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="flex w-full h-full items-center justify-center">
+        <div className="h-full grid">
           {
             data && (
               <VptsHeatmapChart data={data}/>
             )
           }
+          {
+            isLoading && (
+                <div className="w-full h-full flex items-center justify-center">
+                    <img src={loader} alt="loading-vphist" width={35} height={35}  />
+                </div>
+            )
+          }
+          {         
+            error && (
+              <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                <Unplug width={60} height={60} className='text-red-500'/>
+              </div> 
+          )}
         </div>
 
     </SectionCard>

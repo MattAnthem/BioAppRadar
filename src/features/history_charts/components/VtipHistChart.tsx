@@ -1,7 +1,5 @@
 import { useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
-import DataLoading from "../../../shared/components/loader/DataLoading";
-import FetchError from "../../../shared/components/loader/FetchError";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { changeVtipHistPayload } from "../slices/vtipHistChartSlice";
 import ChartModal from "./ChartModal";
@@ -39,8 +37,6 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
   //#endregion
 
 
-
-
   // Submit Vtip Popup data
   const submitVtipPopup = () => {
       dispatch(changeVtipHistPayload(
@@ -52,43 +48,25 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
       ))
   }
 
+  // Chart modal handler
 
-
-  if (isLoading) return (
-    <div className={`${className} p-1`}>
-      <DataLoading />
-    </div> 
-  )
-  if (error) return (
-    <div className={`${className} p-1 h-full`}>
-      <FetchError>
-        <VtipHistPopup onSubmitPopup={submitVtipPopup}/>
-
-      </FetchError>
-    </div> 
-  )
-
-
-    // Chart modal handler
-
-    const handleOpenModal = () => {
+  const handleOpenModal = () => {
       setIsModalOpen(true);
-    }
+  }
 
-    const handleDisplayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDisplayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setDisplayMode(e.target.value as 'png' | 'interactive');
-    }
+  }
   
 
   return (
-    <SectionCard className={`${className} p-1 `}>
-
+    <SectionCard className={`${className} w-full h-full flex flex-col`}>
 
 
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${selectedParameter.displayText} Chart`}
+              modalTitle={`${data?.name} chart`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
               {/* Handle display mode */}
@@ -148,7 +126,6 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
                     <HighchartVtip
                       data={data}
                       displayTitle
-                      chartHeight={500}
                     />
                   </div>
                 )
@@ -159,7 +136,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
       
           {/* Heading */}
           <div className="p-1 w-full flex items-center justify-between">
-              <h3 className='tracking-wider text-xs font-semibold'>{data?.name} ({data?.units})</h3>
+              <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
 
 
               <div className="flex gap-2">
@@ -183,7 +160,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
           </div>
 
           {/* Chart */}
-          <div className="flex w-full h-full items-center justify-center">
+          <div className="h-full grid">
             {
               data && (
                 <HighchartVtip
@@ -191,6 +168,19 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
                 />
               )
             }
+            {
+            isLoading && (
+                <div className="w-full h-full flex items-center justify-center">
+                    <img src={loader} alt="loading-vphist" width={35} height={35}  />
+                </div>
+            )
+            }
+            {         
+              error && (
+                <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                  <Unplug width={60} height={60} className='text-red-500'/>
+                </div> 
+            )}
           </div>
 
     </SectionCard>

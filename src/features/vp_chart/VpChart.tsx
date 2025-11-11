@@ -34,24 +34,27 @@ const VpChart = ({ className }: VpChartProps) => {
   }
 
   return (
-    <SectionCard className={`${className} h-full flex flex-col`}>
+    <SectionCard className={`${className} w-full h-full flex flex-col`}>
 
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${selectedParameter.displayText} Chart`}
+              modalTitle={`${data?.name} chart`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
 
               {data && (
-
-                  <VpChartHighcharts
-                    data={data}
-                    displayTitle
-                    chartHeight={500}
-                    selectedHeight={currentHeight}
-                  />
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="lg:w-1/2 w-full h-full">
+                    <VpChartHighcharts
+                      data={data}
+                      displayTitle
+                      chartHeight={500}
+                      selectedHeight={currentHeight}
+                    />
+                  </div>
+                </div>
 
               )}
               {
@@ -73,7 +76,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs'>{selectedParameter.displayText} ({data?.units})</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{selectedParameter.displayText} ({data?.units})</h3>
 
             {/* Open the modal */}
             <Tooltip 
@@ -89,7 +92,7 @@ const VpChart = ({ className }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="flex-1 w-full min-h-0 overflow-hidden">
+        <div className="h-full grid">
           {data && (
 
                 <VpChartHighcharts
@@ -100,8 +103,8 @@ const VpChart = ({ className }: VpChartProps) => {
             )}
             {
                 isLoading && (
-                    <div className="absolute z-30 w-full h-full flex items-center justify-center">
-                        <img src={loader} alt="loading-data" width={35} height={35}  />
+                    <div className="w-full h-full flex items-center justify-center">
+                        <img src={loader} alt="loading-vphist" width={35} height={35}  />
                     </div>
                 )
             }

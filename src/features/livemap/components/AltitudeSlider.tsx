@@ -35,12 +35,12 @@ const AltitudeSlider = (
 ) => {
 
     const position_classes: Record<Position, string> = {
-        right: "right-2 lg:bottom-[25%] bottom-0",
+        right: " bottom-0",
         left: "left-2 lg:bottom-[20%] bottom-[25%]"
     }
 
   return (
-    <div className={`${position_classes[position]} ${className}  z-10  border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 max-h-[80vh] lg:h-[full] h-[37vh]  rounded-sm  flex justify-center items-center`}>
+    <div className={`${position_classes[position]} ${className}  z-10 border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
       
 
       {/* Altitude band */}

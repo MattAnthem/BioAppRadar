@@ -102,13 +102,12 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
     const queryClient = useQueryClient();
     const cachedFrame = queryClient.getQueryData<SpatialDataResponse>(queryKey);
     
-    const data = cachedFrame ?? classifData
-
+    const data = cachedFrame ?? classifData;
 
 
 
     if (error || coverageError) return (
-        <SectionCard className="relative w-full h-full col-span-6">
+        <SectionCard className="relative w-full h-full">
             <FetchError>
                 <MapbasePopup/>
                 <ClassificationPopup onSubmitPopup={handleSubmitPopupData}/>
@@ -180,7 +179,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         {/* Altitude slider */}
         {
             (displayedData === "classification" || radarPayload.type === 'grid') && (
-                <div className="h-full absolute bottom-4.5 right-2 flex lg:items-center items-start">
+                <div className="lg:h-full h-[70%] absolute lg:bottom-0 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}
@@ -203,19 +202,19 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         {/* Classification legends */}
         {
             (displayedData === "classification") && (
-                <div className="absolute flex flex-col gap-0.5 z-10 w-1/5 h-10  right-2 bottom-4">
+                <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/12 h-10  right-4 lg:bottom-4 bottom-1">
                     
                     {/* Color 0 */}
-                    <div className="flex justify-start items-center gap-2 text-xs">
-                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
+                    <div className="flex justify-start items-center gap-0.5 text-xs">
+                        <div className='lg:w-4 lg:h-4 xl:w-4 xl:h-4 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
                         <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
                     </div>
                     {/* Color 1 */}
                     <div className="flex justify-start items-center gap-2 text-xs">
-                        <div className='w-8 h-4 rounded-sm border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
+                        <div className='lg:w-4 lg:h-4 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
                         <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
                     </div>
-                    <div className="text-xs">
+                    <div className="lg:text-xs text-[10px]">
                         <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
                     </div>
                 </div>

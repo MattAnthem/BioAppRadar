@@ -12,7 +12,7 @@ interface VpChartHighchartsProps {
   radarAltitude?: number;      
   selectedHeight?: number;
   displayTitle?: boolean;   
-  chartHeight?: number; 
+  chartHeight?: number | string;
 }
 
 const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
@@ -34,10 +34,12 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
     return {
       chart: {
         inverted: true,
+        reflow: true,
         backgroundColor: 'transparent',
-        height: chartHeight || 365,
+        height: chartHeight ?? null,
         events: {
           load: function () {
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
             const chart = this;
             const yPos = chart.plotLeft;
             const xPix = chart.xAxis[0].toPixels(radarAltitude);
@@ -45,8 +47,8 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
             const arrowHalfHeight = 6;
             const offset = 16;
 
-            // Dessin de la flèche radar altitude
-            const arrowPath = [
+            
+            const arrowPath: (string | number)[] = [
               'M', yPos - offset, xPix - arrowHalfHeight,
               'L', yPos - offset + arrowLength, xPix,
               'L', yPos - offset, xPix + arrowHalfHeight,
@@ -189,14 +191,13 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
   }, [selectedHeight, radarAltitude]);
 
   return (
-    <div className="h-full w-full">
+
       <HighchartsReact
         highcharts={Highcharts}
         options={getChartOptions()}
         ref={chartRef}
-        containerProps={{ style: { width: '100%', height: '100%' } }}
+        containerProps={{ style: { width: '100%'} }}
       />
-    </div>
   );
 };
 

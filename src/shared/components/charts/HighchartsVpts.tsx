@@ -30,7 +30,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
 }) => {
     const chartRef = useRef<HighchartsReact.RefObject>(null);
     const { theme } = useTheme();
-    const { chartFontColor } = theme;
+    const { chartFontColor, chartLegendColor } = theme;
 
 
     const seriesData = useMemo(() => {
@@ -193,12 +193,12 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
             chart: {
                 plotBorderWidth: 0,
                 backgroundColor:'transparent',
-                height:chartHeight || 200,
+                reflow: true,
                 style:{fontFamily:'Inter, sans-serif',color:chartFontColor,fontSize:'14px'},
                 events:{load(){drawDayNightBar(this as DayNightChart);}, render(){drawDayNightBar(this as DayNightChart);}},
                 zooming:{type:'x'}
             },
-            title:{text:title?`${data.name} [${data.units}]`:undefined, style:{color:chartFontColor,fontSize:'12px'}},
+            title:{text:title?`${data.name} [${data.units}]`:undefined, style:{color:chartLegendColor,fontSize:'12px'}},
             xAxis:{
                 type:'datetime', 
                 tickLength:13, 
@@ -288,9 +288,12 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
 
         chartRef.current?.chart.update(options,true,true);
 
-    },[data, radarAltitude, legend, title, seriesData, colorPalette, chartFontColor, chartHeight]);
+    },[data, radarAltitude, legend, title, seriesData, colorPalette, chartFontColor, chartHeight, chartLegendColor]);
 
-    return <HighchartsReact containerProps={{style:{width:'100%',height:'100%'}}} highcharts={Highcharts} options={{}} ref={chartRef} />;
+    return (
+
+            <HighchartsReact containerProps={{style:{width:'100%'}}} highcharts={Highcharts} options={{}} ref={chartRef} />
+    );
 };
 
 export default VptsHeatmapChart;

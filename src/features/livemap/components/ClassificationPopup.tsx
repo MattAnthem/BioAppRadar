@@ -17,6 +17,7 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
 
     const { availableVariables, selectedVariable, color_0, color_1, isPopupOpen } = useAppSelector(state=> state.classificationpopup);
 
+
     const dispatch = useAppDispatch();
 
 
@@ -50,7 +51,7 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
         onClose={() => dispatch(closeClassifPopup())}
         onOpen={() => dispatch(toggleClassifPopup())}
     >
-        <small>Select a variable</small>
+        <small className='font-semibold'>Select a variable</small>
         <div className="border-b border-b-gray-400"/>
 
         <SimpleSelect

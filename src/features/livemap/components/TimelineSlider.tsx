@@ -67,8 +67,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
            {/* Timestamp indicator */}
            {currentFrame ? (
-              <div className="">
-                <h2 className=" text-gray-50  tracking-wide">
+              <div className="lg:flex lg:flex-col hidden">
+                <h2 className=" text-gray-50 tracking-wide">
                   {currentFrame.split(" ")[0]}
                 </h2>
                 <small className="text-normal text-gray-200 tracking-wide">
@@ -88,7 +88,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
             {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}
           </button>
           {/* Frame jump btns + speed*/}
-          <div className="flex items-center justify-center bg-gray-800 rounded-sm">
+          <div className="lg:flex hidden items-center justify-center bg-gray-800 rounded-sm">
             {/* Back to one past frame */}
             <Tooltip
               position="top"

@@ -2,7 +2,7 @@ import  { type ReactNode } from 'react';
 
 type LayoutProps = {
     className?: string;
-    children: ReactNode;
+    children?: ReactNode;
 }
 
 /**
@@ -13,7 +13,7 @@ type LayoutProps = {
  */
 const MainLayout = ({ className, children }: LayoutProps) => {
   return (
-    <div className={`${className} w-full min-h-screen px-4 py-10  overflow-y-auto overflow-x-hidden`}>
+    <div className={`${className} w-full h-screen min-h-screen px-4 pt-10  overflow-y-auto overflow-x-hidden`}>
       {children}
     </div>
   )

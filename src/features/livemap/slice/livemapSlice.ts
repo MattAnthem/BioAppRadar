@@ -55,7 +55,7 @@ const initialState: LivemapState = {
         time: '2020-11-10 12:00:33',
     },
     classificationPayload: {
-        class: 'biometeo',
+        class: 'species',
         color_0: '#dc3545',
         color_1: '#0d6efd',
         height: 0,

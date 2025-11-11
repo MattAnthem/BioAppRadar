@@ -20,13 +20,11 @@ interface DayNightChart extends Highcharts.Chart {
 interface VtipChartProps {
   data: VtipResponse;
   displayTitle?: boolean;
-  chartHeight?: number;
 }
 
 const HighchartVtip: React.FC<VtipChartProps> = ({
   data,
   displayTitle = false,
-  chartHeight = 200,
 }) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const { theme } = useTheme();
@@ -88,7 +86,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
         zoomType: "x",
         plotBorderWidth: 0,
         backgroundColor: "transparent",
-        height: chartHeight || 200,
+        reflow: true,
         events: {
           load: function () {
             drawDayNightBar(this as DayNightChart, data);
@@ -144,7 +142,10 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
         min: pmin,
         max: ymax,
         title: {
-          text: null,
+          text: `${data.name} (${data.units})`,
+          style: {
+            fontSize: "11px"
+          }
         },
         labels: {
           style: { color: chartFontColor, fontSize: "11px" },
@@ -205,23 +206,23 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
       legend: { enabled: false },
       credits: { enabled: false },
     };
-  }, [data, displayTitle, chartHeight, chartFontColor, chartGridline, chartLegendColor]);
+  }, [data, displayTitle, chartFontColor, chartGridline, chartLegendColor]);
 
   return (
-    <div className="w-full h-full">
+
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
         ref={chartRef}
-        containerProps={{ style: { width: "100%", height: "100%" } }}
+        containerProps={{ style: { width: "100%" } }}
       />
-    </div>
+
   );
 };
 
 export default HighchartVtip;
 
-// --- Jour/Nuit ---
+// 
 function drawDayNightBar(chart: DayNightChart, json: VtipResponse) {
   if (!chart || !json?.times?.length) return
   const times = json.times.map((t) => Date.parse(t.replace(" ", "T") + "Z"));

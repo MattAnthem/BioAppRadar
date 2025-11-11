@@ -51,20 +51,25 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
           {/* Modal chart */}
           <ChartModal
+
               isModalOpen={isModalOpen}
-              modalTitle={`${selectedParameter.displayText} Chart`}
+              modalTitle={`${data?.name} chart`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
 
               {data && (
 
-                  <VpChartHighcharts
-                    data={data}
-                    displayTitle
-                    chartHeight={500}
-                    selectedHeight={currentHeight}
-                  />
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="lg:w-1/2 w-full h-full">
+                        <VpChartHighcharts
+                          data={data}
+                          displayTitle
+                          selectedHeight={currentHeight}
+                          chartHeight={500}
+                        />
+                    </div>
+                  </div>
 
               )}
               {
@@ -87,7 +92,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs font-semibold'>{data?.name} ({data?.units})</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
             
             <div className="flex justify-center">
               {/* controls */}
@@ -110,7 +115,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="flex-1 w-full min-h-0 overflow-hidden">
+        <div className="h-full grid">
         {data && (
 
           <VpChartHighcharts
@@ -119,11 +124,10 @@ const VpHistChart = ({ className }: VpChartProps) => {
           />
 
         )}
-
         {
             isLoading && (
-                <div className="absolute z-40 w-full h-full flex items-center justify-center">
-                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                <div className="w-full h-full flex items-center justify-center">
+                    <img src={loader} alt="loading-vphist" width={35} height={35}  />
                 </div>
             )
         }
@@ -133,7 +137,6 @@ const VpHistChart = ({ className }: VpChartProps) => {
               <Unplug width={60} height={60} className='text-red-500'/>
             </div> 
         )}
-
         </div>
 
     </SectionCard>
