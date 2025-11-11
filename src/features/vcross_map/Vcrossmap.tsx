@@ -170,7 +170,7 @@ const Vcrossmap = () => {
               className='z-20 p-1 flex justify-between items-center'
             >
 
-                <h3 className='text-white tracking-wider text-sm'>{data?.info.name} {data?.info.time}</h3>
+                <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
 
                 {/* Data popover Options */}
                 <div className="z-5 flex gap-2 justify-center items-end">
@@ -216,6 +216,13 @@ const Vcrossmap = () => {
                     console.log('Clicked shape:', geojson);
                 }}
             />
+
+            {/* Map Time */}
+            <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${mapMode === 'vcross_bioclass' ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+
+                <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
+
+            </div>
 
     </SectionCard>
   )

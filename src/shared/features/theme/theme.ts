@@ -163,7 +163,7 @@ export const dark: ThemeElements = {
     simpleSelect: {
         bg: 'bg-zinc-700',
         border: 'border-zinc-500',
-        hover: 'hover:bg-zinc-600',
+        hover: 'hover:bg-zinc-500',
         text: 'text-zinc-300',
         icon_color: 'text-zinc-400',
         shadow: 'shadow-zinc-900',

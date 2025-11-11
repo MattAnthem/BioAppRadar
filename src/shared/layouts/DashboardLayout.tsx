@@ -15,7 +15,7 @@ const DashboardLayout = ({ map, vpChart, vptsChart, vtipChart }: DahsLayoutProps
       <div 
         className={`
           lg:h-full lg:w-full
-          lg:px-4 py-2 
+          lg:px-4 lg:py-8 py-4
           flex flex-col  
           lg:grid lg:grid-rows-[4fr_2fr] gap-2  
         `}

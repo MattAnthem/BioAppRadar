@@ -37,6 +37,7 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
 
     return {
       chart: {
+        reflow: true,
         type: 'heatmap',
         zoomType: 'x',
         // backgroundColor: 'transparent',
@@ -96,13 +97,11 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
   }, [data, chartFontColor, chartGridline]);
 
   return (
-    <div className="w-full h-full">
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
-        containerProps={{ style: { width: '100%', height: '100%' } }}
+        containerProps={{ style: { width: '100%' } }}
       />
-    </div>
   );
 };
 

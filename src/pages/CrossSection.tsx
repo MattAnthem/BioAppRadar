@@ -8,25 +8,46 @@ const CrossSection = () => {
 
 
   return (
-    <MainLayout className='w-full h-full'>
+    <MainLayout className='h-full min-h-screen'>
         
-        <div className="xl:grid flex flex-col xl:grid-cols-9 px-4 lg:px-8 xl:px-10 py-2 grid-cols-1 lg:h-[80vh] h-full w-full gap-2">
 
-          <div className="lg:col-span-5 h-[50vh] lg:h-full">
+        <div 
+            className={`
+              w-full h-full
+              lg:px-4 lg:py-8 py-4
+              flex flex-col
+              lg:grid lg:grid-cols-4
+              gap-2
+            `}
+          >
 
-            {/* Vcross Map */}
-            <Vcrossmap/>
+
+              <div className={`
+                  w-full h-full
+                  lg:col-span-2 col-span-1
+                `}
+              >
+
+                <SectionCard className='w-full h-full'>
+                    <Vcrossmap/>
+                </SectionCard>
+
+              </div>
+
+              <div className={`
+                  w-full h-full
+                  lg:col-span-2 col-span-1
+                `}
+              >
+
+                <SectionCard className='w-full h-full flex items-center justify-center p-1'>
+                    <VcrossHeatmap/>
+                </SectionCard>
+
+              </div>
+
 
           </div>
-
-
-          {/* Generated cross section */}
-          <SectionCard className='col-span-4 w-full h-full p-1 flex justify-center items-center'>
-            <VcrossHeatmap/>
-          </SectionCard>
-
-        </div>
-
         
 
 
