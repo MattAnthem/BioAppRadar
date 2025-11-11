@@ -6,7 +6,7 @@ import { useTheme } from "../../../shared/hooks/useTheme";
 import { Map } from "lucide-react";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { changeHistBaseMap, changeHistColormap, changeHistCoverage, hideHistMapBasePopup, toggleShowHistMapBasePopup } from "../slice/histBaseMapPopupSlice";
+import { changeHistBaseMap, changeHistColormap, hideHistMapBasePopup, setSelectedBoundaryHist, setSelectedBoundaryTypeHist, toggleShowHistMapBasePopup } from "../slice/histBaseMapPopupSlice";
 import Colorbar from "../../livemap/components/Colorbar";
 
 
@@ -19,7 +19,7 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: BaseMapProps) => {
 
   // redux 
-  const { isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap, coverageOptions, selectedCoverage } = useAppSelector(state => state.hist_basemap);
+  const { isMapBasePopupOpen, mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap, selectedBoundary, boundaryTypes, selectedBoundaryType, boundaryOptions } = useAppSelector(state => state.hist_basemap);
  
   const mapBasepopupRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useAppDispatch();
@@ -32,15 +32,20 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
     }
   })
 
+    // Coverage
+    const handleChangeCoverageGenre = (option: SelectOption) => {
+      dispatch(setSelectedBoundaryHist(option));
+    }
+    const handleChangeCoverageType = (option: SelectOption) => {
+      dispatch(setSelectedBoundaryTypeHist(option));
+    }
 
   // handlers
   const handleChangeBase = (option: SelectOption) => {
     dispatch(changeHistBaseMap(option))
   }
 
-  const handleChangeCoverage = (option: SelectOption) => {
-    dispatch(changeHistCoverage(option.id));
-  }
+
   
   const handleChangeColormap = (option: SelectOption) => {
     dispatch(changeHistColormap(option));
@@ -56,7 +61,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
 
       <Tooltip 
         position="bottom" 
-        display_condition={!isMapBasePopupOpen}  // is popup open
+        display_condition={!isMapBasePopupOpen}  
         text="Change Base Map"
       >
         
@@ -78,7 +83,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
       >
 
         {/* Select map base */}
-        <small>Base Map</small>
+        <small className="font-semibold">Base Map</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
           onSelectValue={handleChangeBase}
@@ -89,15 +94,24 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
         />
 
 
-        <small>Coverages</small>
+        <small className="font-semibold">Coverages</small>
         <div className="border-b border-b-gray-400"/>
 
         {/* Select coverage */}
+        {/* Select coverage Genre */}
         <SimpleSelect
-          onSelectValue={handleChangeCoverage}
-          options={coverageOptions}
+          onSelectValue={handleChangeCoverageGenre}
+          options={boundaryOptions}
           width="w-85"
-          value={selectedCoverage.displayText}
+          value={selectedBoundary.displayText}
+          className="border-0! bg-none!"
+        />
+        {/* Select coverage Types */}
+        <SimpleSelect
+          onSelectValue={handleChangeCoverageType}
+          options={boundaryTypes}
+          width="w-85"
+          value={selectedBoundaryType.displayText}
           className="border-0! bg-none!"
         />
 
@@ -105,7 +119,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
         {
           displayColorbarOption && (
             <>
-              <small>Colorbar</small>
+              <small className="font-semibold">Colorbar</small>
               <div className="border-b border-b-gray-400"/>
               <SimpleSelect
                 onSelectValue={handleChangeColormap}

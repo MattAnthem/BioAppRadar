@@ -28,7 +28,7 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
     // Redux states
     const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, radarPayload } = useAppSelector(state => state.livemap);
     // Coverage
-    const { selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary)
+    const { selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
     const { selectedMapBase } = useAppSelector(state => state.basemappopup);
     const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch()

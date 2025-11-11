@@ -7,7 +7,7 @@ import AlertFlash from './shared/components/popups/alert/AlertFlash';
 import { Route, Routes } from 'react-router-dom';
 import AppLayout from './shared/layouts/AppLayout';
 import React from 'react';
-import ResponsiveLayout from './tests/ui/ResponsiveLayout.test';
+import Notifications from './pages/Notifications';
 const OverviewDashboard = React.lazy(() => import('./pages/OverviewDashboard'));
 const HistoricalExplorer = React.lazy(() => import('./pages/HistoricalExplorer'));
 const CrossSection = React.lazy(() => import('./pages/CrossSection'));
@@ -25,7 +25,7 @@ function App() {
           <Route path='/' element={<OverviewDashboard/>} /> 
           <Route path='/history_explorer' element={<HistoricalExplorer/>}/>
           <Route path='/cross_section' element={<CrossSection/>}/>
-          <Route path='/notification_center' element={<ResponsiveLayout/>} />
+          <Route path='/notification_center' element={<Notifications/>} />
         </Route>
       </Routes>
     </>

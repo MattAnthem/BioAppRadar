@@ -20,17 +20,25 @@ import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQue
 import { useEffect, useMemo, useState } from 'react';
 import { Unplug } from 'lucide-react';
 import ElevationSlider from './components/ElevationSlider';
+import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 
 const HistoryMap = () => {
     const [currentElevationIndex, setCurrentElevationIndex] = useState<number>(0);
 
     // Redux call
     // Selected Radar type and Radar Parameter
-    const { selectedMapBase, selectedColormap, selectedCoverage } = useAppSelector(state => state.hist_basemap);
+    const { selectedMapBase, selectedColormap, selectedCoverage, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
     const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
     const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
 
+
+
+    // Map boundary GeoJson
+    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
+            type: selectedBoundary.id as string,
+            json: selectedBoundaryType.id as string
+    })
 
     
     //#region  Overlay fetching
@@ -147,7 +155,7 @@ const HistoryMap = () => {
 
         
         {
-            (error) && (
+            (error || coverageError) && (
                 <div className="absolute z-10 w-full h-full flex items-center justify-center">
                     <Unplug width={35} height={35} className='text-red-500'/>
                 </div>
@@ -158,6 +166,14 @@ const HistoryMap = () => {
             isLoading && (
                 <div className="absolute z-10 w-full h-full flex items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
+                </div>
+            )
+        }
+        {
+            ( coverageLoading ) && (
+                <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
+                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                    <p className='text-gray-700'>Loading coverage</p>
                 </div>
             )
         }
@@ -242,7 +258,10 @@ const HistoryMap = () => {
                     bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
                 }
             }
-            // overlayShapes={[selectedCoverage.geometry as GeoJSON.Feature]}
+            overlayShapes={coverageJson}
+            onShapeClicked={(geojson) => {
+                console.log('Clicked shape:', geojson);
+            }}
         />
 
 
