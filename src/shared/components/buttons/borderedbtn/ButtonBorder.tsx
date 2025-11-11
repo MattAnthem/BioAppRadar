@@ -22,7 +22,7 @@ type ButtonBorderProps = {
  */
 const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled=false, ariaControls, ariaExpanded, ariaHasPopup, stopPropagation=false }: ButtonBorderProps) => {
   const themes = useTheme();
-  const { border, hover_bg, text } = themes.theme.btnBorder;
+  const { border, hover_bg, text, bg } = themes.theme.btnBorder;
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (stopPropagation) e.stopPropagation(); 
     if (!isDisabled && onClick) onClick(e);
@@ -36,7 +36,7 @@ const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled=fals
       aria-haspopup={ariaHasPopup}
       disabled={isDisabled}
       onClick={handleClick}  
-      className={`${className} ${border} ${hover_bg} ${text}  text-sm border-2 rounded-sm focus-visible:outline-2 outline-offset-1 outline-blue-800`}
+      className={`${className} ${border} ${hover_bg} ${text} ${bg}  text-sm border-2 rounded-sm focus-visible:outline-2 outline-offset-1 outline-blue-800`}
     >
       { children }
     </button>

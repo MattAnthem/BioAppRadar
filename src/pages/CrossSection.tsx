@@ -23,14 +23,14 @@ const CrossSection = () => {
 
 
               <div className={`
-                  w-full h-full
+                  lg:w-full lg:h-full h-[60vh]
                   lg:col-span-2 col-span-1
                 `}
               >
 
-                <SectionCard className='w-full h-full'>
-                    <Vcrossmap/>
-                </SectionCard>
+
+                  <Vcrossmap/>
+
 
               </div>
 

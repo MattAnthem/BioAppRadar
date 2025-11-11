@@ -20,6 +20,7 @@ import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundari
 const Vcrossmap = () => {
 
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
+    const { selectedRadarParameter, selectedRadarType, timeRadar } = useAppSelector(state => state.vcrosspopup)
     const { mapMode } = useAppSelector(state => state.vcrossmap)
     const dispatch = useAppDispatch();
 
@@ -106,29 +107,12 @@ const Vcrossmap = () => {
         }))
     }
 
-    // Radar
-    const handleChangeVcrossRadarType = (type: SelectOption) => {
+    // Radar submit popup handler
+    const onSubmitRadarPopupData = () => {
         dispatch(setVcrossRadarPayload({
-            type: type.id as string
-        }))
-        dispatch(setOverlayRadarPayload({
-            type: type.id as 'polar' | 'grid'
-        }))
-    }
-    const handleChangeVcrossRadarParam = (param: SelectOption) => {
-        dispatch(setVcrossRadarPayload({
-            parameter: param.id as string
-        }))
-        dispatch(setOverlayRadarPayload({
-            parameter: param.id as string
-        }))
-    }
-    const handleChangeVcrossRadarTime = (time: string) => {
-        dispatch(setVcrossRadarPayload({
-            time: time
-        }))
-        dispatch(setOverlayRadarPayload({
-            time: time
+            type: selectedRadarType.id as 'polar' | 'grid',
+            parameter: selectedRadarParameter.id as string,
+            time: timeRadar
         }))
     }
 //#endregion
@@ -178,7 +162,7 @@ const Vcrossmap = () => {
                         onChangeOverlayColor={handleChangeColorbar}
                         displayColorbarOption= {mapMode == 'vcross_radar'}
                     />
-                    <VcrossRadarDataPopup onChangeVcrossRadarType={handleChangeVcrossRadarType} onChangeVcrossRadarParam={handleChangeVcrossRadarParam} onChangeVcrossRadarTime={handleChangeVcrossRadarTime}/>
+                    <VcrossRadarDataPopup onSubmitPopup={onSubmitRadarPopupData} />
                     <VcrossBioClsDataPopup onChangeBioclass={handleChangeVcrossBioclass} onChangeBioclassTime={handleChangeVcrossBioclassTime}/>
                 </div>
 

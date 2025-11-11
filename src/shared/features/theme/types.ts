@@ -140,6 +140,7 @@ type SectionCardTheme = {
         border: string;
         hover_bg: string;
         text?: string;
+        bg?: string;
     }
 
     type ChartsTheme = {

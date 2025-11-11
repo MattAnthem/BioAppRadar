@@ -42,7 +42,7 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
         onClose={() => dispatch(closeSevipPopup())}
     >
 
-        <small>Select a variable</small>
+        <small className='font-semibold'>Select a variable</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={availableVariables}
@@ -52,7 +52,7 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
         />
 
         {/* Time */}
-        <small>Select time</small>
+        <small className='font-semibold'>Select time</small>
         <div className="border-b border-b-gray-400"/>
         <input onChange={handleSevipTimeChange} value={histTimeSevip} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="sevipHistTime" id="sevipHistTime" />
 

@@ -91,7 +91,9 @@ export const light: ThemeElements = {
     },
     btnBorder: {
         border: 'border-gray-400',
-        hover_bg: 'hover:bg-gray-200'
+        hover_bg: 'hover:bg-sky-700',
+        bg: 'bg-sky-800',
+        text: 'text-white'
     },
     charts: {
         strokes: '#82ca9d',

@@ -55,6 +55,9 @@ const vcrossBioclassOptions: SelectOption[] = [
 ]
 
 interface VcrossState {
+
+    isRadarPopupOpen: boolean;
+
     selectedBioClass: SelectOption;
     availableBioClass: SelectOption[];
     timeBioClass: string;
@@ -67,6 +70,8 @@ interface VcrossState {
 }
 
 const initialState: VcrossState = {
+    isRadarPopupOpen: false,
+
     availableBioClass: vcrossBioclassOptions,
     selectedBioClass: vcrossBioclassOptions[0],
     timeBioClass: '2020-11-10 12:00:33',
@@ -96,9 +101,15 @@ const vcrossPopupSlice = createSlice({
         },
         setSelectedVcrossRadarTime: (state, action) => {
             state.timeRadar = action.payload;
+        },
+        closeVcrossRadarPopup: (state) => {
+            state.isRadarPopupOpen = false
+        },
+        toggleVcrossRadarPopup: (state) => {
+            state.isRadarPopupOpen = !state.isRadarPopupOpen;
         }
     }
 });
 
-export const { setSelectedVcrossBioCls, setSelectedBioclassTime, setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType } = vcrossPopupSlice.actions;
+export const { closeVcrossRadarPopup, toggleVcrossRadarPopup, setSelectedVcrossBioCls, setSelectedBioclassTime, setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType } = vcrossPopupSlice.actions;
 export default vcrossPopupSlice.reducer;
