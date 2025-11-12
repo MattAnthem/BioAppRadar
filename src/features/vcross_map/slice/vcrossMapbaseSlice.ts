@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { boundarieOptionsHist } from "../../history_map/slice/histBaseMapPopupSlice";
-import { colormapOptions, mapbaseOptions } from "../../livemap/slice/baseMapPopupSlice";
+import { colormapsOptions, map_baseOptions, map_boundarieOptions } from "../../../shared/static/chart-options";
 
 interface VcrossMapBaseState {
     isPopupOpen: boolean;
@@ -19,15 +18,15 @@ interface VcrossMapBaseState {
 
 const initialState: VcrossMapBaseState = {
     isPopupOpen: false,
-    mapBaseOptions: mapbaseOptions,
-    colormapOptions: colormapOptions,
-    selectedColormap: colormapOptions[0],
-    selectedMapBase: mapbaseOptions[0],
+    mapBaseOptions: map_baseOptions,
+    colormapOptions: colormapsOptions,
+    selectedColormap: colormapsOptions[0],
+    selectedMapBase: map_baseOptions[0],
 
-    boundaryOptions: boundarieOptionsHist,
-    selectedBoundary: boundarieOptionsHist[0],
-    boundaryTypes: Array.isArray(boundarieOptionsHist[0].availableType) ? boundarieOptionsHist[0].availableType : [],
-    selectedBoundaryType: Array.isArray(boundarieOptionsHist[0].availableType) ? boundarieOptionsHist[0].availableType[0] : {id: '', displayText: ''}
+    boundaryOptions: map_boundarieOptions,
+    selectedBoundary: map_boundarieOptions[0],
+    boundaryTypes: Array.isArray(map_boundarieOptions[0].availableType) ? map_boundarieOptions[0].availableType : [],
+    selectedBoundaryType: Array.isArray(map_boundarieOptions[0].availableType) ? map_boundarieOptions[0].availableType[0] : {id: '', displayText: ''}
 }
 
 const vcrossBaseMapSlice = createSlice({

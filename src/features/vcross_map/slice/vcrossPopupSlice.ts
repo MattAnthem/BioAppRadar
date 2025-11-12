@@ -1,58 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
+import { classif_Options, radar_ParameterOptions, radar_TypeOptions } from "../../../shared/static/chart-options";
 
-export const RadarTypeOptions: SelectOption[] = [
-    {
-      id: 'polar',
-      displayText: 'Polar Volume'
-    },
-    {
-      id: 'grid',
-      displayText: 'Cartesian Grid '
-    },
-]
 
-export const RadarParameterOptions: SelectOption[] = [
-    { 
-    id: 'ref', 
-    displayText: 'Reflectivity' 
-    },
-    { 
-    id: 'zdr', 
-    displayText: 'Differential Reflectivity' 
-    },
-    { 
-    id: 'phi', 
-    displayText: 'Differential Phase' 
-    },
-    { 
-    id: 'rho', 
-    displayText: 'Correlation Coefficient' 
-    },
-    { 
-    id: 'vel', 
-    displayText: 'Radial Velocity' 
-    },
-    { 
-    id: 'sw', 
-    displayText: 'Spectrum Width' 
-    },
-    { 
-    id: 'dr', 
-    displayText: 'Depolarization Ratio' 
-    }
-]
-
-const vcrossBioclassOptions: SelectOption[] = [
-    {
-        id: 'species',
-        displayText: 'Bird vs Insect Classification' 
-    },
-    {
-        id: 'biometeo',
-        displayText: 'Biological vs Meteorological Classification'
-    }
-]
 
 interface VcrossState {
 
@@ -72,14 +22,14 @@ interface VcrossState {
 const initialState: VcrossState = {
     isRadarPopupOpen: false,
 
-    availableBioClass: vcrossBioclassOptions,
-    selectedBioClass: vcrossBioclassOptions[0],
+    availableBioClass: classif_Options,
+    selectedBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : {id: '', displayText: ''},
     timeBioClass: '2020-11-10 12:00:33',
 
-    availableRadarParameters: RadarParameterOptions,
-    avalaibleRadarTypes: RadarTypeOptions,
-    selectedRadarParameter: RadarParameterOptions[0],
-    selectedRadarType: RadarTypeOptions[0],
+    availableRadarParameters: radar_ParameterOptions,
+    avalaibleRadarTypes: radar_TypeOptions,
+    selectedRadarParameter: radar_ParameterOptions[0],
+    selectedRadarType: radar_TypeOptions[0],
     timeRadar: '2020-11-10 12:00:33'
 }
 

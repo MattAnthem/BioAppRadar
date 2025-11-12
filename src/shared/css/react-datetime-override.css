@@ -1,0 +1,42 @@
+
+
+.rdtPicker {
+    @apply border border-gray-300 shadow-md bg-white text-gray-900;
+    z-index: 50; 
+  }
+  
+
+  .dark .rdtPicker {
+    @apply bg-neutral-800 text-gray-100 border-gray-700;
+  }
+  
+
+  .rdtPicker td.rdtDay {
+    @apply text-gray-800 dark:text-gray-200;
+  }
+  
+
+  .rdtPicker td.rdtDay:hover {
+    @apply bg-blue-500 text-white rounded-md;
+  }
+  
+
+  .rdtPicker td.rdtActive {
+    @apply bg-blue-600 text-white font-semibold rounded-md;
+  }
+  
+
+  .rdtPicker .rdtTimeToggle {
+    @apply text-blue-600 hover:text-blue-800 dark:text-blue-400;
+  }
+  
+
+  .rdtPicker thead tr:first-child th {
+    @apply text-gray-700 dark:text-gray-200;
+  }
+  
+
+  .rdtPicker .rdtCounters {
+    @apply bg-white dark:bg-neutral-800;
+  }
+  

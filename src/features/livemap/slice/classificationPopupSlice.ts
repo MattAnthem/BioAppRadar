@@ -1,26 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
+import { classif_Options } from "../../../shared/static/chart-options";
 
-const ClassificationOptions: SelectOption[] = [
-    {
-        id: 'classification',
-        displayText: 'Classification',
-        availableType: [
-            {
-              id: 'species',
-              displayText: 'Bird vs Insect Classification',
-              type0: 'Insects',
-              type1: 'Birds'
-            },
-          {
-            id: 'biometeo',
-            displayText: 'Biological vs Meteorological Classification',
-            type0: 'Meteorological',
-            type1: 'Biological'
-          },
-        ]
-    }
-]
 
 interface ClassificationPopupState {
     isPopupOpen: boolean;
@@ -36,8 +17,8 @@ interface ClassificationPopupState {
 const initialState: ClassificationPopupState = {
     isPopupOpen: false,
 
-    selectedVariable: Array.isArray(ClassificationOptions[0].availableType) ? ClassificationOptions[0].availableType[0] : null,
-    availableVariables: Array.isArray(ClassificationOptions[0].availableType) ? ClassificationOptions[0].availableType : [],
+    selectedVariable: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : null,
+    availableVariables: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     color_0: '#dc3545',
     color_1: '#0d6efd',
     height: 0,

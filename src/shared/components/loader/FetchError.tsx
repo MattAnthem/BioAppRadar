@@ -1,0 +1,38 @@
+import { Unplug } from 'lucide-react';
+import GlassHeader from '../cards/GlassHeader';
+import type { ReactNode } from 'react';
+
+type Props = {
+  children?: ReactNode;
+}
+
+const FetchError = ({children}: Props ) => {
+  return (
+    <div className=" w-full h-full rounded-sm p-1 bg-gray-500/50 left-0 top-0">
+
+        <GlassHeader className=' px-2 top-0 py-2 flex justify-between items-center'>
+          <span className='h-6 w-30 animate-pulse bg-gray-400/45 rounded-sm'/>
+          <div className="flex z-10 gap-3">
+            {children}
+          </div>
+        </GlassHeader>
+
+        <div className="top-0 relative w-full h-full flex items-center justify-center">
+          <div className="  
+                      rounded-sm 
+                      border-white/20 bg-gray-900/50 shadow-md ring-2 ring-black/5 p-4
+                      backdrop-blur-sm
+                      flex flex-col
+                      items-center
+                      justify-center
+                      "
+          >
+              <Unplug width={60} height={60} className='text-red-500'/>
+              <p className='font-semibold text-xs tracking-wider text-gray-300'>Error Fetching DATA</p>
+          </div>
+        </div>
+    </div>
+  )
+}
+
+export default FetchError;

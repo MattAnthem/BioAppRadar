@@ -108,7 +108,6 @@ const VtipChart = ({ className }: VtipChartProps) => {
                     <HighchartVtip
                       data={data}
                       displayTitle
-                      chartHeight={500}
                     />
                   </div>
                 )

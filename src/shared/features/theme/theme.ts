@@ -26,7 +26,7 @@ export const light: ThemeElements = {
     mainBg: 'bg-gray-50',
     sidebar: {
         main: {
-            background: 'bg-stone-100',
+            background: 'text-black bg-stone-100',
             border: 'border-gray-300',
             section_line: 'bg-gray-300',
             toggler_side_bg: 'bg-gray-200',

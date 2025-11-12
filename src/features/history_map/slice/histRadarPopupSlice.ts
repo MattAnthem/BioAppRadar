@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { RadarParameterOptions, RadarTypeOptions } from "../../livemap/slice/radarPopupSlice";
+import { radar_ParameterOptions, radar_TypeOptions } from "../../../shared/static/chart-options";
 
 interface RadarOptionsState {
     isPopupOpen: boolean;
@@ -14,10 +14,10 @@ interface RadarOptionsState {
 
 const initialState: RadarOptionsState = {
     isPopupOpen: false,
-    availableParameters: RadarParameterOptions,
-    availableTypes: RadarTypeOptions,
-    selectedType: RadarTypeOptions[0],
-    selectedParameter: RadarParameterOptions[0],
+    availableParameters: radar_ParameterOptions,
+    availableTypes: radar_TypeOptions,
+    selectedType: radar_TypeOptions[0],
+    selectedParameter: radar_ParameterOptions[0],
     radarTimeHist: '2020-11-10 12:00:33'
 } 
 

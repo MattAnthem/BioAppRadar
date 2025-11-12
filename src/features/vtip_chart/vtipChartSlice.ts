@@ -1,34 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { VtipPayload } from "../../api/endpoints/verticalProfilesAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
+import { vtip_parameterOptions } from "../../shared/static/chart-options";
 
-// static
-export const parameterOptions: SelectOption[] = [
-    {
-        id: 'mtr',
-        displayText: 'Migration traffic rate'
-    },
-    {
-        id: 'mt',
-        displayText: 'Cumulative migration traffic'
-    },
-    {
-        id: 'rt',
-        displayText: 'Cumulative reflectivity traffic'
-    },
-    {
-        id: 'rtr',
-        displayText: 'Reflectivity traffic rate'
-    },
-    {
-        id: 'vid',
-        displayText: 'Vertically integrated densities'
-    },
-    {
-        id: 'vir',
-        displayText: 'Vertically Integrated Reflectivity'
-    },
-]
+
 
 interface VtipChartState {
     parameterOptions: SelectOption[];
@@ -41,8 +16,8 @@ interface VtipChartState {
 
 const initialState: VtipChartState = {
 
-    parameterOptions: parameterOptions,
-    selectedParameter: parameterOptions[0],
+    parameterOptions: vtip_parameterOptions,
+    selectedParameter: vtip_parameterOptions[0],
     vtipStartTime: '2020-11-10 12:01:00',
     vtipEndTime: '2020-11-10 12:50:00',
 

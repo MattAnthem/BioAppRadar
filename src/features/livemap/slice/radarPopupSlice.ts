@@ -1,48 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
+import { radar_ParameterOptions, radar_TypeOptions } from "../../../shared/static/chart-options";
 
-export const RadarTypeOptions: SelectOption[] = [
 
-            {
-            id: 'grid',
-            displayText: 'Cartesian Grid '
-            },
-          {
-            id: 'polar',
-            displayText: 'Polar Volume'
-          },
-]
 
-export const RadarParameterOptions: SelectOption[] = [
-    { 
-        id: 'ref', 
-        displayText: 'Reflectivity' 
-    },
-    { 
-        id: 'zdr', 
-        displayText: 'Differential Reflectivity' 
-    },
-    { 
-        id: 'phi', 
-        displayText: 'Differential Phase' 
-    },
-    { 
-        id: 'rho', 
-        displayText: 'Correlation Coefficient' 
-    },
-    { 
-        id: 'vel', 
-        displayText: 'Radial Velocity' 
-    },
-    { 
-        id: 'sw', 
-        displayText: 'Spectrum Width' 
-    },
-    { 
-        id: 'dr', 
-        displayText: 'Depolarization Ratio' 
-    }
-]
 
 interface RadarPopupState {
     selectedType: SelectOption;
@@ -52,10 +13,10 @@ interface RadarPopupState {
 }
 
 const initialState: RadarPopupState = {
-    availableParameters: RadarParameterOptions,
-    availableTypes: RadarTypeOptions,
-    selectedType: RadarTypeOptions[0],
-    selectedParameter: RadarParameterOptions[0],
+    availableParameters: radar_ParameterOptions,
+    availableTypes: radar_TypeOptions,
+    selectedType: radar_TypeOptions[0],
+    selectedParameter: radar_ParameterOptions[0],
 }
 
 const radarpopupSlice = createSlice({

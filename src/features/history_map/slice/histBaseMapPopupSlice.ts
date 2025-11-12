@@ -1,58 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { colormapOptions, mapbaseOptions } from "../../livemap/slice/baseMapPopupSlice";
+import { colormapsOptions, map_baseOptions, map_boundarieOptions } from "../../../shared/static/chart-options";
 
 
-export const boundarieOptionsHist: SelectOption[] = [
-    {
-        id: 'administrative',
-        displayText: 'Administrative Boundaries',
-        availableType: [
-            {
-                id: 'country',
-                displayText: 'Country'
-            },
-            {
-                id: 'province',
-                displayText: 'State/Province'
-            },
-            {
-                id: 'district',
-                displayText: 'County/District'
-            },
-            {
-                id: 'sector',
-                displayText: 'Sector'
-            },
-            {
-                id: 'cell',
-                displayText: 'Cell'
-            },
-            {
-                id: 'village',
-                displayText: 'Village'
-            }
-        ]
-    },
-    {
-        id: 'special_zones',
-        displayText: 'Special Zones',
-        availableType: [
-            {
-                id: 'protected_areas',
-                displayText: 'Protected Areas'
-            },
-            {
-                id: 'wetland_zones',
-                displayText: 'Wetland Zones'
-            },
-            {
-                id: 'airports',
-                displayText: 'Airports'
-            }
-        ]
-    }
-];
 
 interface HistoryBaseMapState {
     isMapBasePopupOpen: boolean;
@@ -69,15 +19,15 @@ interface HistoryBaseMapState {
 
 const initialState: HistoryBaseMapState =  {
     isMapBasePopupOpen: false,
-    mapBaseOptions: mapbaseOptions,
-    colormapOptions: colormapOptions,
-    selectedColormap: colormapOptions[0],
-    selectedMapBase: mapbaseOptions[0],
+    mapBaseOptions: map_baseOptions,
+    colormapOptions: colormapsOptions,
+    selectedColormap: colormapsOptions[0],
+    selectedMapBase: map_baseOptions[0],
 
-    boundaryOptions: boundarieOptionsHist,
-    selectedBoundary: boundarieOptionsHist[0],
-    boundaryTypes: Array.isArray(boundarieOptionsHist[0].availableType) ? boundarieOptionsHist[0].availableType : [],
-    selectedBoundaryType: Array.isArray(boundarieOptionsHist[0].availableType) ? boundarieOptionsHist[0].availableType[0] : {id: '', displayText: ''},
+    boundaryOptions: map_boundarieOptions,
+    selectedBoundary: map_boundarieOptions[0],
+    boundaryTypes: Array.isArray(map_boundarieOptions[0].availableType) ? map_boundarieOptions[0].availableType : [],
+    selectedBoundaryType: Array.isArray(map_boundarieOptions[0].availableType) ? map_boundarieOptions[0].availableType[0] : {id: '', displayText: ''},
 }
 
 const historyBaseMapSlice = createSlice({

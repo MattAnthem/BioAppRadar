@@ -13,9 +13,7 @@ import vtipchartReducer from '../features/vtip_chart/vtipChartSlice';
 import historymapReducer from '../features/history_map/slice/historyMapSlice';
 import basemaphistoryReducer from '../features/history_map/slice/histBaseMapPopupSlice';
 
-import sevippopupReducer from '../features/livemap/slice/SevipPopupSlice';
 import classificationpopupReducer from '../features/livemap/slice/classificationPopupSlice';
-import radarpopupReducer from '../features/livemap/slice/radarPopupSlice';
 import histClassificationReducer from '../features/history_map/slice/histClassificationPopupSlice';
 import vcrossPopupReducer from '../features/vcross_map/slice/vcrossPopupSlice';
 import vcrossMapReducer from '../features/vcross_map/slice/vcrossMapSlice';
@@ -60,9 +58,7 @@ export const store = configureStore({
 
 
         // Refactor
-        sevippopup: sevippopupReducer,
         classificationpopup: classificationpopupReducer,
-        radarpopup: radarpopupReducer,
         vcrosspopup: vcrossPopupReducer,
         vcrossmap: vcrossMapReducer,
     }
