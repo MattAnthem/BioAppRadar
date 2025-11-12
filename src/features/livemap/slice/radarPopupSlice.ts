@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { radar_ParameterOptions, radar_TypeOptions } from "../../../shared/static/chart-options";
+import { radar_ParameterOptions, radar_TypeOptions } from "../../../shared/static/select-options";
 
 
 

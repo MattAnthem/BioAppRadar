@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { classif_Options } from "../../../shared/static/chart-options";
+import { classif_Options } from "../../../shared/static/select-options";
 
 
 interface ClassificationPopupState {

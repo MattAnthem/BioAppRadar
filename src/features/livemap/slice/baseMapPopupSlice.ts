@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { colormapsOptions, map_baseOptions } from "../../../shared/static/chart-options";
+import { colormapsOptions, map_baseOptions } from "../../../shared/static/select-options";
 
 
 

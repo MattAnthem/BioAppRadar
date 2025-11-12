@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { colormapsOptions, map_baseOptions, map_boundarieOptions } from "../../../shared/static/chart-options";
+import { colormapsOptions, map_baseOptions, map_boundarieOptions } from "../../../shared/static/select-options";
 
 interface VcrossMapBaseState {
     isPopupOpen: boolean;

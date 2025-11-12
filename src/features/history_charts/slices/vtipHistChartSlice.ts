@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import type { VtipPayload } from "../../../api/endpoints/verticalProfilesAPI";
-import { vtip_parameterOptions } from "../../../shared/static/chart-options";
+import { vtip_parameterOptions } from "../../../shared/static/select-options";
 
 
 interface VtipChartState {

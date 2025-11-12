@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import type { VptsPayload } from "../../../api/endpoints/verticalProfilesAPI";
-import { vp_parameterOptions } from "../../../shared/static/chart-options";
+import { vp_parameterOptions } from "../../../shared/static/select-options";
 
 
 interface VptsChartState {
