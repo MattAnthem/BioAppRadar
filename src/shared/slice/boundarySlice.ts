@@ -1,56 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../components/selects/types";
+import { map_boundarieOptions } from "../static/select-options";
 
-const boundarieOptions: SelectOption[] = [
-    {
-        id: 'administrative',
-        displayText: 'Administrative Boundaries',
-        availableType: [
-            {
-                id: 'country',
-                displayText: 'Country'
-            },
-            {
-                id: 'province',
-                displayText: 'State/Province'
-            },
-            {
-                id: 'district',
-                displayText: 'County/District'
-            },
-            {
-                id: 'sector',
-                displayText: 'Sector'
-            },
-            {
-                id: 'cell',
-                displayText: 'Cell'
-            },
-            {
-                id: 'village',
-                displayText: 'Village'
-            }
-        ]
-    },
-    {
-        id: 'special_zones',
-        displayText: 'Special Zones',
-        availableType: [
-            {
-                id: 'protected_areas',
-                displayText: 'Protected Areas'
-            },
-            {
-                id: 'wetland_zones',
-                displayText: 'Wetland Zones'
-            },
-            {
-                id: 'airports',
-                displayText: 'Airports'
-            }
-        ]
-    }
-];
 
 interface BoundaryState {
     boundaryOptions: SelectOption[];
@@ -60,10 +11,10 @@ interface BoundaryState {
 }
 
 const initialState: BoundaryState = {
-    boundaryOptions: boundarieOptions,
-    selectedBoundary: boundarieOptions[0],
-    boundaryTypes: Array.isArray(boundarieOptions[0].availableType) ? boundarieOptions[0].availableType : [],
-    selectedBoundaryType: Array.isArray(boundarieOptions[0].availableType) ? boundarieOptions[0].availableType[0] : {id: '', displayText: ''},
+    boundaryOptions: map_boundarieOptions,
+    selectedBoundary: map_boundarieOptions[0],
+    boundaryTypes: Array.isArray(map_boundarieOptions[0].availableType) ? map_boundarieOptions[0].availableType : [],
+    selectedBoundaryType: Array.isArray(map_boundarieOptions[0].availableType) ? map_boundarieOptions[0].availableType[0] : {id: '', displayText: ''},
 };
 
 const boundarySlice = createSlice({
