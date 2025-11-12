@@ -3,9 +3,9 @@ import { BirdIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
-import { setHistClassificationColorZero, setSelectedHistClassificationOption, setHistClassificationColorOne, setHistClassifTime, closeClassifPopup, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
-import { formatChartDateParam } from '../../../shared/utils/date_format'
+import { setHistClassificationColorZero, setSelectedHistClassificationOption, setHistClassificationColorOne, setHistClassifTime, closeClassifPopup, toggleClassifPopup } from '../slice/histClassificationPopupSlice';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
+import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime'
 
 
 
@@ -39,10 +39,8 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
       dispatch(setHistClassificationColorOne(color));
   };
 
-  const handleClassifTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted = formatChartDateParam(raw);
-    dispatch(setHistClassifTime(formatted))
+  const handleClassifTimeChange = (date: string) => {
+    dispatch(setHistClassifTime(date))
   }
   //#endregion
 
@@ -66,7 +64,7 @@ return (
       <SimpleSelect
           options={availableVariables}
           value={selectedVariable.displayText}
-          width='w-95'
+          width='w-full'
           onSelectValue={handleClassificationVariableChange}
       />
 
@@ -85,7 +83,10 @@ return (
       {/* Time */}
       <small className='font-semibold'>Select time</small>
       <div className="border-b border-b-gray-400"/>
-      <input onChange={handleClassifTimeChange} value={histClassifTime} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="classifHistTime" id="classifHistTime" />
+      <ReactDatetimePicker
+        onChange={handleClassifTimeChange}
+        value={histClassifTime}
+      />
 
       {/* Display data btn */}
       <ButtonBorder

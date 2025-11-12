@@ -1,8 +1,8 @@
 import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder";
+import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
 import OptionPopover from "../../../../shared/components/popups/option/OptionPopover";
 import SimpleSelect from "../../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../../shared/components/selects/types";
-import { formatChartDateParam } from "../../../../shared/utils/date_format";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { closeVpHistPopup, setSelectedVpHistParameterOption, setVpHistTime, toggleVpHistPopup } from "../../slices/vpHistChartSlice";
 
@@ -15,12 +15,8 @@ const VpHistPopup = ({ onSubmitPopup }:Props) => {
   const { parameterOptions, selectedParameter, isPopupOpen, vpTime } = useAppSelector(state => state.vp_histchart);
   const dispatch = useAppDispatch()
 
-  const handleDateChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = evt.target.value; 
-    const formatted =  formatChartDateParam(raw);
-
-    console.log("FORMATTED ", formatted)
-    dispatch(setVpHistTime(formatted))
+  const handleDateChange = (date: string) => {
+    dispatch(setVpHistTime(date))
   }
 
   const handleVariableChange = (option: SelectOption) => {
@@ -39,20 +35,23 @@ const VpHistPopup = ({ onSubmitPopup }:Props) => {
          onClose={() => dispatch(closeVpHistPopup())}
     >
 
-                <div className="w-full">
-                    <small>Select Variable</small>
+
+                    <small className="font-semibold">Select Variable</small>
+                    <div className="border-b border-b-gray-400"/>
                     <SimpleSelect
                       options={parameterOptions}
                       value={selectedParameter.displayText}
                       onSelectValue={handleVariableChange}
                       width="w-full"
                     />
-                  </div>
 
-                  <div className="w-full mb-2">
-                    <small>Select Time</small>
-                    <input onChange={handleDateChange} value={vpTime} step={1} className="w-full p-2 rounded-sm border" type="datetime-local" name="date" id="end-time" />
-                  </div>
+
+                    <small className="font-semibold">Select Time</small>
+                    <div className="border-b border-b-gray-400"/>
+                    <ReactDatetimePicker
+                      onChange={handleDateChange}
+                      value={vpTime}
+                    />
 
         {/* Display data button */}
         <ButtonBorder

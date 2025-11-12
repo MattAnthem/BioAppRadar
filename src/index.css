@@ -1,6 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+
+.dark .rdtPicker {
+  @apply bg-zinc-700 text-gray-100 rounded-b-sm border-gray-600 w-full;
+}
+.light .rdtPicker {
+  @apply bg-white text-gray-900 rounded-b-sm border-gray-300 w-full;
+}
+.dark .rdtPicker td.rdtActive,
+.light .rdtPicker td.rdtActive {
+  @apply bg-blue-600 text-white font-semibold;
+}
+
+.dark .rdtPicker th.rdtSwitch {
+  @apply text-white hover:bg-zinc-600
+}
+
+.dark .rdtPicker td.rdtTimeToggle {
+  @apply hover:bg-zinc-600
+}
+
+.rdtPicker {
+  @apply border border-gray-300 shadow-md bg-white text-gray-600;
+  z-index: 50; 
+}
+
+
+.rdtPicker td.rdtDay {
+  @apply text-gray-800 dark:text-gray-400;
+}
+
+
+.rdtPicker td.rdtDay:hover {
+  @apply bg-blue-500 text-gray-900 rounded-md;
+}
+
+
+.rdtPicker td.rdtActive {
+  @apply bg-blue-600 text-white font-semibold rounded-sm;
+}
+
+
+.rdtPicker .rdtTimeToggle {
+  @apply text-blue-600 hover:text-blue-800 dark:text-blue-400;
+}
+
+
+.rdtPicker thead tr:first-child th {
+  @apply font-light dark:hover:bg-gray-700;
+}
+
+
+.rdtPicker .rdtCounters {
+  @apply dark:bg-zinc-700 dark:bg-neutral-800;
+}
+
 :root {
     font-family: "Work Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100%;
@@ -47,6 +102,10 @@ input::-ms-clear {
 select {
   appearance: base-select;
 }
+
+
+
+
 
 .color{
   color: #585858;

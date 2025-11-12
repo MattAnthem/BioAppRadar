@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { closeSevipPopup, setHistTimeSevip, setSelectedHistSevipOption, toggleSevipPopup } from '../slice/histSevipPopup';
-import { formatChartDateParam } from '../../../shared/utils/date_format';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
+import  ReactDatetimePicker  from '../../../shared/components/input/ReactDatetime';
 
 type SevipPopupProps = {
     onSubmitPopup?: () => void;
@@ -22,10 +22,9 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
         dispatch(setSelectedHistSevipOption(option))
     }
 
-    const handleSevipTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const raw = evt.target.value; 
-        const formatted = formatChartDateParam(raw);
-        dispatch(setHistTimeSevip(formatted));
+    const handleSevipTimeChange = (time: string) => {
+        console.log('PICKED TIME ', time)
+        dispatch(setHistTimeSevip(time));
     }
 
     const handleSubmit = () => {
@@ -54,7 +53,10 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
         {/* Time */}
         <small className='font-semibold'>Select time</small>
         <div className="border-b border-b-gray-400"/>
-        <input onChange={handleSevipTimeChange} value={histTimeSevip} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="sevipHistTime" id="sevipHistTime" />
+        <ReactDatetimePicker
+            onChange={handleSevipTimeChange}
+            value={histTimeSevip}
+        />
 
         {/* Display data button */}
         <ButtonBorder

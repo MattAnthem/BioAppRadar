@@ -5,6 +5,15 @@ export const light: ThemeElements = {
     chartFontColor: '#424242',
     chartGridline: '#e0e0e0',
     chartLegendColor: '#585858',
+    datePicker: {
+            bg: 'bg-neutral-200',
+            border: 'border-gray-300',
+            text: 'text-gray-900',
+            hover: 'hover:bg-blue-500 hover:text-white',
+            selectedDay: 'bg-blue-600 text-white font-semibold',
+            popupBg: 'bg-white',
+            popupBorder: 'border-gray-300',
+    },
     cards: {
         background: 'bg-gray-100',
         border: 'border-gray-500',
@@ -107,7 +116,16 @@ export const light: ThemeElements = {
 export const dark: ThemeElements = {
     chartGridline: '#444444',
     chartFontColor: '#adadad',
-    chartLegendColor: "#929292",  
+    chartLegendColor: "#929292", 
+    datePicker: {
+        bg: 'bg-zinc-700',
+        border: 'border-gray-600',
+        text: 'text-gray-100',
+        hover: 'hover:bg-blue-400 hover:text-gray-900',
+        selectedDay: 'bg-blue-600 text-white font-semibold',
+        popupBg: 'bg-neutral-800',
+        popupBorder: 'border-gray-700',
+    }, 
     cards: {
         background: 'bg-zinc-700',
         border: 'border-zinc-500',

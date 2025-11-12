@@ -17,7 +17,18 @@ export interface ThemeElements {
     chartFontColor: string;
     chartGridline: string;
     chartLegendColor: string;
+    datePicker: DatePicker
 }
+
+type DatePicker = {
+    bg: string;
+    border: string;
+    text: string;
+    hover: string;
+    selectedDay: string;
+    popupBg: string;
+    popupBorder: string;
+  }
 
 
 type Texts = {

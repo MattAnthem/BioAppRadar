@@ -4,8 +4,8 @@ import type { SelectOption } from '../../../shared/components/selects/types';
 import { RadarIcon } from 'lucide-react';
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import OptionPopover from '../../../shared/components/popups/option/OptionPopover';
-import { formatChartDateParam } from '../../../shared/utils/date_format';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
+import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
 
 type RadarOptionPopupProps = {
     onSubmitPopup?: () => void;
@@ -27,10 +27,9 @@ const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
         dispatch(setSelectedHistRadarParameter(option));
     }
 
-    const handleRadarTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const raw = evt.target.value; 
-        const formatted = formatChartDateParam(raw);
-        dispatch(setRadarTimeHist(formatted));
+    const handleRadarTimeChange = (date: string) => {
+
+        dispatch(setRadarTimeHist(date));
     }
   
     const handleSubmit = () => {
@@ -69,7 +68,11 @@ const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
         {/* Time */}
         <small className='font-semibold'>Select time</small>
         <div className="border-b border-b-gray-400"/>
-        <input onChange={handleRadarTimeChange} value={radarTimeHist} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="sevipHistTime" id="sevipHistTime" />
+        <ReactDatetimePicker
+            onChange={handleRadarTimeChange}
+            value={radarTimeHist}
+        />
+
 
         {/* Display data  */}
         <ButtonBorder
