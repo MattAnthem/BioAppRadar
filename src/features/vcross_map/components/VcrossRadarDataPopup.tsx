@@ -21,18 +21,15 @@ const VcrossRadarDataPopup = ({ onSubmitPopup }: Props) => {
     // handlers
     const handleRadarTypeChange = (type: SelectOption) => {
         dispatch(setSelectedVcrossRadarType(type));
-        // onChangeVcrossRadarType?.(type);
     }
     const handleRadarParamChange = (param: SelectOption) => {
         dispatch(setSelectedVcrossRadarParameter(param));
-        // onChangeVcrossRadarParam?.(param);
     }
 
     const handleRadarTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         const raw = evt.target.value; 
         const formatted = formatChartDateParam(raw);
         dispatch(setSelectedVcrossRadarTime(formatted));
-        // onChangeVcrossRadarTime?.(formatted);
     }
 
 
