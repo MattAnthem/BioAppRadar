@@ -183,7 +183,7 @@ const HistoryMap = () => {
 
             <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
 
-            <div className="z-5 flex gap-3 justify-center items-end">
+            <div className="z-5 flex gap-2 justify-center items-end">
 
                 <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 

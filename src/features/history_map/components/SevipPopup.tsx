@@ -1,5 +1,5 @@
 import OptionPopover from '../../../shared/components/popups/option/OptionPopover'
-import { FlipVerticalIcon } from 'lucide-react'
+import { FlipHorizontal } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import type { SelectOption } from '../../../shared/components/selects/types';
@@ -35,7 +35,7 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
   return (
     <OptionPopover
         hoverText='Vertical Integrated Profile Data'
-        customIcon={<FlipVerticalIcon className={iconSize}/>}   
+        customIcon={<FlipHorizontal className={iconSize}/>}   
         isOpen={isPopupOpen}
         onOpen={() => dispatch(toggleSevipPopup())}
         onClose={() => dispatch(closeSevipPopup())}

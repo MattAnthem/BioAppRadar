@@ -28,7 +28,7 @@ const initialState: VcrossState = {
     isRadarPopupOpen: false,
     isSevipPopupOpen: false,
 
-    availableBioClass: classif_Options,
+    availableBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     selectedBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : {id: '', displayText: ''},
     timeBioClass: '2020-11-10 12:00:33',
 
