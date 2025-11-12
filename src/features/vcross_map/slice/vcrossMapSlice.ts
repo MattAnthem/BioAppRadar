@@ -1,14 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { CrossSectionBioClassPayload, CrossSectionRadarPayload } from "../../../api/endpoints/crossSectionAPI";
 import type { ClassificationDataPayload } from "../../../api/endpoints/classificationAPI";
-import type { RadarGridPayload, RadarPayload, RadarPolarPayload } from "../../../api/endpoints/spatialDataAPI";
+import type { RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload } from "../../../api/endpoints/spatialDataAPI";
 
 interface VcrossMapState {
-    mapMode: 'vcross_bioclass' | 'vcross_radar';
+    mapMode: 'vcross_bioclass' | 'vcross_radar' | 'vcross_sevip';
     vcrossBioclassPayload: CrossSectionBioClassPayload;
     vcrossBioclassOvrlayPayload: ClassificationDataPayload;
     vcrossRadarPayload: CrossSectionRadarPayload;
     vcrossRadarOvrlayPayload: RadarPayload,
+    vcrossSevipOvrlayPayload: SevipPayload,
     coordinates: {
         startLon: number;
         startLat: number;
@@ -52,6 +53,11 @@ const initialState: VcrossMapState = {
         type: 'grid',
         height: 0,
     },
+    vcrossSevipOvrlayPayload: {
+        colorbar: 'viridis',
+        time: '2020-11-10 12:00:33',
+        parameter: 'vir'
+    },
     coordinates: {
         startLon: 29.394,
         startLat: -2.325,
@@ -75,6 +81,10 @@ const vcrossMapSlice = createSlice({
             state.mapMode = 'vcross_radar';
             state.vcrossRadarPayload = { ...state.vcrossRadarPayload, ...action.payload }
         },
+        setVcrossSevipPayload: (state, action: PayloadAction<Partial<SevipPayload>>) => {
+            state.mapMode = 'vcross_sevip';
+            state.vcrossSevipOvrlayPayload = { ...state.vcrossSevipOvrlayPayload, ...action.payload };
+        },
         setVcrossCoordinates: (state, action) => {
             state.coordinates = action.payload;
         },
@@ -97,11 +107,12 @@ const vcrossMapSlice = createSlice({
                 }
             }
         },
-        changeVcrossRadarColorbar: (state, action: PayloadAction<string>) => {
-            state.vcrossRadarOvrlayPayload.colorbar = action.payload
+        changeVcrossColorbar: (state, action: PayloadAction<string>) => {
+            state.vcrossRadarOvrlayPayload.colorbar = action.payload;
+            state.vcrossSevipOvrlayPayload.colorbar = action.payload;
         }
     }
 });
 
-export const { setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossRadarPayload, setVcrossCoordinates, setMapMode, setOverlayRadarPayload, changeVcrossRadarColorbar } = vcrossMapSlice.actions;
+export const { setVcrossSevipPayload, setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossRadarPayload, setVcrossCoordinates, setMapMode, setOverlayRadarPayload, changeVcrossColorbar } = vcrossMapSlice.actions;
 export default vcrossMapSlice.reducer;

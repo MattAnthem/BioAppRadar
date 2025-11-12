@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
 import VcrossBioClsDataPopup from './components/VcrossBioClsDataPopup'
 import VcrossRadarDataPopup from './components/VcrossRadarDataPopup'
-import { changeVcrossRadarColorbar, setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload } from './slice/vcrossMapSlice'
+import { changeVcrossColorbar, setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice'
 import type { SelectOption } from '../../shared/components/selects/types';
 import { useEffect, useRef } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
@@ -16,11 +16,13 @@ import loader from '../../assets/loader.webp';
 import MapbaseVcrossPopup from './components/MapbaseVcrossPopup'
 import Colorbar from '../livemap/components/Colorbar'
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery'
+import VcrossSevipDataPopup from './components/VcrossSevipDataPopup'
+import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
 
 const Vcrossmap = () => {
 
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
-    const { selectedRadarParameter, selectedRadarType, timeRadar } = useAppSelector(state => state.vcrosspopup)
+    const { selectedRadarParameter, selectedRadarType, timeRadar, selectedSevipVar, sevipTime } = useAppSelector(state => state.vcrosspopup)
     const { mapMode } = useAppSelector(state => state.vcrossmap)
     const dispatch = useAppDispatch();
 
@@ -40,9 +42,11 @@ const Vcrossmap = () => {
     // Fetching overlay for the map
     const isRadar = mapMode === 'vcross_radar';
     const isBioclass = mapMode === 'vcross_bioclass';
+    const isSevip = mapMode === 'vcross_sevip';
 
     const { data: classifOvrlay, isLoading: classifOvrlayLoading, error: classiOvrlayError } = useVcrossClassificationOverlayData(isBioclass);
     const { data: radarOverlay, isLoading: radarOverlayLoading, error:  radarOvrlayError} = useVcrossRadarOverlayData(isRadar);
+    const { data: sevipOverlay, isLoading: sevipOverlayLoading, error:  sevipOvrlayError} = useVcrossSevipOverlayData(isSevip);
 
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
@@ -59,6 +63,11 @@ const Vcrossmap = () => {
             isLoading = radarOverlayLoading;
             error = radarOvrlayError;
             break;
+        case isSevip:
+            data = sevipOverlay as SpatialDataResponse;
+            isLoading = sevipOverlayLoading;
+            error = sevipOvrlayError;
+            break;
     }
 
     //#endregion
@@ -67,7 +76,7 @@ const Vcrossmap = () => {
 
     // Change overlay colorbar (Sevip and radar)
     const handleChangeColorbar = (colorname: string) => {
-            dispatch(changeVcrossRadarColorbar(colorname));
+        dispatch(changeVcrossColorbar(colorname));
     }
 
     // Handling BIOCLASS/RADAR Payload elements
@@ -115,6 +124,14 @@ const Vcrossmap = () => {
             time: timeRadar
         }))
     }
+
+    // Sevip submit popup handler
+    const onSubmitSevipPopupData = () => {
+        dispatch(setVcrossSevipPayload({
+            parameter: selectedSevipVar.id as string,
+            time: sevipTime
+        }))
+    }
 //#endregion
 
 
@@ -160,8 +177,9 @@ const Vcrossmap = () => {
                 <div className="z-5 flex gap-2 justify-center items-end">
                     <MapbaseVcrossPopup 
                         onChangeOverlayColor={handleChangeColorbar}
-                        displayColorbarOption= {mapMode == 'vcross_radar'}
+                        displayColorbarOption= {mapMode == 'vcross_radar' || mapMode == 'vcross_sevip'}
                     />
+                    <VcrossSevipDataPopup onSubmitPopup={onSubmitSevipPopupData}/>
                     <VcrossRadarDataPopup onSubmitPopup={onSubmitRadarPopupData} />
                     <VcrossBioClsDataPopup onChangeBioclass={handleChangeVcrossBioclass} onChangeBioclassTime={handleChangeVcrossBioclassTime}/>
                 </div>
