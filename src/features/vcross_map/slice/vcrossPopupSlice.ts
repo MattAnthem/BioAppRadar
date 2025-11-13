@@ -14,6 +14,8 @@ interface VcrossState {
     availableBioClass: SelectOption[];
     timeBioClass: string;
     segmentBioclass: boolean;
+    color_0: string;
+    color_1: string;
 
     sevipVariables: SelectOption[];
     selectedSevipVar: SelectOption;
@@ -36,6 +38,8 @@ const initialState: VcrossState = {
     selectedBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : {id: '', displayText: ''},
     timeBioClass: '2020-11-10 12:00:33',
     segmentBioclass: true,
+    color_0: '#dc3545',
+    color_1: '#0d6efd',
 
     sevipTime: '2020-11-10 12:00:33',
     sevipVariables: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType : [],
@@ -68,6 +72,12 @@ const vcrossPopupSlice = createSlice({
         },
         closeVcrossBioclassPopup: (state) => {
             state.isClassifPopupOpen = false;
+        },
+        setVcrossClassificationColorZero: (state, action) => {
+            state.color_0 = action.payload
+        },
+        setVcrossClassificationColorOne: (state, action) => {
+            state.color_1 = action.payload
         },
         // --- Radar ---
         setSelectedVcrossRadarType: (state, action) => {
@@ -107,6 +117,8 @@ const vcrossPopupSlice = createSlice({
 export const { 
     toggleVcrossRadarSegment,
     toggleVcrossBioclassSegment,
+    setVcrossClassificationColorOne,
+    setVcrossClassificationColorZero,
     closeVcrossRadarPopup, 
     toggleVcrossRadarPopup, 
     setSelectedVcrossBioCls, 

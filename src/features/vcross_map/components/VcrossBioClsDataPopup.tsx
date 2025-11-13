@@ -3,7 +3,7 @@ import { BirdIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import type { SelectOption } from '../../../shared/components/selects/types';
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
-import { closeVcrossBioclassPopup, setSelectedBioclassTime, setSelectedVcrossBioCls, toggleVcrossBioclassPopup, toggleVcrossBioclassSegment } from '../slice/vcrossPopupSlice';
+import { closeVcrossBioclassPopup, setSelectedBioclassTime, setSelectedVcrossBioCls, setVcrossClassificationColorOne, setVcrossClassificationColorZero, toggleVcrossBioclassPopup, toggleVcrossBioclassSegment } from '../slice/vcrossPopupSlice';
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 
@@ -13,12 +13,23 @@ type Props = {
 
 const VcrossBioClsDataPopup = ({ onSubmitPopup }: Props) => {
 
-    const { availableBioClass, selectedBioClass, timeBioClass, segmentBioclass, isClassifPopupOpen } = useAppSelector(state => state.vcrosspopup);
+    const { availableBioClass, selectedBioClass, timeBioClass, color_0, color_1, segmentBioclass, isClassifPopupOpen } = useAppSelector(state => state.vcrosspopup);
     const dispatch = useAppDispatch();
 
     const handleBioClassChange = (option: SelectOption) => {
       dispatch(setSelectedVcrossBioCls(option));
     }
+
+    const handleColorZeroChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+      const color = evt.target.value;
+      dispatch(setVcrossClassificationColorZero(color)); 
+
+    };
+
+    const handleColorOneChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const color = evt.target.value;
+        dispatch(setVcrossClassificationColorOne(color));
+    };
 
     const handleBioClassTimeChange = (date: string) => {
       dispatch(setSelectedBioclassTime(date));
@@ -52,6 +63,19 @@ const VcrossBioClsDataPopup = ({ onSubmitPopup }: Props) => {
         width='w-95'
         value={selectedBioClass.displayText}
       />
+
+      {/* Colors for classification targets */}
+      <small className='font-semibold'>Select colors </small>
+      <div className="border-b border-b-gray-400"/>
+
+      <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
+          <small className='w-fit'>{ selectedBioClass['type0'] as string}:</small>
+          <input onChange={handleColorZeroChange} value={color_0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
+      </div>
+      <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
+          <small className='w-fit'>{ selectedBioClass['type1'] as string}:</small>
+          <input onChange={handleColorOneChange} value={color_1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
+      </div>
 
       {/* Toggle on/off segment */}
       <small className='font-semibold'>Segment</small>

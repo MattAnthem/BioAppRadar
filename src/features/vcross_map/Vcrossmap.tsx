@@ -21,8 +21,20 @@ import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
 const Vcrossmap = () => {
 
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
-    const { selectedRadarParameter, selectedRadarType, timeRadar, selectedSevipVar, sevipTime, segmentRadar, segmentBioclass, timeBioClass, selectedBioClass } = useAppSelector(state => state.vcrosspopup)
-    const { mapMode } = useAppSelector(state => state.vcrossmap)
+    const { selectedRadarParameter, 
+            selectedRadarType, 
+            timeRadar, 
+            selectedSevipVar, 
+            sevipTime, 
+            segmentRadar, 
+            segmentBioclass, 
+            timeBioClass, 
+            selectedBioClass,
+            color_0,
+            color_1 
+    } = useAppSelector(state => state.vcrosspopup);
+    const { mapMode } = useAppSelector(state => state.vcrossmap);
+    const { selectedColormap } = useAppSelector(state => state.vcross_basemap)
     const dispatch = useAppDispatch();
 
     const mapModeRef = useRef(mapMode);
@@ -110,6 +122,7 @@ const Vcrossmap = () => {
             time: timeRadar,
             type: selectedRadarType.id as 'polar' | 'grid',
             parameter: selectedRadarParameter.id as string,
+            colorbar: selectedColormap.id as string,
         }))
     }
 
@@ -125,6 +138,8 @@ const Vcrossmap = () => {
         dispatch(setOverlayClassificationPayload({
             class: selectedBioClass.id as string,
             time: timeBioClass,
+            color_0,
+            color_1
         }))
     } 
 
@@ -132,7 +147,8 @@ const Vcrossmap = () => {
     const onSubmitSevipPopupData = () => {
         dispatch(setVcrossSevipPayload({
             parameter: selectedSevipVar.id as string,
-            time: sevipTime
+            time: sevipTime,
+            colorbar: selectedColormap.id as string,
         }))
     }
 //#endregion
