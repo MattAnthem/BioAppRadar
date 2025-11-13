@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
 import VcrossBioClsDataPopup from './components/VcrossBioClsDataPopup'
 import VcrossRadarDataPopup from './components/VcrossRadarDataPopup'
-import { changeVcrossColorbar, setOverlayClassificationPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice'
+import { changeVcrossColorbar, setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice'
 import type { SelectOption } from '../../shared/components/selects/types';
 import { useEffect, useRef } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
@@ -22,7 +22,7 @@ import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
 const Vcrossmap = () => {
 
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
-    const { selectedRadarParameter, selectedRadarType, timeRadar, selectedSevipVar, sevipTime } = useAppSelector(state => state.vcrosspopup)
+    const { selectedRadarParameter, selectedRadarType, timeRadar, selectedSevipVar, sevipTime, segmentRadar } = useAppSelector(state => state.vcrosspopup)
     const { mapMode } = useAppSelector(state => state.vcrossmap)
     const dispatch = useAppDispatch();
 
@@ -118,10 +118,18 @@ const Vcrossmap = () => {
 
     // Radar submit popup handler
     const onSubmitRadarPopupData = () => {
+        // Dispatch popup option to the heatmap
         dispatch(setVcrossRadarPayload({
             type: selectedRadarType.id as 'polar' | 'grid',
             parameter: selectedRadarParameter.id as string,
-            time: timeRadar
+            time: timeRadar,
+            segment: segmentRadar
+        }));
+        // Dispatch popup data to Leaflet map
+        dispatch(setOverlayRadarPayload({
+            time: timeRadar,
+            type: selectedRadarType.id as 'polar' | 'grid',
+            parameter: selectedRadarParameter.id as string,
         }))
     }
 

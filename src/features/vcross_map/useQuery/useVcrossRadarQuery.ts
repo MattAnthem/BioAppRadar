@@ -16,6 +16,7 @@ export const useVcrossRadarQuery = (payload: CrossSectionRadarPayload, enabled?:
         ],
         queryFn: async () => {
             try {
+                console.log("sent payload ", payload);
                 return await fetchVcrossRadar(payload);
             } catch (error) {
                 console.error('Failed to fetch vertical cross section Radar Data', error);
@@ -30,8 +31,7 @@ export const useVcrossRadarQuery = (payload: CrossSectionRadarPayload, enabled?:
                     payload.endLat &&
                     payload.startLon &&
                     payload.endLon &&
-                    payload.time &&
-                    payload.segment
+                    payload.time
                 ),
         refetchOnWindowFocus: false
     })

@@ -20,7 +20,7 @@ const VptsChart = ({className}: VptsChartProps) => {
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux
-  const { selectedParameter, vptsPayload } = useAppSelector(state => state.vptschart);
+  const { vptsPayload } = useAppSelector(state => state.vptschart);
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
 

@@ -40,7 +40,6 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
         reflow: true,
         type: 'heatmap',
         zoomType: 'x',
-        // backgroundColor: 'transparent',
         plotBorderWidth: 1,
         style: {
           fontFamily: 'Inter, sans-serif',
@@ -82,7 +81,7 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
       series: [
         {
           type: 'heatmap',
-          name: data.info.name ?? data.info.class,
+          name: data.info.name ?? (data as CrossSectionBioClassResponse).info.class,
           data: seriesData,
           turboThreshold: 0,
           colsize: 1,

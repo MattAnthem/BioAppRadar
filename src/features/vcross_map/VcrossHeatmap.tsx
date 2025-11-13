@@ -33,30 +33,41 @@ const VcrossHeatmap = () => {
     }
 
 
+    console.log("DATA HEATMAP : ", data)
 
   return (
-    <div className='relative w-full h-full flex items-center justify-center'>
-        {
-            (error) && (
-                <div className="absolute z-10 w-full h-full flex items-center justify-center">
-                    <Unplug width={35} height={35} className='text-red-500'/>
-                </div>
-            )
-        }
+    <div className=' w-full h-full flex flex-col items-center justify-start'>
 
-        {
-            isLoading && (
-                <div className="absolute z-10 w-full h-full flex items-center justify-center">
-                    <img src={loader} alt="loading-data" width={35} height={35}  />
-                </div>
-            )
-        }
 
-        {
-            data && (
-                <HeatmapChart data={data} />
-            )
-        }
+        {/* Heaader title */}
+        <div className="p-1 w-full flex items-center justify-between">
+        <h3 className='tracking-wider text-xs font-semibold'>{`Vertical cross section of ${data?.info.name ?? '--'}`}</h3>
+        </div>
+
+        <div className="w-full h-full relative items-center">
+            {
+                (error) && (
+                    <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                        <Unplug width={35} height={35} className='text-red-500'/>
+                    </div>
+                )
+            }
+
+            {
+                isLoading && (
+                    <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                        <img src={loader} alt="loading-data" width={35} height={35}  />
+                    </div>
+                )
+            }
+            {
+                data && (
+                    <div className="h-full grid p-2">
+                        <HeatmapChart data={data} />
+                    </div>
+                )
+            }
+        </div>
 
 
     </div>

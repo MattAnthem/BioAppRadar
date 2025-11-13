@@ -22,6 +22,7 @@ interface VcrossState {
     selectedRadarParameter: SelectOption;
     availableRadarParameters: SelectOption[];
     timeRadar: string;
+    segmentRadar: boolean;
 }
 
 const initialState: VcrossState = {
@@ -40,7 +41,8 @@ const initialState: VcrossState = {
     avalaibleRadarTypes: radar_TypeOptions,
     selectedRadarParameter: radar_ParameterOptions[0],
     selectedRadarType: radar_TypeOptions[0],
-    timeRadar: '2020-11-10 12:00:33'
+    timeRadar: '2020-11-10 12:00:33',
+    segmentRadar: true,
 }
 
 const vcrossPopupSlice = createSlice({
@@ -53,6 +55,7 @@ const vcrossPopupSlice = createSlice({
         setSelectedBioclassTime: (state, action) => {
             state.timeBioClass = action.payload;
         },
+        // --- Radar ---
         setSelectedVcrossRadarType: (state, action) => {
             state.selectedRadarType = action.payload;
         },
@@ -64,6 +67,9 @@ const vcrossPopupSlice = createSlice({
         },
         closeVcrossRadarPopup: (state) => {
             state.isRadarPopupOpen = false
+        },
+        toggleVcrossRadarSegment: (state) => {
+            state.segmentRadar = !state.segmentRadar;
         },
         toggleVcrossRadarPopup: (state) => {
             state.isRadarPopupOpen = !state.isRadarPopupOpen;
@@ -85,6 +91,7 @@ const vcrossPopupSlice = createSlice({
 });
 
 export const { 
+    toggleVcrossRadarSegment,
     closeVcrossRadarPopup, 
     toggleVcrossRadarPopup, 
     setSelectedVcrossBioCls, 
