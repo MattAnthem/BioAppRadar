@@ -1,17 +1,17 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { changeVptsHistPayload } from "../slices/vptsHistChartSlice";
-import ChartModal from "./ChartModal";
 import { Fullscreen, Unplug } from "lucide-react";
-import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import loader from '../../../assets/loader.webp';
 import VptsHeatmapChart from "../../../shared/components/charts/HighchartsVpts";
-import VptsHistPopup from "./popups/VptsHistPopup";
 import { useVptsHistData } from "../hooks/useData/useVptsHistData";
 import { useVptsImageQuery } from "../hooks/useQuery/useVptsImageQuery";
 
+const ChartModal = React.lazy(() => import('./ChartModal'));
+const Tooltip = React.lazy(() => import('../../../shared/components/popups/tooltip/Tooltip'));
+const VptsHistPopup = React.lazy(() => import('./popups/VptsHistPopup'));
 
 type VptsChartProps = {
   className?: string;

@@ -4,12 +4,6 @@ import GlassHeader from '../../shared/components/cards/GlassHeader';
 import SectionCard from '../../shared/components/cards/SectionCard';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import AltitudeSlider from '../livemap/components/AltitudeSlider';
-import Colorbar from '../livemap/components/Colorbar';
-import ClassificationPopup from './components/ClassificationPopupHist';
-import MapbasePopup from './components/MapbasePopup';
-import RadarOptionPopup from './components/RadarOptionPopup';
-import SevipPopup from './components/SevipPopup';
 import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
@@ -17,10 +11,18 @@ import { changeHistAltitude } from './slice/histAltitudeSlice';
 import { setAltitudeForAll, setClassifPayloadHist, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
 import loader from '../../assets/loader.webp';
 import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQuery';
-import { useEffect, useMemo, useState } from 'react';
+import React,{ useEffect, useMemo, useState } from 'react';
 import { Unplug } from 'lucide-react';
-import ElevationSlider from './components/ElevationSlider';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
+
+const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopupHist'));
+const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
+const RadarOptionPopup =React.lazy(() => import('./components/RadarOptionPopup'));
+const SevipPopup = React.lazy(() => import('./components/SevipPopup'));
+const AltitudeSlider = React.lazy(() => import('../livemap/components/AltitudeSlider'));
+const Colorbar = React.lazy(() => import('../livemap/components/Colorbar'));
+const ElevationSlider = React.lazy(() => import('./components/ElevationSlider'));
+
 
 const HistoryMap = () => {
     const [currentElevationIndex, setCurrentElevationIndex] = useState<number>(0);

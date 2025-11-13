@@ -2,21 +2,23 @@ import SectionCard from '../../shared/components/cards/SectionCard'
 import GlassHeader from '../../shared/components/cards/GlassHeader'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
-import VcrossBioClsDataPopup from './components/VcrossBioClsDataPopup'
-import VcrossRadarDataPopup from './components/VcrossRadarDataPopup'
 import { changeVcrossColorbar, setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice';
-import { useEffect, useRef } from 'react'
+import React,{ useEffect, useRef } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
 import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData'
 import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI'
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI'
 import { Unplug } from 'lucide-react';
 import loader from '../../assets/loader.webp';
-import MapbaseVcrossPopup from './components/MapbaseVcrossPopup'
-import Colorbar from '../livemap/components/Colorbar'
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery'
 import VcrossSevipDataPopup from './components/VcrossSevipDataPopup'
 import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
+
+const Colorbar = React.lazy(() => import('../livemap/components/Colorbar'));
+const MapbaseVcrossPopup = React.lazy(() => import('./components/MapbaseVcrossPopup'));
+const VcrossRadarDataPopup = React.lazy(() => import('./components/VcrossRadarDataPopup'));
+const VcrossBioClsDataPopup = React.lazy(() => import('./components/VcrossBioClsDataPopup'));
+
 
 const Vcrossmap = () => {
 

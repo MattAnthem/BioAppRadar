@@ -1,16 +1,17 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { changeVtipHistPayload } from "../slices/vtipHistChartSlice";
-import ChartModal from "./ChartModal";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { Fullscreen, Unplug } from "lucide-react";
-import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import loader from '../../../assets/loader.webp';
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
-import VtipHistPopup from "./popups/VtipHistPopup";
 import { useVtipHistData } from "../hooks/useData/useVtipHistData";
 import { useVtipImageQuery } from "../hooks/useQuery/useVtipImageQuery";
+
+const ChartModal = React.lazy(() => import('./ChartModal'));
+const Tooltip = React.lazy(() => import('../../../shared/components/popups/tooltip/Tooltip'));
+const VtipHistPopup = React.lazy(() => import('./popups/VtipHistPopup'));
 
 
 type VtipChartProps = {

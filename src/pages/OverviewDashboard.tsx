@@ -1,9 +1,9 @@
-import LiveMap from "../features/livemap/LiveMap"
-import VpChart from "../features/vp_chart/VpChart"
-import VptsChart from "../features/vpts_chart/VptsChart"
-import VtipChart from "../features/vtip_chart/VtipChart"
+import React from "react";
 import MainLayout from "../shared/layouts/MainLayout"
-
+const LiveMap = React.lazy(() => import("../features/livemap/LiveMap"));
+const VpChart = React.lazy(() => import("../features/vp_chart/VpChart"));
+const VptsChart = React.lazy(() => import("../features/vpts_chart/VptsChart"));
+const VtipChart = React.lazy(() => import("../features/vtip_chart/VtipChart"));
 
 const OverviewDashboard = () => {
   return (
@@ -36,7 +36,7 @@ const OverviewDashboard = () => {
                   lg:col-span-4
                 `}
               >
-                  <LiveMap drawable={false} enableLineDraw={false}/>
+                  <LiveMap/>
               </div>
 
               {/* VP chart */}

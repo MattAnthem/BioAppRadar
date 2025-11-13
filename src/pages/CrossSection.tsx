@@ -1,7 +1,8 @@
+import React from 'react';
 import SectionCard from '../shared/components/cards/SectionCard';
 import MainLayout from '../shared/layouts/MainLayout';
-import Vcrossmap from '../features/vcross_map/Vcrossmap';
-import VcrossHeatmap from '../features/vcross_map/VcrossHeatmap';
+const Vcrossmap = React.lazy(() => import("../features/vcross_map/Vcrossmap"));
+const VcrossHeatmap = React.lazy(() => import("../features/vcross_map/VcrossHeatmap"));
 
 const CrossSection = () => {
 

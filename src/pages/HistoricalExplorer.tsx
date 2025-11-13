@@ -1,9 +1,9 @@
-
-import VpHistChart from '../features/history_charts/components/VpHistChart';
-import VptsHistChart from '../features/history_charts/components/VptsHistChart';
-import VtipHistChart from '../features/history_charts/components/VtipHistChart';
-import HistoryMap from '../features/history_map/HistoryMap';
+import React from 'react';
 import MainLayout from '../shared/layouts/MainLayout';
+const HistoryMap = React.lazy(() => import("../features/history_map/HistoryMap"));
+const VpHistChart = React.lazy(() => import("../features/history_charts/components/VpHistChart"));
+const VptsHistChart = React.lazy(() => import("../features/history_charts/components/VptsHistChart"));
+const VtipHistChart = React.lazy(() => import("../features/history_charts/components/VtipHistChart"));
 
 const HistoricalExplorer = () => {
   return (

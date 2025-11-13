@@ -4,10 +4,12 @@ import { useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import loader from '../../assets/loader.webp'
 import { Fullscreen, Unplug } from "lucide-react";
-import { useState } from "react";
-import ChartModal from "../history_charts/components/ChartModal";
-import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
+import React, { useState } from "react";
 import { useTheme } from "../../shared/hooks/useTheme";
+
+const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
+const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
+
 
 type VpChartProps = {
   className?: string;

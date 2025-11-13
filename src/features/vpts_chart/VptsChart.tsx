@@ -1,15 +1,15 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import VptsHeatmapChart from "../../shared/components/charts/HighchartsVpts";
 import { useAppSelector } from "../../store/hooks";
 import { useVptsData } from "./hooks/useVptsData";
-import ChartModal from "../history_charts/components/ChartModal";
-import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
 import { Fullscreen, Unplug } from "lucide-react";
 import { useTheme } from "../../shared/hooks/useTheme";
 import loader from '../../assets/loader.webp';
 import { useVptsImageQuery } from "../history_charts/hooks/useQuery/useVptsImageQuery";
 
+const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
+const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
 
 type VptsChartProps = {
   className?: string;

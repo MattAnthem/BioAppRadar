@@ -1,7 +1,6 @@
+import React from 'react';
 import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
-import MapbasePopup from './components/MapbasePopup';
-import ClassificationPopup from './components/ClassificationPopup';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setClassificationPayload, setSelectedTime } from './slice/livemapSlice';
@@ -18,13 +17,13 @@ import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundari
 import { Unplug } from 'lucide-react';
 import type { MenuNames } from '../../shared/components/buttons/navbtn/MenuTypes';
 
-type LiveMapProps = {
-    drawable: boolean;
-    enableLineDraw: boolean;
-}
 
 
-const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
+const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
+const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopup'))
+
+
+const LiveMap = () => {
 
     // Redux states
     const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, radarPayload } = useAppSelector(state => state.livemap);
@@ -159,8 +158,8 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
         <LeafletMap
             className='relative z-4 w-full h-full rounded-sm'            
             baseMap={selectedMapBase.url as string}
-            drawable={drawable}
-            enableLineDraw={enableLineDraw}
+            drawable={false}
+            enableLineDraw={false}
             center={[-2.158, 30.1131097]}
             zoom={8}
             overlayImg={

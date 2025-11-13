@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import React,{ type ReactNode } from "react";
 import Modal from "../../../shared/components/modal/Modal";
 
 
@@ -23,4 +23,4 @@ const ChartModal = ({children, modalTitle, isModalOpen, mdlToggler_func}: ChartM
   )
 }
 
-export default ChartModal;
+export default React.memo(ChartModal);
