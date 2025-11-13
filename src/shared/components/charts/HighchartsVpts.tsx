@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HCHeatmap from 'highcharts/modules/heatmap';
 import HCAnnotations from 'highcharts/modules/annotations';
 import type { VptsResponse } from '../../../api/endpoints/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
+import HCBoost from 'highcharts/modules/boost';
 
 HCHeatmap(Highcharts);
+// HCBoost(Highcharts);
 HCAnnotations(Highcharts);
 
 interface VpHeatmapChartProps {
@@ -21,6 +23,8 @@ interface DayNightChart extends Highcharts.Chart {
     dayNightRects?: Highcharts.SVGElement[];
 }
 
+
+
 const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
     data,
     radarAltitude = 1616,
@@ -33,15 +37,47 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
     const { chartFontColor, chartLegendColor } = theme;
 
 
-    const seriesData = useMemo(() => {
-        const arr: [number, number, number | null][] = [];
-        data.height.forEach((h, j) => {
-            data.times.forEach((t, i) => {
-                arr.push([Date.parse(t.replace(' ', 'T') + 'Z'), h, data.parameter[j][i]]);
-            });
+    
+    // Data issued from the web worker
+    useEffect(() => {
+        if (!data) return;
+      
+        const worker = new Worker(new URL('./workers/vptsHeatmapWorker.ts', import.meta.url), {
+          type: 'module'
         });
-        return arr;
-    }, [data]);
+      
+        worker.postMessage({ data });
+      
+        worker.onmessage = (e) => {
+          const result = e.data as [number, number, number | null][];
+          const chart = chartRef.current?.chart;
+      
+          if (chart && chart.series.length > 0) {
+            const heatmapSeries = chart.series[0];
+            heatmapSeries.setData(result, false, false, false);
+            chart.redraw(false);
+          }
+      
+          worker.terminate();
+        };
+      
+        return () => {
+          worker.terminate();
+        };
+      }, [data]);
+      
+
+
+    // // Heavy calcul
+    // const seriesData = useMemo(() => {
+    //     const arr: [number, number, number | null][] = [];
+    //     data.height.forEach((h, j) => {
+    //         data.times.forEach((t, i) => {
+    //             arr.push([Date.parse(t.replace(' ', 'T') + 'Z'), h, data.parameter[j][i]]);
+    //         });
+    //     });
+    //     return arr;
+    // }, [data]);
 
    
     const { colorPalette } = useMemo(() => {
@@ -176,7 +212,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                     .css({
                         color:'#fff',
                         fontSize:'11px',
-                        pointerEvents:'none'
+                        pointerEvents:'none',
                     })
                     .hide().add();
                 rect.element.addEventListener('mouseover',()=>tooltip.show());
@@ -205,7 +241,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 tickPixelInterval:100, 
                 minTickInterval:20*60*1000, 
                 labels: {
-                    useHTML: true,
+                    useHTML: false,
                     rotation: 0,
                     align: 'center',
                     style: {
@@ -226,11 +262,11 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                         if (isFirst || isNewDay) {
                             const dateStr = `${p.year}-${p.month}-${p.day}`;
                             const timeStr = `${p.hour}:${p.minute}`;
-                            return `<span style="white-space:nowrap;color:#666;">${dateStr}</span><br>` +
-                                `<span style="color:#000;">${timeStr}</span>`;
+                            return `<span style="white-space:nowrap;color:${chartFontColor};font-weight:700;">${dateStr}</span><br>` +
+                                `<span style="color:${chartFontColor};">${timeStr}</span>`;
                         }
 
-                        return `<span style="color:#000;">${p.hour}:${p.minute}</span>`;
+                        return `<span style="color:${chartFontColor};">${p.hour}:${p.minute}</span>`;
                     }
                 }
             },
@@ -241,21 +277,30 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 endOnTick: false,
                 softMin: p_ymin,
                 softMax: p_ymax,
-                title:{text:'Altitude (m)'}, 
+                title:{
+                    text:'Altitude (m)',
+                    style: {
+                        color: chartLegendColor,
+                        fontWeight: '500',
+                    }
+                }, 
                 gridLineWidth:0, 
                 labels:{
-                    useHTML: true,
+                    useHTML: false,
                     style:{
                         color: chartFontColor,
-                        fontSize:'11px'
+                        fontSize:'12px'
                     },
                     format: '{value}'
                 },
             },
             series:[{
                 type:'heatmap',
+                boostThreshold: 1,
+                animation: false,
+                allowPointSelect: false,
                 name:data.name,
-                data:seriesData,
+                data: [],
                 turboThreshold:0,
                 colsize,
                 rowsize,
@@ -269,12 +314,20 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                     } return '';
                 }}
             }],
-            tooltip:{enabled:true},
+            tooltip:{
+                enabled:true
+            },
             colorAxis:{
                 reversed: false,
                 min: 0,
                 stops:colorPalette,
-                labels:{format:'{value:.1f}'}
+                labels:{
+                    format:'{value:.1f}',
+                    style: {
+                        color: chartFontColor
+                    }
+                }
+                
             },
             legend:legend ? {
                 align: 'right',
@@ -286,9 +339,9 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
             credits:{enabled:false}
         };
 
-        chartRef.current?.chart.update(options,true,true);
+        chartRef.current?.chart.update(options,true,true, false);
 
-    },[data, radarAltitude, legend, title, seriesData, colorPalette, chartFontColor, chartHeight, chartLegendColor]);
+    },[data, radarAltitude, legend, title, colorPalette, chartFontColor, chartHeight, chartLegendColor]);
 
     return (
 

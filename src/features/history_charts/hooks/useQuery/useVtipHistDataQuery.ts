@@ -13,6 +13,7 @@ export const useVtipHistDataQuery = (payload: VtipPayload) => {
             }
         },
         enabled: Boolean(payload.parameter && payload.startTime && payload.endTime),
+        staleTime: 1000 * 60 * 30,
         refetchOnWindowFocus: false,
     })
 }
