@@ -8,10 +8,12 @@ interface VcrossState {
 
     isRadarPopupOpen: boolean;
     isSevipPopupOpen: boolean;
+    isClassifPopupOpen: boolean;
 
     selectedBioClass: SelectOption;
     availableBioClass: SelectOption[];
     timeBioClass: string;
+    segmentBioclass: boolean;
 
     sevipVariables: SelectOption[];
     selectedSevipVar: SelectOption;
@@ -28,10 +30,12 @@ interface VcrossState {
 const initialState: VcrossState = {
     isRadarPopupOpen: false,
     isSevipPopupOpen: false,
+    isClassifPopupOpen: false,
 
     availableBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     selectedBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : {id: '', displayText: ''},
     timeBioClass: '2020-11-10 12:00:33',
+    segmentBioclass: true,
 
     sevipTime: '2020-11-10 12:00:33',
     sevipVariables: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType : [],
@@ -49,11 +53,21 @@ const vcrossPopupSlice = createSlice({
     name: 'vcrosspopup',
     initialState,
     reducers: {
+        //  --- bioclass ---
         setSelectedVcrossBioCls: (state, action) => {
             state.selectedBioClass = action.payload;
         },
         setSelectedBioclassTime: (state, action) => {
             state.timeBioClass = action.payload;
+        },
+        toggleVcrossBioclassSegment: (state) => {
+            state.segmentBioclass = !state.segmentBioclass;
+        },
+        toggleVcrossBioclassPopup: (state) => {
+            state.isClassifPopupOpen = !state.isClassifPopupOpen;
+        },
+        closeVcrossBioclassPopup: (state) => {
+            state.isClassifPopupOpen = false;
         },
         // --- Radar ---
         setSelectedVcrossRadarType: (state, action) => {
@@ -92,9 +106,12 @@ const vcrossPopupSlice = createSlice({
 
 export const { 
     toggleVcrossRadarSegment,
+    toggleVcrossBioclassSegment,
     closeVcrossRadarPopup, 
     toggleVcrossRadarPopup, 
     setSelectedVcrossBioCls, 
+    closeVcrossBioclassPopup,
+    toggleVcrossBioclassPopup,
     setSelectedBioclassTime, 
     setSelectedVcrossRadarParameter, 
     setSelectedVcrossRadarTime, 

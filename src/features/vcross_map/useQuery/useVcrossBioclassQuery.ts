@@ -28,8 +28,7 @@ export const useVcrossBioclassQuery = (payload: CrossSectionBioClassPayload, ena
                     payload.endLat &&
                     payload.startLon &&
                     payload.endLon &&
-                    payload.time &&
-                    payload.segment
+                    payload.time
                 ),
         refetchOnWindowFocus: false
     })

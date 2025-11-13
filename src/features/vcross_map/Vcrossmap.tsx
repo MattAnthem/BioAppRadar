@@ -4,8 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
 import VcrossBioClsDataPopup from './components/VcrossBioClsDataPopup'
 import VcrossRadarDataPopup from './components/VcrossRadarDataPopup'
-import { changeVcrossColorbar, setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice'
-import type { SelectOption } from '../../shared/components/selects/types';
+import { changeVcrossColorbar, setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice';
 import { useEffect, useRef } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
 import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData'
@@ -22,7 +21,7 @@ import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
 const Vcrossmap = () => {
 
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
-    const { selectedRadarParameter, selectedRadarType, timeRadar, selectedSevipVar, sevipTime, segmentRadar } = useAppSelector(state => state.vcrosspopup)
+    const { selectedRadarParameter, selectedRadarType, timeRadar, selectedSevipVar, sevipTime, segmentRadar, segmentBioclass, timeBioClass, selectedBioClass } = useAppSelector(state => state.vcrosspopup)
     const { mapMode } = useAppSelector(state => state.vcrossmap)
     const dispatch = useAppDispatch();
 
@@ -97,25 +96,6 @@ const Vcrossmap = () => {
         }
       };
 
-
-    // Bioclass 
-    const handleChangeVcrossBioclassTime = (time: string) => {
-        dispatch(setVcrossBioClassPayload({
-            time
-        }))
-        dispatch(setOverlayClassificationPayload({
-            time
-        }))
-    }
-    const handleChangeVcrossBioclass = (option: SelectOption) => {
-        dispatch(setVcrossBioClassPayload({
-            class: option.id as string
-        }))
-        dispatch(setOverlayClassificationPayload({
-            class: option.id as string
-        }))
-    }
-
     // Radar submit popup handler
     const onSubmitRadarPopupData = () => {
         // Dispatch popup option to the heatmap
@@ -132,6 +112,21 @@ const Vcrossmap = () => {
             parameter: selectedRadarParameter.id as string,
         }))
     }
+
+    // Bioclass submit popup handler
+    const onSubmitBioclassPopupData = () => {
+        // Dispatch popup data to the heatmap
+        dispatch(setVcrossBioClassPayload({
+            time: timeBioClass,
+            class: selectedBioClass.id as string,
+            segment: segmentBioclass,
+        }))
+        // Dispatch popup data to the leaflet map
+        dispatch(setOverlayClassificationPayload({
+            class: selectedBioClass.id as string,
+            time: timeBioClass,
+        }))
+    } 
 
     // Sevip submit popup handler
     const onSubmitSevipPopupData = () => {
@@ -189,7 +184,7 @@ const Vcrossmap = () => {
                     />
                     <VcrossSevipDataPopup onSubmitPopup={onSubmitSevipPopupData}/>
                     <VcrossRadarDataPopup onSubmitPopup={onSubmitRadarPopupData} />
-                    <VcrossBioClsDataPopup onChangeBioclass={handleChangeVcrossBioclass} onChangeBioclassTime={handleChangeVcrossBioclassTime}/>
+                    <VcrossBioClsDataPopup onSubmitPopup={onSubmitBioclassPopupData} />
                 </div>
 
             </GlassHeader>

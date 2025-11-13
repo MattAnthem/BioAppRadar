@@ -3,40 +3,48 @@ import { BirdIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import type { SelectOption } from '../../../shared/components/selects/types';
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
-import { setSelectedBioclassTime, setSelectedVcrossBioCls } from '../slice/vcrossPopupSlice';
-import { formatChartDateParam } from '../../../shared/utils/date_format';
+import { closeVcrossBioclassPopup, setSelectedBioclassTime, setSelectedVcrossBioCls, toggleVcrossBioclassPopup, toggleVcrossBioclassSegment } from '../slice/vcrossPopupSlice';
+import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
+import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 
 type Props = {
-  onChangeBioclass?: (option: SelectOption) => void;
-  onChangeBioclassTime?: (time: string) => void;
+  onSubmitPopup?: () => void;
 }
 
-const VcrossBioClsDataPopup = ({ onChangeBioclass, onChangeBioclassTime }: Props) => {
+const VcrossBioClsDataPopup = ({ onSubmitPopup }: Props) => {
 
-    const { availableBioClass, selectedBioClass, timeBioClass } = useAppSelector(state => state.vcrosspopup);
+    const { availableBioClass, selectedBioClass, timeBioClass, segmentBioclass, isClassifPopupOpen } = useAppSelector(state => state.vcrosspopup);
     const dispatch = useAppDispatch();
 
     const handleBioClassChange = (option: SelectOption) => {
       dispatch(setSelectedVcrossBioCls(option));
-      onChangeBioclass?.(option);
     }
 
-    const handleBioClassTimeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = evt.target.value; 
-      const formatted = formatChartDateParam(raw);
-      dispatch(setSelectedBioclassTime(formatted));
-      onChangeBioclassTime?.(formatted)
+    const handleBioClassTimeChange = (date: string) => {
+      dispatch(setSelectedBioclassTime(date));
+    }
+
+    const handleToggleSegment = () => {
+      dispatch(toggleVcrossBioclassSegment());
     }
 
 
+    const handleSubmitPopup = () => {
+      dispatch(closeVcrossBioclassPopup());
+      onSubmitPopup?.();
+    }
 
   return (
     <OptionPopover
         hoverText='Select Classification Data'
         customIcon={<BirdIcon className='w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4'/>}
+        isOpen={isClassifPopupOpen}
+        onClose={() => dispatch(closeVcrossBioclassPopup())}
+        onOpen={() => dispatch(toggleVcrossBioclassPopup())}
     >
 
-      <small>Available classification data</small>
+      {/* Select class data to display */}
+      <small className='font-semibold'>Available classification data</small>
       <div className="border-b border-b-gray-400"/>
       <SimpleSelect
         onSelectValue={handleBioClassChange}
@@ -45,11 +53,29 @@ const VcrossBioClsDataPopup = ({ onChangeBioclass, onChangeBioclassTime }: Props
         value={selectedBioClass.displayText}
       />
 
-      {/* Select Time */}
-      <small>Select time</small>
+      {/* Toggle on/off segment */}
+      <small className='font-semibold'>Segment</small>
       <div className="border-b border-b-gray-400"/>
-      <input onChange={handleBioClassTimeChange} value={timeBioClass} step={1} className="w-full p-2 border rounded-sm" type="datetime-local" name="bioclassTime" id="bioclassTime" />
+      <div className="flex items-center justify-start gap-2 px-2">
+        <input type="checkbox" checked={segmentBioclass} onChange={handleToggleSegment} name="vcross-bioclass-segment" id="vcross_bioclass_segment" />
+        <small>Toggle on/off segement</small>
+      </div>
 
+      {/* Select Time */}
+      <small className='font-semibold'>Select time</small>
+      <div className="border-b border-b-gray-400"/>
+      <ReactDatetimePicker
+        value={timeBioClass}
+        onChange={handleBioClassTimeChange}
+      />
+      <ButtonBorder
+            onClick={handleSubmitPopup}
+            className="p-2 mt-2"
+      >
+
+            Display Data
+
+      </ButtonBorder>
         
     </OptionPopover>
   )
