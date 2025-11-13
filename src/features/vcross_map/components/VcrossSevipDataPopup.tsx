@@ -60,6 +60,7 @@ const VcrossSevipDataPopup = ({ onSubmitPopup }:Props) => {
       <ButtonBorder
             onClick={handleSubmitPopup}
             className="p-2 mt-2"
+            isPrimary
       >
 
             Display Data

@@ -191,7 +191,7 @@ const HistoryMap = () => {
                 <ClassificationPopup 
                     onSubmitPopup={submitClassifPopupData}
                 />
-                <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
+                <MapbasePopup onChangeOverlayColor={handleChangeColorbar} displayColorbarOption={!isClassif}/>
                 
             </div>
 

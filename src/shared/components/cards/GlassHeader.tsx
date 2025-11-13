@@ -17,7 +17,7 @@ const GlassHeader = ({ children, className }: GlassHeaderProps) => {
         className={`
             ${className}
             absolute top-0 left-0 rounded-t-sm  w-full flex justify-between
-            border-white/20 bg-gray-900/55
+            border-white/20 bg-gray-800/55
         `}
         >
             {children}
