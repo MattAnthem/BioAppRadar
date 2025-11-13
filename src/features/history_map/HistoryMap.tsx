@@ -27,7 +27,7 @@ const HistoryMap = () => {
 
     // Redux call
     // Selected Radar type and Radar Parameter
-    const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
+    const { selectedMapBase, selectedBoundary, selectedBoundaryType, selectedColormap } = useAppSelector(state => state.hist_basemap);
     const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
     const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
@@ -134,6 +134,7 @@ const HistoryMap = () => {
             type: selectedType.id as 'grid' | 'polar',
             parameter: selectedParameter.id as string,
             time: radarTimeHist,
+            colorbar: selectedColormap.id as string,
         }))
     }
 
@@ -142,7 +143,8 @@ const HistoryMap = () => {
     const submitSevipPopupData = () => {
         dispatch(setSevipPayloadHist({
             parameter: sevipSelVariable.id as string,
-            time: histTimeSevip
+            time: histTimeSevip,
+            colorbar: selectedColormap.id as string,
         }))
     }
 
