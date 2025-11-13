@@ -92,19 +92,25 @@ const vcrossMapSlice = createSlice({
             state.vcrossBioclassOvrlayPayload = { ...state.vcrossBioclassOvrlayPayload, ...action.payload }
         },
         setOverlayRadarPayload: (state, action: PayloadAction<Partial<RadarGridPayload> | Partial<RadarPolarPayload>>) => {
-            const prevPayload = state.vcrossRadarOvrlayPayload;
             const incoming = action.payload;
-            const effectiveType = incoming.type ?? prevPayload.type;
-            if (effectiveType === 'grid') {
-                state.vcrossRadarOvrlayPayload = {
-                    ...(prevPayload as RadarGridPayload),
-                    ...(incoming as Partial<RadarGridPayload>)
-                }
+            const effectiveType = incoming.type ?? state.vcrossRadarOvrlayPayload.type;
+          
+            if (effectiveType === "grid") {
+              state.vcrossRadarOvrlayPayload = {
+                type: "grid",
+                parameter: incoming.parameter ?? "ref",
+                time: incoming.time ?? "2020-11-10 12:00:33",
+                colorbar: incoming.colorbar ?? "turbo",
+                height: (incoming as Partial<RadarGridPayload>).height ?? 0,
+              };
             } else {
-                state.vcrossRadarOvrlayPayload = {
-                    ...(prevPayload as RadarPolarPayload),
-                    ...(incoming as Partial<RadarPolarPayload>)
-                }
+              state.vcrossRadarOvrlayPayload = {
+                type: "polar",
+                parameter: incoming.parameter ?? "ref",
+                time: incoming.time ?? "2020-11-10 12:00:33",
+                colorbar: incoming.colorbar ?? "turbo",
+                elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
+              };
             }
         },
         changeVcrossColorbar: (state, action: PayloadAction<string>) => {

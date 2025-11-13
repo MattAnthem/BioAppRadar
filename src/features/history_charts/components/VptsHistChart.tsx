@@ -35,10 +35,12 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, displayMode === 'png');
 
 
-
   
     // Submit Vtip Popup data
     const submitVptsPopup = () => {
+
+      console.log("START TIME ", vptsStartTime)
+      console.log("END TIME ", vptsEndTime)
 
       dispatch(changeVptsHistPayload(
         {

@@ -92,6 +92,7 @@ return (
       <ButtonBorder
         onClick={handleSubmit}
         className='py-2 mt-2'
+        isPrimary
       >
         Display Data
       </ButtonBorder>

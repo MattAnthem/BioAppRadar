@@ -76,6 +76,7 @@ const ClassificationPopup = ({ onSubmitPopup }: ClassificationPopupProps) => {
         <ButtonBorder
             onClick={submitPopupData}
             className='py-2 mt-2'
+            isPrimary
         >
             Display data
         </ButtonBorder>

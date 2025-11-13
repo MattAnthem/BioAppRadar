@@ -106,7 +106,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
         tickPixelInterval: 100,
         minTickInterval: 20 * 60 * 1000,
         labels: {
-          useHTML: true,
+          useHTML: false,
           rotation: 0,
           align: "center",
           style: {
@@ -130,7 +130,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
             if (isFirst || isNewDay) {
               return `
                 <div style="text-align:center;">
-                  <span style="color:#666;">${dateStr}</span><br/>
+                  <span style="color:${chartFontColor};font-weight:700;">${dateStr}</span><br/>
                   <span style="color:${chartFontColor};">${timeStr}</span>
                 </div>`;
             }
@@ -144,7 +144,8 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
         title: {
           text: `${data.name} (${data.units})`,
           style: {
-            fontSize: "11px"
+            fontSize: "11px",
+            color: chartLegendColor,
           }
         },
         labels: {

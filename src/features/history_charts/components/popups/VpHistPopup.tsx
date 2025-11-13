@@ -57,6 +57,7 @@ const VpHistPopup = ({ onSubmitPopup }:Props) => {
         <ButtonBorder
             onClick={handleSubmitPopupData}
             className='py-2 mt-2'
+            isPrimary
         >
             Display data
         </ButtonBorder>

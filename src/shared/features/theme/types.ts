@@ -17,7 +17,8 @@ export interface ThemeElements {
     chartFontColor: string;
     chartGridline: string;
     chartLegendColor: string;
-    datePicker: DatePicker
+    datePicker: DatePicker;
+    popupBtn: PopupBtn;
 }
 
 type DatePicker = {
@@ -28,7 +29,16 @@ type DatePicker = {
     selectedDay: string;
     popupBg: string;
     popupBorder: string;
-  }
+}
+
+type PopupBtn = {
+    primary_bg: string;
+    primary_hover: string;
+    seconcondary_bg: string;
+    secondary_hover: string;
+    primary_text: string;
+    secondary_text: string;
+}
 
 
 type Texts = {
@@ -150,6 +160,9 @@ type SectionCardTheme = {
     type BtnBorderTheme = {
         border: string;
         hover_bg: string;
+        primary_bg: string;
+        primary_text: string;
+        primary_hover: string;
         text?: string;
         bg?: string;
     }

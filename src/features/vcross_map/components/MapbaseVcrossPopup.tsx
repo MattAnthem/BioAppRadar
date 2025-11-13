@@ -42,6 +42,7 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
     <OptionPopover
         customIcon={<MapIcon className={iconSize}/>}
         hoverText='Change Base Map'
+        isPrimary
     >
 
         <small className='font-semibold'>Base Map</small>

@@ -185,13 +185,13 @@ const HistoryMap = () => {
 
             <div className="z-5 flex gap-2 justify-center items-end">
 
-                <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 
                 <SevipPopup onSubmitPopup={submitSevipPopupData}/>
                 <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
                 <ClassificationPopup 
                     onSubmitPopup={submitClassifPopupData}
                 />
+                <MapbasePopup onChangeOverlayColor={handleChangeColorbar}/>
                 
             </div>
 

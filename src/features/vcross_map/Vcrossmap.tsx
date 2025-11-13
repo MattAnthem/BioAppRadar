@@ -178,13 +178,13 @@ const Vcrossmap = () => {
 
                 {/* Data popover Options */}
                 <div className="z-5 flex gap-2 justify-center items-end">
+                    <VcrossSevipDataPopup onSubmitPopup={onSubmitSevipPopupData}/>
+                    <VcrossRadarDataPopup onSubmitPopup={onSubmitRadarPopupData} />
+                    <VcrossBioClsDataPopup onSubmitPopup={onSubmitBioclassPopupData} />
                     <MapbaseVcrossPopup 
                         onChangeOverlayColor={handleChangeColorbar}
                         displayColorbarOption= {mapMode == 'vcross_radar' || mapMode == 'vcross_sevip'}
                     />
-                    <VcrossSevipDataPopup onSubmitPopup={onSubmitSevipPopupData}/>
-                    <VcrossRadarDataPopup onSubmitPopup={onSubmitRadarPopupData} />
-                    <VcrossBioClsDataPopup onSubmitPopup={onSubmitBioclassPopupData} />
                 </div>
 
             </GlassHeader>

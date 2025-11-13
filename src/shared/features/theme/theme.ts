@@ -100,14 +100,25 @@ export const light: ThemeElements = {
     },
     btnBorder: {
         border: 'border-gray-400',
-        hover_bg: 'hover:bg-sky-700',
-        bg: 'bg-sky-800',
-        text: 'text-white'
+        hover_bg: 'hover:bg-zinc-300',
+        bg: 'bg-zinc-200',
+        text: 'text-black',
+        primary_bg: 'bg-sky-800',
+        primary_hover: 'hover:bg-sky-900',
+        primary_text: 'text-white'
     },
     charts: {
         strokes: '#82ca9d',
         fill: '#82ca9d',
         ticks: 'gray'
+    },
+    popupBtn: {
+        primary_bg: 'bg-sky-800',
+        primary_hover: 'hover:bg-sky-900',
+        primary_text: 'text-white',
+        seconcondary_bg: 'bg-zinc-200',
+        secondary_hover: 'hover:bg-zinc-300',
+        secondary_text: 'text-black'
     }
 }
 
@@ -212,12 +223,24 @@ export const dark: ThemeElements = {
     },
     btnBorder: {
         border: 'border-zinc-500',
-        hover_bg: 'hover:bg-zinc-500',
-        text: 'text-gray-300'
+        hover_bg: 'hover:bg-zinc-600',
+        text: 'text-gray-300',
+        bg: 'bg-zinc-700',
+        primary_bg: 'bg-sky-800',
+        primary_hover: 'hover:bg-sky-900',
+        primary_text: 'text-white'
     },
     charts: {
         strokes: '#41962e',
         fill: '#72966a',
         ticks: '#b3b3b3'
+    },
+    popupBtn: {
+        primary_bg: 'bg-sky-800',
+        primary_hover: 'hover:bg-sky-900',
+        primary_text: 'text-white',
+        seconcondary_bg: 'bg-zinc-700',
+        secondary_hover: 'hover:bg-zinc-600',
+        secondary_text: 'text-white'
     }
 }

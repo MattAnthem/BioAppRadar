@@ -16,6 +16,7 @@ import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import loader from '../../assets/loader.webp';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 import { Unplug } from 'lucide-react';
+import type { MenuNames } from '../../shared/components/buttons/navbtn/MenuTypes';
 
 type LiveMapProps = {
     drawable: boolean;
@@ -71,14 +72,15 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
     //#endregion
 
 
-    // Prefetch classification frames
+    // Prefetch classification frames (only if we are in this page)
+    const currentPath = location.pathname.replace('/', '') as MenuNames;
     const { isPreloading, progress } = usePreloadClassificationFrames(
         mapTimeRange,
         classificationPayload.class,
         classificationPayload.color_0,
         classificationPayload.color_1,
         currentHeight,
-        {enabled: true}
+        {enabled: currentPath === ''}
     )
 
     const { data: classifData, error } = useClassificationDataQuery({
@@ -142,10 +144,10 @@ const LiveMap = ({ drawable, enableLineDraw }: LiveMapProps) => {
             {/* Overlay controller */}
             <div className="z-5 flex gap-2 justify-center items-end">
 
-                <MapbasePopup displayColorbarOption={false}/>
                 <ClassificationPopup 
                     onSubmitPopup={handleSubmitPopupData}
                 />
+                <MapbasePopup displayColorbarOption={false}/>
 
             </div>
 

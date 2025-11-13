@@ -53,8 +53,9 @@ const MapbasePopup = ({ displayColorbarOption, onChangeColormap }: BaseMapProps)
 
   return (
     <OptionPopover
-      customIcon={<MapIcon className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4"/>}
+      customIcon={<MapIcon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4`}/>}
       hoverText="Change Base Map"
+      isPrimary
     >
        {/* Select map base */}
        <small className="font-semibold">Base Map</small>

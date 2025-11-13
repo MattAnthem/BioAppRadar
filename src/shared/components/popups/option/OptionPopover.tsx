@@ -11,6 +11,8 @@ type ChartParamsPopupProps = {
   customIcon?: ReactNode;
   onClickEvent?: () => void;
 
+  isPrimary?: boolean;
+
   isOpen?: boolean;  
   onOpen?: () => void;
   onClose?: () => void;
@@ -23,13 +25,15 @@ const OptionPopover = ({
   onClickEvent,
   isOpen,
   onOpen,
-  onClose
+  onClose,
+  isPrimary=false
 }: ChartParamsPopupProps) => {
   const [localOpen, setLocalOpen] = useState(false);
   const [openUpwards, setOpenUpwards] = useState(false);  
   const popupRef = useRef<HTMLDivElement | null>(null);
   const themes = useTheme();
-  const { bg, border, hover, options_bg, text } = themes.theme.simpleSelect;
+  const { primary_bg, primary_hover, primary_text, seconcondary_bg, secondary_hover, secondary_text } = themes.theme.popupBtn;
+  const { options_bg, border } = themes.theme.simpleSelect;
 
   const isPopupOpen = isOpen ?? localOpen;
 
@@ -64,7 +68,7 @@ const OptionPopover = ({
   }, [isPopupOpen]);
 
   return (
-    <div ref={popupRef} className={`relative inline-block ${text}`}>
+    <div ref={popupRef} className={`relative inline-block`}>
       <Tooltip
         position="bottom"
         display_condition={!isPopupOpen}
@@ -72,7 +76,12 @@ const OptionPopover = ({
       >
         <button
           onClick={handleBtnClick}
-          className={`${bg} ${border} ${hover} p-1 rounded-sm`}
+          className={`
+            ${isPrimary ? primary_bg : seconcondary_bg}  
+            ${isPrimary ? primary_text : secondary_text} 
+            ${isPrimary ? primary_hover : secondary_hover}
+            p-1 rounded-sm
+          `}
         >
           {customIcon || <Settings2 width={15} height={15} />}
         </button>

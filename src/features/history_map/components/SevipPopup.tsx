@@ -23,7 +23,6 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
     }
 
     const handleSevipTimeChange = (time: string) => {
-        console.log('PICKED TIME ', time)
         dispatch(setHistTimeSevip(time));
     }
 
@@ -62,6 +61,7 @@ const SevipPopup = ({ onSubmitPopup }: SevipPopupProps) => {
         <ButtonBorder
             onClick={handleSubmit}
             className='py-2 mt-2'
+            isPrimary
         >
              Display data
         </ButtonBorder>

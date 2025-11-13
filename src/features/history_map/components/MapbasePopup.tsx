@@ -54,7 +54,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
 
   // theme
   const themes = useTheme();
-  const { bg, border, hover, options_bg } = themes.theme.simpleSelect;
+  const { border, options_bg } = themes.theme.simpleSelect;
 
   return (
     <div ref={mapBasepopupRef} className="">
@@ -65,7 +65,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
         text="Change Base Map"
       >
         
-        <button onClick={() => dispatch(toggleShowHistMapBasePopup())} className={`${bg} ${border} ${hover} p-1 rounded-sm`}>
+        <button onClick={() => dispatch(toggleShowHistMapBasePopup())} className={`text-white hover:bg-blue-900 bg-blue-800 p-1 rounded-sm`}>
             <Map className={iconSize}/>
         </button>
 
