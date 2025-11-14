@@ -25,7 +25,7 @@ const HistoricalExplorer = () => {
                 lg:row-span-[4fr] row-span-1
 
                 flex flex-col
-                lg:grid lg:grid-cols-5 gap-2
+                lg:grid lg:grid-cols-8 gap-2
               `}
             >
 
@@ -33,7 +33,7 @@ const HistoricalExplorer = () => {
               <div 
                 className={`
                   lg:w-full lg:h-full h-[60vh]
-                  lg:col-span-4
+                  lg:col-span-6
                 `}
               >
                   <HistoryMap/>
@@ -43,7 +43,7 @@ const HistoricalExplorer = () => {
               <div 
                 className={`
                   lg:w-full lg:h-full 
-                  lg:col-span-1 
+                  lg:col-span-2 
                 `}
               >
                 <VpHistChart/>
