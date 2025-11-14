@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HCHeatmap from 'highcharts/modules/heatmap';
 import HCAnnotations from 'highcharts/modules/annotations';
 import type { VptsResponse } from '../../../api/endpoints/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
-import HCBoost from 'highcharts/modules/boost';
 
 HCHeatmap(Highcharts);
-// HCBoost(Highcharts);
 HCAnnotations(Highcharts);
 
 interface VpHeatmapChartProps {
@@ -34,53 +32,23 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
 }) => {
     const chartRef = useRef<HighchartsReact.RefObject>(null);
     const { theme } = useTheme();
-    const { chartFontColor, chartLegendColor } = theme;
+    const { chartFontColor, chartLegendColor, chartGridline, borderBox } = theme.charts;
 
 
     
-    // Data issued from the web worker
-    useEffect(() => {
-        if (!data) return;
-      
-        const worker = new Worker(new URL('./workers/vptsHeatmapWorker.ts', import.meta.url), {
-          type: 'module'
+    // Heavy calculation
+    const seriesData = useMemo(() => {
+        const arr: [number, number, number | null][] = [];
+        data.height.forEach((h, j) => {
+            data.times.forEach((t, i) => {
+                arr.push([Date.parse(t.replace(' ', 'T') + 'Z'), h, data.parameter[j][i]]);
+            });
         });
-      
-        worker.postMessage({ data });
-      
-        worker.onmessage = (e) => {
-          const result = e.data as [number, number, number | null][];
-          const chart = chartRef.current?.chart;
-      
-          if (chart && chart.series.length > 0) {
-            const heatmapSeries = chart.series[0];
-            heatmapSeries.setData(result, false, false, false);
-            chart.redraw(false);
-          }
-      
-          worker.terminate();
-        };
-      
-        return () => {
-          worker.terminate();
-        };
-      }, [data]);
-      
-
-
-    // // Heavy calcul
-    // const seriesData = useMemo(() => {
-    //     const arr: [number, number, number | null][] = [];
-    //     data.height.forEach((h, j) => {
-    //         data.times.forEach((t, i) => {
-    //             arr.push([Date.parse(t.replace(' ', 'T') + 'Z'), h, data.parameter[j][i]]);
-    //         });
-    //     });
-    //     return arr;
-    // }, [data]);
+        return arr;
+    }, [data]);
 
    
-    const { colorPalette } = useMemo(() => {
+    const { colorPalette, ticks, tckn, tckx } = useMemo(() => {
         const paletteVpts = [
             "#ffffffff", "#ffffd3ff", "#ffffa8ff", "#ffff7cff",
             "#ffff51ff", "#e6ec26ff", "#a6a300ff", "#ffa300ff",
@@ -116,10 +84,14 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
         const tckn = Math.min(...ticks);
         const tckx = Math.max(...ticks);
         const stick = ticks.map(x => (x - tckn)/(tckx - tckn));
+        const ncolor = palette.length;
+        const colorPalette: [number, string][] = [];
+        for (let j = 0; j < ncolor; j++) {
+            const data = [stick[j], palette[j]] as [number, string];
+            colorPalette.push(data);
+        }
 
-        const colorPalette: [number,string][] = palette.map((c,j) => [stick[j], c] as [number,string]);
-        
-        return { colorPalette, ticks };
+        return { colorPalette, ticks, tckn, tckx };
     }, [data]);
 
     useEffect(() => {
@@ -227,7 +199,9 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
         //
         const options: Highcharts.Options = {
             chart: {
-                plotBorderWidth: 0,
+                borderColor: borderBox,
+                borderWidth: 1,
+                borderRadius: 3,
                 backgroundColor:'transparent',
                 reflow: true,
                 style:{fontFamily:'Inter, sans-serif',color:chartFontColor,fontSize:'14px'},
@@ -239,6 +213,8 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 type:'datetime', 
                 tickLength:13, 
                 tickPixelInterval:100, 
+                lineColor: chartGridline,
+                tickColor: chartGridline,
                 minTickInterval:20*60*1000, 
                 labels: {
                     useHTML: false,
@@ -275,6 +251,8 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 max:p_ymax,
                 startOnTick: false,
                 endOnTick: false,
+                lineColor: chartGridline,
+                tickColor: chartGridline,
                 softMin: p_ymin,
                 softMax: p_ymax,
                 title:{
@@ -300,7 +278,7 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 animation: false,
                 allowPointSelect: false,
                 name:data.name,
-                data: [],
+                data: seriesData,
                 turboThreshold:0,
                 colsize,
                 rowsize,
@@ -319,10 +297,12 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
             },
             colorAxis:{
                 reversed: false,
-                min: 0,
+                min: tckn,
+                max: tckx,
+                // tickPositions: ticks ,
                 stops:colorPalette,
                 labels:{
-                    format:'{value:.1f}',
+                    // format:'{value:.1f}',
                     style: {
                         color: chartFontColor
                     }

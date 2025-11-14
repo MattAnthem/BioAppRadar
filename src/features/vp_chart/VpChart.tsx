@@ -94,7 +94,7 @@ const VpChart = ({ className }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="h-full grid">
+        <div className="h-full grid px-2 pb-2">
           {data && (
 
                 <VpChartHighcharts

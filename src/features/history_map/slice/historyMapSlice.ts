@@ -21,10 +21,10 @@ const initialState: HistorymapSliceState = {
         height: 0,
     },
     classifPayloadHist: {
-        class: 'biometeo',
+        class: 'species',
         color_0: '#dc3545',
         color_1: '#0d6efd',
-        height: 250,
+        height: 0,
         time: '2020-11-10 12:00:33',
     },
     sevipPayloadHist: {

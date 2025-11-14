@@ -37,7 +37,7 @@ const Modal = (
           {/* overlay cliquable */}
           <button
             onClick={handle_toggle_mdl}
-            className="absolute inset-0 bg-zinc-800/55"
+            className="absolute inset-0 bg-zinc-700/70"
             aria-label="Close modal"
           />
 
@@ -53,7 +53,7 @@ const Modal = (
                     </ButtonBorder>
 
                   </div>
-                  <div className="w-full border-b border-gray-300" />
+                  <div className="w-full border-b border-zinc-700" />
                   {/* Content */}
                   <div className="w-full h-[70vh]">
                     { children }

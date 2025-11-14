@@ -3,7 +3,7 @@ import type { ThemeElements } from "./types"
 
 export const light: ThemeElements = {
     chartFontColor: '#424242',
-    chartGridline: '#e0e0e0',
+    chartGridline: '#eeeeee',
     chartLegendColor: '#585858',
     datePicker: {
             bg: 'bg-neutral-200',
@@ -50,7 +50,8 @@ export const light: ThemeElements = {
         },
         contents: {
             toggler_hover: 'hover:bg-gray-200',
-            togller_color: 'text-gray-400'
+            togller_color: 'text-gray-400',
+            icon_color: 'text-gray-950'
         }
     },
     scattererCard: {
@@ -108,9 +109,10 @@ export const light: ThemeElements = {
         primary_text: 'text-white'
     },
     charts: {
-        strokes: '#82ca9d',
-        fill: '#82ca9d',
-        ticks: 'gray'
+        chartFontColor: '#222222',
+        chartGridline: '#7a7a7a',
+        chartLegendColor: '#4e4e4e',
+        borderBox: '#979797'
     },
     popupBtn: {
         primary_bg: 'bg-sky-800',
@@ -156,8 +158,8 @@ export const dark: ThemeElements = {
             toogler_hover: 'hover:bg-zinc-600'
         },
         navs: {
-            text: 'text-zinc-300',
-            text_hover: 'hover:text-zinc-300',
+            text: 'text-zinc-100',
+            text_hover: 'hover:text-zinc-200',
             text_active: 'text-zinc-300',
             bg_active: 'bg-zinc-600',
             bg_hover: 'hover:bg-zinc-700',
@@ -173,7 +175,8 @@ export const dark: ThemeElements = {
         },
         contents: {
             toggler_hover: 'hover:bg-zinc-700',
-            togller_color: 'text-zinc-400'
+            togller_color: 'text-zinc-400',
+            icon_color: 'text-gray-100'
         }
     },
     scattererCard: {
@@ -185,10 +188,10 @@ export const dark: ThemeElements = {
         details_bg: 'bg-zinc-800 text-white'
     },
     sectionCard: {
-        bg: 'bg-zinc-700',
-        primary_text: 'text-zinc-300',
+        bg: 'bg-zinc-800',
+        primary_text: 'text-zinc-200',
         secondary_text: 'text-zinc-400',
-        border: 'border-zinc-500',
+        border: 'border-zinc-700',
         shadow: 'shadow-slate-700',
     },
     simpleSelect: {
@@ -231,9 +234,10 @@ export const dark: ThemeElements = {
         primary_text: 'text-white'
     },
     charts: {
-        strokes: '#41962e',
-        fill: '#72966a',
-        ticks: '#b3b3b3'
+        chartFontColor: '#bebebe',
+        chartGridline: '#7a7a7a',
+        chartLegendColor: '#bebebe',
+        borderBox: '#585858'
     },
     popupBtn: {
         primary_bg: 'bg-sky-800',

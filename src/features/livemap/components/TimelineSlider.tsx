@@ -59,7 +59,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
   return (
     <div className="z-5 absolute bottom-0 left-0 w-full">
-      <div className="relative w-full p-0.5">
+      <div className="relative w-full">
 
 
         {/* Timeline controls */}

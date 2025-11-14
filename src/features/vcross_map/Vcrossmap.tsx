@@ -159,7 +159,7 @@ const Vcrossmap = () => {
 
 
   return (
-    <SectionCard className='relative w-full h-full p-0.5'>
+    <SectionCard className='relative w-full h-full'>
 
             {
                 (error || coverageError ) && (

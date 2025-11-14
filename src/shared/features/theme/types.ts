@@ -87,6 +87,7 @@ type TopbarMain = {
 type TopbarContents = {
     toggler_hover: string;
     togller_color: string;
+    icon_color: string;
 }
 
 type TopbarTheme = {
@@ -168,7 +169,8 @@ type SectionCardTheme = {
     }
 
     type ChartsTheme = {
-        ticks: string;
-        strokes: string;
-        fill: string;
+        chartFontColor: string;
+        chartGridline: string;
+        chartLegendColor: string;
+        borderBox: string;
     }

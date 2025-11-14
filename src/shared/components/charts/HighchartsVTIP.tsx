@@ -28,7 +28,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
 }) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const { theme } = useTheme();
-  const { chartFontColor, chartGridline, chartLegendColor } = theme;
+  const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.charts;
 
   useEffect(() => {
     if (!chartRef.current || !data?.times?.length) return;
@@ -84,7 +84,9 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
     return {
       chart: {
         zoomType: "x",
-        plotBorderWidth: 0,
+        borderColor: borderBox,
+        borderWidth: 1,
+        borderRadius: 3,
         backgroundColor: "transparent",
         reflow: true,
         events: {
@@ -105,6 +107,10 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
         tickLength: 13,
         tickPixelInterval: 100,
         minTickInterval: 20 * 60 * 1000,
+        gridLineColor: chartGridline,
+        lineColor: chartGridline,
+        lineWidth: 1,
+        tickColor: chartGridline,
         labels: {
           useHTML: false,
           rotation: 0,
@@ -141,6 +147,8 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
       yAxis: {
         min: pmin,
         max: ymax,
+        tickColor: chartGridline,
+        lineColor: chartGridline,
         title: {
           text: `${data.name} (${data.units})`,
           style: {

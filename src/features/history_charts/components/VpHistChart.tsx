@@ -95,7 +95,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
         <div className="p-1 w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
             
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-2">
               {/* controls */}
               <VpHistPopup
                 onSubmitPopup={onSubmitVpPopup}
@@ -116,7 +116,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="h-full grid">
+        <div className="h-full grid px-2 pb-2">
         {data && (
 
           <VpChartHighcharts

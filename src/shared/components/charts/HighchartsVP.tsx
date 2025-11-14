@@ -24,7 +24,7 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
 }) => {
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const theme = useTheme();
-  const { chartFontColor, chartGridline, chartLegendColor } = theme.theme;
+  const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.theme.charts;
 
   const getChartOptions = (): Highcharts.Options => {
     const seriesData = data.height.map((h, i) => [h, data.parameter[i]]);
@@ -37,6 +37,9 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
         reflow: true,
         backgroundColor: 'transparent',
         height: chartHeight ?? null,
+        borderColor: borderBox,
+        borderWidth: 1,
+        borderRadius: 3,
         events: {
           load: function () {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -95,6 +98,9 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
           min: radarAltitude - 250,
           max: radarAltitude + 5000,
           tickInterval: 500,
+          lineColor: chartGridline,
+          tickColor: chartGridline,
+          lineWidth: 1,
           reversed: false,
           title: {
             text: 'Altitude [m]',
@@ -126,14 +132,17 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
       yAxis: {
         title: {
           text: `${data.name} [${data.units}]`,
-          style: { color: chartLegendColor, fontSize: '11px' },
+          style: { color: chartLegendColor, fontSize: '11px', },
         },
         labels: {
           format: '{value}',
-          style: { color: chartFontColor, fontSize: '11px' },
+          style: { color: chartFontColor, fontSize: '11px',  },
         },
+        lineColor: chartGridline,
         gridLineColor: chartGridline,
         lineWidth: 1,
+        tickColor: chartGridline,
+        
       },
       series: [
         {

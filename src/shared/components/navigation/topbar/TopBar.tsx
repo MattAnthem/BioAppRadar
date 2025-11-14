@@ -29,14 +29,14 @@ const TopBar = () => {
 
       {/* Left Controls */}
       {/* Menu toggler button for smaller screen */}
-      <button aria-labelledby='collapse sidebar' name='toggle_sidebar' onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.togller_color} lg:hidden rounded-sm p-1`}>
+      <button aria-labelledby='collapse sidebar' name='toggle_sidebar' onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.icon_color} lg:hidden rounded-sm p-1`}>
         <Menu className='w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4'/>
       </button>
       
       {/* Right controls */}
       <div className="flex relative w-full justify-end items-center gap-2 opacity-100">
 
-        <Sun className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.togller_color}`}/>
+        <Sun className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.icon_color}`}/>
 
         {/* Switch button */}
         <SwitchBtn 
@@ -48,7 +48,7 @@ const TopBar = () => {
             ariaControls='App theme'
         />
         
-        <Moon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.togller_color}`}/>
+        <Moon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.icon_color}`}/>
 
       </div>
     </div>
