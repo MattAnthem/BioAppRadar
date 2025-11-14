@@ -82,6 +82,11 @@
 }
 
 .leaflet-control-zoom { margin-top: 60px; }
+/* .leaflet-image-layer {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  
+} */
 
 @layer base {
   input:-webkit-autofill,

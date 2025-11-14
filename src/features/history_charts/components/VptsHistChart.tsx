@@ -38,10 +38,6 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   
     // Submit Vtip Popup data
     const submitVptsPopup = () => {
-
-      console.log("START TIME ", vptsStartTime)
-      console.log("END TIME ", vptsEndTime)
-
       dispatch(changeVptsHistPayload(
         {
           startTime: vptsStartTime,
@@ -73,7 +69,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
           >
 
               {/* Handle display mode */}
-              <div className="w-full flex justify-center items-center p-1 gap-2">
+              <div className="w-full flex justify-start items-center p-1 gap-2">
                 <p className="text-sm">Display as :</p>
 
                 <input
