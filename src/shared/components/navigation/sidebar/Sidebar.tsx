@@ -1,5 +1,5 @@
 import {  Bell, CalendarClock, FlipHorizontal,  Home, SidebarIcon } from "lucide-react";
-import logo_svg from "../../../../assets/dark_logo.webp"
+import logo_svg from "../../../../../public/BioAppRadar.webp"
 import { useTheme } from "../../../hooks/useTheme";
 import React, { useEffect, useRef } from "react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
@@ -7,6 +7,9 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import type { MenuNames } from "../../buttons/navbtn/MenuTypes";
 import { setActiveButton, setMinimized, toggleMinimize } from "./sidebarSlice";
 import NavButton from "../../buttons/navbtn/NavButton";
+import mtorwlogo from "../../../../../public/mtorw.webp";
+import pasetlogo from "../../../../../public/paset.webp";
+import rsiflogo from "../../../../../public/rsif.webp";
 
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
@@ -22,7 +25,7 @@ const Sidebar = () => {
 
     const { theme } = themes;
     const { sidebar, topbar } = theme;
-    const { main, navs } = sidebar;
+    const { main } = sidebar;
 
 
     const handleActiveButton = (menu: MenuNames) => {
@@ -67,13 +70,12 @@ const Sidebar = () => {
         <div className={`mb-2 flex ${isMinimized ? 'items-start justify-center' : 'justify-between items-center'}  gap-1 p-1 w-full`}>
 
             <div className="flex justify-center gap-2 items-center">
-                <img src={logo_svg} className={`${isMinimized ? 'hidden' : ''} w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-6 lg:h-6`} alt="appicon"  />
-                <h1 className={`text-sm sm:text-sm md:text-base lg:text-lg ${isMinimized ? 'hidden' : navs.text}`}>BioAppRadar</h1>
+                <img src={logo_svg} className={`${isMinimized ? 'hidden' : ''} h-10`} alt="appicon"  />
             </div>
 
             {/* Toggle minimize sidebar */}
             <button aria-label="toggle-minimize-sidebar" aria-controls="sidebar" onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.togller_color}  rounded-sm p-1 cursor-ew-resize focus-visible:outline-2 outline-offset-1 outline-blue-800`}>
-                <SidebarIcon className={iconSize} />
+                <SidebarIcon className={`w-5`} />
             </button>
 
         </div>
@@ -143,6 +145,24 @@ const Sidebar = () => {
             tooltipText="Notification center"
             badge={12}
         />
+
+        {/* Logos */}
+        <div className="h-full w-full lg:flex flex-col items-end justify-end gap-2">
+        <div className={`${main.section_line} w-full h-0.5`}/>
+
+            <div className="flex justify-center pb-2 gap-1 w-full">
+                <a href="https://mtorw.org" target="_blank" rel="noopener noreferrer">
+                    <img src={mtorwlogo} alt="mtorw-logo" className={`h-7 ${isMinimized ? 'hidden' : ''}`} />
+                </a>
+                <a href="https://paset.org" target="_blank" rel="noopener noreferrer">
+                    <img src={pasetlogo} alt="paset-logo" className={`h-7 ${isMinimized ? 'hidden' : ''}`} />
+                </a>
+                <a href="https://rsif.org" target="_blank" rel="noopener noreferrer">
+                    <img src={rsiflogo} alt="rsif-logo" className={`h-7 ${isMinimized ? 'hidden' : ''}`} />
+                </a>
+            </div>
+
+        </div>
 
     </div>
   )
