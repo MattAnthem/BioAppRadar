@@ -83,7 +83,7 @@ const RadarOptionPopup = () => {
         onOpen={handleTooglePopup}
         onClose={closePopup}
     >
-        <small className='font-semibold'>Select Radar Type</small>
+        <small className='font-semibold'>Select projection type</small>
         <div className="border-b border-b-gray-400"/>
 
         {/* Type Select */}

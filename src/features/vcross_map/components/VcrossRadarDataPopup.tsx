@@ -101,7 +101,7 @@ const VcrossRadarDataPopup = () => {
     >
 
         {/* Data */}
-        <small className="font-semibold">Available Radar data</small>
+        <small className="font-semibold">Select projection type</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={locAvailableTypes}
@@ -109,6 +109,8 @@ const VcrossRadarDataPopup = () => {
             width="w-95"
             value={locSelectedType.displayText}
         />
+        <small className="font-semibold">Select a variable</small>
+        <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={locAvailableParams}
             onSelectValue={handleRadarParamChange}
