@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import SectionCard from '../shared/components/cards/SectionCard';
 import MainLayout from '../shared/layouts/MainLayout';
 const Vcrossmap = React.lazy(() => import("../features/vcross_map/Vcrossmap"));
@@ -29,8 +29,9 @@ const CrossSection = () => {
                 `}
               >
 
-
+                <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>}>
                   <Vcrossmap/>
+                </Suspense>
 
 
               </div>
@@ -40,10 +41,11 @@ const CrossSection = () => {
                   lg:col-span-2 col-span-1
                 `}
               >
-
-                <SectionCard className='w-full h-full flex items-center justify-center p-1'>
-                    <VcrossHeatmap/>
-                </SectionCard>
+                 <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>}>
+                  <SectionCard className='w-full h-full flex items-center justify-center p-1'>    
+                      <VcrossHeatmap/>
+                  </SectionCard>
+                 </Suspense>
 
               </div>
 

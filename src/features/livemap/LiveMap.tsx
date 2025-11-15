@@ -187,7 +187,7 @@ const LiveMap = () => {
         {/* Classification legends */}
         {
             (displayedData === "classification") && (
-                <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/12 h-10  right-4 lg:bottom-4 bottom-1">
+                <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-4 lg:bottom-4 bottom-1">
                     
                     {/* Color 0 */}
                     <div className="flex justify-start items-center gap-0.5 text-xs">

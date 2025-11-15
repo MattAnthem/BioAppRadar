@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
 import MainLayout from "../shared/layouts/MainLayout"
+import SectionCard from "../shared/components/cards/SectionCard";
 const LiveMap = React.lazy(() => import("../features/livemap/LiveMap"));
 const VpChart = React.lazy(() => import("../features/vp_chart/VpChart"));
 const VptsChart = React.lazy(() => import("../features/vpts_chart/VptsChart"));
@@ -36,7 +37,9 @@ const OverviewDashboard = () => {
                   lg:col-span-6
                 `}
               >
-                  <LiveMap/>
+                  <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>}>
+                    <LiveMap/>
+                  </Suspense>
               </div>
 
               {/* VP chart */}
@@ -46,7 +49,9 @@ const OverviewDashboard = () => {
                   lg:col-span-2
                 `}
               >
-                <VpChart/>
+                 <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>}>
+                  <VpChart/>
+                 </Suspense>
               </div>
 
             </div>
@@ -68,7 +73,9 @@ const OverviewDashboard = () => {
                 lg:col-span-1
                 `}
               >
-                <VtipChart/>
+                 <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>}>
+                  <VtipChart/>
+                 </Suspense>
               </div>
 
               {/* Vpts Chart */}
@@ -76,7 +83,9 @@ const OverviewDashboard = () => {
                 lg:w-full lg:h-full 
                 lg:col-span-1
                 `}>
-                <VptsChart/>
+                 <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>}>
+                  <VptsChart/>
+                 </Suspense>
               </div>
 
             </div>

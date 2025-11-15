@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import MainLayout from '../shared/layouts/MainLayout';
+import SectionCard from '../shared/components/cards/SectionCard';
 const HistoryMap = React.lazy(() => import("../features/history_map/HistoryMap"));
 const VpHistChart = React.lazy(() => import("../features/history_charts/components/VpHistChart"));
 const VptsHistChart = React.lazy(() => import("../features/history_charts/components/VptsHistChart"));
@@ -36,7 +37,13 @@ const HistoricalExplorer = () => {
                   lg:col-span-6
                 `}
               >
-                  <HistoryMap/>
+                  <Suspense fallback={
+                    <SectionCard className='w-full h-full animate-pulse'/>}
+                  >
+                    {/* History map */}
+                    <HistoryMap/>
+
+                  </Suspense>
               </div>
 
               {/* VP chart */}
@@ -46,7 +53,13 @@ const HistoricalExplorer = () => {
                   lg:col-span-2 
                 `}
               >
-                <VpHistChart/>
+                  <Suspense fallback={
+                    <SectionCard className='w-full h-full animate-pulse'/>}
+                  >
+                    {/* Vp Chart */}
+                    <VpHistChart/>
+
+                  </Suspense>
               </div>
 
             </div>
@@ -68,7 +81,13 @@ const HistoricalExplorer = () => {
                 lg:col-span-1
                 `}
               >
-                <VtipHistChart/>
+                  <Suspense fallback={
+                    <SectionCard className='w-full h-full animate-pulse'/>}
+                  >
+                    {/* Vtip chart */}
+                    <VtipHistChart/>
+                  </Suspense>
+
               </div>
 
               {/* Vpts Chart */}
@@ -76,7 +95,12 @@ const HistoricalExplorer = () => {
                 lg:w-full lg:h-full 
                 lg:col-span-1
                 `}>
-                <VptsHistChart/>
+                <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>} >
+
+                  {/* Vpts Chart */}
+                  <VptsHistChart/>
+
+                </Suspense>
               </div>
 
             </div>
