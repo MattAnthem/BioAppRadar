@@ -24,21 +24,15 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
   // Redux
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.hist_altitude);
-  const { selectedParameter, vpTime } = useAppSelector(state => state.vp_histchart);
   const currentHeight = altitudeOptions[currentAltitudeIndex];
-  const dispatch = useAppDispatch();
+
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
 
   const { isLoading, data, error } = useVpHistData();
 
 
-  const onSubmitVpPopup = () => {
-    dispatch(changeVpHistPayload({
-      parameter: selectedParameter.id as string,
-      time: vpTime,
-    }))
-  }
+console.log("rendering VP")
 
 
       // handler to open the modal
@@ -97,11 +91,9 @@ const VpHistChart = ({ className }: VpChartProps) => {
             
             <div className="flex justify-center gap-2">
               {/* controls */}
-              <VpHistPopup
-                onSubmitPopup={onSubmitVpPopup}
-              />
+              <VpHistPopup />
 
-                          {/* Open the modal */}
+              {/* Open the modal */}
               <Tooltip 
                     position="bottom" 
                     display_condition={!isModalOpen}  

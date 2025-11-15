@@ -1,51 +1,89 @@
+import { useEffect, useState } from "react";
 import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder"
 import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
 import OptionPopover from "../../../../shared/components/popups/option/OptionPopover"
 import SimpleSelect from "../../../../shared/components/selects/SimpleSelect"
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { closeVptsHistPopup, setSelectedVptsHistParameterOption, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
+import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
 
-type Props = {
-    onSubmitPopup?: () => void;
-}
 
-const VptsHistPopup = ({onSubmitPopup}: Props) => {
 
+const VptsHistPopup = () => {
+
+    // --- read only redux states ----
     const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime } = useAppSelector(state => state.vpts_histchart);
+
+    // --- Local states for the inputs ---
+    const [locParams, setLocParams] = useState(parameterOptions);
+    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
+    const [locStartTime, setLocStartTime] = useState(vptsStartTime);
+    const [locEndTime, setLocEndTime] = useState(vptsEndTime);
+
+    // ---- Synch with redux states on mount ---
+    useEffect(() => {
+      if (isPopupOpen) {
+        setLocParams(parameterOptions);
+        setLocSelectedParam(selectedParameter);
+        setLocStartTime(vptsStartTime);
+        setLocEndTime(vptsEndTime);
+      }
+    }, [isPopupOpen, parameterOptions, selectedParameter, vptsEndTime, vptsStartTime]);
+
+    //  --- local handlers to update the inputs
+    const handleStartTimeChange = (date: string) => {
+      setLocStartTime(date);
+    }
+    const handleEndTimeChange = (date: string) => {
+      setLocEndTime(date);
+    }
+    const handleVariableChange = (option: SelectOption) => {
+      setLocSelectedParam(option);
+    }
+
+    // --- Popup togglers ---
+    const handleTogglePopup = () => {
+      dispatch(toggleVptsHistPopup())
+    }
+    const handleClosePopup = () => {
+      dispatch(closeVptsHistPopup())
+    }
+
     const dispatch = useAppDispatch();
 
-    const handleStartTimeChange = (date: string) => {
-        dispatch(setVptsHistStartTime(date));
-    }
-    
-    const handleEndTimeChange = (date: string) => {
-        dispatch(setVptsHistEndTime(date));
-    }
-    
-    const handleVariableChange = (option: SelectOption) => {
-        dispatch(setSelectedVptsHistParameterOption(option));
-    }
 
     const handleSubmitPopupData = () => {
-        onSubmitPopup?.();
-        dispatch(closeVptsHistPopup())
+      dispatch(changeVptsHistPayload(
+        {
+          startTime: locStartTime,
+          endTime: locEndTime,
+          parameter: locSelectedParam.id as string
+        }
+      ));
+
+      // --- update Redux store ---
+      dispatch(setVptsHistStartTime(locStartTime));
+      dispatch(setVptsHistEndTime(locEndTime));
+      dispatch(setSelectedVptsHistParameterOption(locSelectedParam));
+
+      
+      dispatch(closeVptsHistPopup());
     }
 
   return (
     <OptionPopover
         hoverText="Select Options"
         isOpen={isPopupOpen}
-        onOpen={() => dispatch(toggleVptsHistPopup())}
-        onClose={() => dispatch(closeVptsHistPopup())}
+        onOpen={handleTogglePopup}
+        onClose={handleClosePopup}
     >
 
 
           <small className="font-semibold">Select variable</small>
           <div className="border-b border-b-gray-400"/>
           <SimpleSelect
-            options={parameterOptions}
-            value={selectedParameter.displayText}
+            options={locParams}
+            value={locSelectedParam.displayText}
             onSelectValue={handleVariableChange}
             width="w-full"
           />
@@ -56,15 +94,15 @@ const VptsHistPopup = ({onSubmitPopup}: Props) => {
           <div className="border-b border-b-gray-400"/>
           <ReactDatetimePicker
             onChange={handleStartTimeChange}
-            value={vptsStartTime}
+            value={locStartTime}
           />
 
           <small className="font-semibold">Select end Time</small>
           <div className="border-b border-b-gray-400"/>
           <ReactDatetimePicker
             onChange={handleEndTimeChange}
-            value={vptsEndTime}
-            minDate={vptsStartTime}
+            value={locEndTime}
+            minDate={locStartTime}
           />
 
         {/* Display data button */}

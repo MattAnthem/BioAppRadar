@@ -1,13 +1,11 @@
 import React,{ useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import { useTheme } from "../../../shared/hooks/useTheme";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { changeVptsHistPayload } from "../slices/vptsHistChartSlice";
 import { Fullscreen, Unplug } from "lucide-react";
 import loader from '../../../assets/loader.webp';
 import VptsHeatmapChart from "../../../shared/components/charts/HighchartsVpts";
 import { useVptsHistData } from "../hooks/useData/useVptsHistData";
-import { useVptsImageQuery } from "../hooks/useQuery/useVptsImageQuery";
+import { useVptsHistImagaData } from "../hooks/useData/useVptsHistImagaData";
 
 const ChartModal = React.lazy(() => import('./ChartModal'));
 const Tooltip = React.lazy(() => import('../../../shared/components/popups/tooltip/Tooltip'));
@@ -22,9 +20,6 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
-  // Redux
-  const { selectedParameter, vptsPayload, vptsStartTime, vptsEndTime } = useAppSelector(state => state.vpts_histchart);
-  const dispatch = useAppDispatch();
 
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
@@ -32,20 +27,10 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   // Tanstack
   const { isLoading, data, error } = useVptsHistData();
 
-  const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, displayMode === 'png');
+  const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsHistImagaData(displayMode === 'png');
 
 
-  
-    // Submit Vtip Popup data
-    const submitVptsPopup = () => {
-      dispatch(changeVptsHistPayload(
-        {
-          startTime: vptsStartTime,
-          endTime: vptsEndTime,
-          parameter: selectedParameter.id as string
-        }
-      ))
-    }
+
 
 
   // handler to open the modal
@@ -139,7 +124,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
             <div className="flex gap-2">
               
                 {/* Controls */}
-                <VptsHistPopup onSubmitPopup={submitVptsPopup} />
+                <VptsHistPopup />
 
 
                   {/* Open the modal */}

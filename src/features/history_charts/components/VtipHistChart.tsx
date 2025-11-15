@@ -1,13 +1,11 @@
 import React,{ useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { changeVtipHistPayload } from "../slices/vtipHistChartSlice";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { Fullscreen, Unplug } from "lucide-react";
 import loader from '../../../assets/loader.webp';
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 import { useVtipHistData } from "../hooks/useData/useVtipHistData";
-import { useVtipImageQuery } from "../hooks/useQuery/useVtipImageQuery";
+import { useVtipHistImageData } from "../hooks/useData/useVtipHistImageData";
 
 const ChartModal = React.lazy(() => import('./ChartModal'));
 const Tooltip = React.lazy(() => import('../../../shared/components/popups/tooltip/Tooltip'));
@@ -23,9 +21,8 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
+
   // Redux 
-  const { selectedParameter, vtipPayload, vtipStartTime, vtipEndTime } = useAppSelector(state => state.vtip_histchart);
-  const dispatch = useAppDispatch();
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
 
@@ -33,21 +30,12 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
   //#region  Data Fetching
   const { isLoading, data, error } = useVtipHistData();
 
-  const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, isModalOpen);
+  const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipHistImageData(displayMode === 'png');
 
   //#endregion
 
 
-  // Submit Vtip Popup data
-  const submitVtipPopup = () => {
-      dispatch(changeVtipHistPayload(
-        {
-          startTime: vtipStartTime,
-          endTime: vtipEndTime,
-          parameter: selectedParameter.id as string
-        }
-      ))
-  }
+
 
   // Chart modal handler
 
@@ -143,7 +131,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
               <div className="flex gap-2">
 
                 {/* Controls popup */}
-                <VtipHistPopup onSubmitPopup={submitVtipPopup}/>
+                <VtipHistPopup />
                 
                 {/* Open the modal */}
                 <Tooltip 

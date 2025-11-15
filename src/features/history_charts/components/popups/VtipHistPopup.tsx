@@ -1,52 +1,88 @@
 import SimpleSelect from '../../../../shared/components/selects/SimpleSelect'
 import ButtonBorder from '../../../../shared/components/buttons/borderedbtn/ButtonBorder'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { closeVtipHistPopup, setSelectedVtipHistParameterOption, setVtipHistEndTime, setVtipHistStartTime, toggleVtipHistPopup } from '../../slices/vtipHistChartSlice';
+import { changeVtipHistPayload, closeVtipHistPopup, setSelectedVtipHistParameterOption, setVtipHistEndTime, setVtipHistStartTime, toggleVtipHistPopup } from '../../slices/vtipHistChartSlice';
 import type { SelectOption } from '../../../../shared/components/selects/types';
 import OptionPopover from '../../../../shared/components/popups/option/OptionPopover';
 import ReactDatetimePicker from '../../../../shared/components/input/ReactDatetime';
+import { useEffect, useState } from 'react';
 
-type Props = {
-    onSubmitPopup?: () => void;
-}
 
-const VtipHistPopup = ({ onSubmitPopup }:Props) => {
+
+const VtipHistPopup = () => {
+    // --- Read only state from Redux store
     const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen } = useAppSelector(state => state.vtip_histchart);
+
+    // --- Local state variables for controlling popup visibility and form inputs ---
+    const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions);
+    const [locSelectedParameter, setLocSelectedParameter] = useState<SelectOption>(selectedParameter);
+    const [locStartTime, setLocStartTime] = useState<string>(vtipStartTime);
+    const [locEndTime, setLocEndTime] = useState<string>(vtipEndTime);
+
+    // ---Sync with Redux store---
+    useEffect(() => {
+        if (isPopupOpen) {
+            setLocParameters(parameterOptions);
+            setLocSelectedParameter(selectedParameter);
+            setLocStartTime(vtipStartTime);
+            setLocEndTime(vtipEndTime);
+        }
+    }, [parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen]);
+
+    //  --- local input handlers to handle input changes ---
+    const handleStartTimeChange = (date: string) => {
+        setLocStartTime(date);
+    }
+    const handleEndTimeChange = (date: string) => {
+        setLocEndTime(date);
+    }
+    const handleVariableChange = (option: SelectOption) => {
+        setLocSelectedParameter(option);
+    }
+
+    //  --- Popup toggler handlers ---
+    const handleTogglePopup = () => {
+        dispatch(toggleVtipHistPopup());
+    }
+    const handleClosePopup = () => {
+        dispatch(closeVtipHistPopup());
+    }
+
     const dispatch = useAppDispatch()
 
 
 
-    const handleStartTimeChange = (date: string) => {
-        dispatch(setVtipHistStartTime(date));
-    }
-    
-    const handleEndTimeChange = (date: string) => {
-        dispatch(setVtipHistEndTime(date));
-    }
-    
-    const handleVariableChange = (option: SelectOption) => {
-        dispatch(setSelectedVtipHistParameterOption(option));
-    }
 
     const handleSubmitPopupData = () => {
-        onSubmitPopup?.();
-        dispatch(closeVtipHistPopup())
+        dispatch(changeVtipHistPayload(
+            {
+              startTime: locStartTime,
+              endTime: locEndTime,
+              parameter: locSelectedParameter.id as string
+            }
+          ));
+        //   --- update the store
+        dispatch(setVtipHistStartTime(locStartTime));
+        dispatch(setVtipHistEndTime(locEndTime));
+        dispatch(setSelectedVtipHistParameterOption(locSelectedParameter));
+        
+        dispatch(closeVtipHistPopup());
     }
 
   return (
     <OptionPopover
         hoverText="Select Options"
         isOpen={isPopupOpen}
-        onOpen={() => dispatch(toggleVtipHistPopup())}
-        onClose={() => dispatch(closeVtipHistPopup())}
+        onOpen={handleTogglePopup}
+        onClose={handleClosePopup}
     >
 
  
         <small className='font-semibold'>Select variable</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
-            options={parameterOptions}
-            value={selectedParameter.displayText}
+            options={locParameters}
+            value={locSelectedParameter.displayText}
             onSelectValue={handleVariableChange}
             width="w-full"
         />
@@ -57,15 +93,15 @@ const VtipHistPopup = ({ onSubmitPopup }:Props) => {
 
             <ReactDatetimePicker
                 onChange={handleStartTimeChange}
-                value={vtipStartTime}
+                value={locStartTime}
             />
 
             <small className='font-semibold'>Select end Time</small>
             <div className="border-b border-b-gray-400"/>
             <ReactDatetimePicker 
                 onChange={handleEndTimeChange}
-                value={vtipEndTime}
-                minDate={vtipStartTime}
+                value={locEndTime}
+                minDate={locStartTime}
             />
 
 
@@ -82,4 +118,4 @@ const VtipHistPopup = ({ onSubmitPopup }:Props) => {
   )
 }
 
-export default VtipHistPopup
+export default VtipHistPopup;

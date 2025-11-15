@@ -7,7 +7,6 @@ export const useClassifHistDataQuery = (payload: ClassificationDataPayload, enab
         queryKey: key,
         queryFn: async () => {
             try {
-                console.log("SENT PAYLOAD FOR HISTORICAL CLASSIFICATION:", payload);
                 return await fetchClassificationData(payload);
             } catch (error) {
                 console.error('Failed to fetch historical Classification data', error);
