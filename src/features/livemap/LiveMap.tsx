@@ -3,7 +3,7 @@ import SectionCard from '../../shared/components/cards/SectionCard';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setClassificationPayload, setSelectedTime } from './slice/livemapSlice';
+import { setSelectedTime } from './slice/livemapSlice';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
@@ -57,18 +57,7 @@ const LiveMap = () => {
     };
 
 
-    //#region Classification data handler 
 
-    const { selectedVariable, color_0, color_1 } = useAppSelector(state=> state.classificationpopup);
-    const handleSubmitPopupData = () => {
-        dispatch(setClassificationPayload({
-            class: selectedVariable.id as string,
-            color_0,
-            color_1,
-        }))
-    }
-
-    //#endregion
 
 
     // Prefetch classification frames (only if we are in this page)
@@ -143,9 +132,7 @@ const LiveMap = () => {
             {/* Overlay controller */}
             <div className="z-5 flex gap-2 justify-center items-end">
 
-                <ClassificationPopup 
-                    onSubmitPopup={handleSubmitPopupData}
-                />
+                <ClassificationPopup />
                 <MapbasePopup displayColorbarOption={false}/>
 
             </div>
