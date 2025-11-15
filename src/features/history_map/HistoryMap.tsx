@@ -29,7 +29,7 @@ const HistoryMap = () => {
 
     // Redux call
     // Selected Radar type and Radar Parameter
-    const { selectedMapBase, selectedBoundary, selectedBoundaryType, selectedColormap } = useAppSelector(state => state.hist_basemap);
+    const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
     const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
     const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
@@ -118,21 +118,7 @@ const HistoryMap = () => {
 
     //#endregion
 
-    //#region Popup Options submits
 
-    // Radar
-    const { selectedType, selectedParameter, radarTimeHist } = useAppSelector(state => state.hist_radarpopup);
-    const submitRadarPopupData = () => {
-        dispatch(setRadarPayloadHist({
-            type: selectedType.id as 'grid' | 'polar',
-            parameter: selectedParameter.id as string,
-            time: radarTimeHist,
-            colorbar: selectedColormap.id as string,
-        }))
-    }
-
-
-    //#endregion
 
 
   return (
@@ -175,7 +161,7 @@ const HistoryMap = () => {
                     <SevipPopup />
                 </Suspense>
                 <Suspense>
-                    <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
+                    <RadarOptionPopup />
                 </Suspense>
 
                 <Suspense>

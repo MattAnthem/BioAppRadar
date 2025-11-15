@@ -27,12 +27,14 @@ const ClassificationPopup = () => {
 
   // --- Sync local states with redux states on mount and when redux states change ---
   useEffect(() => {
-    setLocAvailableVars(availableVariables);
-    setLocSelectedVar(selectedVariable);
-    setLocColor0(color_0);
-    setLocColor1(color_1);
-    setLocTime(histClassifTime);
-  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable])
+    if (isPopupOpen) {
+      setLocAvailableVars(availableVariables);
+      setLocSelectedVar(selectedVariable);
+      setLocColor0(color_0);
+      setLocColor1(color_1);
+      setLocTime(histClassifTime);
+    }
+  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable, isPopupOpen])
 
 
   // --- Local input handlers (for edition : proper to the popup only) ---

@@ -6,35 +6,73 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import OptionPopover from '../../../shared/components/popups/option/OptionPopover';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
+import { useEffect, useState } from 'react';
+import { setRadarPayloadHist } from '../slice/historyMapSlice';
 
-type RadarOptionPopupProps = {
-    onSubmitPopup?: () => void;
-}
+
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
-const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
+const RadarOptionPopup = () => {
 
-    // Redux
+    // Redux read only states
     const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, isPopupOpen } = useAppSelector(state => state.hist_radarpopup);
+    
+    // --- Local state for the inputs
+    const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
+    const [locAvailableParams, setLocAvailableParams] = useState(availableParameters);
+    const [locSelectedType, setLocSelectedType] = useState(selectedType);
+    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
+    const [locTime, setLocTime] = useState(radarTimeHist);
+    
+
+    // --- Sync local states with redux state on mount or when the popup opens
+    useEffect(() => {
+        if (isPopupOpen) {
+            setLocAvailableParams(availableParameters);
+            setLocAvailableTypes(availableTypes);
+            setLocSelectedType(selectedType);
+            setLocSelectedParam(selectedParameter);
+            setLocTime(radarTimeHist);
+        }
+    }, [availableParameters, availableTypes, isPopupOpen, radarTimeHist, selectedParameter, selectedType])
+
+
+    // -- Local input handlers (for edition: proper to this popup)
+    const handleTypeChange = (type: SelectOption) => {
+        setLocSelectedType(type)
+    }
+    const handleParamChange = (param: SelectOption) => {
+        setLocSelectedParam(param);
+    }
+    const handleTimeChange = (date: string) => {
+        setLocTime(date);
+    }
+
+
+    // --- popup toggle open/close --- 
+    const handleTooglePopup = () => {
+        dispatch(toggleRadarPopup())
+    }
+    const closePopup = () => {
+        dispatch(closeRadarPopup());
+    }
+    
+
     const dispatch = useAppDispatch();
 
-
-    const handleRadarTypeChange = (option: SelectOption) => {
-        dispatch(setSelectedHistRadarType(option));
-    }
-
-    const handleRadarParameterChange = (option: SelectOption) => {
-        dispatch(setSelectedHistRadarParameter(option));
-    }
-
-    const handleRadarTimeChange = (date: string) => {
-
-        dispatch(setRadarTimeHist(date));
-    }
-  
     const handleSubmit = () => {
-        onSubmitPopup?.();
-        dispatch(closeRadarPopup())
+        dispatch(setRadarPayloadHist({
+            type: locSelectedType.id as 'polar' | 'grid',
+            parameter: locSelectedParam.id as string,
+            time: locTime,
+        }))
+
+        // --- Update slice states ---
+        dispatch(setSelectedHistRadarType(locSelectedType));
+        dispatch(setSelectedHistRadarParameter(locSelectedParam));
+        dispatch(setRadarTimeHist(locTime));
+
+        dispatch(closeRadarPopup());
     }
 
   return (
@@ -42,35 +80,35 @@ const RadarOptionPopup = ({ onSubmitPopup }: RadarOptionPopupProps) => {
         hoverText='Radar Data'
         customIcon={<RadarIcon className={iconSize}/>}
         isOpen={isPopupOpen}
-        onOpen={() => dispatch(toggleRadarPopup())}
-        onClose={() => dispatch(closeRadarPopup())}
+        onOpen={handleTooglePopup}
+        onClose={closePopup}
     >
         <small className='font-semibold'>Select Radar Type</small>
         <div className="border-b border-b-gray-400"/>
 
         {/* Type Select */}
         <SimpleSelect
-            options={availableTypes}
-            value={selectedType.displayText}
+            options={locAvailableTypes}
+            value={locSelectedType.displayText}
             width='w-95'
-            onSelectValue={handleRadarTypeChange}
+            onSelectValue={handleTypeChange}
         />
         
         <small className='font-semibold'>Select parameter</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
-            options={availableParameters}
-            value={selectedParameter.displayText}
+            options={locAvailableParams}
+            value={locSelectedParam.displayText}
             width='w-95'
-            onSelectValue={handleRadarParameterChange}
+            onSelectValue={handleParamChange}
         />
 
         {/* Time */}
         <small className='font-semibold'>Select time</small>
         <div className="border-b border-b-gray-400"/>
         <ReactDatetimePicker
-            onChange={handleRadarTimeChange}
-            value={radarTimeHist}
+            onChange={handleTimeChange}
+            value={locTime}
         />
 
 
