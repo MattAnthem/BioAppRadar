@@ -1,8 +1,7 @@
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import VpChartHighcharts from "../../../shared/components/charts/HighchartsVP";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useAppSelector } from "../../../store/hooks";
 import { useVpHistData } from "../hooks/useData/useVpHistData";
-import { changeVpHistPayload } from "../slices/vpHistChartSlice";
 import loader from '../../../assets/loader.webp';
 import { Fullscreen, Unplug } from "lucide-react";
 import React,{ useState } from "react";
@@ -32,7 +31,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
   const { isLoading, data, error } = useVpHistData();
 
 
-console.log("rendering VP")
+
 
 
       // handler to open the modal

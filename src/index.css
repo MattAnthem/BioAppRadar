@@ -27,9 +27,25 @@
 }
 
 
-.rdtPicker td.rdtDay {
-  @apply text-gray-800 dark:text-gray-400;
+.light .rdtPicker td.rdtDay {
+  @apply text-gray-800;
 }
+.dark .rdtPicker td.rdtDay {
+  @apply text-gray-300;
+}
+.light .rdtPicker td.rdtDay.rdtOld {
+  @apply text-gray-400;
+}
+.light .rdtPicker td.rdtDay.rdtNew {
+  @apply text-gray-400;
+}
+.dark .rdtPicker td.rdtDay.rdtOld {
+  @apply text-gray-500;
+}
+.dark .rdtPicker td.rdtDay.rdtNew {
+  @apply text-gray-500;
+}
+
 
 
 .rdtPicker td.rdtDay:hover {
