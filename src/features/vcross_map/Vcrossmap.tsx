@@ -2,7 +2,7 @@ import SectionCard from '../../shared/components/cards/SectionCard'
 import GlassHeader from '../../shared/components/cards/GlassHeader'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import LeafletMap from '../../shared/components/map/LeafletMap'
-import { changeVcrossColorbar, setOverlayClassificationPayload, setOverlayRadarPayload, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload, setVcrossSevipPayload } from './slice/vcrossMapSlice';
+import { changeVcrossColorbar, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload } from './slice/vcrossMapSlice';
 import React,{ useEffect, useRef } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
 import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData'
@@ -23,23 +23,12 @@ const VcrossBioClsDataPopup = React.lazy(() => import('./components/VcrossBioCls
 const Vcrossmap = () => {
 
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.vcross_basemap);
-    const { selectedRadarParameter, 
-            selectedRadarType, 
-            timeRadar, 
-            selectedSevipVar, 
-            sevipTime, 
-            segmentRadar, 
-            segmentBioclass, 
-            timeBioClass, 
-            selectedBioClass,
-            color_0,
-            color_1 
-    } = useAppSelector(state => state.vcrosspopup);
+
     const { mapMode } = useAppSelector(state => state.vcrossmap);
-    const { selectedColormap } = useAppSelector(state => state.vcross_basemap)
     const dispatch = useAppDispatch();
 
     const mapModeRef = useRef(mapMode);
+
 
     useEffect(() => {
         mapModeRef.current = mapMode;
@@ -110,49 +99,8 @@ const Vcrossmap = () => {
         }
       };
 
-    // Radar submit popup handler
-    const onSubmitRadarPopupData = () => {
-        // Dispatch popup option to the heatmap
-        dispatch(setVcrossRadarPayload({
-            type: selectedRadarType.id as 'polar' | 'grid',
-            parameter: selectedRadarParameter.id as string,
-            time: timeRadar,
-            segment: segmentRadar
-        }));
-        // Dispatch popup data to Leaflet map
-        dispatch(setOverlayRadarPayload({
-            time: timeRadar,
-            type: selectedRadarType.id as 'polar' | 'grid',
-            parameter: selectedRadarParameter.id as string,
-            colorbar: selectedColormap.id as string,
-        }))
-    }
+ 
 
-    // Bioclass submit popup handler
-    const onSubmitBioclassPopupData = () => {
-        // Dispatch popup data to the heatmap
-        dispatch(setVcrossBioClassPayload({
-            time: timeBioClass,
-            class: selectedBioClass.id as string,
-            segment: segmentBioclass,
-        }))
-        // Dispatch popup data to the leaflet map
-        dispatch(setOverlayClassificationPayload({
-            class: selectedBioClass.id as string,
-            time: timeBioClass,
-            color_0,
-            color_1
-        }))
-    } 
-
-    // Sevip submit popup handler
-    const onSubmitSevipPopupData = () => {
-        dispatch(setVcrossSevipPayload({
-            parameter: selectedSevipVar.id as string,
-            time: sevipTime,
-            colorbar: selectedColormap.id as string,
-        }))
-    }
 //#endregion
 
 
@@ -196,9 +144,9 @@ const Vcrossmap = () => {
 
                 {/* Data popover Options */}
                 <div className="z-5 flex gap-2 justify-center items-end">
-                    <VcrossSevipDataPopup onSubmitPopup={onSubmitSevipPopupData}/>
-                    <VcrossRadarDataPopup onSubmitPopup={onSubmitRadarPopupData} />
-                    <VcrossBioClsDataPopup onSubmitPopup={onSubmitBioclassPopupData} />
+                    <VcrossSevipDataPopup />
+                    <VcrossRadarDataPopup />
+                    <VcrossBioClsDataPopup />
                     <MapbaseVcrossPopup 
                         onChangeOverlayColor={handleChangeColorbar}
                         displayColorbarOption= {mapMode == 'vcross_radar' || mapMode == 'vcross_sevip'}

@@ -64,8 +64,8 @@ const vcrossPopupSlice = createSlice({
         setSelectedBioclassTime: (state, action) => {
             state.timeBioClass = action.payload;
         },
-        toggleVcrossBioclassSegment: (state) => {
-            state.segmentBioclass = !state.segmentBioclass;
+        setVcrossBioclassSegment: (state, action) => {
+            state.segmentBioclass = action.payload;
         },
         toggleVcrossBioclassPopup: (state) => {
             state.isClassifPopupOpen = !state.isClassifPopupOpen;
@@ -92,8 +92,8 @@ const vcrossPopupSlice = createSlice({
         closeVcrossRadarPopup: (state) => {
             state.isRadarPopupOpen = false
         },
-        toggleVcrossRadarSegment: (state) => {
-            state.segmentRadar = !state.segmentRadar;
+        setVcrossRadarSegment: (state, action) => {
+            state.segmentRadar = action.payload;
         },
         toggleVcrossRadarPopup: (state) => {
             state.isRadarPopupOpen = !state.isRadarPopupOpen;
@@ -115,8 +115,8 @@ const vcrossPopupSlice = createSlice({
 });
 
 export const { 
-    toggleVcrossRadarSegment,
-    toggleVcrossBioclassSegment,
+    setVcrossBioclassSegment, 
+    setVcrossRadarSegment,
     setVcrossClassificationColorOne,
     setVcrossClassificationColorZero,
     closeVcrossRadarPopup, 

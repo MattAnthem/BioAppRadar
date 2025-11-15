@@ -35,8 +35,6 @@ const HistoryMap = () => {
     const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
 
 
-    console.log('"RERENDERING hIST MAP"')
-
     // Map boundary GeoJson
     const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
             type: selectedBoundary.id as string,

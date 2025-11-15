@@ -2,42 +2,92 @@ import { RadarIcon } from "lucide-react"
 import OptionPopover from "../../../shared/components/popups/option/OptionPopover"
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { closeVcrossRadarPopup, setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType, toggleVcrossRadarPopup, toggleVcrossRadarSegment } from "../slice/vcrossPopupSlice";
+import { closeVcrossRadarPopup, setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType, setVcrossRadarSegment, toggleVcrossRadarPopup } from "../slice/vcrossPopupSlice";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import ButtonBorder from "../../../shared/components/buttons/borderedbtn/ButtonBorder";
 import ReactDatetimePicker from "../../../shared/components/input/ReactDatetime";
-
-type Props = {
-    onSubmitPopup?: () => void;
-}   
+import { useEffect, useState } from "react";
+import { setOverlayRadarPayload, setVcrossRadarPayload } from "../slice/vcrossMapSlice";
 
 
-const VcrossRadarDataPopup = ({ onSubmitPopup }: Props) => {
+const VcrossRadarDataPopup = () => {
 
-    // Redux states
+    // Redux states (read only)
     const {  availableRadarParameters, avalaibleRadarTypes, selectedRadarParameter, selectedRadarType, timeRadar, isRadarPopupOpen, segmentRadar } = useAppSelector(state => state.vcrosspopup);
-    const dispatch = useAppDispatch();
+    
+    // Local states for input changes
+    const [locAvailableParams, setLocAvailableParams] = useState(availableRadarParameters);
+    const [locAvailableTypes, setLocAvailableTypes] = useState(avalaibleRadarTypes);
+    const [locSelectedType, setLocSelectedType] = useState(selectedRadarType);
+    const [locSelectedParam, setLocSelectedParam] = useState(selectedRadarParameter);
+    const [locSegment, setLocSegment] = useState(segmentRadar);
+    const [locTime, setLocTime] = useState(timeRadar);
 
-    // handlers
+
+    //  --- Sync with Redux ---
+    useEffect(() => {
+        if (isRadarPopupOpen) {
+            setLocAvailableParams(availableRadarParameters);
+            setLocAvailableTypes(avalaibleRadarTypes);
+            setLocSelectedType(selectedRadarType);
+            setLocSelectedParam(selectedRadarParameter);
+            setLocSegment(segmentRadar);
+            setLocTime(timeRadar)
+        }
+    }, [availableRadarParameters, avalaibleRadarTypes, isRadarPopupOpen, segmentRadar, selectedRadarParameter, selectedRadarType, timeRadar])
+
+    //  --- Local input handlers ---
     const handleRadarTypeChange = (type: SelectOption) => {
-        dispatch(setSelectedVcrossRadarType(type));
-    }
-    const handleRadarParamChange = (param: SelectOption) => {
-        dispatch(setSelectedVcrossRadarParameter(param));
+        setLocSelectedType(type);
     }
 
-    const handleRadarTimeChange = (date: string) => {
-        dispatch(setSelectedVcrossRadarTime(date));
+    const handleRadarParamChange = (param: SelectOption) => {
+        setLocSelectedParam(param);
+    }
+
+    const handleRadarTimeChange = (time: string) => {
+        setLocTime(time);
     }
 
     const handleToggleRadarSegment = () => {
-        dispatch(toggleVcrossRadarSegment())
+        setLocSegment(!locSegment);
     }
+
+    // --- popup controls ---
+    const handleTooglePopup = () => {
+        dispatch(toggleVcrossRadarPopup())
+      }
+      const closePopup = () => {
+        dispatch(dispatch(closeVcrossRadarPopup()));
+      }
+    
+    const dispatch = useAppDispatch();
+
 
 
     const handleSubmitPopup = () => {
+        // Dispatch popup option to the heatmap
+        dispatch(setVcrossRadarPayload({
+            type: locSelectedType.id as 'polar' | 'grid',
+            parameter: locSelectedParam.id as string,
+            time: locTime,
+            segment: locSegment
+        }));
+        // Dispatch popup data to Leaflet map
+        dispatch(setOverlayRadarPayload({
+            time: locTime,
+            type: locSelectedType.id as 'polar' | 'grid',
+            parameter: locSelectedParam.id as string,
+        }))
+
+        // --- Update slice ---
+        dispatch(setSelectedVcrossRadarType(locSelectedType));
+        dispatch(setSelectedVcrossRadarParameter(locSelectedParam));
+        dispatch(setSelectedVcrossRadarTime(locTime));
+        dispatch(setVcrossRadarSegment(locSegment));
+
+        // --- Close on submit ---
         dispatch(closeVcrossRadarPopup());
-        onSubmitPopup?.();
     }
   
 
@@ -46,31 +96,31 @@ const VcrossRadarDataPopup = ({ onSubmitPopup }: Props) => {
         hoverText="Select Radar Data"
         customIcon={<RadarIcon className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4"/>}
         isOpen={isRadarPopupOpen}
-        onClose={() => dispatch(closeVcrossRadarPopup())}
-        onOpen={() => dispatch(toggleVcrossRadarPopup())}
+        onClose={closePopup}
+        onOpen={handleTooglePopup}
     >
 
         {/* Data */}
         <small className="font-semibold">Available Radar data</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
-            options={avalaibleRadarTypes}
+            options={locAvailableTypes}
             onSelectValue={handleRadarTypeChange}
             width="w-95"
-            value={selectedRadarType.displayText}
+            value={locSelectedType.displayText}
         />
         <SimpleSelect
-            options={availableRadarParameters}
+            options={locAvailableParams}
             onSelectValue={handleRadarParamChange}
             width="w-95"
-            value={selectedRadarParameter.displayText}
+            value={locSelectedParam.displayText}
         />
 
         {/* Segment */}
         <small className="font-semibold">Segment</small>
         <div className="border-b border-b-gray-400"/>
         <div className="w-full flex px-2 space-x-2 justify-start items-center">
-            <input type="checkbox" checked={segmentRadar} onChange={handleToggleRadarSegment} name="segment-radar-vcross" id="segm_radar_vcross" />
+            <input type="checkbox" checked={locSegment} onChange={handleToggleRadarSegment} name="segment-radar-vcross" id="segm_radar_vcross" />
             <small>Toggle on/off segment</small>
         </div>
 
@@ -80,7 +130,7 @@ const VcrossRadarDataPopup = ({ onSubmitPopup }: Props) => {
 
         <ReactDatetimePicker
             onChange={handleRadarTimeChange}
-            value={timeRadar}
+            value={locTime}
         />
 
         <ButtonBorder
