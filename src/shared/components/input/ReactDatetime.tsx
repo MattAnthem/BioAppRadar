@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Datetime from "react-datetime";
 import moment from "moment";
 import "react-datetime/css/react-datetime.css";
@@ -114,4 +114,4 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
   );
 };
 
-export default ReactDatetimePicker;
+export default memo(ReactDatetimePicker);

@@ -1,4 +1,4 @@
-import  { useRef } from 'react';
+import  { useRef, memo } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import { useTheme } from '../../hooks/useTheme';
@@ -101,4 +101,4 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
   )
 }
 
-export default SimpleSelect;
+export default memo(SimpleSelect);

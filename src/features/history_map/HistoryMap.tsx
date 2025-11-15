@@ -1,4 +1,4 @@
-import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
+import type { ClassificationDataPayload, ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import SectionCard from '../../shared/components/cards/SectionCard';
@@ -8,10 +8,10 @@ import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
-import { setAltitudeForAll, setClassifPayloadHist, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
+import { setAltitudeForAll, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
 import loader from '../../assets/loader.webp';
 import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQuery';
-import React,{ useEffect, useMemo, useState } from 'react';
+import React,{ Suspense, useEffect, useMemo, useState } from 'react';
 import { Unplug } from 'lucide-react';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 
@@ -35,6 +35,7 @@ const HistoryMap = () => {
     const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
 
 
+    console.log('"RERENDERING hIST MAP"')
 
     // Map boundary GeoJson
     const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
@@ -118,16 +119,6 @@ const HistoryMap = () => {
     //#endregion
 
     //#region Popup Options submits
-    // classification
-    const { selectedVariable, color_0, color_1, histClassifTime } = useAppSelector(state => state.hist_classifpopup)
-    const submitClassifPopupData = () => {
-        dispatch(setClassifPayloadHist({
-            class: selectedVariable.id as string,
-            color_0: color_0,
-            color_1: color_1,
-            time: histClassifTime
-        }))
-    }
 
     // Radar
     const { selectedType, selectedParameter, radarTimeHist } = useAppSelector(state => state.hist_radarpopup);
@@ -189,13 +180,19 @@ const HistoryMap = () => {
 
             <div className="z-5 flex gap-2 justify-center items-end">
 
-                
-                <SevipPopup onSubmitPopup={submitSevipPopupData}/>
-                <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
-                <ClassificationPopup 
-                    onSubmitPopup={submitClassifPopupData}
-                />
-                <MapbasePopup onChangeOverlayColor={handleChangeColorbar} displayColorbarOption={!isClassif}/>
+                <Suspense>
+                    <SevipPopup onSubmitPopup={submitSevipPopupData}/>
+                </Suspense>
+                <Suspense>
+                    <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
+                </Suspense>
+
+                <Suspense>
+                    <ClassificationPopup />
+                </Suspense>
+                <Suspense>
+                    <MapbasePopup onChangeOverlayColor={handleChangeColorbar} displayColorbarOption={!isClassif}/>
+                </Suspense>
                 
             </div>
 
@@ -215,7 +212,7 @@ const HistoryMap = () => {
         {/* altitude slider */}
         {
             (mapModeHist === 'classification' || (mapModeHist === 'radar' && radarPayloadHist.type === 'grid')) && (
-                <div className="lg:h-full h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
+                <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <AltitudeSlider
                         position='right'
                         currentIndex={currentAltitudeIndex}

@@ -3,7 +3,6 @@ import L from 'leaflet';
 import "leaflet-draw";
 import { enableDraw } from "./feature/enableDraw";
 import { enableDrawLine } from "./feature/enableDrawLine";
-import { addRasterImage } from "../../../lib/leaflet-raster/addRasterImage";
 
 type MapProps = {
   baseMap: string;
@@ -56,9 +55,9 @@ const LeafletMap = ({
 }: MapProps) => {
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const overlayImgRef = useRef<L.GridLayer | null>(null);
+  const overlayImgRef = useRef<L.ImageOverlay | null>(null);
 
-  // --- Map initialization ---
+  // Map initialization
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
@@ -103,18 +102,17 @@ const LeafletMap = ({
     };
   }, [boxZoom, scrollWheelZoom, baseMap]);
 
-  // --- Line drawing ---
-  useEffect(() => {
+    useEffect(() => {
       const map = mapRef.current;
       if (!map) return;
     
       if (enableLineDraw) {
         enableDrawLine(map, onDrawLine);
       } 
-  }, [enableLineDraw, onDrawLine]);
+    }, [enableLineDraw, onDrawLine]);
 
 
-  // --- Add GeoJSON layers according to users parameters ---
+  // Add GeoJSON layers according to users parameters
   const overlayShapesRef = useRef<L.GeoJSON[]>([]);
   useEffect(() => {
     const map = mapRef.current;
@@ -146,14 +144,12 @@ const LeafletMap = ({
   useEffect(() => { 
     const map = mapRef.current; 
     if (!map || !overlayImg) return; 
+
+    console.log('NEW OVERLAY CREATED')
     // Remove old overlays 
     if (overlayImgRef.current) map.removeLayer(overlayImgRef.current); 
     // Add new overlays 
-
-    const ovrl = addRasterImage(overlayImg.url, overlayImg.bounds,{
-      opacity: overlayImg.opacity ?? 0.8,
-      zIndex: 30
-    }).addTo(map)
+    const ovrl = L.imageOverlay(overlayImg.url, overlayImg.bounds, { opacity: overlayImg.opacity ?? 0.7, zIndex: 10, interactive: overlayImg.interactive ?? false, }).addTo(map); 
     overlayImgRef.current = ovrl; 
  
   }, [overlayImg]);

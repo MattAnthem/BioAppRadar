@@ -88,17 +88,17 @@ const OptionPopover = ({
       </Tooltip>
 
       {/* Pop-over menu */}
-	<div
-		className={`
-			${options_bg} ${border} z-30 border shadow-sm flex flex-col gap-2 justify-center w-[400px]
-			absolute right-0 ${openUpwards ? "bottom-full mb-1 origin-bottom-right" : "top-full origin-top-right"}
-			p-2 rounded-sm transition-all duration-100 ease-out
-			${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none hidden"}
-		`}
-	>
-		{children}
-		</div>
-    </div>
+    <div
+      className={`
+        ${options_bg} ${border} z-20 border shadow-sm flex flex-col gap-2 justify-center w-[400px]
+        absolute right-0 ${openUpwards ? "bottom-full mb-1 origin-bottom-right" : "top-full origin-top-right"}
+        p-2 rounded-sm transition-transform duration-100 ease-ou
+        ${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none hidden"}
+      `}
+    >
+      {children}
+      </div>
+      </div>
   );
 };
 

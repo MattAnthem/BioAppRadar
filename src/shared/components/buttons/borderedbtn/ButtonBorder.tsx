@@ -1,4 +1,4 @@
-import {type ReactNode} from 'react';
+import {type ReactNode, memo} from 'react';
 import { useTheme } from '../../../hooks/useTheme';
 
 
@@ -44,4 +44,4 @@ const ButtonBorder = ({ children, className, onClick, ariaLabel, isDisabled=fals
   )
 }
 
-export default ButtonBorder;
+export default memo(ButtonBorder);
