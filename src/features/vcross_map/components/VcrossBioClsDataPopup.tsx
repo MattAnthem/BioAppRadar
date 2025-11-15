@@ -6,7 +6,7 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import { closeVcrossBioclassPopup, setSelectedBioclassTime, setSelectedVcrossBioCls, setVcrossBioclassSegment, setVcrossClassificationColorOne, setVcrossClassificationColorZero, toggleVcrossBioclassPopup } from '../slice/vcrossPopupSlice';
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { setOverlayClassificationPayload, setVcrossBioClassPayload } from '../slice/vcrossMapSlice';
 
 
@@ -156,4 +156,4 @@ const VcrossBioClsDataPopup = () => {
   )
 }
 
-export default VcrossBioClsDataPopup;
+export default memo(VcrossBioClsDataPopup);

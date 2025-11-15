@@ -7,6 +7,7 @@ import { setSevipPayload } from "../slice/livemapSlice";
 import { changeBaseMap, changeColormap } from "../slice/baseMapPopupSlice";
 import OptionPopover from "../../../shared/components/popups/option/OptionPopover";
 import { setSelectedBoundary, setSelectedBoundaryType } from "../../../shared/slice/boundarySlice";
+import { memo } from "react";
 
 
 
@@ -122,4 +123,4 @@ const MapbasePopup = ({ displayColorbarOption, onChangeColormap }: BaseMapProps)
   )
 }
 
-export default MapbasePopup;
+export default memo(MapbasePopup);

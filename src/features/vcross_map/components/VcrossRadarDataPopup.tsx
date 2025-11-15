@@ -6,7 +6,7 @@ import { closeVcrossRadarPopup, setSelectedVcrossRadarParameter, setSelectedVcro
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import ButtonBorder from "../../../shared/components/buttons/borderedbtn/ButtonBorder";
 import ReactDatetimePicker from "../../../shared/components/input/ReactDatetime";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { setOverlayRadarPayload, setVcrossRadarPayload } from "../slice/vcrossMapSlice";
 
 
@@ -149,4 +149,4 @@ const VcrossRadarDataPopup = () => {
   )
 }
 
-export default VcrossRadarDataPopup;
+export default memo(VcrossRadarDataPopup);

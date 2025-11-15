@@ -5,7 +5,7 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
 import { closeClassifPopup, setClassificationColorOne, setClassificationColorZero, setSelectedClassificationOption, toggleClassifPopup } from '../slice/classificationPopupSlice';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, memo } from 'react'
 import { setClassificationPayload } from '../slice/livemapSlice'
 
 
@@ -120,4 +120,4 @@ const ClassificationPopup = () => {
   )
 }
 
-export default ClassificationPopup;
+export default memo(ClassificationPopup);

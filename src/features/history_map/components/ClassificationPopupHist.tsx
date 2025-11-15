@@ -5,7 +5,7 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { closeClassifPopup, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifTime, setSelectedHistClassificationOption, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
 import { setClassifPayloadHist } from '../slice/historyMapSlice'
 
@@ -136,4 +136,4 @@ return (
 )
 }
 
-export default ClassificationPopup;
+export default memo(ClassificationPopup);

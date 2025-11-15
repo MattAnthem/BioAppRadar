@@ -1,3 +1,4 @@
+import { memo } from "react";
 
 type ColorbarProps = {
     colorCodes: string[];
@@ -28,4 +29,4 @@ const Colorbar = ({ colorCodes, className, valueScale }: ColorbarProps) => {
   )
 }
 
-export default Colorbar;
+export default memo(Colorbar);

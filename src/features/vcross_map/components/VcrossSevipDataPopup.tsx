@@ -6,7 +6,7 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { setVcrossSevipPayload } from '../slice/vcrossMapSlice';
 
 
@@ -104,4 +104,4 @@ const VcrossSevipDataPopup = () => {
   )
 }
 
-export default VcrossSevipDataPopup
+export default memo(VcrossSevipDataPopup);

@@ -1,6 +1,7 @@
 import { formatBigNumber } from '../../../shared/utils/number_format';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import radarIcon from '../../../assets/radarIcon.webp';
+import { memo } from 'react';
 
 
 
@@ -91,4 +92,4 @@ const AltitudeSlider = (
   )
 }
 
-export default AltitudeSlider;
+export default memo(AltitudeSlider);

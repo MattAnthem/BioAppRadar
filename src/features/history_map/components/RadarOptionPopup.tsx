@@ -6,7 +6,7 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import OptionPopover from '../../../shared/components/popups/option/OptionPopover';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { setRadarPayloadHist } from '../slice/historyMapSlice';
 
 
@@ -125,4 +125,4 @@ const RadarOptionPopup = () => {
   )
 }
 
-export default RadarOptionPopup
+export default memo(RadarOptionPopup);

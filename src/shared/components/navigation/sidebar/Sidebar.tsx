@@ -147,7 +147,7 @@ const Sidebar = () => {
         />
 
         {/* Logos */}
-        <div className="h-full w-full lg:flex flex-col items-end justify-end gap-2">
+        <div className="h-full w-full flex flex-col items-end justify-end gap-2">
         <div className={`${main.section_line} w-full h-0.5`}/>
 
             <div className="flex justify-center pb-2 gap-1 w-full">

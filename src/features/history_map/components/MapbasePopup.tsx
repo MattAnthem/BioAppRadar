@@ -5,6 +5,7 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import { changeHistBaseMap, changeHistColormap, setSelectedBoundaryHist, setSelectedBoundaryTypeHist } from "../slice/histBaseMapPopupSlice";
 import Colorbar from "../../livemap/components/Colorbar";
 import OptionPopover from "../../../shared/components/popups/option/OptionPopover";
+import { memo } from "react";
 
 
 type BaseMapProps = {
@@ -114,4 +115,4 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
   )
 }
 
-export default MapbasePopup;
+export default memo(MapbasePopup);

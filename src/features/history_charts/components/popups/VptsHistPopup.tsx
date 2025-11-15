@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder"
 import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
 import OptionPopover from "../../../../shared/components/popups/option/OptionPopover"
@@ -33,6 +33,7 @@ const VptsHistPopup = () => {
     //  --- local handlers to update the inputs
     const handleStartTimeChange = (date: string) => {
       setLocStartTime(date);
+      setLocEndTime(date); // ensure end time is not before start time
     }
     const handleEndTimeChange = (date: string) => {
       setLocEndTime(date);
@@ -118,4 +119,4 @@ const VptsHistPopup = () => {
   )
 }
 
-export default VptsHistPopup
+export default memo(VptsHistPopup);

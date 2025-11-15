@@ -145,7 +145,6 @@ const LeafletMap = ({
     const map = mapRef.current; 
     if (!map || !overlayImg) return; 
 
-    console.log('NEW OVERLAY CREATED')
     // Remove old overlays 
     if (overlayImgRef.current) map.removeLayer(overlayImgRef.current); 
     // Add new overlays 

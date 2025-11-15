@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder";
 import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
 import OptionPopover from "../../../../shared/components/popups/option/OptionPopover";
@@ -6,7 +6,6 @@ import SimpleSelect from "../../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { changeVpHistPayload, closeVpHistPopup, setSelectedVpHistParameterOption, setVpHistTime, toggleVpHistPopup } from "../../slices/vpHistChartSlice";
-
 
 const VpHistPopup = () => {
 
@@ -99,4 +98,4 @@ const VpHistPopup = () => {
   )
 }
 
-export default VpHistPopup
+export default memo(VpHistPopup);

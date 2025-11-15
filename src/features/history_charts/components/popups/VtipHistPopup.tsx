@@ -5,7 +5,7 @@ import { changeVtipHistPayload, closeVtipHistPopup, setSelectedVtipHistParameter
 import type { SelectOption } from '../../../../shared/components/selects/types';
 import OptionPopover from '../../../../shared/components/popups/option/OptionPopover';
 import ReactDatetimePicker from '../../../../shared/components/input/ReactDatetime';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 
 
 
@@ -32,6 +32,7 @@ const VtipHistPopup = () => {
     //  --- local input handlers to handle input changes ---
     const handleStartTimeChange = (date: string) => {
         setLocStartTime(date);
+        setLocEndTime(date); // Ensure end time is not before start time
     }
     const handleEndTimeChange = (date: string) => {
         setLocEndTime(date);
@@ -54,6 +55,7 @@ const VtipHistPopup = () => {
 
 
     const handleSubmitPopupData = () => {
+
         dispatch(changeVtipHistPayload(
             {
               startTime: locStartTime,
@@ -118,4 +120,4 @@ const VtipHistPopup = () => {
   )
 }
 
-export default VtipHistPopup;
+export default memo(VtipHistPopup);

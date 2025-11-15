@@ -5,6 +5,7 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import { changeVcrossColormap, changeVcrossBaseMap, setSelectedBoundaryTypeVcross, setSelectedBoundaryVcross } from '../slice/vcrossMapbaseSlice';
 import Colorbar from '../../livemap/components/Colorbar';
 import type { SelectOption } from '../../../shared/components/selects/types';
+import { memo } from 'react';
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
@@ -105,4 +106,4 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
   )
 }
 
-export default MapbaseVcrossPopup
+export default memo(MapbaseVcrossPopup);

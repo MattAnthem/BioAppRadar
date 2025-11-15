@@ -6,7 +6,7 @@ import type { SelectOption } from '../../../shared/components/selects/types';
 import { closeSevipPopup, setHistTimeSevip, setSelectedHistSevipOption, toggleSevipPopup } from '../slice/histSevipPopup';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 import  ReactDatetimePicker  from '../../../shared/components/input/ReactDatetime';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { setSevipPayloadHist } from '../slice/historyMapSlice';
 
 
@@ -100,4 +100,4 @@ const SevipPopup = () => {
   )
 }
 
-export default SevipPopup;
+export default memo(SevipPopup);
