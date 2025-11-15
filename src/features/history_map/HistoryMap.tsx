@@ -1,4 +1,4 @@
-import type { ClassificationDataPayload, ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
+import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import SectionCard from '../../shared/components/cards/SectionCard';
@@ -8,7 +8,7 @@ import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
-import { setAltitudeForAll, setColorbarForAll, setRadarPayloadHist, setSevipPayloadHist } from './slice/historyMapSlice';
+import { setAltitudeForAll, setColorbarForAll, setRadarPayloadHist } from './slice/historyMapSlice';
 import loader from '../../assets/loader.webp';
 import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQuery';
 import React,{ Suspense, useEffect, useMemo, useState } from 'react';
@@ -131,15 +131,6 @@ const HistoryMap = () => {
         }))
     }
 
-    // sevip
-    const { selectedVariable: sevipSelVariable , histTimeSevip } = useAppSelector(state => state.hist_sevippopup);
-    const submitSevipPopupData = () => {
-        dispatch(setSevipPayloadHist({
-            parameter: sevipSelVariable.id as string,
-            time: histTimeSevip,
-            colorbar: selectedColormap.id as string,
-        }))
-    }
 
     //#endregion
 
@@ -181,7 +172,7 @@ const HistoryMap = () => {
             <div className="z-5 flex gap-2 justify-center items-end">
 
                 <Suspense>
-                    <SevipPopup onSubmitPopup={submitSevipPopupData}/>
+                    <SevipPopup />
                 </Suspense>
                 <Suspense>
                     <RadarOptionPopup onSubmitPopup={submitRadarPopupData} />
