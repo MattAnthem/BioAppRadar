@@ -7,14 +7,16 @@ export const fetchRadarGifAnim = async (payload: RadarPayload): Promise<SpatialD
         ? {
             type: payload.type,
             parameter: payload.parameter,
-            time: payload.time,
+            startTime: payload.startTime,
+            endTime: payload.endTime,
             colorbar: payload.colorbar,
             elevation_angle: payload.elevation_angle,
           }
         : {
             type: payload.type,
             parameter: payload.parameter,
-            time: payload.time,
+            startTime: payload.startTime,
+            endTime: payload.endTime,
             colorbar: payload.colorbar,
             height: payload.height,
           };

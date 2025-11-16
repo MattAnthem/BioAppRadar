@@ -15,6 +15,7 @@ import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundari
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 import { useSevipGifData } from './hooks/useData/useSevipGifData';
+import { useRadarGifData } from './hooks/useData/useRadarGifData';
 
 const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopupHist'));
 const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
@@ -48,6 +49,7 @@ const HistoryMap = () => {
     const isSevip = mapModeHist === 'sevip';
     const isClassif = mapModeHist === 'classification';
     const isSevipGif = mapModeHist === 'sevip_gif';
+    const isRadarGif = mapModeHist === 'radar_gif';
      
     // Still images
     const { data: radarData, isLoading: radarDataLoading, error: radarError } = useRadarData(isRadar);
@@ -56,6 +58,7 @@ const HistoryMap = () => {
 
     // Gif animated
     const { data: sevipGifData, isLoading: sevipGifLoading, error: sevipGifError } = useSevipGifData(isSevipGif);
+    const { data: radarGifData, isLoading: radarGifLoading, error: radarGifError } = useRadarGifData(isRadarGif);
     
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
@@ -81,6 +84,12 @@ const HistoryMap = () => {
             data = sevipGifData as SpatialDataResponse;
             isLoading = sevipGifLoading;
             error = sevipGifError;
+            break;
+        case isRadarGif:
+            data = radarGifData as SpatialDataResponse;
+            isLoading = radarGifLoading;
+            error = radarGifError;
+            break;
     }
     
     //#endregion
@@ -223,7 +232,12 @@ const HistoryMap = () => {
 
         {/* Map Time */}
         {
-            (mapModeHist !== 'sevip_gif') && (
+            (mapModeHist === 'sevip_gif' || mapModeHist === 'radar_gif') ? (
+                <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-2/7 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+                    <small className='text-white tracking-wide'>Time: {data?.info.time[0]} - {data?.info.time[data.info.time.length - 1]}</small>
+                </div>
+            ):
+            (
                 <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
                     <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
                 </div>
