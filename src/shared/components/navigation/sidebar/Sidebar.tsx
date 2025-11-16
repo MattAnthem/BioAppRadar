@@ -25,7 +25,7 @@ const Sidebar = () => {
 
     const { theme } = themes;
     const { sidebar, topbar } = theme;
-    const { main } = sidebar;
+    const { main, navs } = sidebar;
 
 
     const handleActiveButton = (menu: MenuNames) => {
@@ -67,15 +67,16 @@ const Sidebar = () => {
     >
 
         {/* AppLogo */}
-        <div className={`mb-2 flex ${isMinimized ? 'items-start justify-center' : 'justify-between items-center'}  gap-1 p-1 w-full`}>
+        <div className={`mb-2 flex ${isMinimized ? 'items-start justify-center mb-4' : 'justify-between items-center'}  gap-1  w-full`}>
 
-            <div className="flex justify-center gap-2 items-center">
-                <img src={logo_svg} className={`${isMinimized ? 'hidden' : ''} h-10`} alt="appicon"  />
-            </div>
+
+            <img src={logo_svg} className={`${isMinimized ? 'hidden' : ''} h-10`} alt="appicon"  />
+            <h1 className={`text-lg font-semibold ${isMinimized ? 'hidden' : navs.text} transition-opacity duration-100 ease-in-out tracking-wider`}>BioAppRadar</h1>
+
 
             {/* Toggle minimize sidebar */}
             <button aria-label="toggle-minimize-sidebar" aria-controls="sidebar" onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.togller_color}  rounded-sm p-1 cursor-ew-resize focus-visible:outline-2 outline-offset-1 outline-blue-800`}>
-                <SidebarIcon className={`w-5`} />
+                <SidebarIcon className={`w-4 h-4`} />
             </button>
 
         </div>
@@ -150,16 +151,16 @@ const Sidebar = () => {
         <div className="h-full w-full flex flex-col items-end justify-end gap-2">
         <div className={`${main.section_line} w-full h-0.5`}/>
 
-            <div className="flex justify-center pb-2 gap-1 w-full">
-                <a href="https://mtorw.org" target="_blank" rel="noopener noreferrer">
-                    <img src={mtorwlogo} alt="mtorw-logo" className={`h-7 ${isMinimized ? 'hidden' : ''}`} />
-                </a>
-                <a href="https://paset.org" target="_blank" rel="noopener noreferrer">
-                    <img src={pasetlogo} alt="paset-logo" className={`h-7 ${isMinimized ? 'hidden' : ''}`} />
-                </a>
-                <a href="https://rsif.org" target="_blank" rel="noopener noreferrer">
-                    <img src={rsiflogo} alt="rsif-logo" className={`h-7 ${isMinimized ? 'hidden' : ''}`} />
-                </a>
+            <div className="flex flex-col justify-center items-center p-2 gap-6 w-full">
+                
+                    <img src={mtorwlogo} alt="mtorw-logo" className={`w-30 ${isMinimized ? 'hidden' : ''}`} />
+                
+                
+                    <img src={pasetlogo} alt="paset-logo" className={`w-30 ${isMinimized ? 'hidden' : ''}`} />
+                
+                
+                    <img src={rsiflogo} alt="rsif-logo" className={` w-30 ${isMinimized ? 'hidden' : ''}`} />
+                
             </div>
 
         </div>
