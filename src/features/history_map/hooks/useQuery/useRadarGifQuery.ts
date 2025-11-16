@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import {  type RadarPayload,  type SpatialDataResponse, } from "../../../../api/endpoints/spatialDataAPI";
-import { fetchRadarGifAnim } from "../../../../api/endpoints/spatialGifAnimAPI";
+import { fetchRadarGifAnim } from "../../../../api/endpoints/spatial/spatialGifAnimAPI";
+import type { RadarPayload, SpatialDataResponse } from "../../../../api/endpoints/spatial/spatialDataAPI";
 
 
 export const useRadarGifDataQuery = (payload: RadarPayload, enabled?: boolean) => {

@@ -6,7 +6,7 @@ import HCWindbarb from "highcharts/modules/windbarb";
 import HCAnnotations from "highcharts/modules/annotations";
 import HCAccessibility from "highcharts/modules/accessibility";
 import { useTheme } from "../../hooks/useTheme";
-import type { VtipResponse } from "../../../api/endpoints/verticalProfilesAPI";
+import type { VtipResponse } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 import HCExporting from "highcharts/modules/exporting";
 import HCOfflineExporting from "highcharts/modules/offline-exporting";
 import HCExportData from "highcharts/modules/export-data";

@@ -3,7 +3,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HCHeatmap from 'highcharts/modules/heatmap';
 import HCAnnotations from 'highcharts/modules/annotations';
-import type { VptsResponse } from '../../../api/endpoints/verticalProfilesAPI';
+import type { VptsResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
 // import exportingModule from "highcharts/modules/exporting";
 

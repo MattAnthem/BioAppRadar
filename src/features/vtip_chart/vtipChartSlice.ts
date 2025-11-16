@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { VtipPayload } from "../../api/endpoints/verticalProfilesAPI";
+import type { VtipPayload } from "../../api/endpoints/verical_profile/verticalProfilesAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
 import { vtip_parameterOptions } from "../../shared/static/select-options";
 

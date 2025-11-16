@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { type VptsResponse, type VptsPayload, fetchVPTS } from "../../../api/endpoints/verticalProfilesAPI";
+import { type VptsResponse, type VptsPayload, fetchVPTS } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
 
 export const useVptsDataQuery = (payload: VptsPayload) => {

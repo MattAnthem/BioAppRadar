@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchRadarData, type RadarPayload, type SpatialDataResponse } from "../../../../api/endpoints/spatialDataAPI";
+import { fetchRadarData, type RadarPayload, type SpatialDataResponse } from "../../../../api/endpoints/spatial/spatialDataAPI";
 
 export const useRadarHistDataQuery = (payload: RadarPayload, enabled?: boolean) => {
     const queryKey =

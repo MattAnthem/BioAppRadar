@@ -7,15 +7,15 @@ import { setSelectedTime } from './slice/livemapSlice';
 import TimelineSlider from './components/TimelineSlider';
 import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
-import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
 import { usePreloadClassificationFrames } from './hooks/usePreload/usePreloadClassificationFrames';
 import { useClassificationDataQuery } from './hooks/useQuery/useClassificationDataQuery';
 import { useQueryClient } from '@tanstack/react-query';
-import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import loader from '../../assets/loader.webp';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 import { Unplug } from 'lucide-react';
 import type { MenuNames } from '../../shared/components/buttons/navbtn/MenuTypes';
+import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
+import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
 
 

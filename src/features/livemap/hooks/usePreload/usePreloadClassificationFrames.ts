@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchClassificationData } from "../../../../api/endpoints/classificationAPI";
+import { fetchClassificationData } from "../../../../api/endpoints/spatial/classificationAPI";
 
 export const usePreloadClassificationFrames = (
   frames: string[],

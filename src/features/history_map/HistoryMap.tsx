@@ -1,5 +1,3 @@
-import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI';
-import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI';
 import GlassHeader from '../../shared/components/cards/GlassHeader';
 import SectionCard from '../../shared/components/cards/SectionCard';
 import LeafletMap from '../../shared/components/map/LeafletMap';
@@ -14,6 +12,8 @@ import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQue
 import React,{ Suspense, useEffect, useMemo, useState } from 'react';
 import { Unplug } from 'lucide-react';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
+import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
+import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
 const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopupHist'));
 const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));

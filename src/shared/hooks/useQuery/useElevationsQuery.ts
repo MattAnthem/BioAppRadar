@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchElevationAngles } from "../../../api/endpoints/spatialDataAPI";
+import { fetchElevationAngles } from "../../../api/endpoints/spatial/spatialDataAPI";
 
 export const useElevationsQuery = (enabled?: boolean) => {
     const queryKey = ["elevations"];

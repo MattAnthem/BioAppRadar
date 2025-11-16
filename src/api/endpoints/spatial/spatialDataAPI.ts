@@ -1,4 +1,5 @@
-import { axiosClient } from "../axiosClient";
+import { axiosClient } from "../../axiosClient";
+
 
 export interface SpatialDataPayload {
     type: string;

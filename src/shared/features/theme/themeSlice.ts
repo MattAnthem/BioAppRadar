@@ -13,7 +13,7 @@ type themeState = {
 };
 
 const initialState: themeState = {
-    currentTheme: light,
+    currentTheme: savedTheme === 'light' ? light : dark,
     themeName: savedTheme ?? 'light',
     isDarkMode: savedTheme === 'dark',
 };

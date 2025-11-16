@@ -1,4 +1,4 @@
-import type { VptsResponse } from "../../../../api/endpoints/verticalProfilesAPI";
+import type { VptsResponse } from "../../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
 // ---
 self.onmessage = (e: MessageEvent<{data: VptsResponse}>) => {

@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchImageVPTS, type VptsPayload } from "../../../../api/endpoints/verticalProfilesAPI";
+import { fetchImageVPTS, type VptsPayload } from "../../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
 export const useVptsImageQuery = (payload: VptsPayload, enabled?: boolean) => {
     const key = ["vpts_image", payload.parameter, payload.startTime, payload.endTime];
-    return useQuery<Blob>({
+    return useQuery({
         queryKey: key,
         queryFn: async () => {
             try {

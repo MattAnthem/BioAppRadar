@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchVTIP, type VtipPayload, type VtipResponse } from "../../../../api/endpoints/verticalProfilesAPI";
+import { fetchVTIP, type VtipPayload, type VtipResponse } from "../../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
 export const useVtipHistDataQuery = (payload: VtipPayload) => {
     return useQuery<VtipResponse>({

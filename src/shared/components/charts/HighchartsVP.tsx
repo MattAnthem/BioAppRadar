@@ -3,7 +3,7 @@ import Highcharts from 'highcharts';
 import Windbarb from 'highcharts/modules/windbarb';
 import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from '../../hooks/useTheme';
-import type { VpResponse } from '../../../api/endpoints/verticalProfilesAPI';
+import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 
 Windbarb(Highcharts);
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchVP, type VpPayload, type VpResponse } from "../../../../api/endpoints/verticalProfilesAPI";
+import { fetchVP, type VpPayload, type VpResponse } from "../../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
 export const useVpHistDataQuery = (payload: VpPayload) => {
     return useQuery<VpResponse>({

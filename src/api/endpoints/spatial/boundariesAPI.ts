@@ -1,4 +1,5 @@
-import { axiosClient } from "../axiosClient";
+import { axiosClient } from "../../axiosClient";
+
 
 export interface BoundaryPayload {
     type: string;

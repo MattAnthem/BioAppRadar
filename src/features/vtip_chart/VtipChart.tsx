@@ -3,7 +3,7 @@ import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import { useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
-import { ChartLine, Database, Download, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
+import { ChartLine, Download, Fullscreen, ImageIcon, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
 import { useTheme } from "../../shared/hooks/useTheme";
 import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
@@ -55,10 +55,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
   // CSV
   const handleDownloadInteractiveChartCSV = () => {
     if (!chartRef.current) return;
-    // chartRef.current.exportChartLocal({
-    //   type: 'image/png',
-    //   filename: 'testdown'
-    // });
+    chartRef.current.downloadCSV();
   }
 
   return (

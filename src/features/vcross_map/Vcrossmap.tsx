@@ -5,14 +5,14 @@ import LeafletMap from '../../shared/components/map/LeafletMap'
 import { changeVcrossColorbar, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload } from './slice/vcrossMapSlice';
 import React,{ useEffect, useRef } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
-import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData'
-import type { ClassificationDataResponse } from '../../api/endpoints/classificationAPI'
-import type { SpatialDataResponse } from '../../api/endpoints/spatialDataAPI'
+import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData';
 import { Unplug } from 'lucide-react';
 import loader from '../../assets/loader.webp';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery'
 import VcrossSevipDataPopup from './components/VcrossSevipDataPopup'
 import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
+import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
+import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
 const Colorbar = React.lazy(() => import('../livemap/components/Colorbar'));
 const MapbaseVcrossPopup = React.lazy(() => import('./components/MapbaseVcrossPopup'));

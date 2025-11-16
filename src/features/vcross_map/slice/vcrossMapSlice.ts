@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { CrossSectionBioClassPayload, CrossSectionRadarPayload } from "../../../api/endpoints/crossSectionAPI";
-import type { ClassificationDataPayload } from "../../../api/endpoints/classificationAPI";
-import type { RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload } from "../../../api/endpoints/spatialDataAPI";
+import type { ClassificationDataPayload } from "../../../api/endpoints/spatial/classificationAPI";
+import type { RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload } from "../../../api/endpoints/spatial/spatialDataAPI";
 
 interface VcrossMapState {
     mapMode: 'vcross_bioclass' | 'vcross_radar' | 'vcross_sevip';

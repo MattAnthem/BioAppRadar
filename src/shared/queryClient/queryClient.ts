@@ -11,7 +11,7 @@ const queryClient = new QueryClient({
     }
 });
 
-const persister = createIDBPersister('sevip-cache');
+const persister = createIDBPersister('bioradar-cache');
 
 persistQueryClient({
     queryClient,

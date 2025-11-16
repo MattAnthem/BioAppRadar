@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload } from "../../../api/endpoints/spatialDataAPI";
-import type { ClassificationDataPayload } from "../../../api/endpoints/classificationAPI";
-
+import type { RadarGridPayload, RadarPayload, RadarPolarPayload, SevipPayload } from "../../../api/endpoints/spatial/spatialDataAPI";
+import type { ClassificationDataPayload } from "../../../api/endpoints/spatial/classificationAPI";
 
 
 interface HistorymapSliceState {

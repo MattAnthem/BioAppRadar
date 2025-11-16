@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchBoundaryData, type BoundaryPayload } from "../../../api/endpoints/boundariesAPI";
+import { fetchBoundaryData, type BoundaryPayload } from "../../../api/endpoints/spatial/boundariesAPI";
 
 export const useBoundariesQuery = (payload: BoundaryPayload, enabled?: boolean) => {
     const key = ["boundary_data", payload.type, JSON.stringify(payload.json)];

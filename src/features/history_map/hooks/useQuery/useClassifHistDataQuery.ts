@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchClassificationData, type ClassificationDataPayload, type ClassificationDataResponse } from "../../../../api/endpoints/classificationAPI";
+import { fetchClassificationData, type ClassificationDataPayload, type ClassificationDataResponse } from "../../../../api/endpoints/spatial/classificationAPI";
 
 export const useClassifHistDataQuery = (payload: ClassificationDataPayload, enabled?: boolean) => {
     const key = ["classification_hist_data", payload.class, payload.time, payload.color_0, payload.color_1, payload.height];
