@@ -61,14 +61,31 @@ export interface CrossSectionResponse {
 
 export interface SevipPayload {
     parameter: string;
-    time: string;
+    time?: string;
+    startTime?: string;
+    endTime?: string;
     colorbar: string;
 }
 
 export interface SpatialDataResponse {
-    data: {png: string; bounds: [[number, number], [number, number]]};
-    ckeys: {labels: string[]; colors: string[]; png: string};
-    info: {time: string; name: string; height?: string, elevation_angle?: string; units: string; type?: string}
+    data: {
+        png?: Base64URLString; 
+        gif?:Base64URLString; 
+        bounds: [[number, number], [number, number]]
+    };
+    ckeys: {
+        labels: string[]; 
+        colors: string[]; 
+        png: string
+    };
+    info: {
+        time: string; 
+        name: string; 
+        height?: string;
+        elevation_angle?: string; 
+        units: string; 
+        type?: string
+    }
 }
 
 

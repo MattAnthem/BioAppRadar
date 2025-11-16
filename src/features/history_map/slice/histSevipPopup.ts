@@ -8,7 +8,12 @@ interface SevipPopupState {
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
 
+    // time for png image
     histTimeSevip: string;
+
+    // timerange for gif animation
+    startTimeSevip: string;
+    endTimeSevip: string;
 }
 
 const initialState: SevipPopupState = {
@@ -16,7 +21,10 @@ const initialState: SevipPopupState = {
 
     selectedVariable: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType[0] : null,
     availableVariables: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType : [],
-    histTimeSevip: '2020-11-10 12:00:33'
+    histTimeSevip: '2020-11-10 12:00:33',
+    
+    startTimeSevip: '2020-11-10 12:00:33',
+    endTimeSevip: '2020-11-10 12:50:00'
 }
 
 const histSevippopupSlice = createSlice({
@@ -29,6 +37,12 @@ const histSevippopupSlice = createSlice({
         setHistTimeSevip: (state, action) => {
           state.histTimeSevip = action.payload;
         },
+        setHistSevipTimeStart: (state, action) => {
+          state.startTimeSevip = action.payload;
+        },
+        setHistSevipTimeEnd: (state, action) => {
+          state.endTimeSevip = action.payload;
+        },
         toggleSevipPopup: (state) => {
           state.isPopupOpen = !state.isPopupOpen;
         },
@@ -38,5 +52,5 @@ const histSevippopupSlice = createSlice({
     }
 })
 
-export const { setSelectedHistSevipOption, setHistTimeSevip, closeSevipPopup, toggleSevipPopup } = histSevippopupSlice.actions;
+export const { setSelectedHistSevipOption, setHistTimeSevip, closeSevipPopup, toggleSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart } = histSevippopupSlice.actions;
 export default histSevippopupSlice.reducer;

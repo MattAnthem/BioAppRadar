@@ -14,6 +14,7 @@ import { Unplug } from 'lucide-react';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
+import { useSevipGifData } from './hooks/useData/useSevipGifData';
 
 const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopupHist'));
 const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
@@ -46,11 +47,15 @@ const HistoryMap = () => {
     const isRadar = mapModeHist === 'radar';
     const isSevip = mapModeHist === 'sevip';
     const isClassif = mapModeHist === 'classification';
+    const isSevipGif = mapModeHist === 'sevip_gif';
      
-    
+    // Still images
     const { data: radarData, isLoading: radarDataLoading, error: radarError } = useRadarData(isRadar);
     const { data: sevipData, isLoading: sevipDataLoading, error: sevipError } = useSevipData(isSevip);
     const { data: classifData, isLoading: classifDataLoading, error: classifError } = useClassifData(isClassif);
+
+    // Gif animated
+    const { data: sevipGifData, isLoading: sevipGifLoading, error: sevipGifError } = useSevipGifData(isSevipGif);
     
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
@@ -72,8 +77,12 @@ const HistoryMap = () => {
             isLoading = classifDataLoading;
             error = classifError;
             break;
+        case isSevipGif: 
+            data = sevipGifData as SpatialDataResponse;
+            isLoading = sevipGifLoading;
+            error = sevipGifError;
     }
-            
+    
     //#endregion
             
     //#region Fetch default elevations for polar radar mode
@@ -213,11 +222,13 @@ const HistoryMap = () => {
 
 
         {/* Map Time */}
-        <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
-
-            <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
-
-        </div>
+        {
+            (mapModeHist !== 'sevip_gif') && (
+                <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+                    <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
+                </div>
+            )
+        }
 
         {/* Map Leaflet */}
         <LeafletMap
@@ -229,7 +240,7 @@ const HistoryMap = () => {
             zoom={8}
             overlayImg={
                 {
-                    url: data?.data?.png ?? '',
+                    url: (data?.data?.png || data?.data?.gif) ?? '',
                     bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
                 }
             }

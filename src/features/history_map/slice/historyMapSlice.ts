@@ -4,10 +4,13 @@ import type { ClassificationDataPayload } from "../../../api/endpoints/spatial/c
 
 
 interface HistorymapSliceState {
-    mapModeHist: 'sevip' | 'classification' | 'radar';
+    mapModeHist: 'sevip' | 'classification' | 'radar' | 'sevip_gif';
     radarPayloadHist: RadarPayload;
     sevipPayloadHist: SevipPayload;
     classifPayloadHist: ClassificationDataPayload;
+
+    // gif animated states
+    sevipGifPayloadHist: SevipPayload;
 } 
 
 const initialState: HistorymapSliceState = {
@@ -30,6 +33,13 @@ const initialState: HistorymapSliceState = {
         parameter: 'vid',
         colorbar: 'viridis',
         time: '2020-11-10 12:00:33',
+    },
+
+    sevipGifPayloadHist: {
+        colorbar: 'viridis',
+        parameter: 'vid',
+        startTime: '2020-11-10 12:00:33',
+        endTime: '2020-11-10 12:50:00'
     }
 }
 
@@ -43,6 +53,10 @@ const historymapSlice = createSlice({
         setSevipPayloadHist: (state, action: PayloadAction<Partial<SevipPayload>>) => {
             state.mapModeHist = 'sevip';
             state.sevipPayloadHist = {...state.sevipPayloadHist, ...action.payload}
+        },
+        setSevipGifPayloadHist: (state, action: PayloadAction<Partial<SevipPayload>>) => {
+            state.mapModeHist = 'sevip_gif';
+            state.sevipGifPayloadHist = {...state.sevipGifPayloadHist, ...action.payload}
         },
         setClassifPayloadHist: (state, action: PayloadAction<Partial<ClassificationDataPayload>>) => {
             state.mapModeHist = 'classification';
@@ -95,5 +109,5 @@ const historymapSlice = createSlice({
     }
 });
 
-export const { setMapModeHist, setSevipPayloadHist, setClassifPayloadHist, setRadarPayloadHist, setColorbarForAll, setAltitudeForAll, setElevation } = historymapSlice.actions;
+export const { setMapModeHist, setSevipGifPayloadHist, setSevipPayloadHist, setClassifPayloadHist, setRadarPayloadHist, setColorbarForAll, setAltitudeForAll, setElevation } = historymapSlice.actions;
 export default historymapSlice.reducer;

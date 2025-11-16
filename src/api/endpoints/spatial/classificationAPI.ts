@@ -11,7 +11,8 @@ export interface ClassificationDataPayload {
 
 export interface ClassificationDataResponse {
     data: {
-        png: string
+        png?: string;
+        gif?: string;
         bounds: [[number, number], [number, number]]
     },
     legend: {
