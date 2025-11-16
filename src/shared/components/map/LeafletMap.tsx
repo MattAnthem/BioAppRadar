@@ -3,6 +3,13 @@ import L from 'leaflet';
 import "leaflet-draw";
 import { enableDraw } from "./feature/enableDraw";
 import { enableDrawLine } from "./feature/enableDrawLine";
+import airportMarker from '../../../assets/airport.png';
+
+const planeMarker = L.icon({
+  iconUrl: airportMarker,
+  iconSize: [35, 35],
+  iconAnchor: [14, 10],
+})
 
 type MapProps = {
   baseMap: string;
@@ -122,6 +129,7 @@ const LeafletMap = ({
     overlayShapesRef.current = [];
   
     const layer = L.geoJSON(overlayShapes, {
+      pointToLayer: (_, latLng) => L.marker(latLng, {icon: planeMarker}),
       style: {
         color: 'blue',
         weight: 1,
