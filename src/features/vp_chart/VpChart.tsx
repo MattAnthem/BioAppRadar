@@ -3,7 +3,7 @@ import VpChartHighcharts from "../../shared/components/charts/HighchartsVP";
 import { useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import loader from '../../assets/loader.webp'
-import { Fullscreen, Unplug } from "lucide-react";
+import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
 import React, { useState } from "react";
 import { useTheme } from "../../shared/hooks/useTheme";
 
@@ -47,14 +47,26 @@ const VpChart = ({ className }: VpChartProps) => {
 
 
               {data && (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="w-full h-full flex flex-col  items-center justify-center">
                   <div className="lg:w-1/2 w-full h-full">
-                    <VpChartHighcharts
-                      data={data}
-                      displayTitle
-                      chartHeight={500}
-                      selectedHeight={currentHeight}
-                    />
+                        {/* Download : Dataset/Image */}
+                        <div className="flex w-full justify-end items-end pt-1 px-1">
+                          <Tooltip
+                            position="bottom"
+                            text="Download chart"
+                            display_condition={isModalOpen}
+                          >
+                            <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                              <LucideDownload className="w-4 h-4"/>
+                            </button>
+                          </Tooltip>
+                        </div>
+                        <VpChartHighcharts
+                          data={data}
+                          displayTitle
+                          chartHeight={500}
+                          selectedHeight={currentHeight}
+                        />
                   </div>
                 </div>
 

@@ -3,7 +3,7 @@ import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import { useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
-import { Fullscreen, Unplug } from "lucide-react";
+import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
 import { useTheme } from "../../shared/hooks/useTheme";
 import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
@@ -37,10 +37,16 @@ const VtipChart = ({ className }: VtipChartProps) => {
     setIsModalOpen(true);
   }
 
-  const handleDisplayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayMode(e.target.value as 'png' | 'interactive');
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
   }
 
+  const handleDisplayImage = () => {
+    setDisplayMode('png');
+  }
+  const handleDisplayInteractiveChart = () => {
+    setDisplayMode('interactive');
+  }
 
   return (
     <SectionCard className={`${className} w-full h-full flex flex-col`}>
@@ -52,29 +58,29 @@ const VtipChart = ({ className }: VtipChartProps) => {
               mdlToggler_func={() => setIsModalOpen(false)}
           >
             
-            {/* Handle display mode */}
-            <div className="w-full flex justify-center items-center p-1 gap-2">
-                <p className="text-sm">Display as :</p>
+              {/* Handle display mode */}
+              <div className="w-full flex justify-start items-center p-1 gap-1">
+                <Tooltip
+                  display_condition={isModalOpen}
+                  position="bottom"
+                  text="Display as interactive chart"
+                >
+                  <button onClick={handleDisplayInteractiveChart} className={`px-2 py-0.5 ${displayMode === 'interactive' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                      <ChartLine className="w-4"/>
+                  </button>
+                </Tooltip>
 
-                <input
-                  type="radio"
-                  name="display"
-                  value="png"
-                  checked={displayMode === 'png'}
-                  onChange={handleDisplayChange}
-                  id="disp_image"
-                />
-                <label htmlFor="disp_image" className="text-xs">PNG</label>
+                <Tooltip
+                  display_condition={isModalOpen}
+                  position="bottom"
+                  text="Display as image"
+                >
+                  <button onClick={handleDisplayImage} value={'png'} className={`px-2 py-0.5 ${displayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                      <ImageIcon className="w-4"/>
+                  </button>
+                </Tooltip>
 
-                <input
-                  type="radio"
-                  name="display"
-                  value="interactive"
-                  checked={displayMode === 'interactive'}
-                  onChange={handleDisplayChange}
-                  id="disp_interactive"
-                />
-                <label htmlFor="disp_interactive" className="text-xs">Interactive Chart</label>
+
               </div>
 
               {
@@ -105,7 +111,19 @@ const VtipChart = ({ className }: VtipChartProps) => {
 
               {
                 (displayMode === 'interactive' && data) && (
-                  <div className="flex w-full h-full justify-center items-center">
+                  <div className="flex flex-col w-full h-full justify-start items-center">
+                      {/* Download : Dataset/Image */}
+                      <div className="flex w-full justify-end items-center px-1">
+                        <Tooltip
+                          position="bottom"
+                          text="Download chart"
+                          display_condition={isModalOpen}
+                        >
+                          <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                            <LucideDownload className="w-4 h-4"/>
+                          </button>
+                        </Tooltip>
+                      </div>
                     <HighchartVtip
                       data={data}
                       displayTitle

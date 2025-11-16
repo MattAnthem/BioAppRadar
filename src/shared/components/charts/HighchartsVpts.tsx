@@ -5,9 +5,11 @@ import HCHeatmap from 'highcharts/modules/heatmap';
 import HCAnnotations from 'highcharts/modules/annotations';
 import type { VptsResponse } from '../../../api/endpoints/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
+// import exportingModule from "highcharts/modules/exporting";
 
 HCHeatmap(Highcharts);
 HCAnnotations(Highcharts);
+// exportingModule(Highcharts);
 
 interface VpHeatmapChartProps {
     data: VptsResponse;

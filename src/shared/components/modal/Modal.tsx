@@ -43,7 +43,7 @@ const Modal = (
 
             {/* Modal contents */}
               
-                <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] h-[85vh] transition-all duration-300 ease-in-out p-2 flex-col`}>
+                <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] h-[85vh]  p-2 flex flex-col`}>
                   <div className="w-full flex justify-between items-baseline">
                     {/* Heading */}
                     <h1 className="p-2 text-sm font-semibold">{title}</h1>
@@ -53,7 +53,7 @@ const Modal = (
                     </ButtonBorder>
 
                   </div>
-                  <div className="w-full border-b border-zinc-700" />
+                  <div className="w-full border-b border-zinc-400" />
                   {/* Content */}
                   <div className="w-full h-[70vh]">
                     { children }
