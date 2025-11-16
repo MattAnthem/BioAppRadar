@@ -30,7 +30,8 @@ export const light: ThemeElements = {
             border: 'border-gray-300',
             section_line: 'bg-gray-300',
             toggler_side_bg: 'bg-gray-200',
-            toogler_hover: 'hover:bg-gray-300'
+            toogler_hover: 'hover:bg-gray-300',
+            logos: 'bg-stone-100'
         },
         navs: {
             text: 'text-black',
@@ -155,7 +156,8 @@ export const dark: ThemeElements = {
             border: 'border-zinc-700',
             section_line: 'bg-zinc-700',
             toggler_side_bg: 'bg-zinc-700',
-            toogler_hover: 'hover:bg-zinc-600'
+            toogler_hover: 'hover:bg-zinc-600',
+            logos: 'bg-stone-300'
         },
         navs: {
             text: 'text-zinc-100',

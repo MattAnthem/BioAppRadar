@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from "react";
+import { useMemo, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HCDataGrouping from "highcharts/modules/datagrouping";
@@ -7,6 +7,13 @@ import HCAnnotations from "highcharts/modules/annotations";
 import HCAccessibility from "highcharts/modules/accessibility";
 import { useTheme } from "../../hooks/useTheme";
 import type { VtipResponse } from "../../../api/endpoints/verticalProfilesAPI";
+import HCExporting from "highcharts/modules/exporting";
+import HCOfflineExporting from "highcharts/modules/offline-exporting";
+import HCExportData from "highcharts/modules/export-data";
+
+HCExporting(Highcharts);
+HCExportData(Highcharts);
+HCOfflineExporting(Highcharts);
 
 HCDataGrouping(Highcharts);
 HCWindbarb(Highcharts);
@@ -22,13 +29,18 @@ interface VtipChartProps {
   displayTitle?: boolean;
 }
 
-const HighchartVtip: React.FC<VtipChartProps> = ({
-  data,
-  displayTitle = false,
-}) => {
+const HighchartVtip = forwardRef<Highcharts.Chart | null, VtipChartProps>(
+  ({ data, displayTitle = false }, ref) => {
+    
   const chartRef = useRef<HighchartsReact.RefObject>(null);
   const { theme } = useTheme();
+
+  useImperativeHandle<Highcharts.Chart | null | undefined, Highcharts.Chart | null>(
+    ref,
+    () => chartRef.current?.chart ?? null,
+  );
   const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.charts;
+
 
   useEffect(() => {
     if (!chartRef.current || !data?.times?.length) return;
@@ -82,6 +94,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
     const ymax = pmax + (pmax - pmin) * 0.01;
 
     return {
+      
       chart: {
         zoomType: "x",
         borderColor: borderBox,
@@ -214,6 +227,11 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
       },
       legend: { enabled: false },
       credits: { enabled: false },
+      exporting: {
+        buttons: {
+          contextButton: {enabled: false}
+        }
+      }
     };
   }, [data, displayTitle, chartFontColor, chartGridline, chartLegendColor]);
 
@@ -227,7 +245,7 @@ const HighchartVtip: React.FC<VtipChartProps> = ({
       />
 
   );
-};
+});
 
 export default HighchartVtip;
 

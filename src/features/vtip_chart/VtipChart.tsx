@@ -1,9 +1,9 @@
-import React,{ useState } from "react";
+import React,{ useRef, useState } from "react";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import { useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
-import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
+import { ChartLine, Database, Download, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
 import { useTheme } from "../../shared/hooks/useTheme";
 import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
@@ -31,6 +31,9 @@ const VtipChart = ({ className }: VtipChartProps) => {
   const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, displayMode === 'png');
 
 
+  // Ref to the chart
+  const chartRef = useRef<Highcharts.Chart | null>(null);
+
 
   // handler to open the modal
   const handleOpenModal = () => {
@@ -48,6 +51,16 @@ const VtipChart = ({ className }: VtipChartProps) => {
     setDisplayMode('interactive');
   }
 
+  // Dowload handlers
+  // CSV
+  const handleDownloadInteractiveChartCSV = () => {
+    if (!chartRef.current) return;
+    // chartRef.current.exportChartLocal({
+    //   type: 'image/png',
+    //   filename: 'testdown'
+    // });
+  }
+
   return (
     <SectionCard className={`${className} w-full h-full flex flex-col`}>
 
@@ -55,7 +68,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
           <ChartModal
               isModalOpen={isModalOpen}
               modalTitle={`${selectedParameter.displayText} Chart`}
-              mdlToggler_func={() => setIsModalOpen(false)}
+              mdlToggler_func={handleCloseModal}
           >
             
               {/* Handle display mode */}
@@ -116,17 +129,18 @@ const VtipChart = ({ className }: VtipChartProps) => {
                       <div className="flex w-full justify-end items-center px-1">
                         <Tooltip
                           position="bottom"
-                          text="Download chart"
+                          text="Download CSV"
                           display_condition={isModalOpen}
                         >
-                          <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                            <LucideDownload className="w-4 h-4"/>
+                          <button onClick={handleDownloadInteractiveChartCSV} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                            <Download className="w-4 h-4"/>
                           </button>
                         </Tooltip>
                       </div>
                     <HighchartVtip
                       data={data}
                       displayTitle
+                      ref={chartRef}
                     />
                   </div>
                 )

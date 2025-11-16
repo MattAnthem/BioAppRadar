@@ -200,6 +200,13 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
 
         //
         const options: Highcharts.Options = {
+            exporting: {
+                buttons: {
+                    contextButton: {
+                        enabled: false,
+                    }
+                },
+            },
             chart: {
                 borderColor: borderBox,
                 borderWidth: 1,

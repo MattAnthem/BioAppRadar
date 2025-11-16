@@ -60,6 +60,7 @@ type SidebarMain = {
     section_line: string;
     toggler_side_bg: string;
     toogler_hover: string;
+    logos: string;
 }
 
 type SidebarNavs = {

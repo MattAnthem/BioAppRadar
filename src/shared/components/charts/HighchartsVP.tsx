@@ -32,6 +32,9 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
     const vmax = Math.max(...data.parameter.filter((v): v is number => v !== null));
 
     return {
+      exporting: {
+        buttons: {contextButton: {enabled: false}}
+      },
       chart: {
         inverted: true,
         reflow: true,
