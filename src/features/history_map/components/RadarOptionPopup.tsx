@@ -94,10 +94,12 @@ const RadarOptionPopup = () => {
     
             // --- Update slice states ---
             dispatch(setRadarTimeHist(locTime));
+            dispatch(setSelectedHistRadarParameter(locSelectedParam));
+            dispatch(setSelectedHistRadarType(locSelectedType));
             
         } else if (overlayMode === 'gif') {
             dispatch(setRadarGifPayloadHist({
-                type: locSelectedParam.id as 'polar' | 'grid',
+                type: locSelectedType.id as 'polar' | 'grid',
                 parameter: locSelectedParam.id as string,
                 startTime: locStartTime,
                 endTime: locEndTime
@@ -105,9 +107,10 @@ const RadarOptionPopup = () => {
             // -- update the slices
             dispatch(setRadarStartTimeHist(locStartTime));
             dispatch(setRadarEndTimeHist(locEndTime));
+            dispatch(setSelectedHistRadarParameter(locSelectedParam));
+            dispatch(setSelectedHistRadarType(locSelectedType));
         }
-        dispatch(setSelectedHistRadarParameter(locSelectedParam));
-        dispatch(setSelectedHistRadarType(locSelectedType));
+
         dispatch(closeRadarPopup());
     }
 

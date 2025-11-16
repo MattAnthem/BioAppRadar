@@ -4,7 +4,7 @@ import type { ClassificationDataPayload } from "../../../api/endpoints/spatial/c
 
 
 interface HistorymapSliceState {
-    mapModeHist: 'sevip' | 'classification' | 'radar' | 'sevip_gif' | 'radar_gif';
+    mapModeHist: 'sevip' | 'classification' | 'radar' | 'sevip_gif' | 'radar_gif' | 'classif_gif';
     radarPayloadHist: RadarPayload;
     sevipPayloadHist: SevipPayload;
     classifPayloadHist: ClassificationDataPayload;
@@ -12,6 +12,7 @@ interface HistorymapSliceState {
     // gif animated states
     sevipGifPayloadHist: SevipPayload;
     radarGifPayloadHist: RadarPayload;
+    // classifGifPayloadHist: ClassificationDataPayload;
 } 
 
 const initialState: HistorymapSliceState = {
@@ -49,7 +50,10 @@ const initialState: HistorymapSliceState = {
         endTime: '2020-11-10 12:50:00',
         type: 'grid',
         height: 0
-    }
+    },
+    // classifGifPayloadHist: {
+    //     class
+    // }
 }
 
 const historymapSlice = createSlice({
@@ -105,10 +109,10 @@ const historymapSlice = createSlice({
           state.mapModeHist = "radar_gif";
         
           const incoming = action.payload;
-          const effectiveType = incoming.type ?? state.radarPayloadHist.type;
+          const effectiveType = incoming.type ?? state.radarGifPayloadHist.type;
         
           if (effectiveType === "grid") {
-            state.radarPayloadHist = {
+            state.radarGifPayloadHist = {
               type: "grid",
               parameter: incoming.parameter ?? "ref",
               startTime: incoming.startTime ?? "2020-11-10 12:00:33",
@@ -117,7 +121,7 @@ const historymapSlice = createSlice({
               height: (incoming as Partial<RadarGridPayload>).height ?? 0,
             };
           } else {
-            state.radarPayloadHist = {
+            state.radarGifPayloadHist = {
               type: "polar",
               parameter: incoming.parameter ?? "ref",
               startTime: incoming.startTime ?? "2020-11-10 12:00:33",
@@ -136,8 +140,11 @@ const historymapSlice = createSlice({
         },
         setAltitudeForAll: (state, action: PayloadAction<number>) => {
             const height = action.payload;
-            if ((state.mapModeHist === 'radar' || state.mapModeHist === 'radar_gif') && (state.radarPayloadHist.type === 'grid' || state.radarGifPayloadHist.type === 'grid')) {
+            if (state.mapModeHist === 'radar'  && state.radarPayloadHist.type === 'grid') {
                 (state.radarPayloadHist as RadarGridPayload).height = height;
+                
+            }
+            else if (state.mapModeHist === 'radar_gif' && state.radarGifPayloadHist.type === 'grid') {
                 (state.radarGifPayloadHist as RadarGridPayload).height = height;
             }
             state.classifPayloadHist.height = height;

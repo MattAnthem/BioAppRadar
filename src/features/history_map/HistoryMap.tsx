@@ -34,7 +34,7 @@ const HistoryMap = () => {
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
     const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
-    const { mapModeHist, radarPayloadHist } = useAppSelector(state => state.historymap);
+    const { mapModeHist, radarPayloadHist, radarGifPayloadHist } = useAppSelector(state => state.historymap);
 
 
     // Map boundary GeoJson
@@ -204,7 +204,7 @@ const HistoryMap = () => {
 
         {/* altitude slider */}
         {
-            (mapModeHist === 'classification' || (mapModeHist === 'radar' && radarPayloadHist.type === 'grid')) && (
+            (isClassif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
                 <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <AltitudeSlider
                         position='right'

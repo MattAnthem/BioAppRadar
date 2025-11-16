@@ -4,15 +4,28 @@ import type { RadarPayload, SpatialDataResponse } from "../../../../api/endpoint
 
 
 export const useRadarGifDataQuery = (payload: RadarPayload, enabled?: boolean) => {
-    return useQuery<SpatialDataResponse>({
-      queryKey: [
-        "radar_dataGif",
+  const queryKey =
+  payload.type === "grid"
+    ? [
+        "radar_gif_data",
+        payload.type,
         payload.parameter,
         payload.startTime,
         payload.endTime,
-        payload.type,
         payload.colorbar,
-      ],
+        payload.height,
+      ]
+    : [
+        "radar_gif_data",
+        payload.type,
+        payload.parameter,
+        payload.startTime,
+        payload.endTime,
+        payload.colorbar,
+        payload.elevation_angle,
+      ];
+    return useQuery<SpatialDataResponse>({
+      queryKey,
       queryFn: async () => {
         try {
           return await fetchRadarGifAnim(payload);
