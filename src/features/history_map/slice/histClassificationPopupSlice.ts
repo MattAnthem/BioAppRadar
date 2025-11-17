@@ -10,7 +10,11 @@ interface HistClassificationPopupState {
     color_1: string;
     height: number;
 
+    // for still image (at a specific date)
     histClassifTime: string;
+    // for gif animated (time range)
+    startTimeClassif: string;
+    endTimeClassif: string;
 }
 
 const initialState: HistClassificationPopupState = {
@@ -20,7 +24,10 @@ const initialState: HistClassificationPopupState = {
     color_0: '#dc3545',
     color_1: '#0d6efd',
     height: 0,
-    histClassifTime: '2020-11-10 12:00:33'
+    histClassifTime: '2020-11-10 12:00:33',
+
+    startTimeClassif: '2020-11-10 12:00:33',
+    endTimeClassif: '2020-11-10 12:50:00',
 }
 
 const HistclassificationpopupSlice = createSlice({
@@ -31,13 +38,19 @@ const HistclassificationpopupSlice = createSlice({
             state.selectedVariable = action.payload;
         },
         setHistClassificationColorZero: (state, action) => {
-            state.color_0 = action.payload
+            state.color_0 = action.payload;
         },
         setHistClassificationColorOne: (state, action) => {
-            state.color_1 = action.payload
+            state.color_1 = action.payload;
         },
         setHistClassifTime: (state, action) => {
-            state.histClassifTime = action.payload
+            state.histClassifTime = action.payload;
+        },
+        setHistClassifStartTime: (state, action) => {
+            state.startTimeClassif = action.payload;
+        },
+        setHistClassifEndTime: (state, action) => {
+            state.endTimeClassif = action.payload;
         },
         toggleClassifPopup: (state) => {
             state.isPopupOpen = !state.isPopupOpen;
@@ -48,5 +61,5 @@ const HistclassificationpopupSlice = createSlice({
     }
 })
 
-export const { setHistClassificationColorOne, setHistClassificationColorZero,closeClassifPopup, toggleClassifPopup,  setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
+export const { setHistClassificationColorOne, setHistClassifEndTime, setHistClassifStartTime, setHistClassificationColorZero,closeClassifPopup, toggleClassifPopup,  setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
 export default HistclassificationpopupSlice.reducer;

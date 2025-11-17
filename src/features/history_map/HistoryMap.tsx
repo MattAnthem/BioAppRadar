@@ -16,6 +16,7 @@ import type { ClassificationDataResponse } from '../../api/endpoints/spatial/cla
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 import { useSevipGifData } from './hooks/useData/useSevipGifData';
 import { useRadarGifData } from './hooks/useData/useRadarGifData';
+import { useClassifGifData } from './hooks/useData/useClassifGifData';
 
 const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopupHist'));
 const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
@@ -50,6 +51,7 @@ const HistoryMap = () => {
     const isClassif = mapModeHist === 'classification';
     const isSevipGif = mapModeHist === 'sevip_gif';
     const isRadarGif = mapModeHist === 'radar_gif';
+    const isClassifGif = mapModeHist === 'classif_gif';
      
     // Still images
     const { data: radarData, isLoading: radarDataLoading, error: radarError } = useRadarData(isRadar);
@@ -59,6 +61,7 @@ const HistoryMap = () => {
     // Gif animated
     const { data: sevipGifData, isLoading: sevipGifLoading, error: sevipGifError } = useSevipGifData(isSevipGif);
     const { data: radarGifData, isLoading: radarGifLoading, error: radarGifError } = useRadarGifData(isRadarGif);
+    const { data: classifGifData, isLoading: classifGifLoading, error: classifGifError } = useClassifGifData(isClassifGif);
     
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
@@ -89,6 +92,11 @@ const HistoryMap = () => {
             data = radarGifData as SpatialDataResponse;
             isLoading = radarGifLoading;
             error = radarGifError;
+            break;
+        case isClassifGif:
+            data = classifGifData as ClassificationDataResponse;
+            isLoading = classifGifLoading;
+            error = classifGifError;
             break;
     }
     
@@ -151,8 +159,9 @@ const HistoryMap = () => {
 
         {
             isLoading && (
-                <div className="absolute z-10 w-full h-full flex items-center justify-center">
+                <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
+                    <p className='text-gray-700'>Loading overlay</p>
                 </div>
             )
         }
@@ -204,7 +213,7 @@ const HistoryMap = () => {
 
         {/* altitude slider */}
         {
-            (isClassif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
+            (isClassif || isClassifGif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
                 <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <AltitudeSlider
                         position='right'
@@ -232,8 +241,8 @@ const HistoryMap = () => {
 
         {/* Map Time */}
         {
-            (mapModeHist === 'sevip_gif' || mapModeHist === 'radar_gif') ? (
-                <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-2/7 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+            (isSevipGif || isRadarGif || isClassifGif) ? (
+                <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 2xl:1/6 lg:w-2/7 w:1/3 ${(isClassif || isClassifGif) ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
                     <small className='text-white tracking-wide'>Time: {data?.info.time[0]} - {data?.info.time[data.info.time.length - 1]}</small>
                 </div>
             ):
@@ -267,7 +276,7 @@ const HistoryMap = () => {
 
         {/* Classification legends */}
         {
-            (mapModeHist === "classification") && (
+            (isClassif || isClassifGif) && (
                 <div className=" absolute flex flex-col gap-0.5 z-10 lg:w-1/7 h-16 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
                     
                     {/* Color 0 */}

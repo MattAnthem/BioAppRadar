@@ -12,7 +12,7 @@ interface HistorymapSliceState {
     // gif animated states
     sevipGifPayloadHist: SevipPayload;
     radarGifPayloadHist: RadarPayload;
-    // classifGifPayloadHist: ClassificationDataPayload;
+    classifGifPayloadHist: ClassificationDataPayload;
 } 
 
 const initialState: HistorymapSliceState = {
@@ -37,6 +37,7 @@ const initialState: HistorymapSliceState = {
         time: '2020-11-10 12:00:33',
     },
 
+    // Gif animated default payloads
     sevipGifPayloadHist: {
         colorbar: 'viridis',
         parameter: 'vid',
@@ -51,9 +52,14 @@ const initialState: HistorymapSliceState = {
         type: 'grid',
         height: 0
     },
-    // classifGifPayloadHist: {
-    //     class
-    // }
+    classifGifPayloadHist: {
+        class: 'species',
+        color_0: '#dc3545',
+        color_1: '#0d6efd',
+        height: 0,
+        startTime: '2020-11-10 12:00:33',
+        endTime: '2020-11-10 12:50:00',
+    }
 }
 
 const historymapSlice = createSlice({
@@ -74,6 +80,10 @@ const historymapSlice = createSlice({
         setClassifPayloadHist: (state, action: PayloadAction<Partial<ClassificationDataPayload>>) => {
             state.mapModeHist = 'classification';
             state.classifPayloadHist = { ...state.classifPayloadHist, ...action.payload }
+        },
+        setClassifGifPayloadHist: (state, action: PayloadAction<Partial<ClassificationDataPayload>>) => {
+            state.mapModeHist = 'classif_gif';
+            state.classifGifPayloadHist = { ...state.classifGifPayloadHist, ...action.payload }
         },
         setRadarPayloadHist: (
           state,
@@ -133,10 +143,20 @@ const historymapSlice = createSlice({
         },
         setColorbarForAll: (state, action: PayloadAction<string>) => {
             const color = action.payload;
-            state.radarPayloadHist.colorbar = color;
-            state.sevipPayloadHist.colorbar = color;
-            state.sevipGifPayloadHist.colorbar = color;
-            state.radarGifPayloadHist.colorbar =color;
+            switch (state.mapModeHist) {
+              case ('radar'):
+                state.radarPayloadHist.colorbar = color;
+                break;
+              case ('radar_gif'):
+                state.radarGifPayloadHist.colorbar = color;
+                break;
+              case ('sevip'):
+                state.sevipPayloadHist.colorbar = color;
+                break;
+              case ('sevip_gif'):
+                state.sevipGifPayloadHist.colorbar = color;
+                break;
+            }    
         },
         setAltitudeForAll: (state, action: PayloadAction<number>) => {
             const height = action.payload;
@@ -148,6 +168,7 @@ const historymapSlice = createSlice({
                 (state.radarGifPayloadHist as RadarGridPayload).height = height;
             }
             state.classifPayloadHist.height = height;
+            state.classifGifPayloadHist.height = height;
         },
         setElevation: (state, action: PayloadAction<number>) => {
             if ((state.mapModeHist === 'radar' || state.mapModeHist === 'radar_gif') && (state.radarPayloadHist.type === 'polar' || state.radarGifPayloadHist.type === 'polar')) {
@@ -158,5 +179,15 @@ const historymapSlice = createSlice({
     }
 });
 
-export const { setMapModeHist, setSevipGifPayloadHist, setRadarGifPayloadHist, setSevipPayloadHist, setClassifPayloadHist, setRadarPayloadHist, setColorbarForAll, setAltitudeForAll, setElevation } = historymapSlice.actions;
+export const { 
+    setMapModeHist, 
+    setSevipGifPayloadHist, 
+    setRadarGifPayloadHist, 
+    setSevipPayloadHist, 
+    setClassifPayloadHist, 
+    setClassifGifPayloadHist,
+    setRadarPayloadHist, 
+    setColorbarForAll, 
+    setAltitudeForAll, 
+    setElevation } = historymapSlice.actions;
 export default historymapSlice.reducer;

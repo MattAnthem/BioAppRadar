@@ -3,7 +3,9 @@ import { axiosClient } from "../../axiosClient";
 
 export interface ClassificationDataPayload {
     class: string;
-    time: string;
+    time?: string;
+    startTime?: string;
+    endTime?: string;
     height: number;
     color_0: string;
     color_1: string;

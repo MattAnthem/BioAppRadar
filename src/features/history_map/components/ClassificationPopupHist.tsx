@@ -1,13 +1,14 @@
 import OptionPopover from '../../../shared/components/popups/option/OptionPopover'
-import { BirdIcon } from 'lucide-react'
+import { BirdIcon, ImageIcon, ImagePlayIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime'
 import { useEffect, useState, memo } from 'react';
-import { closeClassifPopup, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifTime, setSelectedHistClassificationOption, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
-import { setClassifPayloadHist } from '../slice/historyMapSlice'
+import { closeClassifPopup, setHistClassifEndTime, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifStartTime, setHistClassifTime, setSelectedHistClassificationOption, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
+import { setClassifGifPayloadHist, setClassifPayloadHist } from '../slice/historyMapSlice'
+import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
 
 
 
@@ -16,7 +17,7 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 const ClassificationPopup = () => {
 
   // Read only redux states
-  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, isPopupOpen } = useAppSelector(state=> state.hist_classifpopup);
+  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, isPopupOpen, endTimeClassif, startTimeClassif } = useAppSelector(state=> state.hist_classifpopup);
 
   // --- Local state for the inputs
   const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);
@@ -24,6 +25,9 @@ const ClassificationPopup = () => {
   const [locColor0, setLocColor0] = useState(color_0);
   const [locColor1, setLocColor1] = useState(color_1);
   const [locTime, setLocTime] = useState(histClassifTime);
+  const [locStartTime, setLocStartTime] = useState(startTimeClassif);
+  const [locEndTime, setLocEndTime] = useState(endTimeClassif);
+  const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
 
   // --- Sync local states with redux states on mount and when redux states change ---
   useEffect(() => {
@@ -33,9 +37,18 @@ const ClassificationPopup = () => {
       setLocColor0(color_0);
       setLocColor1(color_1);
       setLocTime(histClassifTime);
+      setLocStartTime(startTimeClassif);
+      setLocEndTime(endTimeClassif);
     }
-  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable, isPopupOpen])
+  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable, isPopupOpen, startTimeClassif, endTimeClassif])
 
+  // --- Toggle overlay mode handlers --- 
+  const handleSetToPngMode = () => {
+        setOverlayMode("png");
+  }
+  const handleSetToGifMode = () => {
+        setOverlayMode("gif");
+  }
 
   // --- Local input handlers (for edition : proper to the popup only) ---
   const handleInputVarChange = (variable: SelectOption) => {
@@ -54,7 +67,14 @@ const ClassificationPopup = () => {
     setLocTime(date);
   }
 
-  const dispatch = useAppDispatch();
+      // --- Gif animated handlers ---
+  const handleGifStartTimeChange = (time: string) => {
+        setLocStartTime(time);
+        setLocEndTime(time);
+  }
+  const handleGifEndTimeChange = (time: string) => {
+        setLocEndTime(time);
+  }
 
   // --- Redux controls of the popup ---
   const handleTooglePopup = () => {
@@ -64,23 +84,47 @@ const ClassificationPopup = () => {
     dispatch(closeClassifPopup());
   }
 
+  const dispatch = useAppDispatch();
+
+
 
   // --- Submit handler:  ---
   const handleSubmit = () => {
-    dispatch(setClassifPayloadHist({
+    //  --- Changing payload according to the overlay mode to display ---
+    if (overlayMode === 'png') {
+      dispatch(setClassifPayloadHist({
+          class: locSelectedVar.id as string,
+          color_0: locColor0,
+          color_1: locColor1,
+          time: locTime
+      }))
+      // --- Update slice states ---
+      dispatch(setHistClassifTime(locTime));
+      dispatch(setHistClassificationColorOne(locColor1));
+      dispatch(setHistClassificationColorZero(locColor0));
+      dispatch(setSelectedHistClassificationOption(locSelectedVar));
+  
+      // --- close on submit (only if the fields are validated) ---
+      dispatch(closeClassifPopup());
+    } else if (overlayMode === 'gif') {
+      dispatch(setClassifGifPayloadHist({
         class: locSelectedVar.id as string,
         color_0: locColor0,
         color_1: locColor1,
-        time: locTime
-    }))
-    // --- Update slice states ---
-    dispatch(setHistClassifTime(locTime));
-    dispatch(setHistClassificationColorOne(locColor1));
-    dispatch(setHistClassificationColorZero(locColor0));
-    dispatch(setSelectedHistClassificationOption(locSelectedVar));
+        startTime: locStartTime,
+        endTime: locEndTime
+      }));
+      // --- update states of the popups slice
+      dispatch(setHistClassificationColorOne(locColor1));
+      dispatch(setHistClassificationColorZero(locColor0));
+      dispatch(setSelectedHistClassificationOption(locSelectedVar));
+      dispatch(setHistClassifStartTime(locStartTime));
+      dispatch(setHistClassifEndTime(locEndTime));
 
-    // --- close on submit (only if the fields are validated) ---
-    dispatch(closeClassifPopup());
+      dispatch(closeClassifPopup());
+    }
+
+    
 }
 
 return (
@@ -92,6 +136,35 @@ return (
       onOpen={handleTooglePopup}
       onClose={closePopup}
   >
+
+        {/* Display mode toggle */}
+        <small className='font-semibold'>Choose a display mode</small>
+        <div className="border-b border-b-gray-400"/>
+        <div className="w-full flex justify-start items-center p-1 gap-1">
+                <Tooltip
+                  display_condition={isPopupOpen}
+                  position="bottom"
+                  text="Display as image"
+                >
+                  <button onClick={handleSetToPngMode} className={`w-full px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                      <ImageIcon className="w-4"/>
+                  </button>
+                </Tooltip>
+
+                <Tooltip
+                  display_condition={isPopupOpen}
+                  position="bottom"
+                  text="Display as gif"
+                >
+                  <button onClick={handleSetToGifMode} className={`w-full px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                      <ImagePlayIcon className="w-4"/>
+                  </button>
+                </Tooltip>
+
+
+        </div>
+
+      {/* Variable selection */}
       <small className='font-semibold'>Select a variable</small>
       <div className="border-b border-b-gray-400"/>
 
@@ -102,6 +175,7 @@ return (
           onSelectValue={handleInputVarChange}
       />
 
+      {/* Colors selections */}
       <small className='font-semibold'>Select colors </small>
       <div className="border-b border-b-gray-400"/>
 
@@ -114,13 +188,42 @@ return (
           <input onChange={handleInputColor1Change} value={locColor1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
       </div>
 
-      {/* Time */}
-      <small className='font-semibold'>Select time</small>
-      <div className="border-b border-b-gray-400"/>
-      <ReactDatetimePicker
-        onChange={handleTimeChange}
-        value={locTime}
-      />
+      {/* Time for still image */}
+      {
+        (overlayMode === 'png') && (
+          <>
+            <small className='font-semibold'>Select time</small>
+            <div className="border-b border-b-gray-400"/>
+            <ReactDatetimePicker
+              onChange={handleTimeChange}
+              value={locTime}
+            />
+          </>
+        )
+      }
+      {/* Time for animated gif */}
+      {
+        (overlayMode === 'gif') && (
+          <>
+            {/* Start time for the gif */}
+            <small className='font-semibold'>Select start</small>
+            <div className="border-b border-b-gray-400"/>
+            <ReactDatetimePicker
+                onChange={handleGifStartTimeChange}
+                value={locStartTime}
+            />
+
+            {/* End time for the gif */}
+            <small className='font-semibold'>Select end</small>
+            <div className="border-b border-b-gray-400"/>
+            <ReactDatetimePicker
+                onChange={handleGifEndTimeChange}
+                value={locEndTime}
+                minDate={locStartTime}
+            />
+          </>
+        )
+      }
 
       {/* Display data btn */}
       <ButtonBorder
