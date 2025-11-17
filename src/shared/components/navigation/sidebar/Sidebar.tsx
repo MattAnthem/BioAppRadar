@@ -1,5 +1,5 @@
 import {  Bell, CalendarClock, FlipHorizontal,  Home, SidebarIcon } from "lucide-react";
-import logo_svg from "../../../../../public/BioAppRadar.webp"
+import logo_svg from "../../../../assets/BioAppRadar.webp"
 import { useTheme } from "../../../hooks/useTheme";
 import React, { useEffect, useRef } from "react";
 import { useClickOutside } from "../../../hooks/useClickOutside";
@@ -7,9 +7,9 @@ import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import type { MenuNames } from "../../buttons/navbtn/MenuTypes";
 import { setActiveButton, setMinimized, toggleMinimize } from "./sidebarSlice";
 import NavButton from "../../buttons/navbtn/NavButton";
-import mtorwlogo from "../../../../../public/mtorw.webp";
-import pasetlogo from "../../../../../public/paset.webp";
-import rsiflogo from "../../../../../public/rsif.webp";
+import mtorwlogo from "../../../../assets/mtorw.webp";
+import pasetlogo from "../../../../assets/paset.webp";
+import rsiflogo from "../../../../assets/rsif.webp";
 
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
