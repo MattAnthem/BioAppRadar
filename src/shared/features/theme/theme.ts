@@ -7,7 +7,7 @@ export const light: ThemeElements = {
     chartLegendColor: '#585858',
     datePicker: {
             bg: 'bg-neutral-200',
-            border: 'border-gray-300',
+            border: 'border-gray-400',
             text: 'text-gray-900',
             hover: 'hover:bg-blue-500 hover:text-white',
             selectedDay: 'bg-blue-600 text-white font-semibold',

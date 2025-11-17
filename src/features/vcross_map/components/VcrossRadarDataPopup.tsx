@@ -106,7 +106,7 @@ const VcrossRadarDataPopup = () => {
         <SimpleSelect
             options={locAvailableTypes}
             onSelectValue={handleRadarTypeChange}
-            width="w-95"
+            width="w-full"
             value={locSelectedType.displayText}
         />
         <small className="font-semibold">Select a variable</small>
@@ -114,7 +114,7 @@ const VcrossRadarDataPopup = () => {
         <SimpleSelect
             options={locAvailableParams}
             onSelectValue={handleRadarParamChange}
-            width="w-95"
+            width="w-full"
             value={locSelectedParam.displayText}
         />
 

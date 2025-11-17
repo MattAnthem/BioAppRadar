@@ -142,7 +142,7 @@ const SevipPopup = () => {
         <SimpleSelect
             options={locAvailableVars}
             value={locSelectedVar.displayText}
-            width='w-95'
+            width='w-full'
             onSelectValue={handleInputVarChange}
         />
 

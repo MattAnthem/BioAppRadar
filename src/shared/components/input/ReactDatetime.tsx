@@ -86,9 +86,9 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
 
   return (
     <div
-      className={`relative rounded-sm border p-1 ${
+      className={`relative rounded-sm border ${
         isDarkMode ? "dark" : "light"
-      } ${pickerTheme.border} ${pickerTheme.bg}`}
+      } ${pickerTheme.border} ${pickerTheme.bg} border`}
     >
       <Datetime
         value={internalValue}
@@ -101,15 +101,15 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
           onChange: handleManualChange,
           onBlur: handleBlur,
           placeholder: "YYYY-MM-DD HH:mm:ss",
-          className: `rounded-sm px-3 py-2 text-sm w-full outline-none transition-all ${
+          className: `rounded-[2px] p-1.5  text-sm w-full outline-none transition-opacity ${
             isValid
-              ? "border-gray-300 focus:ring-2 focus:ring-offset-3 focus:ring-blue-700"
-              : "border-red-500 focus:ring-2 focus:ring-offset-3 focus:ring-red-400"
+              ? "border-gray-400 focus:ring-1 focus:ring-offset-2 focus:ring-blue-700"
+              : "border-red-500 focus:ring-1 focus:ring-offset-2 focus:ring-red-400"
           } ${pickerTheme.text}`,
         }}
         closeOnSelect
       />
-      <Calendar className="absolute w-4 h-4 right-2 bottom-4"/>
+      <Calendar className="absolute w-4 h-4 right-2 bottom-2"/>
     </div>
   );
 };

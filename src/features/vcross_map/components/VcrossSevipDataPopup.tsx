@@ -78,7 +78,7 @@ const VcrossSevipDataPopup = () => {
       <SimpleSelect
         onSelectValue={handleVariableChange}
         options={locVariables}
-        width='w-95'
+        width='w-full'
         value={locSelectedVar.displayText}
       />
 

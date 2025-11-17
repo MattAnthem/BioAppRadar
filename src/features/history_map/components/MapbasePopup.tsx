@@ -57,7 +57,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
           <SimpleSelect
             onSelectValue={handleChangeBase}
             options={mapBaseOptions}
-            width="w-95"
+            width="w-full"
             value={selectedMapBase.displayText}
             className="border-0! bg-none!"
           />
@@ -71,7 +71,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
           <SimpleSelect
             onSelectValue={handleChangeCoverageGenre}
             options={boundaryOptions}
-            width="w-95"
+            width="w-full"
             value={selectedBoundary.displayText}
             className="border-0! bg-none!"
           />
@@ -79,7 +79,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
           <SimpleSelect
             onSelectValue={handleChangeCoverageType}
             options={boundaryTypes}
-            width="w-95"
+            width="w-full"
             value={selectedBoundaryType.displayText}
             className="border-0! bg-none!"
           />
@@ -93,7 +93,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
                 <SimpleSelect
                   onSelectValue={handleChangeColormap}
                   options={colormapOptions}
-                  width="w-95"
+                  width="w-full"
                   value={selectedColormap.displayText}
                   className="border-0! bg-none!"
                 />

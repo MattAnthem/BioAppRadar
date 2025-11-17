@@ -110,7 +110,7 @@ const VcrossBioClsDataPopup = () => {
       <SimpleSelect
         onSelectValue={handleBioClassChange}
         options={locAvailableBioclass}
-        width='w-95'
+        width='w-full'
         value={locSelectedBioclass.displayText}
       />
 

@@ -25,7 +25,7 @@ const CrossSection = () => {
 
               <div className={`
                   lg:w-full lg:h-full h-screen
-                  lg:col-span-2 col-span-1
+                  lg:col-span-2 
                 `}
               >
 

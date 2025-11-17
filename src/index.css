@@ -6,7 +6,7 @@
   @apply bg-zinc-700 text-gray-100 rounded-b-sm border-gray-600 w-full;
 }
 .light .rdtPicker {
-  @apply bg-white text-gray-900 rounded-b-sm border-gray-300 w-full;
+  @apply bg-gray-100 border-gray-400 text-gray-900 rounded-b-sm w-full;
 }
 .dark .rdtPicker td.rdtActive,
 .light .rdtPicker td.rdtActive {

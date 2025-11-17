@@ -155,7 +155,7 @@ const RadarOptionPopup = () => {
         <SimpleSelect
             options={locAvailableTypes}
             value={locSelectedType.displayText}
-            width='w-95'
+            width='w-full'
             onSelectValue={handleTypeChange}
         />
         
@@ -164,7 +164,7 @@ const RadarOptionPopup = () => {
         <SimpleSelect
             options={locAvailableParams}
             value={locSelectedParam.displayText}
-            width='w-95'
+            width='w-full'
             onSelectValue={handleParamChange}
         />
 

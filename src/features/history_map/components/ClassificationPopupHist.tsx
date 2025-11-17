@@ -140,7 +140,7 @@ return (
         {/* Display mode toggle */}
         <small className='font-semibold'>Choose a display mode</small>
         <div className="border-b border-b-gray-400"/>
-        <div className="w-full flex justify-start items-center p-1 gap-1">
+        <div className="w flex justify-start items-center gap-1">
                 <Tooltip
                   display_condition={isPopupOpen}
                   position="bottom"

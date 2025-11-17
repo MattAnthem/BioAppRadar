@@ -5,11 +5,9 @@ import { memo } from 'react';
 
 
 
-type Position = "left" | "right"
 
 type AltitudeSliderProps = {
     className?: string;
-    position: Position;
     altitudes: number[];
     currentIndex: number;
     onChangeAltitude: (index: number) => void; 
@@ -27,7 +25,7 @@ type AltitudeSliderProps = {
  */
 const AltitudeSlider = (
   { 
-    position, 
+
     className,
     altitudes, 
     currentIndex, 
@@ -35,17 +33,13 @@ const AltitudeSlider = (
   }: AltitudeSliderProps
 ) => {
 
-    const position_classes: Record<Position, string> = {
-        right: " bottom-0",
-        left: "left-2 lg:bottom-[20%] bottom-[25%]"
-    }
 
   return (
-    <div className={`${position_classes[position]} ${className}  z-10 border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
+    <div className={` ${className} z-10 border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
       
 
       {/* Altitude band */}
-      <div className="h-fit  flex flex-col justify-center items-center">
+      <div className="h-fit flex flex-col justify-center items-center">
 
         <small className='text-[10px] text-xs text-center font-light'>Height in meters</small>
 

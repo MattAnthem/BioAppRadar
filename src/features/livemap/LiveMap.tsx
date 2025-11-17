@@ -164,9 +164,8 @@ const LiveMap = () => {
         {/* Altitude slider */}
         {
             (displayedData === "classification" || radarPayload.type === 'grid') && (
-                <div className="lg:h-full h-[70%] absolute lg:bottom-0 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
+                <div className="lg:h-full h-[70%] absolute lg:bottom-0 bottom-[10vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <AltitudeSlider
-                        position='right'
                         currentIndex={currentAltitudeIndex}
                         onChangeAltitude={handleAltitudeChange}
                         altitudes={altitudeOptions}
