@@ -75,7 +75,7 @@ export const light: ThemeElements = {
         border: 'border-gray-400',
         hover: 'hover:bg-neutral-300',
         text: 'text-gray-800',
-        icon_color: 'text-gray-400',
+        icon_color: 'text-gray-500',
         shadow: 'shadow-gray-300',
         options_bg: 'bg-gray-100 border-gray-400',
         option_hover: 'hover:bg-gray-200',

@@ -1,4 +1,5 @@
 import { useTheme } from "../../../hooks/useTheme";
+import { memo } from "react";
 
 
 type SwitchBtnProps = {
@@ -54,5 +55,5 @@ const SwitchBtn = ({ handler_func, height = 24, width = 48, isActive, ariaLabel,
   );
 };
 
-export default SwitchBtn;
+export default memo(SwitchBtn);
 

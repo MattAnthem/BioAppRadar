@@ -56,7 +56,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                 aria-controls={ariaControls}
                 onKeyDown={handleKeyDown}
                 onClick={() => setIsOpen(!isOpen)}  
-                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border p-2 flex justify-between items-center gap-2 cursor-pointer`}
+                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border p-1.5 flex justify-between items-center gap-2 cursor-pointer`}
             >
 
                 <span className={`${text} flex gap-3 text-xs lg:text-sm xl:text-sm`}>
@@ -66,11 +66,11 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                     </span>
                 </span>
 
-                <ChevronDown className={`${isOpen ? '-rotate-180' : 'rotate-0'} ${icon_color} ${responsive? 'hidden lg:block' : ''}  transition-transform ease-in-out duration-300`} />
+                <ChevronDown className={`w-4 ${isOpen ? '-rotate-180' : 'rotate-0'} ${icon_color} ${responsive? 'hidden lg:block' : ''}  transition-transform ease-in-out duration-200`} />
 
             </button>
             {isOpen && (
-                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} text-xs lg:text-sm xl:text-sm custom_select border shadow-lg  absolute max-h-[150px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-1.5 `} style={{zIndex: 300}}>
+                <div id={ariaControls} tabIndex={-1} className={`${options_bg} ${responsive ? '' : 'w-full'} text-xs lg:text-sm xl:text-sm custom_select border shadow-lg  absolute max-h-[200px] top-full lg:left-0 right-0 rounded-b-sm overflow-y-scroll flex flex-col items-start  p-1.5 `} style={{zIndex: 300}}>
                     <div className='w-full'>
                         {
                             options?.map((option, i) => (
