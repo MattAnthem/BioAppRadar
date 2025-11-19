@@ -8,6 +8,7 @@ import loader from '../../assets/loader.webp';
 import { useTheme } from "../../shared/hooks/useTheme";
 import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
 import { capitalize } from "../../shared/utils/text_format";
+import VtipSpeciePopup from "./popup/VtipSpeciePopup";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -151,16 +152,19 @@ const VtipChart = ({ className }: VtipChartProps) => {
           <div className="p-1 w-full flex items-center justify-between">
               <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
 
-                {/* Open the modal */}
-                <Tooltip 
-                  position="bottom" 
-                  display_condition={!isModalOpen}  
-                  text={"Open in fullscreen"}
-                >                  
-                  <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
-                      <Fullscreen width={15} height={15}/>
-                  </button>
-                </Tooltip>
+                <div className="flex justify-center gap-1.5">
+                    <VtipSpeciePopup/>
+                    {/* Open the modal */}
+                    <Tooltip 
+                      position="bottom" 
+                      display_condition={!isModalOpen}  
+                      text={"Open in fullscreen"}
+                    >                  
+                      <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
+                          <Fullscreen width={15} height={15}/>
+                      </button>
+                    </Tooltip>
+                </div>
 
 
           </div>

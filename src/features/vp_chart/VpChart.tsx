@@ -7,6 +7,7 @@ import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
 import React, { useState } from "react";
 import { useTheme } from "../../shared/hooks/useTheme";
 import { capitalize } from "../../shared/utils/text_format";
+import VpSpeciePopup from "./popup/VpSpeciePopup";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -92,15 +93,23 @@ const VpChart = ({ className }: VpChartProps) => {
             <h3 className='tracking-wider text-xs font-semibold'>{capitalize(data?.query_spec)} - {data?.name ?? '--'} ({data?.units ?? '--'})</h3>
 
             {/* Open the modal */}
-            <Tooltip 
-                  position="bottom" 
-                  display_condition={!isModalOpen}  
-                  text={"Open in fullscreen"}
-            >                  
-                <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
-                    <Fullscreen width={15} height={15}/>
-                </button>
-            </Tooltip>
+            <div className="flex justify-center gap-1 5">
+
+              <VpSpeciePopup/>
+
+              <Tooltip 
+                    position="bottom" 
+                    display_condition={!isModalOpen}  
+                    text={"Open in fullscreen"}
+              >                  
+                  <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
+                      <Fullscreen width={15} height={15}/>
+                  </button>
+              </Tooltip>
+              
+            </div>
+
+            
             
         </div>           
 

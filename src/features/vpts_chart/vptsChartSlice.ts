@@ -6,6 +6,8 @@ import { species_options, vp_parameterOptions } from "../../shared/static/select
 
 
 interface VptsChartState {
+    isSpeciesPopupOpen: boolean;
+
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
     speciesOptions: SelectOption[];
@@ -15,12 +17,14 @@ interface VptsChartState {
 }
 
 const initialState: VptsChartState = {
+    isSpeciesPopupOpen: false,
+
     parameterOptions: vp_parameterOptions,
     selectedParameter: vp_parameterOptions[0],
     speciesOptions: species_options,
     selectedSpecie: species_options[0],
     vptsPayload: {
-        startTime: '"2025-10-01 00:00:00",',
+        startTime: "2025-10-01 00:00:00",
         endTime: '2025-10-01 00:50:00',
         parameter: vp_parameterOptions[0].id as string,
         radarID: 1,
@@ -43,6 +47,12 @@ const vptsChartSlice = createSlice({
                 parameter: action.payload.id,
             }
         },
+        toggleSpeciesPopup: (state) => {
+            state.isSpeciesPopupOpen = !state.isSpeciesPopupOpen;
+        },
+        closeSpeciesPopup: (state) => {
+            state.isSpeciesPopupOpen = false;
+        },
         setSelectedVptsSPecie: (state, action) => {
             state.selectedSpecie = action.payload;
             state.vptsPayload = {
@@ -56,5 +66,5 @@ const vptsChartSlice = createSlice({
     }
 });
 
-export const { changeVptsPayload, setSelectedVptsParameterOption, setVptsData, setSelectedVptsSPecie } = vptsChartSlice.actions;
+export const { changeVptsPayload, setSelectedVptsParameterOption, setVptsData, setSelectedVptsSPecie, closeSpeciesPopup, toggleSpeciesPopup } = vptsChartSlice.actions;
 export default vptsChartSlice.reducer;

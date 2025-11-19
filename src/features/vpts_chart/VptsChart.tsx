@@ -8,6 +8,7 @@ import { useTheme } from "../../shared/hooks/useTheme";
 import loader from '../../assets/loader.webp';
 import { useVptsImageQuery } from "../history_charts/hooks/useQuery/useVptsImageQuery";
 import { capitalize } from "../../shared/utils/text_format";
+import VptsSpeciePopup from "./popup/VptsSpeciePopup";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -144,17 +145,21 @@ const VptsChart = ({className}: VptsChartProps) => {
         <div className="p-1 w-full flex items-center justify-between">
             <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
             {/* Controls */}
+            
+            <div className="flex justify-center gap-1 5">
 
-            {/* Open the modal */}
-            <Tooltip 
-              position="bottom" 
-              display_condition={!isModalOpen}  // is popup open
-              text={"Open in fullscreen"}
-            >                  
-                    <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
-                        <Fullscreen width={15} height={15}/>
-                    </button>
-            </Tooltip>
+              <VptsSpeciePopup/>
+              {/* Open the modal */}
+              <Tooltip 
+                position="bottom" 
+                display_condition={!isModalOpen}  // is popup open
+                text={"Open in fullscreen"}
+              >                  
+                      <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
+                          <Fullscreen width={15} height={15}/>
+                      </button>
+              </Tooltip>
+            </div>
         </div>           
 
         {/* Chart */}

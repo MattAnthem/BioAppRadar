@@ -6,6 +6,8 @@ import { species_options, vtip_parameterOptions } from "../../shared/static/sele
 
 
 interface VtipChartState {
+    isSpeciesPopupOpen: boolean;
+
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
     speciesOptions: SelectOption[];
@@ -17,6 +19,7 @@ interface VtipChartState {
 
 
 const initialState: VtipChartState = {
+    isSpeciesPopupOpen: false,
 
     parameterOptions: vtip_parameterOptions,
     selectedParameter: vtip_parameterOptions[0],
@@ -26,7 +29,7 @@ const initialState: VtipChartState = {
     vtipEndTime: '2020-11-10 12:50:00',
 
     vtipPayload: {
-        startTime: '"2025-10-01 00:00:00",',
+        startTime: "2025-10-01 00:00:00",
         endTime: '2025-10-01 01:10:00',
         parameter: 'mtr',
         radarID: 1,
@@ -44,6 +47,19 @@ const vtipChartSlice = createSlice({
         setSelectedVtipParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
         },
+        setSelectedVtipSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
+            state.vtipPayload = {
+                ...state.vtipPayload,
+                species: action.payload.id,
+            }
+        },
+        toggleSpeciesPopup: (state) => {
+            state.isSpeciesPopupOpen = !state.isSpeciesPopupOpen;
+        },
+        closeSpeciesPopup: (state) => {
+            state.isSpeciesPopupOpen = false;
+        },
         setVtipParameter: (state, action) => {
             state.selectedParameter = action.payload
         }
@@ -51,5 +67,5 @@ const vtipChartSlice = createSlice({
     }
 });
 
-export const { changeVtipPayload, setSelectedVtipParameterOption, setVtipParameter } = vtipChartSlice.actions;
+export const { changeVtipPayload, setSelectedVtipSpecie, closeSpeciesPopup, toggleSpeciesPopup, setSelectedVtipParameterOption, setVtipParameter } = vtipChartSlice.actions;
 export default vtipChartSlice.reducer;
