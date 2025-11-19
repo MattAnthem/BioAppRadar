@@ -6,6 +6,7 @@ import loader from '../../../assets/loader.webp';
 import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
 import React,{ useState } from "react";
 import { useTheme } from "../../../shared/hooks/useTheme";
+import { capitalize } from "../../../shared/utils/text_format";
 
 const VpHistPopup = React.lazy(() => import('./popups/VpHistPopup'));
 const ChartModal = React.lazy(() => import('./ChartModal'));
@@ -100,7 +101,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec) ?? '--'} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
             
             <div className="flex justify-center gap-2">
               {/* controls */}

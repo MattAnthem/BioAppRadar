@@ -16,6 +16,8 @@ interface SevipPopupState {
     endTimeSevip: string;
 }
 
+
+
 const initialState: SevipPopupState = {
     isPopupOpen: false,
 

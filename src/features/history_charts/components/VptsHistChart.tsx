@@ -6,6 +6,7 @@ import loader from '../../../assets/loader.webp';
 import VptsHeatmapChart from "../../../shared/components/charts/HighchartsVpts";
 import { useVptsHistData } from "../hooks/useData/useVptsHistData";
 import { useVptsHistImagaData } from "../hooks/useData/useVptsHistImagaData";
+import { capitalize } from "../../../shared/utils/text_format";
 
 const ChartModal = React.lazy(() => import('./ChartModal'));
 const Tooltip = React.lazy(() => import('../../../shared/components/popups/tooltip/Tooltip'));
@@ -146,7 +147,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'}) `}</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'}) `}</h3>
             
             <div className="flex gap-2">
               

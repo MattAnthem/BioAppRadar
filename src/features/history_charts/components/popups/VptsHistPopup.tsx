@@ -6,6 +6,7 @@ import SimpleSelect from "../../../../shared/components/selects/SimpleSelect"
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setSelectedVptsHistSpecie, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
+import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 
 
 
@@ -13,6 +14,9 @@ const VptsHistPopup = () => {
 
     // --- read only redux states ----
     const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vpts_histchart);
+
+    // --- Temporal coverages to restrict time selects ---
+    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
 
     // --- Local states for the inputs ---
     const [locParams, setLocParams] = useState(parameterOptions);
@@ -37,7 +41,6 @@ const VptsHistPopup = () => {
     //  --- local handlers to update the inputs
     const handleStartTimeChange = (date: string) => {
       setLocStartTime(date);
-      setLocEndTime(date); // ensure end time is not before start time
     }
     const handleEndTimeChange = (date: string) => {
       setLocEndTime(date);
@@ -116,6 +119,8 @@ const VptsHistPopup = () => {
           <ReactDatetimePicker
             onChange={handleStartTimeChange}
             value={locStartTime}
+            minDate={temporal?.start_time}
+            maxDate={temporal?.end_time}
           />
 
           <small className="font-semibold">End Time</small>
@@ -124,6 +129,7 @@ const VptsHistPopup = () => {
             onChange={handleEndTimeChange}
             value={locEndTime}
             minDate={locStartTime}
+            maxDate={temporal?.end_time}
           />
 
         {/* Display data button */}

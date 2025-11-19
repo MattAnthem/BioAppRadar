@@ -79,7 +79,6 @@ const HistoryMap = () => {
             error = sevipError;
             break;
         case isClassif:
-            console.log("WE ARE CLASSIF")
             data = classifData as ClassificationDataResponse;
             isLoading = classifDataLoading;
             error = classifError;
@@ -103,7 +102,6 @@ const HistoryMap = () => {
     
     //#endregion
 
-    console.log(isClassif)
             
     //#region Fetch default elevations for polar radar mode
     const { data: defaultElevations } = useElevationsQuery(isRadar && radarPayloadHist.type === 'polar');

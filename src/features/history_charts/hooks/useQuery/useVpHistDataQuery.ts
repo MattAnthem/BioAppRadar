@@ -8,7 +8,7 @@ export const useVpHistDataQuery = (payload: VpPayload) => {
             try {
                 return await fetchVP(payload);
             } catch (error) {
-                console.error('Failed to fetch VPhist data');
+                console.error('Failed to fetch VPhist data', error, payload);
                 throw error;
             }
         },

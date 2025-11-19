@@ -6,12 +6,17 @@ import type { SelectOption } from '../../../../shared/components/selects/types';
 import OptionPopover from '../../../../shared/components/popups/option/OptionPopover';
 import ReactDatetimePicker from '../../../../shared/components/input/ReactDatetime';
 import { useEffect, useState, memo } from 'react';
+import { useVpTemporalCoverageQuery } from '../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 
 
 
 const VtipHistPopup = () => {
     // --- Read only state from Redux store
     const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen, selectedSpecie, speciesOptions } = useAppSelector(state => state.vtip_histchart);
+
+
+    // --- Temporal coverages to restrict time selects ---
+    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
 
     // --- Local state variables for controlling popup visibility and form inputs ---
     const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions);
@@ -36,7 +41,6 @@ const VtipHistPopup = () => {
     //  --- local input handlers to handle input changes ---
     const handleStartTimeChange = (date: string) => {
         setLocStartTime(date);
-        setLocEndTime(date); // Ensure end time is not before start time
     }
     const handleEndTimeChange = (date: string) => {
         setLocEndTime(date);
@@ -117,6 +121,8 @@ const VtipHistPopup = () => {
             <ReactDatetimePicker
                 onChange={handleStartTimeChange}
                 value={locStartTime}
+                minDate={temporal?.start_time}
+                maxDate={temporal?.end_time}
             />
 
             <small className='font-semibold'>End Time</small>
@@ -125,6 +131,7 @@ const VtipHistPopup = () => {
                 onChange={handleEndTimeChange}
                 value={locEndTime}
                 minDate={locStartTime}
+                maxDate={temporal?.end_time}
             />
 
 

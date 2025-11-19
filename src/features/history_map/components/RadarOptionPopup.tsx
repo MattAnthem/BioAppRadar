@@ -9,15 +9,34 @@ import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime'
 import { useEffect, useState, memo } from 'react';
 import { setRadarGifPayloadHist, setRadarPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
+import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
+import { useTheme } from '../../../shared/hooks/useTheme';
 
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const RadarOptionPopup = () => {
+    // Themes 
+    const themes = useTheme();
+    const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
+
 
     // Redux read only states
     const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, isPopupOpen, endTimeRadar, startTimeRadar } = useAppSelector(state => state.hist_radarpopup);
-    
+    const dispatch = useAppDispatch();
+
+    // --- Temporal coverages to restrict time selects ---
+    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+
+    useEffect(() => {
+        if (!isPopupOpen) return;
+        if (temporal) {
+            dispatch(setRadarStartTimeHist(temporal?.start_time));
+            dispatch(setRadarEndTimeHist(temporal?.end_time));
+            dispatch(setRadarTimeHist(temporal?.start_time));
+        }
+    }, [dispatch, isPopupOpen, temporal])
+
     // --- Local state for the inputs
     const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
     const [locAvailableParams, setLocAvailableParams] = useState(availableParameters);
@@ -82,7 +101,7 @@ const RadarOptionPopup = () => {
     }
     
 
-    const dispatch = useAppDispatch();
+    
 
     const handleSubmit = () => {
         if (overlayMode === 'png') {            
@@ -124,15 +143,21 @@ const RadarOptionPopup = () => {
     >
 
         {/* Display mode toggle */}
-        <small className='font-semibold'>Display mode</small>
-        <div className="border-b border-b-gray-400"/>
-        <div className="w-full flex justify-start items-center gap-1">
+        <div className="w-full grid grid-cols-2 justify-start items-center gap-2">
                 <Tooltip
                   display_condition={isPopupOpen}
                   position="bottom"
                   text="Display as image"
                 >
-                  <button onClick={handleSetToPngMode} className={`w-25 flex gap-1 justify-center items-center px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                  <button 
+                    onClick={handleSetToPngMode} 
+                    className={`
+                        w-full flex gap-1 justify-center items-center 
+                        px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                        ${overlayMode === 'png' ? `${active_border} ${active_text} font-semibold` : border} 
+                        ${hover}
+                      `}
+                  >
                       <ImageIcon className="w-4"/>
                       <h1>PNG</h1>
                   </button>
@@ -143,13 +168,19 @@ const RadarOptionPopup = () => {
                   position="bottom"
                   text="Display as gif"
                 >
-                  <button onClick={handleSetToGifMode} className={`w-25 flex gap-1 justify-center items-center  px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                  <button 
+                    onClick={handleSetToGifMode} 
+                    className={`
+                        w-full flex gap-1 justify-center items-center 
+                        px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                        ${overlayMode === 'gif' ? `${active_border} ${active_text} font-semibold` : border} 
+                        ${hover}
+                      `}
+                    >
                       <ImagePlayIcon className="w-4"/>
                       <h1>GIF</h1>
                   </button>
                 </Tooltip>
-
-
         </div>
 
         <small className='font-semibold'>Projection type</small>
@@ -181,6 +212,8 @@ const RadarOptionPopup = () => {
                     <ReactDatetimePicker
                         onChange={handleTimeChange}
                         value={locTime}
+                        minDate={temporal?.start_time}
+                        maxDate={temporal?.end_time}
                     />
                 </>
             )
@@ -196,6 +229,8 @@ const RadarOptionPopup = () => {
                 <ReactDatetimePicker
                     onChange={handleGifStartTimeChange}
                     value={locStartTime}
+                    minDate={temporal?.start_time}
+                    maxDate={locEndTime}
                 />
 
                 {/* End time for the gif */}
@@ -205,6 +240,7 @@ const RadarOptionPopup = () => {
                     onChange={handleGifEndTimeChange}
                     value={locEndTime}
                     minDate={locStartTime}
+                    maxDate={temporal?.end_time}
                 />
             </>
             )

@@ -6,11 +6,15 @@ import SimpleSelect from "../../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { changeVpHistPayload, closeVpHistPopup, setSelectedVpHistParameterOption, setSelectedVpHistSpecie, setVpHistTime, toggleVpHistPopup } from "../../slices/vpHistChartSlice";
+import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 
 const VpHistPopup = () => {
 
   // Redux read only states
   const { parameterOptions, selectedParameter, isPopupOpen, vpTime, speciesOptions, selectedSpecie } = useAppSelector(state => state.vp_histchart);
+
+  // --- Temporal coverages to restrict time selects ---
+  const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
 
   // Local state variables for the inputs 
   const [locParams, setLocParams] = useState(parameterOptions);
@@ -102,6 +106,8 @@ const VpHistPopup = () => {
                     <ReactDatetimePicker
                       onChange={handleDateChange}
                       value={locTime}
+                      minDate={temporal?.start_time}
+                      maxDate={temporal?.end_time}
                     />
 
         {/* Display data button */}

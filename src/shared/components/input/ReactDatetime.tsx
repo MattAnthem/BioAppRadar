@@ -9,9 +9,10 @@ type DateTimeProps = {
   value?: string;
   onChange?: (val: string) => void;
   minDate?: string | moment.Moment;
+  maxDate?: string | moment.Moment;
 };
 
-const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate }) => {
+const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate, maxDate }) => {
 
   const [internalValue, setInternalValue] = useState<moment.Moment | undefined>(
     value ? moment(value, "YYYY-MM-DD HH:mm:ss", true) : undefined
@@ -25,6 +26,7 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
   const isDarkMode = useAppSelector((state) => state.theme.isDarkMode);
 
   const minMoment = minDate ? moment(minDate, "YYYY-MM-DD HH:mm:ss", true) : undefined;
+  const maxMoment = maxDate ? moment(maxDate, "YYYY-MM-DD HH:mm:ss", true) : undefined;
 
 
   useEffect(() => {
@@ -46,14 +48,18 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
       hour >= 0 && hour < 24 && min >= 0 && min < 60 && sec >= 0 && sec < 60;
     const validDate = moment(date, "YYYY-MM-DD", true).isValid();
     const afterMinDate = minMoment ? parsed.isSameOrAfter(minMoment) : true;
+    const beforeMaxDate = maxMoment ? parsed.isSameOrBefore(maxMoment) : true;
 
-    return validTime && validDate && afterMinDate;
+    return validTime && validDate && afterMinDate && beforeMaxDate;
   };
 
   const applyValidValue = (parsed: moment.Moment) => {
     let finalVal = parsed;
     if (minMoment && parsed.isBefore(minMoment)) {
       finalVal = minMoment.clone();
+    }
+    if (maxMoment && parsed.isAfter(maxMoment)) {
+      finalVal = maxMoment.clone();
     }
     const formatted = finalVal.format("YYYY-MM-DD HH:mm:ss");
     setInternalValue(finalVal);
@@ -80,8 +86,9 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
   };
 
   const isValidCalendarDate = (currentDate: moment.Moment) => {
-    if (!minMoment) return true;
-    return currentDate.isSameOrAfter(minMoment, "day");
+    if (minMoment && currentDate.isBefore(minMoment, "day")) return false;
+    if (maxMoment && currentDate.isAfter(maxMoment, "day")) return false;
+    return true;
   };
 
   return (

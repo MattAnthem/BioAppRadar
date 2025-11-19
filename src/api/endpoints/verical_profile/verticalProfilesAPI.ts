@@ -29,6 +29,7 @@ export interface VtipResponse {
     sunrise: string[];
     sunset: string[];
     query_par: string;
+    query_spec: string;
 }
 
 export interface VpResponse {
@@ -42,6 +43,7 @@ export interface VpResponse {
     dd: (null | number)[];
     ff: (null | number)[];
     height: number[]
+    query_spec: string;
 }
 
 export interface VptsResponse {
@@ -56,9 +58,15 @@ export interface VptsResponse {
     ff: (null | number)[];
     height: number[];
     query_par: string;
+    query_spec: string;
 }
 
-export const fetchTemporalCoverage = async (payload: { radarID: number }) =>  {
+export interface TemporalCovResponse {
+    end_time: string;
+    start_time: string;
+}
+
+export const fetchTemporalCoverage = async (payload: { radarID: number }): Promise<TemporalCovResponse> =>  {
     const { data } = await axiosClient.post('vp_temporal_coverage', payload);
     if (data.status !== 0) {
         throw new Error('Error fetching image')

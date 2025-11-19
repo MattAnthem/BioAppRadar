@@ -3,7 +3,7 @@ import { fetchVPTS, type VptsPayload, type VptsResponse } from "../../../../api/
 
 export const useVptsHistDataQuery = (payload: VptsPayload) => {
     return useQuery<VptsResponse>({
-        queryKey: ["vptshist_data", payload.startTime, payload.endTime, payload.parameter],
+        queryKey: ["vptshist_data", payload.startTime, payload.endTime, payload.parameter, payload.species],
         queryFn: async () => {
             try {
                 return await fetchVPTS(payload);
@@ -12,7 +12,7 @@ export const useVptsHistDataQuery = (payload: VptsPayload) => {
                 throw error;
             }
         },
-        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime),
+        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime && payload.species),
         staleTime: 1000 * 60 * 30,
         refetchOnWindowFocus: false,
     })

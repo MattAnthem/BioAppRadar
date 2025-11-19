@@ -19,6 +19,7 @@ export interface ThemeElements {
     chartLegendColor: string;
     datePicker: DatePicker;
     popupBtn: PopupBtn;
+    displayTogglerBtn: DisplayTogglerBtn;
 }
 
 type DatePicker = {
@@ -29,6 +30,13 @@ type DatePicker = {
     selectedDay: string;
     popupBg: string;
     popupBorder: string;
+}
+
+type DisplayTogglerBtn = {
+    border: string;
+    hover: string;
+    active_border: string;
+    active_text: string;
 }
 
 type PopupBtn = {

@@ -9,6 +9,8 @@ import  ReactDatetimePicker  from '../../../shared/components/input/ReactDatetim
 import { useEffect, useState, memo } from 'react';
 import { setSevipGifPayloadHist, setSevipPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
+import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
+import { useTheme } from '../../../shared/hooks/useTheme';
 
 
 
@@ -16,8 +18,30 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const SevipPopup = () => {
 
+    // Themes 
+    const themes = useTheme();
+    const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
+
     // --- Read only redux states ---
     const { selectedVariable, availableVariables, histTimeSevip, isPopupOpen,  startTimeSevip, endTimeSevip } = useAppSelector(state => state.hist_sevippopup);
+
+    const dispatch = useAppDispatch();
+
+    // --- Temporal coverages to restrict time selects ---
+    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+
+    // --- Sync store to the temporal coverage ---
+    useEffect(() => {
+ 
+        if (!isPopupOpen) return;
+
+        if(temporal) {
+            dispatch(setHistSevipTimeStart(temporal.start_time));
+            dispatch(setHistSevipTimeEnd(temporal.end_time));
+            dispatch(setHistTimeSevip(temporal.start_time));
+        }
+    
+    }, [dispatch, isPopupOpen, temporal])
 
     // --- Local states for the inputs ---
     const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);
@@ -64,13 +88,12 @@ const SevipPopup = () => {
     // --- Gif animated handlers ---
     const handleGifStartTimeChange = (time: string) => {
         setLocStartTime(time);
-        setLocEndTime(time);
     }
     const handleGifEndTimeChange = (time: string) => {
         setLocEndTime(time);
     }
 
-    const dispatch = useAppDispatch();
+    
 
 
     // --- Submit handler:  ---
@@ -83,8 +106,7 @@ const SevipPopup = () => {
             }))
             // --- update the sevip slice states ---
             dispatch(setHistTimeSevip(locTime));
-            dispatch(setSelectedHistSevipOption(locSelectedVar))
-            dispatch(closeSevipPopup());
+            dispatch(setSelectedHistSevipOption(locSelectedVar));
         }  
         if (overlayMode === 'gif') {
             dispatch(setSevipGifPayloadHist({
@@ -96,8 +118,8 @@ const SevipPopup = () => {
             dispatch(setSelectedHistSevipOption(locSelectedVar));
             dispatch(setHistSevipTimeStart(locStartTime));
             dispatch(setHistSevipTimeEnd(locEndTime));
-            dispatch(closeSevipPopup());
         }
+        dispatch(closeSevipPopup());
     }
 
   return (
@@ -110,15 +132,21 @@ const SevipPopup = () => {
     >
 
         {/* Display mode toggle */}
-        <small className='font-semibold'>Display mode</small>
-        <div className="border-b border-b-gray-400"/>
-        <div className="w-full flex justify-start items-center gap-1">
+        <div className="w-full grid grid-cols-2 justify-start items-center gap-2">
                 <Tooltip
                   display_condition={isPopupOpen}
                   position="bottom"
                   text="Display as image"
                 >
-                  <button onClick={handleSetToPngMode} className={`w-25 flex gap-1 justify-center items-center px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                  <button 
+                    onClick={handleSetToPngMode} 
+                    className={`
+                        w-full flex gap-1 justify-center items-center 
+                        px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                        ${overlayMode === 'png' ? `${active_border} ${active_text} font-semibold` : border} 
+                        ${hover}
+                      `}
+                  >
                       <ImageIcon className="w-4"/>
                       <h1>PNG</h1>
                   </button>
@@ -129,13 +157,19 @@ const SevipPopup = () => {
                   position="bottom"
                   text="Display as gif"
                 >
-                  <button onClick={handleSetToGifMode} className={`w-25 flex gap-1 justify-center items-center  px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                  <button 
+                    onClick={handleSetToGifMode} 
+                    className={`
+                        w-full flex gap-1 justify-center items-center 
+                        px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                        ${overlayMode === 'gif' ? `${active_border} ${active_text} font-semibold` : border} 
+                        ${hover}
+                      `}
+                    >
                       <ImagePlayIcon className="w-4"/>
                       <h1>GIF</h1>
                   </button>
                 </Tooltip>
-
-
         </div>
 
 
@@ -157,6 +191,8 @@ const SevipPopup = () => {
                     <ReactDatetimePicker
                         onChange={handleTimeChange}
                         value={locTime}
+                        minDate={temporal?.start_time}
+                        maxDate={temporal?.end_time}
                     />
                 </>
             )
@@ -172,6 +208,8 @@ const SevipPopup = () => {
                     <ReactDatetimePicker
                         onChange={handleGifStartTimeChange}
                         value={locStartTime}
+                        maxDate={locEndTime}
+                        minDate={temporal?.start_time}
                     />
 
                     {/* End time for the gif */}
@@ -181,6 +219,7 @@ const SevipPopup = () => {
                         onChange={handleGifEndTimeChange}
                         value={locEndTime}
                         minDate={locStartTime}
+                        maxDate={temporal?.end_time}
                     />
                 </>
             )

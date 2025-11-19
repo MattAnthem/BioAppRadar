@@ -6,6 +6,7 @@ import loader from '../../../assets/loader.webp';
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 import { useVtipHistData } from "../hooks/useData/useVtipHistData";
 import { useVtipHistImageData } from "../hooks/useData/useVtipHistImageData";
+import { capitalize } from "../../../shared/utils/text_format";
 
 const ChartModal = React.lazy(() => import('./ChartModal'));
 const Tooltip = React.lazy(() => import('../../../shared/components/popups/tooltip/Tooltip'));
@@ -139,7 +140,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
       
           {/* Heading */}
           <div className="p-1 w-full flex items-center justify-between">
-              <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
+              <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
 
 
               <div className="flex gap-2">
