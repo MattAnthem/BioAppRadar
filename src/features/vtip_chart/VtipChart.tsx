@@ -7,6 +7,7 @@ import { ChartLine, Download, Fullscreen, ImageIcon, Unplug } from "lucide-react
 import loader from '../../assets/loader.webp';
 import { useTheme } from "../../shared/hooks/useTheme";
 import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
+import { capitalize } from "../../shared/utils/text_format";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -64,7 +65,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${selectedParameter.displayText} Chart`}
+              modalTitle={`${capitalize(data?.query_spec)} ${selectedParameter.displayText}`}
               mdlToggler_func={handleCloseModal}
           >
             
@@ -148,7 +149,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
 
           {/* Heading */}
           <div className="p-1 w-full flex items-center justify-between">
-              <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
+              <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
 
                 {/* Open the modal */}
                 <Tooltip 

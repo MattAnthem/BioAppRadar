@@ -100,7 +100,7 @@ const vcrossMapSlice = createSlice({
                 type: "grid",
                 parameter: incoming.parameter ?? "ref",
                 time: incoming.time ?? "2020-11-10 12:00:33",
-                colorbar: incoming.colorbar ?? "turbo",
+                colorbar: incoming.colorbar ?? "viridis",
                 height: (incoming as Partial<RadarGridPayload>).height ?? 0,
               };
             } else {
@@ -108,7 +108,7 @@ const vcrossMapSlice = createSlice({
                 type: "polar",
                 parameter: incoming.parameter ?? "ref",
                 time: incoming.time ?? "2020-11-10 12:00:33",
-                colorbar: incoming.colorbar ?? "turbo",
+                colorbar: incoming.colorbar ?? "viridis",
                 elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
               };
             }

@@ -18,7 +18,7 @@ interface HistorymapSliceState {
 const initialState: HistorymapSliceState = {
     mapModeHist: 'classification',
     radarPayloadHist: {
-        colorbar: 'turbo',
+        colorbar: 'viridis',
         parameter: 'ref',
         time: '2020-11-10 12:00:33',
         type: 'grid',
@@ -45,7 +45,7 @@ const initialState: HistorymapSliceState = {
         endTime: '2020-11-10 12:50:00'
     },
     radarGifPayloadHist: {
-        colorbar: 'turbo',
+        colorbar: 'viridis',
         parameter: 'ref',
         startTime: '2020-11-10 12:00:33',
         endTime: '2020-11-10 12:50:00',
@@ -99,7 +99,7 @@ const historymapSlice = createSlice({
               type: "grid",
               parameter: incoming.parameter ?? "ref",
               time: incoming.time ?? "2020-11-10 12:00:33",
-              colorbar: incoming.colorbar ?? "turbo",
+              colorbar: incoming.colorbar ?? "viridis",
               height: (incoming as Partial<RadarGridPayload>).height ?? 0,
             };
           } else {
@@ -107,7 +107,7 @@ const historymapSlice = createSlice({
               type: "polar",
               parameter: incoming.parameter ?? "ref",
               time: incoming.time ?? "2020-11-10 12:00:33",
-              colorbar: incoming.colorbar ?? "turbo",
+              colorbar: incoming.colorbar ?? "viridis",
               elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
             };
           }
@@ -127,7 +127,7 @@ const historymapSlice = createSlice({
               parameter: incoming.parameter ?? "ref",
               startTime: incoming.startTime ?? "2020-11-10 12:00:33",
               endTime: incoming.endTime ?? '2020-11-10 12:50:00',
-              colorbar: incoming.colorbar ?? "turbo",
+              colorbar: incoming.colorbar ?? "viridis",
               height: (incoming as Partial<RadarGridPayload>).height ?? 0,
             };
           } else {
@@ -136,7 +136,7 @@ const historymapSlice = createSlice({
               parameter: incoming.parameter ?? "ref",
               startTime: incoming.startTime ?? "2020-11-10 12:00:33",
               endTime: incoming.endTime ?? '2020-11-10 12:50:00',
-              colorbar: incoming.colorbar ?? "turbo",
+              colorbar: incoming.colorbar ?? "viridis",
               elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
             };
           }

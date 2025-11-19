@@ -60,7 +60,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${data?.name} chart`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name}`}
               mdlToggler_func={handleCloseModal}
           >
               {/* Handle display mode */}

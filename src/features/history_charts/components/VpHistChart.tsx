@@ -48,7 +48,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
           <ChartModal
 
               isModalOpen={isModalOpen}
-              modalTitle={`${data?.name} chart`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name}`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 

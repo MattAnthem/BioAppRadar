@@ -1,4 +1,4 @@
-import React,{ useRef, useState } from "react";
+import React,{ useState } from "react";
 import SectionCard from "../../../shared/components/cards/SectionCard";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
@@ -22,7 +22,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Chart ref
-  const chartRef = useRef(null);
+  // const chartRef = useRef(null);
 
 
   const themes = useTheme();
@@ -32,9 +32,6 @@ const VptsHistChart = ({className}: VptsChartProps) => {
   const { isLoading, data, error } = useVptsHistData();
 
   const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsHistImagaData(displayMode === 'png');
-
-
-
 
 
   // handler to open the modal
@@ -59,7 +56,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${data?.name} chart`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name}`}
               mdlToggler_func={handleCloseModal}
           >
 

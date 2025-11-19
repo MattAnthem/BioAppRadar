@@ -7,6 +7,7 @@ import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide
 import { useTheme } from "../../shared/hooks/useTheme";
 import loader from '../../assets/loader.webp';
 import { useVptsImageQuery } from "../history_charts/hooks/useQuery/useVptsImageQuery";
+import { capitalize } from "../../shared/utils/text_format";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -54,7 +55,7 @@ const VptsChart = ({className}: VptsChartProps) => {
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${data?.name} chart`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name}`}
               mdlToggler_func={handleCloseModal}
           >
 
@@ -141,7 +142,7 @@ const VptsChart = ({className}: VptsChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex items-center justify-between">
-            <h3 className='tracking-wider text-xs font-semibold'>{`${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
             {/* Controls */}
 
             {/* Open the modal */}

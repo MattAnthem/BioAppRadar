@@ -6,6 +6,7 @@ import loader from '../../assets/loader.webp'
 import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
 import React, { useState } from "react";
 import { useTheme } from "../../shared/hooks/useTheme";
+import { capitalize } from "../../shared/utils/text_format";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -18,10 +19,8 @@ type VpChartProps = {
 const VpChart = ({ className }: VpChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('png');
 
   // Redux
-  const { selectedParameter } = useAppSelector(state => state.vpchart);
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
   const currentHeight = altitudeOptions[currentAltitudeIndex];
   const themes = useTheme();
@@ -41,7 +40,7 @@ const VpChart = ({ className }: VpChartProps) => {
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${data?.name} chart`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name}`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
@@ -90,7 +89,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs font-semibold'>{selectedParameter.displayText} ({data?.units})</h3>
+            <h3 className='tracking-wider text-xs font-semibold'>{capitalize(data?.query_spec)} - {data?.name ?? '--'} ({data?.units ?? '--'})</h3>
 
             {/* Open the modal */}
             <Tooltip 
@@ -129,6 +128,7 @@ const VpChart = ({ className }: VpChartProps) => {
                 </div> 
             )}
         </div>
+
 
     </SectionCard>
   )
