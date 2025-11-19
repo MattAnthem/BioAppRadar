@@ -1,13 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import type { VtipPayload } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
-import { vtip_parameterOptions } from "../../../shared/static/select-options";
+import { species_options, vtip_parameterOptions } from "../../../shared/static/select-options";
 
 
 interface VtipChartState {
     isPopupOpen: boolean;
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
     vtipStartTime: string;
     vtipEndTime: string;
 
@@ -20,13 +22,17 @@ const initialState: VtipChartState = {
 
     parameterOptions: vtip_parameterOptions,
     selectedParameter: vtip_parameterOptions[0],
-    vtipStartTime: '2020-11-10 12:01:00',
-    vtipEndTime: '2020-11-10 12:50:00',
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
+    vtipStartTime: '2025-10-01 00:00:00',
+    vtipEndTime: '2025-10-01 00:50:00',
 
     vtipPayload: {
-        startTime: '2020-11-10 12:01:00',
-        endTime: '2020-11-10 12:50:00',
-        parameter: vtip_parameterOptions[0].id as string
+        startTime: '2025-10-01 00:00:00',
+        endTime: '2025-10-01 00:50:00',
+        parameter: vtip_parameterOptions[0].id as string,
+        radarID: 1,
+        species: species_options[0].id as string,
     }
 }
 
@@ -39,6 +45,9 @@ const vtipHistChartSlice = createSlice({
         },
         setSelectedVtipHistParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
+        },
+        setSelectedVtipHistSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
         },
         setVtipHistStartTime: (state, action) => {
             state.vtipStartTime = action.payload
@@ -56,5 +65,5 @@ const vtipHistChartSlice = createSlice({
     }
 });
 
-export const { changeVtipHistPayload, setSelectedVtipHistParameterOption, closeVtipHistPopup, setVtipHistEndTime, setVtipHistStartTime,  toggleVtipHistPopup } = vtipHistChartSlice.actions;
+export const { changeVtipHistPayload, setSelectedVtipHistSpecie, setSelectedVtipHistParameterOption, closeVtipHistPopup, setVtipHistEndTime, setVtipHistStartTime,  toggleVtipHistPopup } = vtipHistChartSlice.actions;
 export default vtipHistChartSlice.reducer;

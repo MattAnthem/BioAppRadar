@@ -23,11 +23,11 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
   const currentFrame = frames[currentIndex] ?? frames[0] ?? null;
 
-  // Gestion de l’animation
+  
   useEffect(() => {
 
     if (preloadingFrames) {
-      onFrameChange(0);
+      setIsPlaying(false);
       return;
     };
 

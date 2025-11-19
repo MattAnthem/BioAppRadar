@@ -13,7 +13,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import loader from '../../assets/loader.webp';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 import { Unplug } from 'lucide-react';
-import type { MenuNames } from '../../shared/components/buttons/navbtn/MenuTypes';
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
@@ -26,7 +25,7 @@ const ClassificationPopup = React.lazy(() => import('./components/Classification
 const LiveMap = () => {
 
     // Redux states
-    const { selectedMapTime, mapTimeRange, displayedData, classificationPayload, radarPayload } = useAppSelector(state => state.livemap);
+    const { selectedMapTime, mapTimeRange, classificationPayload } = useAppSelector(state => state.livemap);
     // Coverage
     const { selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
     const { selectedMapBase } = useAppSelector(state => state.basemappopup);
@@ -59,16 +58,13 @@ const LiveMap = () => {
 
 
 
-
     // Prefetch classification frames (only if we are in this page)
-    const currentPath = location.pathname.replace('/', '') as MenuNames;
     const { isPreloading, progress } = usePreloadClassificationFrames(
         mapTimeRange,
         classificationPayload.class,
         classificationPayload.color_0,
         classificationPayload.color_1,
         currentHeight,
-        {enabled: currentPath === ''}
     )
 
     const { data: classifData, error } = useClassificationDataQuery({
@@ -77,7 +73,7 @@ const LiveMap = () => {
         color_0: classificationPayload.color_0,
         color_1: classificationPayload.color_1,
         height: currentHeight,
-    }, true)
+    })
 
     const queryKey = [
         "classification_data", 
@@ -133,7 +129,7 @@ const LiveMap = () => {
             <div className="z-5 flex gap-2 justify-center items-end">
 
                 <ClassificationPopup />
-                <MapbasePopup displayColorbarOption={false}/>
+                <MapbasePopup />
 
             </div>
 
@@ -162,17 +158,15 @@ const LiveMap = () => {
         />
 
         {/* Altitude slider */}
-        {
-            (displayedData === "classification" || radarPayload.type === 'grid') && (
-                <div className="lg:h-full h-[70%] absolute lg:bottom-0 bottom-[10vh] right-2 flex lg:items-center items-start lg:py-16 ">
-                    <AltitudeSlider
-                        currentIndex={currentAltitudeIndex}
-                        onChangeAltitude={handleAltitudeChange}
-                        altitudes={altitudeOptions}
-                    />
-                </div>
-            )
-        }
+
+        <div className="lg:h-full h-[70%] absolute lg:bottom-0 bottom-[10vh] right-2 flex lg:items-center items-start lg:py-16 ">
+                <AltitudeSlider
+                    currentIndex={currentAltitudeIndex}
+                    onChangeAltitude={handleAltitudeChange}
+                    altitudes={altitudeOptions}
+                />
+        </div>
+
         {/* Timeline */}
 
         <TimelineSlider 
@@ -184,26 +178,24 @@ const LiveMap = () => {
 
 
         {/* Classification legends */}
-        {
-            (displayedData === "classification") && (
-                <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-4 lg:bottom-4 bottom-1">
+
+            <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-4 lg:bottom-4 bottom-1">
                     
                     {/* Color 0 */}
-                    <div className="flex justify-start items-center gap-0.5 text-xs">
+                <div className="flex justify-start items-center gap-0.5 text-xs">
                         <div className='lg:w-4 lg:h-4 xl:w-4 xl:h-4 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
                         <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
-                    </div>
+                </div>
                     {/* Color 1 */}
-                    <div className="flex justify-start items-center gap-2 text-xs">
+                <div className="flex justify-start items-center gap-2 text-xs">
                         <div className='lg:w-4 lg:h-4 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
                         <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
-                    </div>
+                </div>
                     <div className="lg:text-xs text-[10px]">
                         <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
-                    </div>
                 </div>
-            )
-        }
+            </div>
+
 
       
     </SectionCard>

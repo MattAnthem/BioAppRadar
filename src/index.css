@@ -96,6 +96,10 @@
     background-color: #2c3a4d;
     appearance: none;
 }
+*::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
+}
 
 .leaflet-control-zoom { margin-top: 60px; }
 .leaflet-image-layer {

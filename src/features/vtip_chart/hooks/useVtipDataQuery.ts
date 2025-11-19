@@ -4,7 +4,7 @@ import { type VtipPayload, type VtipResponse, fetchVTIP } from "../../../api/end
 
 export const useVtipDataQuery = (payload: VtipPayload) => {
     return useQuery<VtipResponse>({
-        queryKey: ["vtip_data", payload.startTime, payload.endTime, payload.parameter],
+        queryKey: ["vtip_data", payload.startTime, payload.endTime, payload.parameter, payload.species],
         queryFn: async () => {
             try{
                 return await fetchVTIP(payload);
@@ -13,7 +13,7 @@ export const useVtipDataQuery = (payload: VtipPayload) => {
                 throw error;
             }
         },
-        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime),
+        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime && payload.species),
         refetchOnWindowFocus: false,
     })
 }

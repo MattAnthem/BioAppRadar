@@ -5,18 +5,20 @@ import OptionPopover from "../../../../shared/components/popups/option/OptionPop
 import SimpleSelect from "../../../../shared/components/selects/SimpleSelect"
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
+import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setSelectedVptsHistSpecie, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
 
 
 
 const VptsHistPopup = () => {
 
     // --- read only redux states ----
-    const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime } = useAppSelector(state => state.vpts_histchart);
+    const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vpts_histchart);
 
     // --- Local states for the inputs ---
     const [locParams, setLocParams] = useState(parameterOptions);
     const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
+    const [locSpecies, setLocSpecies] = useState(speciesOptions);
+    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
     const [locStartTime, setLocStartTime] = useState(vptsStartTime);
     const [locEndTime, setLocEndTime] = useState(vptsEndTime);
 
@@ -27,8 +29,10 @@ const VptsHistPopup = () => {
         setLocSelectedParam(selectedParameter);
         setLocStartTime(vptsStartTime);
         setLocEndTime(vptsEndTime);
+        setLocSpecies(speciesOptions);
+        setLocSelectedSpecie(selectedSpecie);
       }
-    }, [isPopupOpen, parameterOptions, selectedParameter, vptsEndTime, vptsStartTime]);
+    }, [isPopupOpen, parameterOptions, selectedParameter, selectedSpecie, speciesOptions, vptsEndTime, vptsStartTime]);
 
     //  --- local handlers to update the inputs
     const handleStartTimeChange = (date: string) => {
@@ -40,6 +44,10 @@ const VptsHistPopup = () => {
     }
     const handleVariableChange = (option: SelectOption) => {
       setLocSelectedParam(option);
+    }
+
+    const handleSpecieChange = (option: SelectOption) => {
+      setLocSelectedSpecie(option);
     }
 
     // --- Popup togglers ---
@@ -58,12 +66,14 @@ const VptsHistPopup = () => {
         {
           startTime: locStartTime,
           endTime: locEndTime,
-          parameter: locSelectedParam.id as string
+          parameter: locSelectedParam.id as string,
+          species: locSelectedSpecie.id as string,
         }
       ));
 
       // --- update Redux store ---
       dispatch(setVptsHistStartTime(locStartTime));
+      dispatch(setSelectedVptsHistSpecie(locSelectedSpecie));
       dispatch(setVptsHistEndTime(locEndTime));
       dispatch(setSelectedVptsHistParameterOption(locSelectedParam));
 
@@ -80,7 +90,17 @@ const VptsHistPopup = () => {
     >
 
 
-          <small className="font-semibold">Select variable</small>
+          <small className="font-semibold">Specie</small>
+          <div className="border-b border-b-gray-400"/>
+          <SimpleSelect
+            options={locSpecies}
+            value={locSelectedSpecie.displayText}
+            onSelectValue={handleSpecieChange}
+            width="w-full"
+          />
+
+
+          <small className="font-semibold">Variable</small>
           <div className="border-b border-b-gray-400"/>
           <SimpleSelect
             options={locParams}
@@ -91,14 +111,14 @@ const VptsHistPopup = () => {
 
 
 
-          <small className="font-semibold">Select start Time</small>
+          <small className="font-semibold">Start Time</small>
           <div className="border-b border-b-gray-400"/>
           <ReactDatetimePicker
             onChange={handleStartTimeChange}
             value={locStartTime}
           />
 
-          <small className="font-semibold">Select end Time</small>
+          <small className="font-semibold">End Time</small>
           <div className="border-b border-b-gray-400"/>
           <ReactDatetimePicker
             onChange={handleEndTimeChange}

@@ -8,11 +8,11 @@ export const useVptsHistDataQuery = (payload: VptsPayload) => {
             try {
                 return await fetchVPTS(payload);
             } catch (error) {
-                console.error('Failed to fetch VPTShist data');
+                console.error('Failed to fetch VPTShist data', payload, 'error: ', error);
                 throw error;
             }
         },
-        enabled: Boolean(payload.parameter),
+        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime),
         staleTime: 1000 * 60 * 30,
         refetchOnWindowFocus: false,
     })

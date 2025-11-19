@@ -3,12 +3,16 @@ import { axiosClient } from "../../axiosClient";
 export interface VpPayload {
     parameter: string;
     time: string;
+    species?: string;
+    radarID?: number;
 }
 
 export interface VptsPayload {
     parameter: string;
     startTime: string;
     endTime: string;
+    species?: string;
+    radarID?: number;
 }
 
 export type VtipPayload = VptsPayload;
@@ -54,6 +58,14 @@ export interface VptsResponse {
     query_par: string;
 }
 
+export const fetchTemporalCoverage = async (payload: { radarID: number }) =>  {
+    const { data } = await axiosClient.post('vp_temporal_coverage', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching image')
+    } 
+    return data.data;
+}
+
 export const fetchImageVTIP = async (payload: VtipPayload) => {
     const {data} = await axiosClient.post('/image_vtip', payload);
     if (data.status !== 0) {
@@ -61,6 +73,9 @@ export const fetchImageVTIP = async (payload: VtipPayload) => {
     } 
     return data.data;
 }
+
+
+
 export const fetchImageVPTS = async (payload: VptsPayload) => {
     const {data} = await axiosClient.post('/image_vpts', payload);
     if (data.status !== 0) {

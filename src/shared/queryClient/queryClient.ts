@@ -5,7 +5,8 @@ import { persistQueryClient } from "@tanstack/react-query-persist-client";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            staleTime: 1000 * 60 * 5,
+            staleTime: 1000 * 60 * 30, 
+            gcTime: 1000 * 60 * 60 * 24,
             refetchOnWindowFocus: false,      
         }
     }

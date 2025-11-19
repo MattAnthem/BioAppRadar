@@ -2,28 +2,19 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { MapIcon } from "lucide-react";
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import Colorbar from "./Colorbar";
-import { setSevipPayload } from "../slice/livemapSlice";
-import { changeBaseMap, changeColormap } from "../slice/baseMapPopupSlice";
+import { changeBaseMap } from "../slice/baseMapPopupSlice";
 import OptionPopover from "../../../shared/components/popups/option/OptionPopover";
 import { setSelectedBoundary, setSelectedBoundaryType } from "../../../shared/slice/boundarySlice";
 import { memo } from "react";
 
 
 
-type BaseMapProps = {
-  displayColorbarOption?: boolean;
-  onChangeColormap?: () => void;
-}
-
-const MapbasePopup = ({ displayColorbarOption, onChangeColormap }: BaseMapProps) => {
+const MapbasePopup = () => {
 
   // redux 
   const {
     mapBaseOptions, 
-    colormapOptions, 
     selectedMapBase, 
-    selectedColormap 
   } = useAppSelector(state => state.basemappopup);
   const dispatch = useAppDispatch();
   const { boundaryOptions, boundaryTypes, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
@@ -43,11 +34,6 @@ const MapbasePopup = ({ displayColorbarOption, onChangeColormap }: BaseMapProps)
     dispatch(setSelectedBoundaryType(option));
   }
   
-  const handleChangeColormap = (option: SelectOption) => {
-    onChangeColormap?.();
-    dispatch(changeColormap(option));
-    dispatch(setSevipPayload({colorbar: option.id as string}))
-  }
   //#endregion
 
 
@@ -90,35 +76,6 @@ const MapbasePopup = ({ displayColorbarOption, onChangeColormap }: BaseMapProps)
           className="border-0! bg-none!"
         />
         
-
-
-        {/* Colormap preview */}
-        {
-          displayColorbarOption && (
-            <>
-              <small className="font-semibold">Colorbar</small>
-              <div className="border-b border-b-gray-400"/>
-              <SimpleSelect
-                onSelectValue={handleChangeColormap}
-                options={colormapOptions}
-                width="w-85"
-                value={selectedColormap.displayText}
-                className="border-0! bg-none!"
-              />
-
-              
-              
-              <div className="w-full flex flex-col">
-                <small>Preview</small>
-                <Colorbar
-                  colorCodes={selectedColormap.colors as string[]}
-                  valueScale={[]}
-                  className="w-full rounded-none!"
-                />
-              </div>
-            </>
-          )
-        }
     </OptionPopover>
   )
 }

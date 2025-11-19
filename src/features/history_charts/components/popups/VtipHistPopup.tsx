@@ -1,7 +1,7 @@
 import SimpleSelect from '../../../../shared/components/selects/SimpleSelect'
 import ButtonBorder from '../../../../shared/components/buttons/borderedbtn/ButtonBorder'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { changeVtipHistPayload, closeVtipHistPopup, setSelectedVtipHistParameterOption, setVtipHistEndTime, setVtipHistStartTime, toggleVtipHistPopup } from '../../slices/vtipHistChartSlice';
+import { changeVtipHistPayload, closeVtipHistPopup, setSelectedVtipHistParameterOption, setSelectedVtipHistSpecie, setVtipHistEndTime, setVtipHistStartTime, toggleVtipHistPopup } from '../../slices/vtipHistChartSlice';
 import type { SelectOption } from '../../../../shared/components/selects/types';
 import OptionPopover from '../../../../shared/components/popups/option/OptionPopover';
 import ReactDatetimePicker from '../../../../shared/components/input/ReactDatetime';
@@ -11,11 +11,13 @@ import { useEffect, useState, memo } from 'react';
 
 const VtipHistPopup = () => {
     // --- Read only state from Redux store
-    const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen } = useAppSelector(state => state.vtip_histchart);
+    const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen, selectedSpecie, speciesOptions } = useAppSelector(state => state.vtip_histchart);
 
     // --- Local state variables for controlling popup visibility and form inputs ---
     const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions);
     const [locSelectedParameter, setLocSelectedParameter] = useState<SelectOption>(selectedParameter);
+    const [locSpecies, setLocSpecies] = useState(speciesOptions);
+    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
     const [locStartTime, setLocStartTime] = useState<string>(vtipStartTime);
     const [locEndTime, setLocEndTime] = useState<string>(vtipEndTime);
 
@@ -26,8 +28,10 @@ const VtipHistPopup = () => {
             setLocSelectedParameter(selectedParameter);
             setLocStartTime(vtipStartTime);
             setLocEndTime(vtipEndTime);
+            setLocSpecies(speciesOptions);
+            setLocSelectedSpecie(selectedSpecie);
         }
-    }, [parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen]);
+    }, [parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen, speciesOptions, selectedSpecie]);
 
     //  --- local input handlers to handle input changes ---
     const handleStartTimeChange = (date: string) => {
@@ -39,6 +43,9 @@ const VtipHistPopup = () => {
     }
     const handleVariableChange = (option: SelectOption) => {
         setLocSelectedParameter(option);
+    }
+    const handleSpecieChange = (option: SelectOption) => {
+        setLocSelectedSpecie(option);
     }
 
     //  --- Popup toggler handlers ---
@@ -60,13 +67,17 @@ const VtipHistPopup = () => {
             {
               startTime: locStartTime,
               endTime: locEndTime,
-              parameter: locSelectedParameter.id as string
+              parameter: locSelectedParameter.id as string,
+              species: locSelectedSpecie.id as string,
             }
           ));
         //   --- update the store
         dispatch(setVtipHistStartTime(locStartTime));
         dispatch(setVtipHistEndTime(locEndTime));
         dispatch(setSelectedVtipHistParameterOption(locSelectedParameter));
+        dispatch(setSelectedVtipHistSpecie(locSelectedSpecie));
+
+
         
         dispatch(closeVtipHistPopup());
     }
@@ -80,7 +91,17 @@ const VtipHistPopup = () => {
     >
 
  
-        <small className='font-semibold'>Select variable</small>
+        <small className='font-semibold'>Specie</small>
+        <div className="border-b border-b-gray-400"/>
+        <SimpleSelect
+            options={locSpecies}
+            value={locSelectedSpecie.displayText}
+            onSelectValue={handleSpecieChange}
+            width='w-full'
+        />
+
+
+        <small className='font-semibold'>Variable</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={locParameters}
@@ -90,7 +111,7 @@ const VtipHistPopup = () => {
         />
 
 
-            <small className='font-semibold'>Select start Time</small>
+            <small className='font-semibold'>Start Time</small>
             <div className="border-b border-b-gray-400"/>
 
             <ReactDatetimePicker
@@ -98,7 +119,7 @@ const VtipHistPopup = () => {
                 value={locStartTime}
             />
 
-            <small className='font-semibold'>Select end Time</small>
+            <small className='font-semibold'>End Time</small>
             <div className="border-b border-b-gray-400"/>
             <ReactDatetimePicker 
                 onChange={handleEndTimeChange}

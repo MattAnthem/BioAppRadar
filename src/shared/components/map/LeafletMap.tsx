@@ -91,6 +91,8 @@ const LeafletMap = ({
     // Add tiles
     L.tileLayer(baseMap, {
       maxZoom: 19,
+      keepBuffer: 0,
+      maxNativeZoom: 18
     }).addTo(map);
 
     mapRef.current = map;

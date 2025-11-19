@@ -1,13 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { VptsPayload, VptsResponse } from "../../api/endpoints/verical_profile/verticalProfilesAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
-import { vp_parameterOptions } from "../../shared/static/select-options";
+import { species_options, vp_parameterOptions } from "../../shared/static/select-options";
 
 
 
 interface VptsChartState {
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
     vptsPayload: VptsPayload;
     vptsData: VptsResponse | null;
 }
@@ -15,10 +17,14 @@ interface VptsChartState {
 const initialState: VptsChartState = {
     parameterOptions: vp_parameterOptions,
     selectedParameter: vp_parameterOptions[0],
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
     vptsPayload: {
-        startTime: '2020-11-10 12:01:00',
-        endTime: '2020-11-10 12:50:00',
-        parameter: vp_parameterOptions[0].id as string
+        startTime: '"2025-10-01 00:00:00",',
+        endTime: '2025-10-01 00:50:00',
+        parameter: vp_parameterOptions[0].id as string,
+        radarID: 1,
+        species: 'bird'
     },
     vptsData: null,
 }
@@ -37,11 +43,18 @@ const vptsChartSlice = createSlice({
                 parameter: action.payload.id,
             }
         },
+        setSelectedVptsSPecie: (state, action) => {
+            state.selectedSpecie = action.payload;
+            state.vptsPayload = {
+                ...state.vptsPayload,
+                species: action.payload.id
+            }
+        },
         setVptsData: (state, action: PayloadAction<VptsResponse | null>) => {
             state.vptsData = action.payload
         }
     }
 });
 
-export const { changeVptsPayload, setSelectedVptsParameterOption, setVptsData } = vptsChartSlice.actions;
+export const { changeVptsPayload, setSelectedVptsParameterOption, setVptsData, setSelectedVptsSPecie } = vptsChartSlice.actions;
 export default vptsChartSlice.reducer;

@@ -138,16 +138,17 @@ return (
   >
 
         {/* Display mode toggle */}
-        <small className='font-semibold'>Choose a display mode</small>
-        <div className="border-b border-b-gray-400"/>
-        <div className="w flex justify-start items-center gap-1">
+        <small className='font-semibold'>Display mode</small>
+        <div className="border-b my-0! border-b-gray-400"/>
+        <div className="w-full flex justify-start items-center gap-1">
                 <Tooltip
                   display_condition={isPopupOpen}
                   position="bottom"
                   text="Display as image"
                 >
-                  <button onClick={handleSetToPngMode} className={`w-full px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                  <button onClick={handleSetToPngMode} className={`w-25 flex gap-1 justify-center items-center px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
                       <ImageIcon className="w-4"/>
+                      <h1>PNG</h1>
                   </button>
                 </Tooltip>
 
@@ -156,8 +157,9 @@ return (
                   position="bottom"
                   text="Display as gif"
                 >
-                  <button onClick={handleSetToGifMode} className={`w-full px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                  <button onClick={handleSetToGifMode} className={`w-25 flex gap-1 justify-center items-center  px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
                       <ImagePlayIcon className="w-4"/>
+                      <h1>GIF</h1>
                   </button>
                 </Tooltip>
 
@@ -165,7 +167,7 @@ return (
         </div>
 
       {/* Variable selection */}
-      <small className='font-semibold'>Select a variable</small>
+      <small className='font-semibold'>Variable</small>
       <div className="border-b border-b-gray-400"/>
 
       <SimpleSelect
@@ -176,12 +178,12 @@ return (
       />
 
       {/* Colors selections */}
-      <small className='font-semibold'>Select colors </small>
+      <small className='font-semibold'>Colors </small>
       <div className="border-b border-b-gray-400"/>
 
       <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
           <small className='w-fit'>{ locSelectedVar['type0'] as string}:</small>
-          <input onChange={handleInputColor0Change} value={locColor0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
+          <input onChange={handleInputColor0Change} value={locColor0}  className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
       </div>
       <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
           <small className='w-fit'>{ locSelectedVar['type1'] as string}:</small>
@@ -192,7 +194,7 @@ return (
       {
         (overlayMode === 'png') && (
           <>
-            <small className='font-semibold'>Select time</small>
+            <small className='font-semibold'>Time</small>
             <div className="border-b border-b-gray-400"/>
             <ReactDatetimePicker
               onChange={handleTimeChange}
@@ -206,7 +208,7 @@ return (
         (overlayMode === 'gif') && (
           <>
             {/* Start time for the gif */}
-            <small className='font-semibold'>Select start</small>
+            <small className='font-semibold'>Start</small>
             <div className="border-b border-b-gray-400"/>
             <ReactDatetimePicker
                 onChange={handleGifStartTimeChange}
@@ -214,7 +216,7 @@ return (
             />
 
             {/* End time for the gif */}
-            <small className='font-semibold'>Select end</small>
+            <small className='font-semibold'>End</small>
             <div className="border-b border-b-gray-400"/>
             <ReactDatetimePicker
                 onChange={handleGifEndTimeChange}

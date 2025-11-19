@@ -79,6 +79,7 @@ const HistoryMap = () => {
             error = sevipError;
             break;
         case isClassif:
+            console.log("WE ARE CLASSIF")
             data = classifData as ClassificationDataResponse;
             isLoading = classifDataLoading;
             error = classifError;
@@ -101,6 +102,8 @@ const HistoryMap = () => {
     }
     
     //#endregion
+
+    console.log(isClassif)
             
     //#region Fetch default elevations for polar radar mode
     const { data: defaultElevations } = useElevationsQuery(isRadar && radarPayloadHist.type === 'polar');
@@ -202,7 +205,7 @@ const HistoryMap = () => {
 
         {/* Colorbar */}
         {
-            (mapModeHist !== 'classification') && (
+            (!isClassif && !isClassifGif) && (
                 <Colorbar
                     colorCodes={(data as SpatialDataResponse)?.ckeys?.colors ?? []}
                     valueScale={(data as SpatialDataResponse)?.ckeys?.labels.map(Number)  ?? []}
@@ -216,7 +219,6 @@ const HistoryMap = () => {
             (isClassif || isClassifGif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
                 <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <AltitudeSlider
-                        position='right'
                         currentIndex={currentAltitudeIndex}
                         onChangeAltitude={handleAltitudeChange}
                         altitudes={altitudeOptions}

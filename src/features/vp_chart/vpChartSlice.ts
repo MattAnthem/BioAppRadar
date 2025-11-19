@@ -1,12 +1,14 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { VpPayload, VpResponse } from "../../api/endpoints/verical_profile/verticalProfilesAPI";
 import type { SelectOption } from "../../shared/components/selects/types";
-import { vp_parameterOptions } from "../../shared/static/select-options";
+import { species_options, vp_parameterOptions } from "../../shared/static/select-options";
 
 
 interface VpCharState {
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption; 
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
     vpPayload: VpPayload;
     vpData: VpResponse | null;
 }
@@ -14,9 +16,13 @@ interface VpCharState {
 const initialState: VpCharState = {
     parameterOptions: vp_parameterOptions,
     selectedParameter: vp_parameterOptions[0],
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
     vpPayload: {
         parameter: vp_parameterOptions[0].id as string,
-        time: '2020-11-10 12:01:00'
+        time: '2025-10-01 00:00:00',
+        radarID: 1,
+        species: 'insect',
     },
     vpData: null,
 }
@@ -35,11 +41,18 @@ const vpChartSlice = createSlice({
                 parameter: action.payload.id,
             };
         }, 
+        setSelectedVpSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
+            state.vpPayload = {
+                ...state.vpPayload,
+                species: action.payload.id,
+            }
+        },
         setVpData: (state, action: PayloadAction<VpResponse | null>) => {
             state.vpData = action.payload;
         },
     }
 }) 
 
-export const { changeVpPayload, setSelectedVpParameterOption, setVpData } = vpChartSlice.actions;
+export const { changeVpPayload, setSelectedVpParameterOption, setVpData, setSelectedVpSpecie } = vpChartSlice.actions;
 export default vpChartSlice.reducer;

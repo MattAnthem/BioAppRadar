@@ -1,5 +1,17 @@
 import type { SelectOption } from "../components/selects/types";
 
+// --- Species Options ---
+export const species_options: SelectOption[] = [
+    {
+        id: 'bird',
+        displayText: 'Bird'
+    },
+    {
+        id: 'insect',
+        displayText: 'Insect'
+    }
+]
+
 // --- Verical Profiles ---
 export const vp_parameterOptions: SelectOption[] = [
     {

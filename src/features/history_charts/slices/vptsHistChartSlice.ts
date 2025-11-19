@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import type { VptsPayload } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
-import { vp_parameterOptions } from "../../../shared/static/select-options";
+import { species_options, vp_parameterOptions } from "../../../shared/static/select-options";
 
 
 interface VptsChartState {
@@ -9,6 +9,8 @@ interface VptsChartState {
     isPopupOpen: boolean;
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
     vptsStartTime: string;
     vptsEndTime: string;
 
@@ -21,13 +23,17 @@ const initialState: VptsChartState = {
 
     parameterOptions: vp_parameterOptions,
     selectedParameter: vp_parameterOptions[0],
-    vptsStartTime: '2020-11-10 12:01:00',
-    vptsEndTime: '2020-11-10 12:50:00',
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
+    vptsStartTime: '2025-10-01 00:00:00',
+    vptsEndTime: '2025-10-01 00:50:00',
 
     vptsPayload: {
-        startTime: '2020-11-10 12:01:00',
-        endTime: '2020-11-10 12:50:00',
-        parameter: vp_parameterOptions[0].id as string
+        startTime: '2025-10-01 00:00:00',
+        endTime: '2025-10-01 00:50:00',
+        parameter: vp_parameterOptions[0].id as string,
+        radarID: 1,
+        species: 'bird'
     },
 }
 
@@ -40,6 +46,9 @@ const vptsHistChartSlice = createSlice({
         },
         setSelectedVptsHistParameterOption: (state, action) => {
             state.selectedParameter = action.payload;
+        },
+        setSelectedVptsHistSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
         },
         setVptsHistStartTime: (state, action) => {
             state.vptsStartTime = action.payload
@@ -57,5 +66,5 @@ const vptsHistChartSlice = createSlice({
     }
 });
 
-export const { changeVptsHistPayload, setSelectedVptsHistParameterOption, closeVptsHistPopup, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } = vptsHistChartSlice.actions;
+export const { changeVptsHistPayload, setSelectedVptsHistParameterOption, closeVptsHistPopup, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup, setSelectedVptsHistSpecie } = vptsHistChartSlice.actions;
 export default vptsHistChartSlice.reducer;

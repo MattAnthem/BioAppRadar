@@ -4,17 +4,17 @@ import { type VpResponse, type VpPayload, fetchVP } from "../../../api/endpoints
 
 export const useVpDataQuery = (payload: VpPayload) => {
     return useQuery<VpResponse>({
-        queryKey: ["vp_data", payload.time, payload.parameter],
+        queryKey: ["vp_data", payload.time, payload.parameter, payload.species],
         queryFn: async () => {
             try {
                 return await fetchVP(payload);
             } catch (error) {
-                console.error('Failed to fetch VP data');
+                console.error('Failed to fetch VP data', error);
                 throw error;
             }
         },
-        enabled: Boolean(payload.parameter && payload.time),
+        enabled: Boolean(payload.parameter && payload.time && payload.species),
         refetchOnWindowFocus: false,
-        refetchInterval: 1000*60*5,
+        refetchInterval: 1000*60*60,
     })
 }

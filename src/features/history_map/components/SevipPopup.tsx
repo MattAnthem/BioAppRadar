@@ -110,16 +110,17 @@ const SevipPopup = () => {
     >
 
         {/* Display mode toggle */}
-        <small className='font-semibold'>Choose a display mode</small>
+        <small className='font-semibold'>Display mode</small>
         <div className="border-b border-b-gray-400"/>
-        <div className="w-full flex justify-start items-center p-1 gap-1">
+        <div className="w-full flex justify-start items-center gap-1">
                 <Tooltip
                   display_condition={isPopupOpen}
                   position="bottom"
                   text="Display as image"
                 >
-                  <button onClick={handleSetToPngMode} className={`w-full px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                  <button onClick={handleSetToPngMode} className={`w-25 flex gap-1 justify-center items-center px-2 py-0.5 ${overlayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
                       <ImageIcon className="w-4"/>
+                      <h1>PNG</h1>
                   </button>
                 </Tooltip>
 
@@ -128,8 +129,9 @@ const SevipPopup = () => {
                   position="bottom"
                   text="Display as gif"
                 >
-                  <button onClick={handleSetToGifMode} className={`w-full px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                  <button onClick={handleSetToGifMode} className={`w-25 flex gap-1 justify-center items-center  px-2 py-0.5 ${overlayMode === 'gif' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
                       <ImagePlayIcon className="w-4"/>
+                      <h1>GIF</h1>
                   </button>
                 </Tooltip>
 
@@ -137,7 +139,7 @@ const SevipPopup = () => {
         </div>
 
 
-        <small className='font-semibold'>Select a variable</small>
+        <small className='font-semibold'>Variable</small>
         <div className="border-b border-b-gray-400"/>
         <SimpleSelect
             options={locAvailableVars}
@@ -150,7 +152,7 @@ const SevipPopup = () => {
         {
             (overlayMode === 'png') && (
                 <>
-                    <small className='font-semibold'>Select time</small>
+                    <small className='font-semibold'>Time</small>
                     <div className="border-b border-b-gray-400"/>
                     <ReactDatetimePicker
                         onChange={handleTimeChange}
@@ -165,7 +167,7 @@ const SevipPopup = () => {
             (overlayMode === 'gif') && (
                 <>
                     {/* Start time for the gif */}
-                    <small className='font-semibold'>Select start</small>
+                    <small className='font-semibold'>Start</small>
                     <div className="border-b border-b-gray-400"/>
                     <ReactDatetimePicker
                         onChange={handleGifStartTimeChange}
@@ -173,7 +175,7 @@ const SevipPopup = () => {
                     />
 
                     {/* End time for the gif */}
-                    <small className='font-semibold'>Select end</small>
+                    <small className='font-semibold'>End</small>
                     <div className="border-b border-b-gray-400"/>
                     <ReactDatetimePicker
                         onChange={handleGifEndTimeChange}

@@ -5,15 +5,17 @@ import OptionPopover from "../../../../shared/components/popups/option/OptionPop
 import SimpleSelect from "../../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { changeVpHistPayload, closeVpHistPopup, setSelectedVpHistParameterOption, setVpHistTime, toggleVpHistPopup } from "../../slices/vpHistChartSlice";
+import { changeVpHistPayload, closeVpHistPopup, setSelectedVpHistParameterOption, setSelectedVpHistSpecie, setVpHistTime, toggleVpHistPopup } from "../../slices/vpHistChartSlice";
 
 const VpHistPopup = () => {
 
   // Redux read only states
-  const { parameterOptions, selectedParameter, isPopupOpen, vpTime } = useAppSelector(state => state.vp_histchart);
+  const { parameterOptions, selectedParameter, isPopupOpen, vpTime, speciesOptions, selectedSpecie } = useAppSelector(state => state.vp_histchart);
 
   // Local state variables for the inputs 
   const [locParams, setLocParams] = useState(parameterOptions);
+  const [locSpecies, setLocSpecies] = useState(speciesOptions);
+  const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
   const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
   const [locTime, setLocTime] = useState(vpTime);
 
@@ -23,8 +25,10 @@ const VpHistPopup = () => {
       setLocParams(parameterOptions);
       setLocSelectedParam(selectedParameter);
       setLocTime(vpTime);
+      setLocSpecies(speciesOptions);
+      setLocSelectedSpecie(selectedSpecie);
     }
-  }, [isPopupOpen, parameterOptions, selectedParameter, vpTime]);
+  }, [isPopupOpen, parameterOptions, selectedParameter, vpTime, speciesOptions, selectedSpecie]);
 
   // --- local input handlers ---
   const handleDateChange = (date: string) => {
@@ -32,6 +36,9 @@ const VpHistPopup = () => {
   }
   const handleVariableChange = (option: SelectOption) => {
     setLocSelectedParam(option);
+  }
+  const handleSpecieChange = (option: SelectOption) => {
+    setLocSelectedSpecie(option);
   }
 
   // --- popup controls ---
@@ -49,11 +56,13 @@ const VpHistPopup = () => {
     dispatch(changeVpHistPayload({
       parameter: locSelectedParam.id as string,
       time: locTime,
+      species: locSelectedSpecie.id as string
     }))
 
     // update redux states 
     dispatch(setVpHistTime(locTime));
     dispatch(setSelectedVpHistParameterOption(locSelectedParam));
+    dispatch(setSelectedVpHistSpecie(locSelectedSpecie));
 
 
     dispatch(closeVpHistPopup())
@@ -67,8 +76,18 @@ const VpHistPopup = () => {
          onClose={handleClosePopup}
     >
 
+                    {/* Select specie */}
+                    <small className="font-semibold">Specie</small>
+                    <div className="border-b border-b-gray-400"/>
+                    <SimpleSelect
+                      options={locSpecies}
+                      onSelectValue={handleSpecieChange}
+                      value={locSelectedSpecie.displayText}
+                      width="w-full"
+                    />
 
-                    <small className="font-semibold">Select Variable</small>
+
+                    <small className="font-semibold">Variable</small>
                     <div className="border-b border-b-gray-400"/>
                     <SimpleSelect
                       options={locParams}
@@ -78,7 +97,7 @@ const VpHistPopup = () => {
                     />
 
 
-                    <small className="font-semibold">Select Time</small>
+                    <small className="font-semibold">Time</small>
                     <div className="border-b border-b-gray-400"/>
                     <ReactDatetimePicker
                       onChange={handleDateChange}
