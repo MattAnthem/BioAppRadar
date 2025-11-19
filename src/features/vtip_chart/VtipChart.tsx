@@ -24,7 +24,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux 
-  const {  selectedParameter, vtipPayload } = useAppSelector(state => state.vtipchart)
+  const { vtipPayload } = useAppSelector(state => state.vtipchart)
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
 
@@ -66,7 +66,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
           {/* Modal chart */}
           <ChartModal
               isModalOpen={isModalOpen}
-              modalTitle={`${capitalize(data?.query_spec)} ${selectedParameter.displayText}`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name ?? '--'}`}
               mdlToggler_func={handleCloseModal}
           >
             
@@ -181,14 +181,14 @@ const VtipChart = ({ className }: VtipChartProps) => {
             {
               isLoading && (
                   <div className="w-full h-full flex items-center justify-center">
-                      <img src={loader} alt="loading-vphist" width={35} height={35}  />
+                      <img src={loader} alt="loading-vphist" width={25} height={25}  />
                   </div>
             )
             }
             {         
               error && (
-                <div className="absolute z-30 w-full h-full flex items-center justify-center">
-                  <Unplug width={60} height={60} className='text-red-500'/>
+                <div className="flex items-center justify-center">
+                  <Unplug width={25} height={25} className='text-red-500'/>
                 </div> 
             )}
           </div>

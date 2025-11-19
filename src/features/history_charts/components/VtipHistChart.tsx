@@ -175,14 +175,14 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
             {
             isLoading && (
                 <div className="w-full h-full flex items-center justify-center">
-                    <img src={loader} alt="loading-vphist" width={35} height={35}  />
+                    <img src={loader} alt="loading-vphist" width={25} height={25}  />
                 </div>
             )
             }
             {         
               error && (
-                <div className="absolute z-30 w-full h-full flex items-center justify-center">
-                  <Unplug width={60} height={60} className='text-red-500'/>
+                <div className="flex items-center justify-center">
+                  <Unplug width={25} height={25} className='text-red-500'/>
                 </div> 
             )}
           </div>

@@ -248,7 +248,7 @@ const HistoryMap = () => {
             ):
             (
                 <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
-                    <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
+                    <small className='text-white tracking-wide'>Time: {data?.info.time ?? ''}</small>
                 </div>
             )
         }
