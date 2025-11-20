@@ -1,7 +1,7 @@
-import React,{ useState } from "react";
+import React,{ useEffect, useMemo, useState } from "react";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import VptsHeatmapChart from "../../shared/components/charts/HighchartsVpts";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVptsData } from "./hooks/useVptsData";
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import { useTheme } from "../../shared/hooks/useTheme";
@@ -9,6 +9,9 @@ import loader from '../../assets/loader.webp';
 import { useVptsImageQuery } from "../history_charts/hooks/useQuery/useVptsImageQuery";
 import { capitalize } from "../../shared/utils/text_format";
 import VptsSpeciePopup from "./popup/VptsSpeciePopup";
+import dayjs from "dayjs";
+import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
+import { changeVptsPayload } from "./vptsChartSlice";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -18,13 +21,41 @@ type VptsChartProps = {
 }
 
 const VptsChart = ({className}: VptsChartProps) => {
+  // themes
+  const themes = useTheme();
+  const { bg, border, hover } = themes.theme.simpleSelect;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux
   const { vptsPayload } = useAppSelector(state => state.vptschart);
-  const themes = useTheme();
-  const { bg, border, hover } = themes.theme.simpleSelect;
+  const dispatch = useAppDispatch();
+
+  // --- Temporal coverages to restrict time selects  ---
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+
+  // --Adjust time to use fresh timerange from the time coverage ---
+  const adjustedTimes = useMemo(() => {
+        if (!temporal) return null;
+      
+        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+      
+        return { fresh_start, fresh_end };
+  }, [temporal]);
+
+  // --- Hydrate Redux Slice if the query succeed
+  useEffect(() => {
+    if(!isSuccess || !adjustedTimes) return;
+    dispatch(changeVptsPayload(
+        {
+          startTime: adjustedTimes.fresh_start,
+          endTime: adjustedTimes.fresh_end,
+        }
+  ));
+
+}, [adjustedTimes, dispatch, isSuccess])
 
   // Tanstack
   const { isLoading, data, error } = useVptsData();

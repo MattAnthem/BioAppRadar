@@ -1,13 +1,16 @@
 import SectionCard from "../../shared/components/cards/SectionCard";
 import VpChartHighcharts from "../../shared/components/charts/HighchartsVP";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import loader from '../../assets/loader.webp'
 import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTheme } from "../../shared/hooks/useTheme";
 import { capitalize } from "../../shared/utils/text_format";
 import VpSpeciePopup from "./popup/VpSpeciePopup";
+import dayjs from "dayjs";
+import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
+import { changeVpPayload } from "./vpChartSlice";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -19,13 +22,38 @@ type VpChartProps = {
 
 const VpChart = ({ className }: VpChartProps) => {
 
+  const themes = useTheme();
+  const { bg, border, hover } = themes.theme.simpleSelect;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Redux
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
   const currentHeight = altitudeOptions[currentAltitudeIndex];
-  const themes = useTheme();
-  const { bg, border, hover } = themes.theme.simpleSelect;
+  const dispatch = useAppDispatch();
+
+  // --- Temporal coverages to restrict time selects  ---
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+
+    // --Adjust time to use fresh timerange from the time coverage ---
+  const adjustedTimes = useMemo(() => {
+        if (!temporal) return null;
+      
+        const fresh_time = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+
+        return { fresh_time };
+  }, [temporal]);
+
+    // --- Hydrate Redux Slice if the query succeed
+  useEffect(() => {
+      if(!isSuccess || !adjustedTimes) return;
+      dispatch(changeVpPayload(
+        {
+          time: adjustedTimes.fresh_time
+        }
+      ));
+
+  }, [adjustedTimes, dispatch, isSuccess]);
 
   const { isLoading, data, error } = useVpData();
 

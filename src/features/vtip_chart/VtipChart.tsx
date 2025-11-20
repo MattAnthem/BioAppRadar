@@ -1,7 +1,7 @@
-import React,{ useRef, useState } from "react";
+import React,{ useEffect, useMemo, useRef, useState } from "react";
 import SectionCard from "../../shared/components/cards/SectionCard";
 import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
-import { useAppSelector } from "../../store/hooks"
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
 import { ChartLine, Download, Fullscreen, ImageIcon, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
@@ -9,6 +9,9 @@ import { useTheme } from "../../shared/hooks/useTheme";
 import { useVtipImageQuery } from "../history_charts/hooks/useQuery/useVtipImageQuery";
 import { capitalize } from "../../shared/utils/text_format";
 import VtipSpeciePopup from "./popup/VtipSpeciePopup";
+import dayjs from "dayjs";
+import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
+import { changeVtipPayload } from "./vtipChartSlice";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -19,14 +22,40 @@ type VtipChartProps = {
 }
 
 const VtipChart = ({ className }: VtipChartProps) => {
+  const themes = useTheme();
+  const { bg, border, hover } = themes.theme.simpleSelect;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux 
-  const { vtipPayload } = useAppSelector(state => state.vtipchart)
-  const themes = useTheme();
-  const { bg, border, hover } = themes.theme.simpleSelect;
+  const { vtipPayload } = useAppSelector(state => state.vtipchart);
+  const dispatch = useAppDispatch();
+
+  // --- Temporal coverages to restrict time selects  ---
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+
+  // --Adjust time to use fresh timerange from the time coverage ---
+  const adjustedTimes = useMemo(() => {
+        if (!temporal) return null;
+      
+        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+      
+        return { fresh_start, fresh_end };
+  }, [temporal]);
+
+  // --- Hydrate Redux Slice if the query succeed
+  useEffect(() => {
+      if(!isSuccess || !adjustedTimes) return;
+      dispatch(changeVtipPayload(
+          {
+            startTime: adjustedTimes.fresh_start,
+            endTime: adjustedTimes.fresh_end,
+          }
+  ));
+
+  }, [adjustedTimes, dispatch, isSuccess])
 
   // Tanstack
   const { isLoading, data, error } = useVtipData();
