@@ -34,6 +34,7 @@ const VtipSpeciePopup = () => {
         onOpen={togglePopup}
         onClose={closePopup}
         hoverText='Change species'
+        isSimpleSelect
     >
         {/* Select specie */}
         <small className="font-semibold">Species</small>

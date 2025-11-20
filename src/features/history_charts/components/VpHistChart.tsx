@@ -91,7 +91,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
               {         
                 error && (
                   <div className="absolute w-full flex items-center justify-center">
-                    <Unplug width={60} height={60} className='text-red-500'/>
+                    <Unplug width={35} height={35}  className='text-red-500'/>
                   </div> 
               )}
 

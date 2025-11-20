@@ -12,6 +12,7 @@ type ChartParamsPopupProps = {
   onClickEvent?: () => void;
 
   isPrimary?: boolean;
+  isSimpleSelect?: boolean;
 
   isOpen?: boolean;  
   onOpen?: () => void;
@@ -26,11 +27,15 @@ const OptionPopover = ({
   isOpen,
   onOpen,
   onClose,
+  isSimpleSelect=false,
   isPrimary=false
 }: ChartParamsPopupProps) => {
   const [localOpen, setLocalOpen] = useState(false);
-  const [openUpwards, setOpenUpwards] = useState(false);  
+  const [openUpwards, setOpenUpwards] = useState(false); 
+
   const popupRef = useRef<HTMLDivElement | null>(null);
+  const popupContentRef = useRef<HTMLDivElement | null>(null);
+
   const themes = useTheme();
   const { primary_bg, primary_hover, primary_text, seconcondary_bg, secondary_hover, secondary_text } = themes.theme.popupBtn;
   const { options_bg, border } = themes.theme.simpleSelect;
@@ -59,12 +64,34 @@ const OptionPopover = ({
   };
 
   useEffect(() => {
-    if (isPopupOpen && popupRef.current) {
-      const rect = popupRef.current.getBoundingClientRect();
-      const popupHeight = 300; 
-      const spaceBelow = window.innerHeight - rect.bottom;
-      setOpenUpwards(spaceBelow < popupHeight); 
+    if (!isPopupOpen || !popupRef.current || !popupContentRef.current) return;
+
+    const popup = popupContentRef.current;
+    const containerRect = popupRef.current.getBoundingClientRect();
+
+    popup.style.visibility = "hidden";
+    popup.style.opacity = '0';
+    popup.style.pointerEvents = 'none';
+    popup.style.display = 'block';
+
+    const height = popup.offsetHeight;
+
+    popup.style.visibility = ''
+    popup.style.opacity = '';
+    popup.style.pointerEvents = '';
+    popup.style.display = '';
+
+    const spaceBelow = window.innerHeight - containerRect.bottom;
+    const spaceAbove = containerRect.top;
+
+    if (spaceBelow >= height) {
+      setOpenUpwards(false);
+    } else if (spaceAbove >= height) {
+      setOpenUpwards(true);
+    } else {
+      setOpenUpwards(spaceAbove > spaceBelow)
     }
+
   }, [isPopupOpen]);
 
   return (
@@ -89,8 +116,9 @@ const OptionPopover = ({
 
       {/* Pop-over menu */}
       <div
+        ref={popupContentRef}
         className={`
-          ${options_bg} ${border} z-20 border shadow-sm flex flex-col gap-2 justify-center lg:w-[25vw] md:w-[45vw] w-full 
+          ${options_bg} ${border} z-20 border shadow-sm flex flex-col gap-2 justify-center ${isSimpleSelect ? 'lg:w-[10vw] md:w-[25vw]' : 'lg:w-[25vw] md:w-[45vw] w-full'}    
           absolute right-0 ${openUpwards ? "bottom-full mb-1 origin-bottom-right" : "top-full origin-top-right"}
           p-2 rounded-sm transition-transform duration-100 ease-ou
           ${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none hidden"}
