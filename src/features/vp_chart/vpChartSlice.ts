@@ -26,7 +26,7 @@ const initialState: VpCharState = {
         parameter: vp_parameterOptions[0].id as string,
         time: '2025-10-01 02:00:00',
         radarID: 1,
-        species: 'insect',
+        species: species_options[0].id as string,
     },
     vpData: null,
 }
