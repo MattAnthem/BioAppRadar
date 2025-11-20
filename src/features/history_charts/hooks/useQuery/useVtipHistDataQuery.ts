@@ -3,7 +3,7 @@ import { fetchVTIP, type VtipPayload, type VtipResponse } from "../../../../api/
 
 export const useVtipHistDataQuery = (payload: VtipPayload) => {
     return useQuery<VtipResponse>({
-        queryKey: ["vtiphist_data", payload.startTime, payload.endTime, payload.parameter, payload.species],
+        queryKey: ["vtiphist_data", payload.startTime, payload.endTime, payload.parameter, payload.species, payload.species],
         queryFn: async () => {
             try{
                 return await fetchVTIP(payload);

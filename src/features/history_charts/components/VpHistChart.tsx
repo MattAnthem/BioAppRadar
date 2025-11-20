@@ -48,7 +48,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
           <ChartModal
 
               isModalOpen={isModalOpen}
-              modalTitle={`${capitalize(data?.query_spec)} ${data?.name}`}
+              modalTitle={`${capitalize(data?.query_spec)} ${data?.name ?? '--'}`}
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
@@ -83,14 +83,14 @@ const VpHistChart = ({ className }: VpChartProps) => {
               )}
               {
                   isLoading && (
-                      <div className="absolute w-full flex items-center justify-center">
+                      <div className="absolute w-full h-full flex items-center justify-center">
                           <img src={loader} alt="loading-data" width={35} height={35}  />
                       </div>
                   )
               }
               {         
                 error && (
-                  <div className="absolute w-full flex items-center justify-center">
+                  <div className="absolute w-full h-full flex items-center justify-center">
                     <Unplug width={35} height={35}  className='text-red-500'/>
                   </div> 
               )}

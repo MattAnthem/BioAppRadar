@@ -24,8 +24,8 @@ const initialState: VptsChartState = {
     speciesOptions: species_options,
     selectedSpecie: species_options[0],
     vptsPayload: {
-        startTime: "2025-10-01 00:00:00",
-        endTime: '2025-10-01 00:50:00',
+        startTime: "2025-10-01 02:00:00",
+        endTime: '2025-10-01 02:50:00',
         parameter: vp_parameterOptions[0].id as string,
         radarID: 1,
         species: 'bird'

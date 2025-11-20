@@ -25,11 +25,11 @@ const initialState: VpCharState = {
     selectedParameter: vp_parameterOptions[0],
     speciesOptions: species_options,
     selectedSpecie: species_options[0],
-    vpTime: '2025-10-01 00:00:00',
+    vpTime: '2025-10-01 02:00:00',
 
     vpPayload: {
         parameter: vp_parameterOptions[0].id as string,
-        time: '2025-10-01 00:00:00',
+        time: '2025-10-01 02:00:00',
         radarID: 1,
         species: 'bird'
     },
