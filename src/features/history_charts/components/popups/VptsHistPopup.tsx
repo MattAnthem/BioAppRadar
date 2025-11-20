@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useMemo } from "react";
 import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder"
 import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
 import OptionPopover from "../../../../shared/components/popups/option/OptionPopover"
@@ -7,6 +7,7 @@ import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setSelectedVptsHistSpecie, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
 import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
+import dayjs from "dayjs";
 
 
 
@@ -14,9 +15,35 @@ const VptsHistPopup = () => {
 
     // --- read only redux states ----
     const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vpts_histchart);
+    const dispatch = useAppDispatch();
 
-    // --- Temporal coverages to restrict time selects ---
-    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    // --- Temporal coverages to restrict time selects  ---
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+
+    const adjustedTimes = useMemo(() => {
+      if (!temporal) return null;
+    
+      const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+      const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+    
+      return { fresh_start, fresh_end };
+    }, [temporal]);
+
+
+
+    // --- Hydrate Redux slice if the query succeed ----
+    useEffect(() => {
+      if (!isSuccess || !adjustedTimes) return;
+
+      dispatch(setVptsHistStartTime(adjustedTimes.fresh_start));
+      dispatch(setVptsHistEndTime(adjustedTimes.fresh_end));
+    
+      dispatch(changeVptsHistPayload({
+        startTime: adjustedTimes.fresh_start,
+        endTime: adjustedTimes.fresh_end,
+      }));
+
+    }, [adjustedTimes, dispatch, isSuccess]);
 
     // --- Local states for the inputs ---
     const [locParams, setLocParams] = useState(parameterOptions);
@@ -61,7 +88,7 @@ const VptsHistPopup = () => {
       dispatch(closeVptsHistPopup())
     }
 
-    const dispatch = useAppDispatch();
+    
 
 
     const handleSubmitPopupData = () => {
@@ -76,8 +103,8 @@ const VptsHistPopup = () => {
 
       // --- update Redux store ---
       dispatch(setVptsHistStartTime(locStartTime));
-      dispatch(setSelectedVptsHistSpecie(locSelectedSpecie));
       dispatch(setVptsHistEndTime(locEndTime));
+      dispatch(setSelectedVptsHistSpecie(locSelectedSpecie));
       dispatch(setSelectedVptsHistParameterOption(locSelectedParam));
 
       
@@ -118,7 +145,7 @@ const VptsHistPopup = () => {
           <div className="border-b border-b-gray-400"/>
           <ReactDatetimePicker
             onChange={handleStartTimeChange}
-            value={locStartTime}
+            value={adjustedTimes?.fresh_start}
             minDate={temporal?.start_time}
             maxDate={temporal?.end_time}
           />
@@ -127,7 +154,7 @@ const VptsHistPopup = () => {
           <div className="border-b border-b-gray-400"/>
           <ReactDatetimePicker
             onChange={handleEndTimeChange}
-            value={locEndTime}
+            value={adjustedTimes?.fresh_end}
             minDate={locStartTime}
             maxDate={temporal?.end_time}
           />

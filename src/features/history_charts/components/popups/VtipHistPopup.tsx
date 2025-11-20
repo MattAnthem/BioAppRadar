@@ -5,18 +5,44 @@ import { changeVtipHistPayload, closeVtipHistPopup, setSelectedVtipHistParameter
 import type { SelectOption } from '../../../../shared/components/selects/types';
 import OptionPopover from '../../../../shared/components/popups/option/OptionPopover';
 import ReactDatetimePicker from '../../../../shared/components/input/ReactDatetime';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { useVpTemporalCoverageQuery } from '../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
-
+import dayjs from 'dayjs';
 
 
 const VtipHistPopup = () => {
     // --- Read only state from Redux store
     const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen, selectedSpecie, speciesOptions } = useAppSelector(state => state.vtip_histchart);
-
+    const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
-    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+
+    // --Adjust time to use fresh timerange from the time coverage ---
+    const adjustedTimes = useMemo(() => {
+        if (!temporal) return null;
+      
+        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+      
+        return { fresh_start, fresh_end };
+    }, [temporal]);
+
+    // --- Hydrate Redux Slice if the query succeed
+    useEffect(() => {
+        if(!isSuccess || !adjustedTimes) return;
+
+        dispatch(setVtipHistStartTime(adjustedTimes.fresh_start));
+        dispatch(setVtipHistEndTime(adjustedTimes.fresh_end));
+
+        dispatch(changeVtipHistPayload(
+            {
+              startTime: adjustedTimes.fresh_start,
+              endTime: adjustedTimes.fresh_end,
+            }
+        ));
+
+    }, [adjustedTimes, dispatch, isSuccess])
 
     // --- Local state variables for controlling popup visibility and form inputs ---
     const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions);
@@ -59,9 +85,6 @@ const VtipHistPopup = () => {
     const handleClosePopup = () => {
         dispatch(closeVtipHistPopup());
     }
-
-    const dispatch = useAppDispatch()
-
 
 
 
@@ -120,7 +143,7 @@ const VtipHistPopup = () => {
 
             <ReactDatetimePicker
                 onChange={handleStartTimeChange}
-                value={locStartTime}
+                value={adjustedTimes?.fresh_start}
                 minDate={temporal?.start_time}
                 maxDate={temporal?.end_time}
             />
@@ -129,7 +152,7 @@ const VtipHistPopup = () => {
             <div className="border-b border-b-gray-400"/>
             <ReactDatetimePicker 
                 onChange={handleEndTimeChange}
-                value={locEndTime}
+                value={adjustedTimes?.fresh_end}
                 minDate={locStartTime}
                 maxDate={temporal?.end_time}
             />

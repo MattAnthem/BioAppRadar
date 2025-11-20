@@ -5,6 +5,7 @@ import HCHeatmap from 'highcharts/modules/heatmap';
 import HCAnnotations from 'highcharts/modules/annotations';
 import type { VptsResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
+import { ErrorBoundary } from "react-error-boundary";
 // import exportingModule from "highcharts/modules/exporting";
 
 HCHeatmap(Highcharts);
@@ -333,8 +334,12 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
     },[data, radarAltitude, legend, title, colorPalette, chartFontColor, chartHeight, chartLegendColor]);
 
     return (
+            <ErrorBoundary
+                fallback={<div>...</div>}
+            >
 
-            <HighchartsReact containerProps={{style:{width:'100%'}}} highcharts={Highcharts} options={{}} ref={chartRef} />
+                <HighchartsReact containerProps={{style:{width:'100%'}}} highcharts={Highcharts} options={{}} ref={chartRef} />
+            </ErrorBoundary>
     );
 };
 

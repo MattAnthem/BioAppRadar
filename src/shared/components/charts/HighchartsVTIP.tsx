@@ -10,6 +10,7 @@ import type { VtipResponse } from "../../../api/endpoints/verical_profile/vertic
 import HCExporting from "highcharts/modules/exporting";
 import HCOfflineExporting from "highcharts/modules/offline-exporting";
 import HCExportData from "highcharts/modules/export-data";
+import { ErrorBoundary } from "react-error-boundary";
 
 HCExporting(Highcharts);
 HCExportData(Highcharts);
@@ -89,8 +90,13 @@ const HighchartVtip = forwardRef<Highcharts.Chart | null, VtipChartProps>(
       data.dd[i],
     ]);
 
-    const pmin = Math.min(...data.parameter);
-    const pmax = Math.max(...data.parameter);
+    let pmin = Math.min(...data.parameter);
+    let pmax = Math.max(...data.parameter);
+    if (pmax === pmin) {
+      pmin = pmin - 0.1;
+      pmax = pmin + 0.1;
+    }
+  
     const ymax = pmax + (pmax - pmin) * 0.01;
 
     return {
@@ -236,6 +242,9 @@ const HighchartVtip = forwardRef<Highcharts.Chart | null, VtipChartProps>(
   }, [data, displayTitle, chartFontColor, chartGridline, chartLegendColor]);
 
   return (
+    <ErrorBoundary
+      fallback={<div>...</div>}
+    >
 
       <HighchartsReact
         highcharts={Highcharts}
@@ -243,6 +252,7 @@ const HighchartVtip = forwardRef<Highcharts.Chart | null, VtipChartProps>(
         ref={chartRef}
         containerProps={{ style: { width: "100%" } }}
       />
+    </ErrorBoundary>
 
   );
 });
@@ -258,6 +268,8 @@ function drawDayNightBar(chart: DayNightChart, json: VtipResponse) {
 
   const pmin = Math.min(...json.parameter);
   const pmax = Math.max(...json.parameter);
+
+
   const heightPb = (pmax - pmin) * 0.03;
 
   const nTimes = times.length;

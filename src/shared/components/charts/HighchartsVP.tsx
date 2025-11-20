@@ -4,6 +4,7 @@ import Windbarb from 'highcharts/modules/windbarb';
 import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from '../../hooks/useTheme';
 import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
+import { ErrorBoundary } from "react-error-boundary";
 
 Windbarb(Highcharts);
 
@@ -204,12 +205,17 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
 
   return (
 
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={getChartOptions()}
-        ref={chartRef}
-        containerProps={{ style: { width: '100%'} }}
-      />
+      <ErrorBoundary
+        fallback={<div>...</div>}
+      >
+
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={getChartOptions()}
+          ref={chartRef}
+          containerProps={{ style: { width: '100%'} }}
+        />
+      </ErrorBoundary>
   );
 };
 

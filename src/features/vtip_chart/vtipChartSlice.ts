@@ -25,12 +25,12 @@ const initialState: VtipChartState = {
     selectedParameter: vtip_parameterOptions[0],
     speciesOptions: species_options,
     selectedSpecie: species_options[0],
-    vtipStartTime: '2020-11-10 12:01:00',
-    vtipEndTime: '2020-11-10 12:50:00',
+    vtipStartTime: '2025-10-01 02:00:00',
+    vtipEndTime: '2025-10-01 02:50:00',
 
     vtipPayload: {
-        startTime: "2025-10-01 00:00:00",
-        endTime: '2025-10-01 01:10:00',
+        startTime: "2025-10-01 02:00:00",
+        endTime: '2025-10-01 02:50:00',
         parameter: 'mtr',
         radarID: 1,
         species: 'bird'
