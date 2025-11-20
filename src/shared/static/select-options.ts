@@ -49,14 +49,7 @@ export const vtip_parameterOptions: SelectOption[] = [
         id: 'mtr',
         displayText: 'Migration traffic rate'
     },
-    {
-        id: 'mt',
-        displayText: 'Cumulative migration traffic'
-    },
-    {
-        id: 'rt',
-        displayText: 'Cumulative reflectivity traffic'
-    },
+
     {
         id: 'rtr',
         displayText: 'Reflectivity traffic rate'
@@ -68,6 +61,14 @@ export const vtip_parameterOptions: SelectOption[] = [
     {
         id: 'vir',
         displayText: 'Vertically Integrated Reflectivity'
+    },
+    {
+        id: 'mt',
+        displayText: 'Cumulative migration traffic'
+    },
+    {
+        id: 'rt',
+        displayText: 'Cumulative reflectivity traffic'
     },
 ]
 
