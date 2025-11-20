@@ -55,7 +55,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
           }
   ));
 
-  }, [adjustedTimes, dispatch, isSuccess])
+  }, [adjustedTimes, dispatch, isSuccess]);
 
   // Tanstack
   const { isLoading, data, error } = useVtipData();
