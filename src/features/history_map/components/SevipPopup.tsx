@@ -6,11 +6,12 @@ import type { SelectOption } from '../../../shared/components/selects/types';
 import { closeSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption, toggleSevipPopup } from '../slice/histSevipPopup';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 import  ReactDatetimePicker  from '../../../shared/components/input/ReactDatetime';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { setSevipGifPayloadHist, setSevipPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useTheme } from '../../../shared/hooks/useTheme';
+import dayjs from 'dayjs';
 
 
 
@@ -28,20 +29,31 @@ const SevipPopup = () => {
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
-    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, {
+        staleTime: 0,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
+    const adjustedTimes = useMemo(() => {
+        if (!temporal) return null;
+      
+        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+      
+        return { fresh_start, fresh_end };
+    }, [temporal]);
 
     // --- Sync store to the temporal coverage ---
     useEffect(() => {
  
-        if (!isPopupOpen) return;
+        if (!isSuccess || !adjustedTimes) return;
 
-        if(temporal) {
-            dispatch(setHistSevipTimeStart(temporal.start_time));
-            dispatch(setHistSevipTimeEnd(temporal.end_time));
-            dispatch(setHistTimeSevip(temporal.start_time));
-        }
-    
-    }, [dispatch, isPopupOpen, temporal])
+        dispatch(setHistSevipTimeStart(adjustedTimes.fresh_start));
+        dispatch(setHistSevipTimeEnd(adjustedTimes.fresh_end));
+        dispatch(setHistTimeSevip(adjustedTimes.fresh_end));
+
+    }, [adjustedTimes, dispatch, isSuccess])
 
     // --- Local states for the inputs ---
     const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);

@@ -28,7 +28,12 @@ const ClassificationPopup = () => {
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects ---
-  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1,{
+    staleTime: 0,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    enabled: true,
+  });
 
   const adjustedTimes = useMemo(() => {
     if (!temporal) return null;

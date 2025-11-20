@@ -27,7 +27,12 @@ const RadarOptionPopup = () => {
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
-    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, {
+        staleTime: 0,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
     const adjustedTimes = useMemo(() => {
         if (!temporal) return null;
       
@@ -48,14 +53,6 @@ const RadarOptionPopup = () => {
         
     }, [adjustedTimes, dispatch, isSuccess])
 
-    useEffect(() => {
-        if (!isPopupOpen) return;
-        if (temporal) {
-            dispatch(setRadarStartTimeHist(temporal?.start_time));
-            dispatch(setRadarEndTimeHist(temporal?.end_time));
-            dispatch(setRadarTimeHist(temporal?.start_time));
-        }
-    }, [dispatch, isPopupOpen, temporal])
 
     // --- Local state for the inputs
     const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
