@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useMemo } from "react";
 import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder";
 import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
 import OptionPopover from "../../../../shared/components/popups/option/OptionPopover";
@@ -7,14 +7,32 @@ import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { changeVpHistPayload, closeVpHistPopup, setSelectedVpHistParameterOption, setSelectedVpHistSpecie, setVpHistTime, toggleVpHistPopup } from "../../slices/vpHistChartSlice";
 import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
+import dayjs from 'dayjs';
 
 const VpHistPopup = () => {
 
   // Redux read only states
   const { parameterOptions, selectedParameter, isPopupOpen, vpTime, speciesOptions, selectedSpecie } = useAppSelector(state => state.vp_histchart);
+  const dispatch = useAppDispatch()
 
   // --- Temporal coverages to restrict time selects ---
-  const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+
+  // --- Adjust date to get the latest in temporal range
+  const adjustedTime = useMemo(() => {
+    if (!temporal) return null;
+    const fresh_time = dayjs(temporal.end_time).add(2, 'hour').format('YYYY-MM-DD HH:mm:ss');
+    return {fresh_time};
+  }, [temporal]);
+
+  // --- Hydrate redux slice
+  useEffect(() => {
+    if(!isSuccess || !adjustedTime) return;
+    dispatch(setVpHistTime(adjustedTime.fresh_time));
+    dispatch(changeVpHistPayload({
+      time: adjustedTime.fresh_time
+    }))
+  }, [adjustedTime, dispatch, isSuccess])
 
   // Local state variables for the inputs 
   const [locParams, setLocParams] = useState(parameterOptions);
@@ -53,7 +71,7 @@ const VpHistPopup = () => {
     dispatch(closeVpHistPopup())
   }
 
-  const dispatch = useAppDispatch()
+  
 
 
   const handleSubmitPopupData = () => {
@@ -105,7 +123,7 @@ const VpHistPopup = () => {
                     <div className="border-b border-b-gray-400"/>
                     <ReactDatetimePicker
                       onChange={handleDateChange}
-                      value={locTime}
+                      value={adjustedTime?.fresh_time}
                       minDate={temporal?.start_time}
                       maxDate={temporal?.end_time}
                     />
