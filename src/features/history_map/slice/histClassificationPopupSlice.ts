@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { classif_Options } from "../../../shared/static/select-options";
+import { classif_Options, species_options } from "../../../shared/static/select-options";
 
 interface HistClassificationPopupState {
     isPopupOpen: boolean,
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
+
+    // Species
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
+
     color_0: string;
     color_1: string;
     height: number;
@@ -21,6 +26,9 @@ const initialState: HistClassificationPopupState = {
     isPopupOpen: false,
     selectedVariable: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : null,
     availableVariables: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
+
     color_0: '#dc3545',
     color_1: '#0d6efd',
     height: 0,
@@ -36,6 +44,9 @@ const HistclassificationpopupSlice = createSlice({
     reducers: {
         setSelectedHistClassificationOption: (state, action) => {
             state.selectedVariable = action.payload;
+        },
+        setSelectedClassifHistSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
         },
         setHistClassificationColorZero: (state, action) => {
             state.color_0 = action.payload;
@@ -61,5 +72,5 @@ const HistclassificationpopupSlice = createSlice({
     }
 })
 
-export const { setHistClassificationColorOne, setHistClassifEndTime, setHistClassifStartTime, setHistClassificationColorZero,closeClassifPopup, toggleClassifPopup,  setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
+export const { setHistClassificationColorOne, setHistClassifEndTime, setSelectedClassifHistSpecie, setHistClassifStartTime, setHistClassificationColorZero,closeClassifPopup, toggleClassifPopup,  setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
 export default HistclassificationpopupSlice.reducer;

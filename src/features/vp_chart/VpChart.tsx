@@ -33,9 +33,14 @@ const VpChart = ({ className }: VpChartProps) => {
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects  ---
-  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+  const { data: temporal, isSuccess, isRefetching } = useVpTemporalCoverageQuery(1, {
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    enabled: true,
+  });
 
-    // --Adjust time to use fresh timerange from the time coverage ---
+  // --Adjust time to use fresh timerange from the time coverage ---
   const adjustedTimes = useMemo(() => {
         if (!temporal) return null;
       
@@ -144,7 +149,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
         {/* Chart */}
         <div className="h-full grid px-2 pb-2">
-          {data && (
+          {(data && !isRefetching && !error) && (
 
                 <VpChartHighcharts
                   data={data}
@@ -156,6 +161,14 @@ const VpChart = ({ className }: VpChartProps) => {
                 isLoading && (
                     <div className="w-full h-full flex items-center justify-center">
                         <img src={loader} alt="loading-vp" width={25} height={25}  />
+                    </div>
+                )
+            }
+            {
+                isRefetching && (
+                    <div className="w-full h-full flex flex-col items-center justify-center">
+                        <img src={loader} alt="loading-vp" width={25} height={25}  />
+                        <small>Updating data...</small>
                     </div>
                 )
             }

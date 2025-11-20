@@ -33,7 +33,12 @@ const VtipChart = ({ className }: VtipChartProps) => {
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects  ---
-  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+  const { data: temporal, isSuccess, isRefetching } = useVpTemporalCoverageQuery(1, {
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    enabled: true,
+  });
 
   // --Adjust time to use fresh timerange from the time coverage ---
   const adjustedTimes = useMemo(() => {
@@ -201,7 +206,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
           {/* Chart */}
           <div className="h-full grid px-2 pb-2">
             {
-              data && (
+              (data && !isRefetching && !error) && (
                 <HighchartVtip
                   data={data}
                 />
@@ -213,6 +218,14 @@ const VtipChart = ({ className }: VtipChartProps) => {
                       <img src={loader} alt="loading-vphist" width={25} height={25}  />
                   </div>
             )
+            }
+            {
+                isRefetching && (
+                    <div className="w-full h-full flex flex-col items-center justify-center">
+                        <img src={loader} alt="loading-vp" width={25} height={25}  />
+                        <small>Updating data...</small>
+                    </div>
+                )
             }
             {         
               error && (

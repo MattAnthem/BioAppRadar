@@ -123,7 +123,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
         {/* Chart */}
         <div className="h-full flex-col grid px-2 pb-2">
-          {data && (
+          {(data && !error) && (
 
             <VpChartHighcharts
               data={data}

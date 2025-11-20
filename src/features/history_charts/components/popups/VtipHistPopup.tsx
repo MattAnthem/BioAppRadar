@@ -15,8 +15,13 @@ const VtipHistPopup = () => {
     const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen, selectedSpecie, speciesOptions } = useAppSelector(state => state.vtip_histchart);
     const dispatch = useAppDispatch();
 
-    // --- Temporal coverages to restrict time selects ---
-    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    // --- Temporal coverages to restrict time selects only on mount ---
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, {
+        staleTime: 0,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
 
     // --Adjust time to use fresh timerange from the time coverage ---
     const adjustedTimes = useMemo(() => {

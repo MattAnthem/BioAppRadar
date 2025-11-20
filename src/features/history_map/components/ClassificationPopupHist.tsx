@@ -5,12 +5,13 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder'
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime'
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { closeClassifPopup, setHistClassifEndTime, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifStartTime, setHistClassifTime, setSelectedHistClassificationOption, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
 import { setClassifGifPayloadHist, setClassifPayloadHist } from '../slice/historyMapSlice'
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery'
-import { useTheme } from '../../../shared/hooks/useTheme'
+import { useTheme } from '../../../shared/hooks/useTheme';
+import dayjs from 'dayjs'
 
 
 
@@ -27,20 +28,27 @@ const ClassificationPopup = () => {
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects ---
-  const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
 
-      // --- Sync store to the temporal coverage ---
-      useEffect(() => {
- 
-        if (!isPopupOpen) return;
+  const adjustedTimes = useMemo(() => {
+    if (!temporal) return null;
+  
+    const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+    const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+  
+    return { fresh_start, fresh_end };
+  }, [temporal]);
 
-        if(temporal) {
-            dispatch(setHistClassifStartTime(temporal.start_time));
-            dispatch(setHistClassifEndTime(temporal.end_time));
-            dispatch(setHistClassifTime(temporal.start_time));
-        }
+  // --- Sync store to the temporal coverage ---
+  useEffect(() => {
+
+    if (!isSuccess || !adjustedTimes) return;
+
+    dispatch(setHistClassifStartTime(adjustedTimes.fresh_start));
+    dispatch(setHistClassifEndTime(adjustedTimes.fresh_end));
+    dispatch(setHistClassifTime(adjustedTimes.fresh_end));
     
-    }, [dispatch, isPopupOpen, temporal])
+  }, [adjustedTimes, dispatch, isSuccess])
   
   // --- Local state for the inputs
   const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);

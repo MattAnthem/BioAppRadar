@@ -16,7 +16,12 @@ const VpHistPopup = () => {
   const dispatch = useAppDispatch()
 
   // --- Temporal coverages to restrict time selects ---
-  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1,{
+    staleTime: 0,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    enabled: true,
+  });
 
   // --- Adjust date to get the latest in temporal range
   const adjustedTime = useMemo(() => {

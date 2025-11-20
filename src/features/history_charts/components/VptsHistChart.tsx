@@ -168,7 +168,7 @@ const VptsHistChart = ({className}: VptsChartProps) => {
         {/* Chart */}
         <div className="h-full grid px-2 pb-2">
           {
-            data && (
+            (data && !error) && (
               <VptsHeatmapChart data={data}/>
             )
           }

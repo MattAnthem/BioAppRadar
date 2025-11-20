@@ -17,8 +17,13 @@ const VptsHistPopup = () => {
     const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vpts_histchart);
     const dispatch = useAppDispatch();
 
-    // --- Temporal coverages to restrict time selects  ---
-    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    // --- Temporal coverages to restrict time selects only on mount  ---
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, {
+      staleTime: 0,
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      enabled: true,
+    });
 
     const adjustedTimes = useMemo(() => {
       if (!temporal) return null;

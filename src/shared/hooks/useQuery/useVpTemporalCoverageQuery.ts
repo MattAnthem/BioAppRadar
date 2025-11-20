@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchTemporalCoverage, type TemporalCovResponse } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
-export const useVpTemporalCoverageQuery = ( radarID: number, enabled?: boolean) => {
+export const useVpTemporalCoverageQuery = ( radarID: number, options = {}) => {
     const queryKey = ["vp_temporalcov", radarID];
     return useQuery<TemporalCovResponse>({
         queryKey,
@@ -13,9 +13,10 @@ export const useVpTemporalCoverageQuery = ( radarID: number, enabled?: boolean) 
                 throw error
             }
         },
-        staleTime: 1000 * 60 * 5,
+        staleTime: 0,
         refetchOnWindowFocus: false,
-        refetchInterval: 1000 * 60 * 5,
-        enabled,
+        refetchInterval: false,
+
+        ...options,
     })
 }

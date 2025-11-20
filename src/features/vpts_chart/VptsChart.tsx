@@ -33,7 +33,12 @@ const VptsChart = ({className}: VptsChartProps) => {
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects  ---
-  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1);
+  const { data: temporal, isSuccess, isRefetching } = useVpTemporalCoverageQuery(1, {
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    enabled: true,
+  });
 
   // --Adjust time to use fresh timerange from the time coverage ---
   const adjustedTimes = useMemo(() => {
@@ -196,7 +201,7 @@ const VptsChart = ({className}: VptsChartProps) => {
         {/* Chart */}
         <div className="h-full grid px-2 pb-2">
           {
-            data && (
+            (data && !isRefetching && !error) && (
               <VptsHeatmapChart data={data}/>
             )
           }
@@ -206,13 +211,21 @@ const VptsChart = ({className}: VptsChartProps) => {
                     <img src={loader} alt="loading-vphist" width={25} height={25}  />
                 </div>
             )
-        }
-        {         
-          error && (
-            <div className=" flex items-center justify-center">
-              <Unplug width={25} height={25} className='text-red-500'/>
-            </div> 
-        )}
+          }
+          {
+            isRefetching && (
+                  <div className="w-full h-full flex flex-col items-center justify-center">
+                        <img src={loader} alt="loading-vp" width={25} height={25}  />
+                        <small>Updating data...</small>
+                  </div>
+              )
+          }
+          {         
+            error && (
+              <div className=" flex items-center justify-center">
+                <Unplug width={25} height={25} className='text-red-500'/>
+              </div> 
+          )}
         </div>
 
     </SectionCard>
