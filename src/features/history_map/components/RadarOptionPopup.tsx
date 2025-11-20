@@ -6,11 +6,12 @@ import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import OptionPopover from '../../../shared/components/popups/option/OptionPopover';
 import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
 import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { setRadarGifPayloadHist, setRadarPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useTheme } from '../../../shared/hooks/useTheme';
+import dayjs from 'dayjs';
 
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
@@ -26,7 +27,26 @@ const RadarOptionPopup = () => {
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
-    const { data: temporal } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, isPopupOpen);
+    const adjustedTimes = useMemo(() => {
+        if (!temporal) return null;
+      
+        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
+        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
+      
+        return { fresh_start, fresh_end };
+    }, [temporal]);
+
+    // --- Sync store to the temporal coverage ---
+    useEffect(() => {
+
+        if (!isSuccess || !adjustedTimes) return;
+
+        dispatch(setRadarStartTimeHist(adjustedTimes.fresh_start));
+        dispatch(setRadarEndTimeHist(adjustedTimes.fresh_end));
+        dispatch(setRadarTimeHist(adjustedTimes.fresh_end));
+        
+    }, [adjustedTimes, dispatch, isSuccess])
 
     useEffect(() => {
         if (!isPopupOpen) return;

@@ -206,14 +206,7 @@ const VptsChart = ({className}: VptsChartProps) => {
             )
           }
           {
-            isLoading && (
-                <div className=" flex items-center justify-center">
-                    <img src={loader} alt="loading-vphist" width={25} height={25}  />
-                </div>
-            )
-          }
-          {
-            isRefetching && (
+            (isRefetching || isLoading) && (
                   <div className="w-full h-full flex flex-col items-center justify-center">
                         <img src={loader} alt="loading-vp" width={25} height={25}  />
                         <small>Updating data...</small>

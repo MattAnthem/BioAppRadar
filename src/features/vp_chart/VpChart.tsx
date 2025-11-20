@@ -158,14 +158,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
             )}
             {
-                isLoading && (
-                    <div className="w-full h-full flex items-center justify-center">
-                        <img src={loader} alt="loading-vp" width={25} height={25}  />
-                    </div>
-                )
-            }
-            {
-                isRefetching && (
+                (isRefetching || isLoading) && (
                     <div className="w-full h-full flex flex-col items-center justify-center">
                         <img src={loader} alt="loading-vp" width={25} height={25}  />
                         <small>Updating data...</small>
