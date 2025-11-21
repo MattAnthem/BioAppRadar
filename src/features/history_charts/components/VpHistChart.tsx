@@ -3,10 +3,11 @@ import VpChartHighcharts from "../../../shared/components/charts/HighchartsVP";
 import { useAppSelector } from "../../../store/hooks";
 import { useVpHistData } from "../hooks/useData/useVpHistData";
 import loader from '../../../assets/loader.webp';
-import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
+import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import React,{ useState } from "react";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { capitalize } from "../../../shared/utils/text_format";
+import { useVpImageQuery } from "../hooks/useQuery/useVpImageQuery";
 
 const VpHistPopup = React.lazy(() => import('./popups/VpHistPopup'));
 const ChartModal = React.lazy(() => import('./ChartModal'));
@@ -21,24 +22,32 @@ type VpChartProps = {
 const VpHistChart = ({ className }: VpChartProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.hist_altitude);
+  const { vpPayload } = useAppSelector(state => state.vp_histchart);
   const currentHeight = altitudeOptions[currentAltitudeIndex];
 
   const themes = useTheme();
   const { bg, border, hover } = themes.theme.simpleSelect;
 
+  // Chart data fetching
   const { isLoading, data, error } = useVpHistData();
+  const { data: vpImageData, isLoading: vpImageLoading, error: vpImageError } = useVpImageQuery(vpPayload, displayMode === 'png');
 
 
-
-
-
-      // handler to open the modal
-    const handleOpenModal = () => {
+  // handler to open the modal
+  const handleOpenModal = () => {
         setIsModalOpen(true);
-    }
+  }
+      // Display mode handlers
+  const handleDisplayImage = () => {
+    setDisplayMode('png');
+  }
+  const handleDisplayInteractiveChart = () => {
+    setDisplayMode('interactive');
+  }
 
   return (
     <SectionCard className={`${className} h-full flex flex-col`}>
@@ -52,8 +61,31 @@ const VpHistChart = ({ className }: VpChartProps) => {
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
+              {/* Handle display mode */}
+              <div className="w-full flex justify-start items-center p-1 gap-1">
+                <Tooltip
+                  display_condition={isModalOpen}
+                  position="bottom"
+                  text="Display as interactive chart"
+                >
+                  <button onClick={handleDisplayInteractiveChart} className={`px-2 py-0.5 ${displayMode === 'interactive' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                      <ChartLine className="w-4"/>
+                  </button>
+                </Tooltip>
 
-              {data && (
+                <Tooltip
+                  display_condition={isModalOpen}
+                  position="bottom"
+                  text="Display as image"
+                >
+                  <button onClick={handleDisplayImage} value={'png'} className={`px-2 py-0.5 ${displayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                      <ImageIcon className="w-4"/>
+                  </button>
+                </Tooltip>
+              </div>
+
+
+              {(displayMode === 'interactive' && data) && (
 
                   <div className="w-full h-full flex flex-col p-2 items-center justify-center">
 
@@ -82,14 +114,21 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
               )}
               {
-                  isLoading && (
+                  vpImageData && !vpImageLoading && !vpImageError && (displayMode === 'png') && (
+                      <div className="w-full h-full flex items-center justify-center">
+                          <img src={vpImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                      </div>
+                  )
+              }
+              {
+                  (vpImageLoading || isLoading) && (
                       <div className="absolute w-full h-full flex items-center justify-center">
                           <img src={loader} alt="loading-data" width={35} height={35}  />
                       </div>
                   )
               }
               {         
-                error && (
+                (vpImageError || error) && (
                   <div className="absolute w-full h-full flex items-center justify-center">
                     <Unplug width={35} height={35}  className='text-red-500'/>
                   </div> 

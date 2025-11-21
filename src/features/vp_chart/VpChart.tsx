@@ -3,7 +3,7 @@ import VpChartHighcharts from "../../shared/components/charts/HighchartsVP";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import loader from '../../assets/loader.webp'
-import { Fullscreen, LucideDownload, Unplug } from "lucide-react";
+import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTheme } from "../../shared/hooks/useTheme";
 import { capitalize } from "../../shared/utils/text_format";
@@ -11,6 +11,7 @@ import VpSpeciePopup from "./popup/VpSpeciePopup";
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import { changeVpPayload } from "./vpChartSlice";
+import { useVpImageQuery } from "../history_charts/hooks/useQuery/useVpImageQuery";
 
 const ChartModal = React.lazy(() => import('../history_charts/components/ChartModal'));
 const Tooltip = React.lazy(() => import('../../shared/components/popups/tooltip/Tooltip'));
@@ -26,9 +27,11 @@ const VpChart = ({ className }: VpChartProps) => {
   const { bg, border, hover } = themes.theme.simpleSelect;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [displayMode, setDisplayMode] = useState<'png' | 'interactive'>('interactive');
 
   // Redux
   const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
+  const { vpPayload } = useAppSelector(state => state.vpchart)
   const currentHeight = altitudeOptions[currentAltitudeIndex];
   const dispatch = useAppDispatch();
 
@@ -60,12 +63,22 @@ const VpChart = ({ className }: VpChartProps) => {
 
   }, [adjustedTimes, dispatch, isSuccess]);
 
+  // Chart data fetching
   const { isLoading, data, error } = useVpData();
+  const { data: vpImageData, isLoading: vpImageLoading, error: vpImageError } = useVpImageQuery(vpPayload, displayMode === 'png');
 
 
-    // handler to open the modal
+  // handler to open the modal
   const handleOpenModal = () => {
       setIsModalOpen(true);
+  }
+
+  // Display mode handlers
+  const handleDisplayImage = () => {
+    setDisplayMode('png');
+  }
+  const handleDisplayInteractiveChart = () => {
+    setDisplayMode('interactive');
   }
 
   return (
@@ -78,8 +91,32 @@ const VpChart = ({ className }: VpChartProps) => {
               mdlToggler_func={() => setIsModalOpen(false)}
           >
 
+              {/* Handle display mode */}
+              <div className="w-full flex justify-start items-center p-1 gap-1">
+                <Tooltip
+                  display_condition={isModalOpen}
+                  position="bottom"
+                  text="Display as interactive chart"
+                >
+                  <button onClick={handleDisplayInteractiveChart} className={`px-2 py-0.5 ${displayMode === 'interactive' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                      <ChartLine className="w-4"/>
+                  </button>
+                </Tooltip>
 
-              {data && (
+                <Tooltip
+                  display_condition={isModalOpen}
+                  position="bottom"
+                  text="Display as image"
+                >
+                  <button onClick={handleDisplayImage} value={'png'} className={`px-2 py-0.5 ${displayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                      <ImageIcon className="w-4"/>
+                  </button>
+                </Tooltip>
+
+
+              </div>
+
+              { (displayMode === 'interactive' && data) && (
                 <div className="w-full h-full flex flex-col  items-center justify-center">
                   <div className="lg:w-1/2 w-full h-full">
                         {/* Download : Dataset/Image */}
@@ -104,15 +141,23 @@ const VpChart = ({ className }: VpChartProps) => {
                 </div>
 
               )}
+
               {
-                  isLoading && (
+                  vpImageData && !vpImageLoading && !vpImageError && (displayMode === 'png') && (
+                      <div className="w-full h-full flex items-center justify-center">
+                          <img src={vpImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                      </div>
+                  )
+              }
+              {
+                  (vpImageLoading || isLoading) && (
                       <div className="absolute z-30 w-full h-full flex items-center justify-center">
                           <img src={loader} alt="loading-data" width={35} height={35}  />
                       </div>
                   )
               }
               {         
-                error && (
+                (vpImageError || error) && (
                   <div className="w-full h-full flex flex-col items-center justify-center">
                     <Unplug width={30} height={30} className='text-red-500'/>
                     <p className='font-semibold text-xs tracking-wider text-red-600'>Error fetching data</p>

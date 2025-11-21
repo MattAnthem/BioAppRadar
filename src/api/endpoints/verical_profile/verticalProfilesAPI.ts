@@ -67,9 +67,9 @@ export interface TemporalCovResponse {
 }
 
 export const fetchTemporalCoverage = async (payload: { radarID: number }): Promise<TemporalCovResponse> =>  {
-    const { data } = await axiosClient.post('vp_temporal_coverage', payload);
+    const { data } = await axiosClient.post('/vp_temporal_coverage', payload);
     if (data.status !== 0) {
-        throw new Error('Error fetching image')
+        throw new Error('Error fetching temporal coverage');
     } 
     return data.data;
 }
@@ -77,17 +77,23 @@ export const fetchTemporalCoverage = async (payload: { radarID: number }): Promi
 export const fetchImageVTIP = async (payload: VtipPayload) => {
     const {data} = await axiosClient.post('/image_vtip', payload);
     if (data.status !== 0) {
-        throw new Error('Error fetching image')
+        throw new Error('Error fetching VTIP image')
     } 
     return data.data;
 }
 
-
+export const fetchImageVP = async (payload: VpPayload) => {
+    const { data } = await axiosClient.post('/image_vp', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching VP');
+    }
+    return data.data;
+}
 
 export const fetchImageVPTS = async (payload: VptsPayload) => {
     const {data} = await axiosClient.post('/image_vpts', payload);
     if (data.status !== 0) {
-        throw new Error('Error fetching image')
+        throw new Error('Error fetching VPTS image')
     } 
     return data.data;
 }
