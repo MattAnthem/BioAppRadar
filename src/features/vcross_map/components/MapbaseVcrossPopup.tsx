@@ -46,8 +46,10 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
         isPrimary
     >
 
-        <small className='font-semibold'>Base Map</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Basemap</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
         <SimpleSelect
           onSelectValue={handleChangeBase}
           options={mapBaseOptions}
@@ -56,8 +58,10 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
           className="border-0! bg-none!"
         />
 
-        <small className='font-semibold'>Coverages</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Coverages</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
         {/* Select coverage Genre */}
         <SimpleSelect
           onSelectValue={handleChangeCoverageGenre}
@@ -79,8 +83,10 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
         {
           displayColorbarOption && (
             <>
-              <small className="font-semibold">Colorbar</small>
-              <div className="border-b border-b-gray-400"/>
+              <div className="flex flex-col gap-0.5">
+                  <small className='font-semibold'>Colorbar</small>
+                  <div className="border-b border-b-gray-400"/>
+              </div>
               <SimpleSelect
                 onSelectValue={handleChangeColormap}
                 options={colormapOptions}

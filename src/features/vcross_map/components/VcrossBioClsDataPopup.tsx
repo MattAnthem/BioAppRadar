@@ -67,8 +67,6 @@ const VcrossBioClsDataPopup = () => {
 
 
 
-
-
     const handleSubmitPopup = () => {
         // Dispatch popup data to the heatmap
         dispatch(setVcrossBioClassPayload({
@@ -105,8 +103,10 @@ const VcrossBioClsDataPopup = () => {
     >
 
       {/* Select class data to display */}
-      <small className='font-semibold'>Available classification data</small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+          <small className='font-semibold'>Variable</small>
+          <div className="border-b border-b-gray-400"/>
+      </div>
       <SimpleSelect
         onSelectValue={handleBioClassChange}
         options={locAvailableBioclass}
@@ -115,29 +115,35 @@ const VcrossBioClsDataPopup = () => {
       />
 
       {/* Colors for classification targets */}
-      <small className='font-semibold'>Select colors </small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+          <small className='font-semibold'>Colors</small>
+          <div className="border-b border-b-gray-400"/>
+      </div>
 
-      <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
+      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
           <small className='w-fit'>{ locSelectedBioclass['type0'] as string}:</small>
           <input onChange={handleColorZeroChange} value={locColor0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
       </div>
-      <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
+      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
           <small className='w-fit'>{ locSelectedBioclass['type1'] as string}:</small>
           <input onChange={handleColorOneChange} value={locColor1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
       </div>
 
       {/* Toggle on/off segment */}
-      <small className='font-semibold'>Segment</small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+          <small className='font-semibold'>Segment</small>
+          <div className="border-b border-b-gray-400"/>
+      </div>
       <div className="flex items-center justify-start gap-2 px-2">
         <input type="checkbox" checked={locSegment} onChange={handleToggleSegment} name="vcross-bioclass-segment" id="vcross_bioclass_segment" />
         <small>Toggle on/off segement</small>
       </div>
 
       {/* Select Time */}
-      <small className='font-semibold'>Select time</small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+          <small className='font-semibold'>Time</small>
+          <div className="border-b border-b-gray-400"/>
+      </div>
       <ReactDatetimePicker
         value={locTime}
         onChange={handleBioClassTimeChange}

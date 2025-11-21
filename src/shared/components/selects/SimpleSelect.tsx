@@ -12,6 +12,7 @@ interface SimpleSelectProps extends SelectProps {
     options: SelectOption[];
     responsive?: boolean;
     title?: string;
+    isDisabled?: boolean;
 }
 
 /**
@@ -22,7 +23,7 @@ interface SimpleSelectProps extends SelectProps {
  * @param responsive: If true, the select element Width will adapt to its parent element
  * @returns React.JSX.Element
  */
-const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaControls, onSelectValue, className, title} : SimpleSelectProps) => {
+const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaControls, onSelectValue, className, title, isDisabled=false} : SimpleSelectProps) => {
     // Theme
     const themes = useTheme();
     const { simpleSelect } = themes.theme;
@@ -42,6 +43,12 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
         }
     })
 
+    const handleOpen = () => {
+        if (!isDisabled) {
+            setIsOpen(!isOpen);
+        }
+    }
+
   return (
     <fieldset className={`${width} ${border} ${title ? 'px-2 pb-2 z-50 rounded-sm border-2' : ''}`}>
 
@@ -55,8 +62,8 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                 aria-expanded={isOpen} 
                 aria-controls={ariaControls}
                 onKeyDown={handleKeyDown}
-                onClick={() => setIsOpen(!isOpen)}  
-                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border p-1.5 flex justify-between items-center gap-2 cursor-pointer`}
+                onClick={handleOpen}  
+                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full border ${isDisabled ? 'border-dashed' : ''} p-1.5 flex justify-between items-center gap-2 cursor-pointer`}
             >
 
                 <span className={`${text} flex gap-3 text-xs lg:text-sm xl:text-sm`}>

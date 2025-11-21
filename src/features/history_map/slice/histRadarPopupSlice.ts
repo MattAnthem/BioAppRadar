@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { radar_ParameterOptions, radar_TypeOptions } from "../../../shared/static/select-options";
+import { radar_ParameterOptions, radar_TypeOptions, species_options } from "../../../shared/static/select-options";
 
 interface RadarOptionsState {
     isPopupOpen: boolean;
@@ -8,6 +8,8 @@ interface RadarOptionsState {
     availableTypes: SelectOption[];
     selectedParameter: SelectOption;
     availableParameters: SelectOption[];
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
 
     // still image time
     radarTimeHist: string;
@@ -23,6 +25,8 @@ const initialState: RadarOptionsState = {
     availableTypes: radar_TypeOptions,
     selectedType: radar_TypeOptions[0],
     selectedParameter: radar_ParameterOptions[0],
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
     radarTimeHist: '2020-11-10 12:00:33',
 
     startTimeRadar: '2020-11-10 12:00:33',
@@ -38,6 +42,9 @@ const radarOptionSlice = createSlice({
         },
         setSelectedHistRadarParameter: (state, action) => {
             state.selectedParameter = action.payload;
+        },
+        setSelectedHistRadarSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
         },
         setRadarStartTimeHist: (state, action) => {
             state.startTimeRadar = action.payload;
@@ -57,5 +64,5 @@ const radarOptionSlice = createSlice({
     }
 });
 
-export const { setSelectedHistRadarParameter, setRadarEndTimeHist, setRadarStartTimeHist, setSelectedHistRadarType, setRadarTimeHist, closeRadarPopup, toggleRadarPopup } = radarOptionSlice.actions;
+export const { setSelectedHistRadarParameter, setRadarEndTimeHist, setRadarStartTimeHist, setSelectedHistRadarType, setRadarTimeHist, closeRadarPopup, toggleRadarPopup, setSelectedHistRadarSpecie } = radarOptionSlice.actions;
 export default radarOptionSlice.reducer;

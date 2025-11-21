@@ -104,8 +104,10 @@ const VpHistPopup = () => {
     >
 
                     {/* Select specie */}
-                    <small className="font-semibold">Specie</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>Specie</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <SimpleSelect
                       options={locSpecies}
                       onSelectValue={handleSpecieChange}
@@ -113,9 +115,10 @@ const VpHistPopup = () => {
                       width="w-full"
                     />
 
-
-                    <small className="font-semibold">Variable</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>Variable</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <SimpleSelect
                       options={locParams}
                       value={locSelectedParam.displayText}
@@ -124,8 +127,10 @@ const VpHistPopup = () => {
                     />
 
 
-                    <small className="font-semibold">Time</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>Time</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <ReactDatetimePicker
                       onChange={handleDateChange}
                       value={adjustedTime?.fresh_time}

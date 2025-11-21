@@ -24,7 +24,7 @@ const SevipPopup = () => {
     const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
     // --- Read only redux states ---
-    const { selectedVariable, availableVariables, histTimeSevip, isPopupOpen,  startTimeSevip, endTimeSevip } = useAppSelector(state => state.hist_sevippopup);
+    const { selectedVariable, availableVariables, histTimeSevip, isPopupOpen,  startTimeSevip, endTimeSevip, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_sevippopup);
 
     const dispatch = useAppDispatch();
 
@@ -185,8 +185,23 @@ const SevipPopup = () => {
         </div>
 
 
-        <small className='font-semibold'>Variable</small>
-        <div className="border-b border-b-gray-400"/>
+        {/* Species select */}
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Specie</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
+        <SimpleSelect
+            options={speciesOptions}
+            value={selectedSpecie.displayText}
+            width='w-full'
+            onSelectValue={() => {}}
+            isDisabled
+        />
+
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Variable</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
         <SimpleSelect
             options={locAvailableVars}
             value={locSelectedVar.displayText}
@@ -198,8 +213,10 @@ const SevipPopup = () => {
         {
             (overlayMode === 'png') && (
                 <>
-                    <small className='font-semibold'>Time</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>Time</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <ReactDatetimePicker
                         onChange={handleTimeChange}
                         value={locTime}
@@ -215,8 +232,10 @@ const SevipPopup = () => {
             (overlayMode === 'gif') && (
                 <>
                     {/* Start time for the gif */}
-                    <small className='font-semibold'>Start</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>Start</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <ReactDatetimePicker
                         onChange={handleGifStartTimeChange}
                         value={locStartTime}
@@ -225,8 +244,10 @@ const SevipPopup = () => {
                     />
 
                     {/* End time for the gif */}
-                    <small className='font-semibold'>End</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>End</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <ReactDatetimePicker
                         onChange={handleGifEndTimeChange}
                         value={locEndTime}

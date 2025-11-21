@@ -85,8 +85,10 @@ const ClassificationPopup = () => {
         onClose={closePopup}
         onOpen={handleTooglePopup}
     >
-        <small className='font-semibold'>Select a variable</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Variable</small>
+              <div className="border-b border-b-gray-400"/>
+        </div>
 
         <SimpleSelect
             options={locAvailableVars}
@@ -95,8 +97,10 @@ const ClassificationPopup = () => {
             onSelectValue={handleInputVarChange}
         />
 
-        <small className='font-semibold'>Select colors </small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Colors</small>
+              <div className="border-b border-b-gray-400"/>
+          </div>
 
         <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start capitalize items-center">
             <small>{locSelectedVar['type0'] as string}:</small>

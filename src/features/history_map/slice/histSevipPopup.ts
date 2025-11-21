@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { sevip_options } from "../../../shared/static/select-options";
+import { sevip_options, species_options } from "../../../shared/static/select-options";
 
 
 interface SevipPopupState {
     isPopupOpen: boolean;
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
 
     // time for png image
     histTimeSevip: string;
@@ -23,6 +25,8 @@ const initialState: SevipPopupState = {
 
     selectedVariable: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType[0] : null,
     availableVariables: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType : [],
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
     histTimeSevip: '2020-11-10 12:00:33',
     
     startTimeSevip: '2020-11-10 12:00:33',
@@ -35,6 +39,9 @@ const histSevippopupSlice = createSlice({
     reducers: {
         setSelectedHistSevipOption: (state, action) => {
             state.selectedVariable = action.payload;
+        },
+        setSelectedHistSevipSpecie: (state, action) => {
+          state.selectedSpecie = action.payload;
         },
         setHistTimeSevip: (state, action) => {
           state.histTimeSevip = action.payload;
@@ -54,5 +61,5 @@ const histSevippopupSlice = createSlice({
     }
 })
 
-export const { setSelectedHistSevipOption, setHistTimeSevip, closeSevipPopup, toggleSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart } = histSevippopupSlice.actions;
+export const { setSelectedHistSevipOption, setHistTimeSevip, closeSevipPopup, toggleSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart, setSelectedHistSevipSpecie } = histSevippopupSlice.actions;
 export default histSevippopupSlice.reducer;

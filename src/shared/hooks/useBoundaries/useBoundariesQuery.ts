@@ -10,7 +10,7 @@ export const useBoundariesQuery = (payload: BoundaryPayload, enabled?: boolean) 
                 const mod = await import('../../../api/endpoints/spatial/boundariesAPI');
                 return await mod.fetchBoundaryData(payload);
             } catch (error) {
-                console.error('Failed to fetch Boundary data');
+                console.error('Failed to fetch Boundary data', error);
                 throw error;
             }
         },

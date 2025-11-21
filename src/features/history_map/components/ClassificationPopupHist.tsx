@@ -119,10 +119,6 @@ const ClassificationPopup = () => {
     dispatch(closeClassifPopup());
   }
 
-  
-
-
-
   // --- Submit handler:  ---
   const handleSubmit = () => {
     //  --- Changing payload according to the overlay mode to display ---
@@ -214,8 +210,10 @@ return (
         </div>
 
       {/* Variable selection */}
-      <small className='font-semibold'>Variable</small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Variable</small>
+            <div className="border-b border-b-gray-400"/>
+      </div>
 
       <SimpleSelect
           options={locAvailableVars}
@@ -225,14 +223,16 @@ return (
       />
 
       {/* Colors selections */}
-      <small className='font-semibold'>Colors </small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Colors</small>
+            <div className="border-b border-b-gray-400"/>
+      </div>
 
-      <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
+      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
           <small className='w-fit'>{ locSelectedVar['type0'] as string}:</small>
           <input onChange={handleInputColor0Change} value={locColor0}  className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
       </div>
-      <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
+      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
           <small className='w-fit'>{ locSelectedVar['type1'] as string}:</small>
           <input onChange={handleInputColor1Change} value={locColor1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
       </div>
@@ -241,8 +241,10 @@ return (
       {
         (overlayMode === 'png') && (
           <>
-            <small className='font-semibold'>Time</small>
-            <div className="border-b border-b-gray-400"/>
+            <div className="flex flex-col gap-0.5">
+                <small className='font-semibold'>Time</small>
+                <div className="border-b border-b-gray-400"/>
+            </div>
             <ReactDatetimePicker
               onChange={handleTimeChange}
               value={locTime}
@@ -257,8 +259,10 @@ return (
         (overlayMode === 'gif') && (
           <>
             {/* Start time for the gif */}
-            <small className='font-semibold'>Start</small>
-            <div className="border-b border-b-gray-400"/>
+            <div className="flex flex-col gap-0.5">
+                <small className='font-semibold'>Start</small>
+                <div className="border-b border-b-gray-400"/>
+            </div>
             <ReactDatetimePicker
                 onChange={handleGifStartTimeChange}
                 value={locStartTime}
@@ -267,8 +271,10 @@ return (
             />
 
             {/* End time for the gif */}
-            <small className='font-semibold'>End</small>
-            <div className="border-b border-b-gray-400"/>
+            <div className="flex flex-col gap-0.5">
+                <small className='font-semibold'>End</small>
+                <div className="border-b border-b-gray-400"/>
+            </div>
             <ReactDatetimePicker
                 onChange={handleGifEndTimeChange}
                 value={locEndTime}

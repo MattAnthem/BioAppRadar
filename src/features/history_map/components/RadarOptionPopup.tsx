@@ -23,7 +23,7 @@ const RadarOptionPopup = () => {
 
 
     // Redux read only states
-    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, isPopupOpen, endTimeRadar, startTimeRadar } = useAppSelector(state => state.hist_radarpopup);
+    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, isPopupOpen, endTimeRadar, startTimeRadar, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_radarpopup);
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
@@ -200,8 +200,23 @@ const RadarOptionPopup = () => {
                 </Tooltip>
         </div>
 
-        <small className='font-semibold'>Projection type</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Specie</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
+        <SimpleSelect
+            options={speciesOptions}
+            value={selectedSpecie.displayText}
+            width='w-full'
+            onSelectValue={() => {}}
+            isDisabled
+        />
+
+
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Projection type</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
 
         {/* Type Select */}
         <SimpleSelect
@@ -211,8 +226,10 @@ const RadarOptionPopup = () => {
             onSelectValue={handleTypeChange}
         />
         
-        <small className='font-semibold'>Parameter</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Parameter</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
         <SimpleSelect
             options={locAvailableParams}
             value={locSelectedParam.displayText}
@@ -224,8 +241,10 @@ const RadarOptionPopup = () => {
         {
             (overlayMode === 'png') && (
                 <>
-                    <small className='font-semibold'>Time</small>
-                    <div className="border-b border-b-gray-400"/>
+                    <div className="flex flex-col gap-0.5">
+                        <small className='font-semibold'>Time</small>
+                        <div className="border-b border-b-gray-400"/>
+                    </div>
                     <ReactDatetimePicker
                         onChange={handleTimeChange}
                         value={locTime}
@@ -241,8 +260,10 @@ const RadarOptionPopup = () => {
             (overlayMode === 'gif') && (
                 <>
                 {/* Start time for the gif */}
-                <small className='font-semibold'>Start</small>
-                <div className="border-b border-b-gray-400"/>
+                <div className="flex flex-col gap-0.5">
+                    <small className='font-semibold'>Start</small>
+                    <div className="border-b border-b-gray-400"/>
+                </div>
                 <ReactDatetimePicker
                     onChange={handleGifStartTimeChange}
                     value={locStartTime}
@@ -251,8 +272,10 @@ const RadarOptionPopup = () => {
                 />
 
                 {/* End time for the gif */}
-                <small className='font-semibold'>End</small>
-                <div className="border-b border-b-gray-400"/>
+                <div className="flex flex-col gap-0.5">
+                    <small className='font-semibold'>End</small>
+                    <div className="border-b border-b-gray-400"/>
+                </div>
                 <ReactDatetimePicker
                     onChange={handleGifEndTimeChange}
                     value={locEndTime}

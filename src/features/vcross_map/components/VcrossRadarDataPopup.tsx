@@ -101,16 +101,20 @@ const VcrossRadarDataPopup = () => {
     >
 
         {/* Data */}
-        <small className="font-semibold">Select projection type</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Projection type</small>
+              <div className="border-b border-b-gray-400"/>
+        </div>
         <SimpleSelect
             options={locAvailableTypes}
             onSelectValue={handleRadarTypeChange}
             width="w-full"
             value={locSelectedType.displayText}
         />
-        <small className="font-semibold">Select a variable</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Variable</small>
+              <div className="border-b border-b-gray-400"/>
+        </div>
         <SimpleSelect
             options={locAvailableParams}
             onSelectValue={handleRadarParamChange}
@@ -119,16 +123,20 @@ const VcrossRadarDataPopup = () => {
         />
 
         {/* Segment */}
-        <small className="font-semibold">Segment</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Segment</small>
+              <div className="border-b border-b-gray-400"/>
+        </div>
         <div className="w-full flex px-2 space-x-2 justify-start items-center">
             <input type="checkbox" checked={locSegment} onChange={handleToggleRadarSegment} name="segment-radar-vcross" id="segm_radar_vcross" />
             <small>Toggle on/off segment</small>
         </div>
 
         {/* Time */}
-        <small className="font-semibold">Select time</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Time</small>
+              <div className="border-b border-b-gray-400"/>
+        </div>
 
         <ReactDatetimePicker
             onChange={handleRadarTimeChange}

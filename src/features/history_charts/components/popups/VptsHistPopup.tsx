@@ -125,8 +125,10 @@ const VptsHistPopup = () => {
     >
 
 
-          <small className="font-semibold">Specie</small>
-          <div className="border-b border-b-gray-400"/>
+          <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Specie</small>
+              <div className="border-b border-b-gray-400"/>
+          </div>
           <SimpleSelect
             options={locSpecies}
             value={locSelectedSpecie.displayText}
@@ -135,8 +137,10 @@ const VptsHistPopup = () => {
           />
 
 
-          <small className="font-semibold">Variable</small>
-          <div className="border-b border-b-gray-400"/>
+          <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Variable</small>
+              <div className="border-b border-b-gray-400"/>
+          </div>
           <SimpleSelect
             options={locParams}
             value={locSelectedParam.displayText}
@@ -146,8 +150,10 @@ const VptsHistPopup = () => {
 
 
 
-          <small className="font-semibold">Start Time</small>
-          <div className="border-b border-b-gray-400"/>
+          <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Start</small>
+              <div className="border-b border-b-gray-400"/>
+          </div>
           <ReactDatetimePicker
             onChange={handleStartTimeChange}
             value={adjustedTimes?.fresh_start}
@@ -155,8 +161,10 @@ const VptsHistPopup = () => {
             maxDate={temporal?.end_time}
           />
 
-          <small className="font-semibold">End Time</small>
-          <div className="border-b border-b-gray-400"/>
+          <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>End</small>
+              <div className="border-b border-b-gray-400"/>
+          </div>
           <ReactDatetimePicker
             onChange={handleEndTimeChange}
             value={adjustedTimes?.fresh_end}

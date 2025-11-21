@@ -73,8 +73,10 @@ const VcrossSevipDataPopup = () => {
     >
 
       {/* Variable */}
-      <small className="font-semibold">Select a variable</small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+          <small className='font-semibold'>Variable</small>
+          <div className="border-b border-b-gray-400"/>
+      </div>
       <SimpleSelect
         onSelectValue={handleVariableChange}
         options={locVariables}
@@ -83,8 +85,10 @@ const VcrossSevipDataPopup = () => {
       />
 
       {/* Time */}
-      <small className="font-semibold">Select time</small>
-      <div className="border-b border-b-gray-400"/>
+      <div className="flex flex-col gap-0.5">
+          <small className='font-semibold'>Time</small>
+          <div className="border-b border-b-gray-400"/>
+      </div>
       <ReactDatetimePicker
         value={locTime}
         onChange={handleTimeChange}

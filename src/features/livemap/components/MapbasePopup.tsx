@@ -45,8 +45,10 @@ const MapbasePopup = () => {
       isPrimary
     >
        {/* Select map base */}
-       <small className="font-semibold">Base Map</small>
-        <div className="border-b border-b-gray-400"/>
+       <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Basemap</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
         <SimpleSelect
           onSelectValue={handleChangeBase}
           options={mapBaseOptions}
@@ -56,8 +58,10 @@ const MapbasePopup = () => {
         />
 
 
-        <small className="font-semibold">Coverages</small>
-        <div className="border-b border-b-gray-400"/>
+        <div className="flex flex-col gap-0.5">
+              <small className='font-semibold'>Coverages</small>
+              <div className="border-b border-b-gray-400"/>
+        </div>
 
         {/* Select coverage Genre */}
         <SimpleSelect
