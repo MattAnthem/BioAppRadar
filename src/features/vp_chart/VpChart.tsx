@@ -58,7 +58,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
 
   return (
-    <SectionCard className={`${className} w-full h-full flex flex-col`}>
+    <SectionCard className={`${className} w-full h-full flex flex-col items-center`}>
 
 
         {/* Heading */}
@@ -80,7 +80,7 @@ const VpChart = ({ className }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="h-full grid px-2 pb-2">
+        <div className="h-full grid px-2">
           {(data && !isRefetching && !error) && (
 
                 <VpChartHighcharts
@@ -104,7 +104,7 @@ const VpChart = ({ className }: VpChartProps) => {
                 </div> 
             )}
         </div>
-
+        <small className="font-semibold">{adjustedTimes?.fresh_time.split(' ')[0] ?? ' '} <span className="font-normal">{`${adjustedTimes?.fresh_time.split(' ')[1] ?? ' '}`}</span> </small>
 
     </SectionCard>
   )

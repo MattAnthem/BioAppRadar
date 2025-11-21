@@ -15,7 +15,7 @@ const OverviewDashboard = () => {
           lg:h-full lg:w-full
           lg:px-4 lg:py-5 py-4
           flex flex-col  
-          lg:grid lg:grid-rows-[4fr_2fr] gap-2  
+          lg:grid lg:grid-rows-[7fr_4fr] gap-2   
         `}
       >
 
@@ -23,7 +23,7 @@ const OverviewDashboard = () => {
             <div 
               className={`
                 lg:h-full lg:w-full 
-                lg:row-span-[4fr] row-span-1
+                lg:row-span-[7fr] row-span-1
 
                 flex flex-col
                 lg:grid lg:grid-cols-8 gap-2
@@ -60,7 +60,7 @@ const OverviewDashboard = () => {
             <div 
               className={`
                 lg:h-full lg:w-full 
-                lg:row-span-[2fr] row-span-1
+                lg:row-span-[4fr] row-span-1
 
                 flex flex-col 
                 lg:grid lg:grid-cols-2 gap-2

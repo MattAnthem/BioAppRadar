@@ -4,8 +4,9 @@ import { useAppSelector } from "../../../store/hooks";
 import { useVpHistData } from "../hooks/useData/useVpHistData";
 import loader from '../../../assets/loader.webp';
 import { Unplug } from "lucide-react";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { capitalize } from "../../../shared/utils/text_format";
+import dayjs from "dayjs";
 
 const VpHistPopup = lazy(() => import('./popups/VpHistPopup'));
 const VpHistModal = lazy(() => import('./modals/VpHistModal'));
@@ -24,9 +25,15 @@ const VpHistChart = ({ className }: VpChartProps) => {
   // Chart data fetching
   const { isLoading, data, error } = useVpHistData();
 
+  const chartTime = useMemo(() => {
+    if (!data) return null;
+    const vp_time = dayjs(data.time).add(2, 'hour').format("YYYY-MM-DD HH:mm:ss");
+    return { vp_time }
+  }, [data])
+
 
   return (
-    <SectionCard className={`${className} h-full flex flex-col`}>
+    <SectionCard className={`${className} h-full items-center flex flex-col gap-0.5`}>
 
         {/* Heading */}
         <div className="p-1 w-full flex justify-between items-center">
@@ -49,13 +56,12 @@ const VpHistChart = ({ className }: VpChartProps) => {
         </div>           
 
         {/* Chart */}
-        <div className="h-full flex-col grid px-2 pb-2">
+        <div className="h-full grid px-2 ">
           {(data && !error) && (
-
-            <VpChartHighcharts
-              data={data}
-              selectedHeight={currentHeight}
-            />
+              <VpChartHighcharts
+                data={data}
+                selectedHeight={currentHeight}
+              />
 
           )}
           {
@@ -72,6 +78,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
               </div> 
           )}
         </div>
+        <small className="font-semibold">{chartTime?.vp_time.split(' ')[0] ?? ' '} <span className="font-normal">{`${chartTime?.vp_time.split(' ')[1] ?? ' '}`}</span> </small>
 
     </SectionCard>
   )
