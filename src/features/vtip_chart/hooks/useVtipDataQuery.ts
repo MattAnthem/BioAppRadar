@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { type VtipPayload, type VtipResponse, fetchVTIP } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 
 
-export const useVtipDataQuery = (payload: VtipPayload) => {
+export const useVtipDataQuery = (payload: VtipPayload, enabled?: boolean) => {
     return useQuery<VtipResponse>({
         queryKey: ["vtip_data", payload.startTime, payload.endTime, payload.parameter, payload.species],
         queryFn: async () => {
@@ -13,7 +13,7 @@ export const useVtipDataQuery = (payload: VtipPayload) => {
                 throw error;
             }
         },
-        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime && payload.species),
+        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime && payload.species) && (enabled ?? true),
         refetchOnWindowFocus: false,
     })
 }

@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import ButtonBorder from '../buttons/borderedbtn/ButtonBorder';
 
 type ModalProps = {
-  title: string;
+  title?: string;
   children?: ReactNode;
   handle_toggle_mdl?: () => void;
   isOpen: boolean;
