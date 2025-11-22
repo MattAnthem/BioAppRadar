@@ -22,6 +22,7 @@ offlineExporting(Highcharts);
 interface VtipChartProps {
   data: VtipResponse;
   title?: boolean;
+  chartHeight?: number;
 }
 
 interface DayNightChart extends Highcharts.Chart {
@@ -30,7 +31,7 @@ interface DayNightChart extends Highcharts.Chart {
 
 
 const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
-  ({ data, title = false }, ref) => {
+  ({ data, title = false, chartHeight }, ref) => {
 
     const { theme } = useTheme();
     const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.charts;
@@ -130,6 +131,7 @@ const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
           borderColor: borderBox,
           borderWidth: 1,
           borderRadius: 3,
+          height: chartHeight ?? null,
           backgroundColor: "transparent",
           reflow: true,
           events: {

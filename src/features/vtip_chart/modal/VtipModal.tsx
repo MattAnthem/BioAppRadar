@@ -4,7 +4,7 @@ import { useVtipData } from "../hooks/useVtipData";
 import { useVtipImageQuery } from "../../history_charts/hooks/useQuery/useVtipImageQuery";
 import { useAppSelector } from "../../../store/hooks";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
-import { ChartLine, Download, Fullscreen, ImageIcon, Unplug } from "lucide-react";
+import { ChartLine, Download, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import Modal from "../../../shared/components/modal/Modal";
 import { capitalize } from "../../../shared/utils/text_format";
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
@@ -52,12 +52,42 @@ const VtipModal = () => {
                 filename: `${vtipPayload.species}_${vtipPayload.parameter}-${vtipPayload.startTime}_${vtipPayload.endTime}`,
                 type: 'image/png',
                 sourceWidth: chart.chartWidth,
-                sourceHeight: chart.chartHeight,
+                sourceHeight: chart.chartHeight,     
             }, {
-            chart: { backgroundColor: 'white' }
+            chart: { 
+                backgroundColor: 'white',   
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize: "12px"
+                }
+            }
         });
 
     };
+
+    // Image ref
+    const chartImgRef = useRef<HTMLImageElement | null>(null);
+    // Image downloader handler
+    const handleDowloadChartImg = async () => {
+        const img = chartImgRef.current;
+        if (!img?.src) return;
+
+        const resp = await fetch(img.src);
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${vtipPayload.species}_${vtipPayload.parameter}-${vtipPayload.startTime}_${vtipPayload.endTime}`;
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
 
   return (
     <div>
@@ -87,9 +117,9 @@ const VtipModal = () => {
                     position="bottom"
                     text="Display as interactive chart"
                     >
-                    <button onClick={handleDisplayInteractiveChart} className={`px-2 py-0.5 ${displayMode === 'interactive' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
-                        <ChartLine className="w-4"/>
-                    </button>
+                        <button onClick={handleDisplayInteractiveChart} className={`px-2 py-0.5 ${displayMode === 'interactive' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
+                            <ChartLine className="w-4"/>
+                        </button>
                     </Tooltip>
 
                     <Tooltip
@@ -97,9 +127,9 @@ const VtipModal = () => {
                     position="bottom"
                     text="Display as image"
                     >
-                    <button onClick={handleDisplayImage} value={'png'} className={`px-2 py-0.5 ${displayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
-                        <ImageIcon className="w-4"/>
-                    </button>
+                        <button onClick={handleDisplayImage} value={'png'} className={`px-2 py-0.5 ${displayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
+                            <ImageIcon className="w-4"/>
+                        </button>
                     </Tooltip>
                 </div>
 
@@ -123,15 +153,32 @@ const VtipModal = () => {
 
                 {
                     vtipImageData && !vtipImageLoading && !vtipImageError && (displayMode === 'png') && (
-                        <div className="w-full h-full flex items-center justify-center">
-                            <img src={vtipImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                        <div className="flex flex-col w-full h-full justify-center items-center">
+                            
+                            <div className="w-full h-full flex flex-col">
+
+                                {/* Download image */}
+                                <div className="flex w-full justify-end px-8 items-center pt-1">
+                                    <Tooltip
+                                        position="bottom"
+                                        text="Download image"
+                                        display_condition={isModalOpen}
+                                    >
+                                        <button onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                            <LucideDownload className="w-4 h-4"/> 
+                                        </button>
+                                        
+                                    </Tooltip>
+                                </div>
+                                <img ref={chartImgRef} src={vtipImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                            </div>
                         </div>
                     )
                 }
 
                 {
                     (displayMode === 'interactive' && data) && (
-                    <div className="flex flex-col w-full h-full justify-start items-center">
+                    <div className="flex flex-col w-full h-full justify-center items-center">
                         {/* Download : Dataset/Image */}
                         <div className="flex w-full justify-end items-center px-1">
                             <Tooltip
@@ -139,15 +186,16 @@ const VtipModal = () => {
                             text="Download as image"
                             display_condition={isModalOpen}
                             >
-                            <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                <Download className="w-4 h-4"/>
-                            </button>
+                                <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                    <Download className="w-4 h-4"/>
+                                </button>
                             </Tooltip>
                         </div>
                         <HighchartVtip
                             data={data}
                             title
                             ref={chartRef}
+                            chartHeight={450}
                         />
                     </div>
                     )

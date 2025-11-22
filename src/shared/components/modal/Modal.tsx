@@ -43,7 +43,7 @@ const Modal = (
 
             {/* Modal contents */}
               
-                <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] h-[85vh]  p-2 flex flex-col`}>
+                <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] h-[90vh]  p-2 flex flex-col`}>
                   <div className="w-full flex justify-between items-baseline">
                     {/* Heading */}
                     <h1 className="p-2 text-sm font-semibold">{title}</h1>

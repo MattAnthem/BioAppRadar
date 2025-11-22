@@ -54,6 +54,25 @@ const VptsHistModal = () => {
         });
 
     };
+
+    // Image ref
+    const chartImgRef = useRef<HTMLImageElement | null>(null);
+    // Image downloader handler
+    const handleDowloadChartImg = async () => {
+        const img = chartImgRef.current;
+        if (!img?.src) return;
+
+        const resp = await fetch(img.src);
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${vptsPayload.species}_${vptsPayload.parameter}-${vptsPayload.startTime}_${vptsPayload.endTime}`;
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
   
   return (
     <div>
@@ -119,8 +138,26 @@ const VptsHistModal = () => {
 
                 {
                     vptsImageData && !vptsImageLoading && !vptsImageError && (displayMode === 'png') && (
-                        <div className="w-full h-full flex items-center justify-center">
-                            <img src={vptsImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                        <div className="flex flex-col w-full h-full justify-center items-center">
+
+                                    <div className="w-full h-full flex flex-col">
+
+                                        {/* Download image */}
+                                        <div className="flex w-full justify-end px-8 items-center pt-1">
+                                            <Tooltip
+                                                position="bottom"
+                                                text="Download image"
+                                                display_condition={isModalOpen}
+                                            >
+                                                <button onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                                    <LucideDownload className="w-4 h-4"/> 
+                                                </button>
+                                                
+                                            </Tooltip>
+                                        </div>
+                                        <img ref={chartImgRef} src={vptsImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                                    </div>
+
                         </div>
                     )
                 }

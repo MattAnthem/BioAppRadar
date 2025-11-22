@@ -44,7 +44,7 @@ const VpModal = () => {
     // Chart dowload
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
-    // Handler de téléchargement
+    // Interactive chart dowloader
     const handleDownloadChart = () => {
         const chart = chartRef.current?.chart;
         if (!chart) return;
@@ -57,9 +57,39 @@ const VpModal = () => {
         },{
             chart: {
                 backgroundColor: 'white'
+            },
+            legend: {
+                enabled: true,
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize: "12px"
+                },
+                
             }
         });
     };
+
+    // Still image dowloader
+    const chartImgRef = useRef<HTMLImageElement | null>(null);
+
+    const handleDowloadChartImg = async () => {
+        const img = chartImgRef.current;
+        if (!img?.src) return;
+
+        const resp = await fetch(img.src);
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${vpPayload.species}_${vpPayload.parameter}_${vpPayload.time}`;
+        link.click();
+
+        URL.revokeObjectURL(url);
+    }
+
 
   return (
     <div>
@@ -107,41 +137,55 @@ const VpModal = () => {
 
                 { (displayMode === 'interactive' && data) && (
                     <div className="w-full h-full flex flex-col  items-center justify-center">
-                    <div className="lg:w-1/2 w-full h-full">
-                            {/* Download : Dataset/Image */}
-                            <div className="flex w-full justify-end items-end pt-1 px-1">
-                            <Tooltip
-                                position="bottom"
-                                text="Download as Image"
-                                display_condition={isModalOpen}
-                            >
-                                <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                    <LucideDownload className="w-4 h-4"/>
-                                </button>
-                            </Tooltip>
-                            </div>
-                            <VpChartHighcharts
-                                ref={chartRef}
-                                data={data}
-                                displayTitle
-                                chartHeight={500}
-                                selectedHeight={currentHeight}
-                            />
-                    </div>
+                        <div className="lg:w-1/2 w-full h-full">
+                                {/* Download : Dataset/Image */}
+                                <div className="flex w-full justify-end items-end pt-1 px-1">
+                                    <Tooltip
+                                        position="bottom"
+                                        text="Download as Image"
+                                        display_condition={isModalOpen}
+                                    >
+                                        <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                            <LucideDownload className="w-4 h-4"/>
+                                        </button>
+                                    </Tooltip>
+                                </div>
+                                <VpChartHighcharts
+                                    ref={chartRef}
+                                    data={data}
+                                    displayTitle
+                                    chartHeight={500}
+                                    selectedHeight={currentHeight}
+                                />
+                        </div>
                     </div>
 
                 )}
 
                 {
                     vpImageData && !vpImageLoading && !vpImageError && (displayMode === 'png') && (
-                        <div className="w-full h-full flex items-center justify-center">
-                            <img src={vpImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                        <div className="w-full h-full flex flex-col items-center justify-center">
+                                <div className="lg:w-1/2 w-full h-full flex flex-col">
+                                    {/* Download image */}
+                                    <div className="flex justify-end items-center pt-1 px-1">
+                                        <Tooltip
+                                            position="bottom"
+                                            text="Download image"
+                                            display_condition={isModalOpen}
+                                        >
+                                            <button onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                                <LucideDownload className="w-4 h-4"/> 
+                                            </button>
+                                        </Tooltip>
+                                    </div>
+                                    <img ref={chartImgRef} src={vpImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                                </div>
                         </div>
                     )
                 }
                 {
                     (vpImageLoading || isLoading) && (
-                        <div className="absolute z-30 w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center">
                             <img src={loader} alt="loading-data" width={35} height={35}  />
                         </div>
                     )
