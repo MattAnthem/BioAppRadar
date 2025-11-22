@@ -1,13 +1,15 @@
-import {memo, useState} from 'react';
+import {memo, useRef, useState} from 'react';
 import { useTheme } from '../../../../shared/hooks/useTheme';
 import { useVptsHistData } from '../../hooks/useData/useVptsHistData';
-import { useVptsHistImagaData } from '../../hooks/useData/useVptsHistImagaData';
 import Tooltip from '../../../../shared/components/popups/tooltip/Tooltip';
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from 'lucide-react';
 import Modal from '../../../../shared/components/modal/Modal';
 import { capitalize } from '../../../../shared/utils/text_format';
 import VptsHeatmapChart from '../../../../shared/components/charts/HighchartsVpts';
 import loader from '../../../../assets/loader.webp';
+import type HighchartsReact from 'highcharts-react-official';
+import { useVptsImageQuery } from '../../hooks/useQuery/useVptsImageQuery';
+import { useAppSelector } from '../../../../store/hooks';
 
 const VptsHistModal = () => {
     // Modal local state
@@ -19,7 +21,8 @@ const VptsHistModal = () => {
 
     // Data
     const { isLoading, data, error } = useVptsHistData(isModalOpen);
-    const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsHistImagaData(displayMode === 'png');
+    const { vptsPayload } = useAppSelector(state => state.vpts_histchart)
+    const { data: vptsImageData, isLoading: vptsImageLoading, error: vptsImageError } = useVptsImageQuery(vptsPayload, displayMode === 'png');
   
     // handler to open the modal
     const handleOpenModal = () => {
@@ -32,6 +35,25 @@ const VptsHistModal = () => {
     const handleDisplayInteractiveChart = () => {
         setDisplayMode('interactive');
     }
+
+    // Dowload the chart
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+    // Handler de téléchargement
+    const handleDownloadChart = () => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+    
+
+        chart.exportChartLocal({
+                filename: `${vptsPayload.species}_${vptsPayload.parameter}-${vptsPayload.startTime}_${vptsPayload.endTime}`,
+                type: 'image/png',
+                sourceWidth: chart.chartWidth,
+                sourceHeight: chart.chartHeight,
+            }, {
+            chart: { backgroundColor: 'white' }
+        });
+
+    };
   
   return (
     <div>
@@ -110,10 +132,10 @@ const VptsHistModal = () => {
                         <div className="flex w-full justify-end items-center px-1">
                             <Tooltip
                             position="bottom"
-                            text="Download chart"
+                            text="Download as image"
                             display_condition={isModalOpen}
                             >
-                            <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                            <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                 <LucideDownload className="w-4 h-4"/>
                             </button>
                             </Tooltip>
@@ -123,6 +145,7 @@ const VptsHistModal = () => {
                             data={data} 
                             title
                             legend
+                            ref={chartRef}
                         />
 
                     </div>

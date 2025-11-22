@@ -9,6 +9,7 @@ import Modal from "../../../shared/components/modal/Modal";
 import { capitalize } from "../../../shared/utils/text_format";
 import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 import loader from '../../../assets/loader.webp';
+import type HighchartsReact from "highcharts-react-official";
 
 const VtipModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,15 +39,25 @@ const VtipModal = () => {
     }
 
     // Dowload the chart
-    // Ref to the chart
-    const chartRef = useRef<Highcharts.Chart | null>(null);
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
 
-    // CSV
-    const handleDownloadInteractiveChartCSV = () => {
-        if (!chartRef.current) return;
-        chartRef.current.downloadCSV();
-    }
 
+    // Handler de téléchargement
+    const handleDownloadChart = () => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+    
+
+        chart.exportChartLocal({
+                filename: `${vtipPayload.species}_${vtipPayload.parameter}-${vtipPayload.startTime}_${vtipPayload.endTime}`,
+                type: 'image/png',
+                sourceWidth: chart.chartWidth,
+                sourceHeight: chart.chartHeight,
+            }, {
+            chart: { backgroundColor: 'white' }
+        });
+
+    };
 
   return (
     <div>
@@ -125,17 +136,17 @@ const VtipModal = () => {
                         <div className="flex w-full justify-end items-center px-1">
                             <Tooltip
                             position="bottom"
-                            text="Download CSV"
+                            text="Download as image"
                             display_condition={isModalOpen}
                             >
-                            <button onClick={handleDownloadInteractiveChartCSV} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                            <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                 <Download className="w-4 h-4"/>
                             </button>
                             </Tooltip>
                         </div>
                         <HighchartVtip
                             data={data}
-                            displayTitle
+                            title
                             ref={chartRef}
                         />
                     </div>

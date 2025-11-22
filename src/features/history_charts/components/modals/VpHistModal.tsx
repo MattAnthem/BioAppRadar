@@ -1,4 +1,4 @@
-import {memo, useState} from 'react';
+import {memo, useRef, useState} from 'react';
 import { useAppSelector } from '../../../../store/hooks';
 import { useTheme } from '../../../../shared/hooks/useTheme';
 import { useVpHistData } from '../../hooks/useData/useVpHistData';
@@ -9,6 +9,7 @@ import Modal from '../../../../shared/components/modal/Modal';
 import { capitalize } from '../../../../shared/utils/text_format';
 import VpChartHighcharts from '../../../../shared/components/charts/HighchartsVP';
 import loader from '../../../../assets/loader.webp';
+import type HighchartsReact from 'highcharts-react-official';
 
 const VpHistModal = () => {
     const themes = useTheme();
@@ -28,17 +29,38 @@ const VpHistModal = () => {
 
 
     
-  // handler to open the modal
-  const handleOpenModal = () => {
-    setIsModalOpen(!isModalOpen);
-  }
-      // Display mode handlers
-  const handleDisplayImage = () => {
-    setDisplayMode('png');
-  }
-  const handleDisplayInteractiveChart = () => {
-    setDisplayMode('interactive');
-  }
+    // handler to open the modal
+    const handleOpenModal = () => {
+        setIsModalOpen(!isModalOpen);
+    }
+        // Display mode handlers
+    const handleDisplayImage = () => {
+        setDisplayMode('png');
+    }
+    const handleDisplayInteractiveChart = () => {
+        setDisplayMode('interactive');
+    }
+
+    //  Chart download
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+    
+    const handleDownloadChart = () => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+
+        chart.exportChartLocal({
+                filename: `${vpPayload.species}_${vpPayload.parameter}_${vpPayload.time}`,
+                type: 'image/png',
+                sourceWidth: chart.chartWidth,
+                sourceHeight: chart.chartHeight,
+            },
+            {
+                chart: {
+                    backgroundColor: 'white'
+                }
+            }
+        )
+    }
 
   return (
     <div>
@@ -93,10 +115,10 @@ const VpHistModal = () => {
                             <div className="flex  w-full justify-end items-end pt-1 px-1">
                                 <Tooltip
                                 position="bottom"
-                                text="Download chart"
+                                text="Download as image"
                                 display_condition={isModalOpen}
                                 >
-                                <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                     <LucideDownload className="w-4 h-4"/>
                                 </button>
                                 </Tooltip>
@@ -107,6 +129,7 @@ const VpHistModal = () => {
                                 displayTitle
                                 selectedHeight={currentHeight}
                                 chartHeight={500}
+                                ref={chartRef}
                             />
                         </div>
                     </div>

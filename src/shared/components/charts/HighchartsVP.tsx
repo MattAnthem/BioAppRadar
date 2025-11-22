@@ -1,41 +1,48 @@
-import React, { useEffect, useRef } from 'react';
+import { forwardRef } from 'react';
 import Highcharts from 'highcharts';
 import Windbarb from 'highcharts/modules/windbarb';
 import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from '../../hooks/useTheme';
 import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { ErrorBoundary } from "react-error-boundary";
+import exporting from "highcharts/modules/exporting";
+import exportData from "highcharts/modules/export-data";
+import offlineExporting from "highcharts/modules/offline-exporting";
+import HCAccessibility from "highcharts/modules/accessibility";
+
+exporting(Highcharts);
+exportData(Highcharts);
+offlineExporting(Highcharts);
 
 Windbarb(Highcharts);
+HCAccessibility(Highcharts);
 
 interface VpChartHighchartsProps {
   data: VpResponse;
-  radarAltitude?: number;      
+  radarAltitude?: number;
   selectedHeight?: number;
-  displayTitle?: boolean;   
+  displayTitle?: boolean;
   chartHeight?: number | string;
 }
 
-const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
-  data,
-  radarAltitude = 1616,
-  selectedHeight = 0,
-  displayTitle,
-  chartHeight,
-}) => {
-  const chartRef = useRef<HighchartsReact.RefObject>(null);
-  const theme = useTheme();
-  const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.theme.charts;
+type AxisWithBands = Highcharts.Axis & {
+  plotLinesAndBands?: Highcharts.PlotLineOrBand[];
+};
 
-  const getChartOptions = (): Highcharts.Options => {
+
+const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHighchartsProps>(
+  ({ data, chartHeight, displayTitle, radarAltitude = 1616, selectedHeight = 0 }, chartRef) => {
+
+    const theme = useTheme();
+    const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.theme.charts;
+
     const seriesData = data.height.map((h, i) => [h, data.parameter[i]]);
     const seriesWind = data.height.map((h, i) => [h, data.ff[i], data.dd[i]]);
     const vmax = Math.max(...data.parameter.filter((v): v is number => v !== null));
 
-    return {
-      exporting: {
-        buttons: {contextButton: {enabled: false}}
-      },
+    const options: Highcharts.Options = {
+      exporting: { buttons: { contextButton: { enabled: false } } },
+
       chart: {
         inverted: true,
         reflow: true,
@@ -44,22 +51,22 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
         borderColor: borderBox,
         borderWidth: 1,
         borderRadius: 3,
+
         events: {
           load: function () {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const chart = this;
             const yPos = chart.plotLeft;
             const xPix = chart.xAxis[0].toPixels(radarAltitude);
-            const arrowLength = 15;
-            const arrowHalfHeight = 6;
+            const arrowLen = 15;
+            const halfH = 6;
             const offset = 16;
 
-            
-            const arrowPath: (string | number)[] = [
-              'M', yPos - offset, xPix - arrowHalfHeight,
-              'L', yPos - offset + arrowLength, xPix,
-              'L', yPos - offset, xPix + arrowHalfHeight,
-              'Z'
+            const arrowPath: Highcharts.SVGPathArray = [
+              ['M', yPos - offset, xPix - halfH],
+              ['L', yPos - offset + arrowLen, xPix],
+              ['L', yPos - offset, xPix + halfH],
+              ['Z']
             ];
 
             const arrow = chart.renderer.path(arrowPath)
@@ -78,7 +85,7 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
                 fill: 'rgba(0,0,0,0.75)',
                 padding: 6,
                 r: 4,
-                zIndex: 9,
+                zIndex: 999,
               })
               .css({
                 color: '#FFFFFF',
@@ -91,8 +98,27 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
             arrow.element.addEventListener('mouseover', () => tooltip.show());
             arrow.element.addEventListener('mouseout', () => tooltip.hide());
           },
-        },
+
+          redraw: function () {
+            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            const chart = this;
+          
+            const axis = chart.xAxis[0] as AxisWithBands;
+          
+            axis.plotLinesAndBands?.forEach(plb => plb.destroy());
+          
+            axis.addPlotLine({
+              id: 'selectedHeightLine',
+              color: 'brown',
+              width: 2,
+              value: radarAltitude + selectedHeight
+            });
+          }
+          
+          
+        }
       },
+
       title: { 
         text: displayTitle ? `${data.name} [${data.units}]` : undefined, 
         style: { color: chartFontColor, fontSize: '13px' },
@@ -133,6 +159,7 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
           tickLength: 0,
         },
       ],
+
       yAxis: {
         title: {
           text: `${data.name} [${data.units}]`,
@@ -146,8 +173,8 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
         gridLineColor: chartGridline,
         lineWidth: 1,
         tickColor: chartGridline,
-        
       },
+
       series: [
         {
           type: 'spline',
@@ -176,47 +203,22 @@ const VpChartHighcharts: React.FC<VpChartHighchartsProps> = ({
           },
         },
       ],
+
       legend: { enabled: false },
       credits: { enabled: false },
     };
-  };
-  useEffect(() => {
-    if (chartRef.current?.chart) {
-      const chart = chartRef.current.chart;
-      chart.update(
-        {
-          xAxis: [
-            {
-              plotLines: [
-                {
-                  color: 'brown',
-                  width: 2,
-                  value: radarAltitude + selectedHeight,
-                },
-              ],
-            },
-          ],
-        },
-        false
-      );
-      chart.redraw();
-    }
-  }, [selectedHeight, radarAltitude]);
 
-  return (
-
-      <ErrorBoundary
-        fallback={<div>...</div>}
-      >
-
+    return (
+      <ErrorBoundary fallback={<div>...</div>}>
         <HighchartsReact
           highcharts={Highcharts}
-          options={getChartOptions()}
+          options={options}
           ref={chartRef}
-          containerProps={{ style: { width: '100%'} }}
+          containerProps={{ style: { width: '100%' } }}
         />
       </ErrorBoundary>
-  );
-};
+    );
+  }
+);
 
 export default VpChartHighcharts;

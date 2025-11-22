@@ -1,4 +1,4 @@
-import  { useState, memo } from 'react'
+import  { useState, memo, useRef } from 'react'
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useAppSelector } from '../../../store/hooks';
 import { useVptsData } from '../hooks/useVptsData';
@@ -9,6 +9,7 @@ import Modal from '../../../shared/components/modal/Modal';
 import { capitalize } from '../../../shared/utils/text_format';
 import loader from '../../../assets/loader.webp';
 import VptsHeatmapChart from '../../../shared/components/charts/HighchartsVpts';
+import type HighchartsReact from 'highcharts-react-official';
 
 const VptsModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +37,28 @@ const VptsModal = () => {
     const handleDisplayInteractiveChart = () => {
         setDisplayMode('interactive');
     }
+
+    // Chart dowload
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
+
+    // Handler de téléchargement
+    const handleDownloadChart = () => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+
+        chart.exportChartLocal({
+            filename: `${vptsPayload.species}_${vptsPayload.parameter}-${vptsPayload.startTime}_${vptsPayload.endTime}`,
+            type: 'image/jpeg',
+            sourceWidth: chart.chartWidth,
+            sourceHeight: chart.chartHeight,
+        },{
+            chart: {
+                backgroundColor: 'white',
+                borderColor: 'black'
+            }
+        });
+    };
 
   return (
     <div>
@@ -116,16 +139,16 @@ const VptsModal = () => {
                             text="Download chart"
                             display_condition={isModalOpen}
                             >
-                            <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                            <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                 <LucideDownload className="w-4 h-4"/>
                             </button>
                             </Tooltip>
                         </div>
                         <VptsHeatmapChart 
                             data={data} 
+                            ref={chartRef}
                             title
                             legend
-                            chartHeight={500}
                         />
                     </div>
                     )

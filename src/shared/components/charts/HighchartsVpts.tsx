@@ -1,57 +1,55 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HCHeatmap from 'highcharts/modules/heatmap';
 import HCAnnotations from 'highcharts/modules/annotations';
+import { ErrorBoundary } from 'react-error-boundary';
 import type { VptsResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
-import { ErrorBoundary } from "react-error-boundary";
-// import exportingModule from "highcharts/modules/exporting";
+import exporting from "highcharts/modules/exporting";
+import exportData from "highcharts/modules/export-data";
+import offlineExporting from "highcharts/modules/offline-exporting";
+import HCAccessibility from "highcharts/modules/accessibility";
+
+exporting(Highcharts);
+exportData(Highcharts);
+offlineExporting(Highcharts);
 
 HCHeatmap(Highcharts);
 HCAnnotations(Highcharts);
-// exportingModule(Highcharts);
-
+HCAccessibility(Highcharts);
 interface VpHeatmapChartProps {
     data: VptsResponse;
     radarAltitude?: number;
     legend?: boolean;
     title?: boolean;
-    chartHeight?: number;
 }
 
 interface DayNightChart extends Highcharts.Chart {
     dayNightRects?: Highcharts.SVGElement[];
 }
 
+const VptsHeatmapChart = React.forwardRef<HighchartsReact.RefObject, VpHeatmapChartProps>(
+    ({ data, legend, title, radarAltitude=1616}, ref) => {
 
 
-const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
-    data,
-    radarAltitude = 1616,
-    legend = false,
-    title = false,
-    chartHeight = 200,
-}) => {
-    const chartRef = useRef<HighchartsReact.RefObject>(null);
     const { theme } = useTheme();
     const { chartFontColor, chartLegendColor, chartGridline, borderBox } = theme.charts;
 
 
-    
-    // Heavy calculation
     const seriesData = useMemo(() => {
-        const arr: [number, number, number | null][] = [];
+        const out: [number, number, number | null][] = [];
         data.height.forEach((h, j) => {
             data.times.forEach((t, i) => {
-                arr.push([Date.parse(t.replace(' ', 'T') + 'Z'), h, data.parameter[j][i]]);
+                out.push([Date.parse(t.replace(' ', 'T') + 'Z'), h, data.parameter[j][i]]);
             });
         });
-        return arr;
+        return out;
     }, [data]);
 
-   
-    const { colorPalette, ticks, tckn, tckx } = useMemo(() => {
+
+
+    const { colorPalette, tckn, tckx } = useMemo(() => {
         const paletteVpts = [
             "#ffffffff", "#ffffd3ff", "#ffffa8ff", "#ffff7cff",
             "#ffff51ff", "#e6ec26ff", "#a6a300ff", "#ffa300ff",
@@ -66,52 +64,47 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
             "#3f4788ff", "#453781ff", "#482677ff", "#481568ff", "#440154ff"
         ];
 
-        let palette: string[];
+        let palette: string[] = [];
         let ticks: number[] = [];
-        const parLower = data.query_par.toLowerCase();
+        const par = data.query_par.toLowerCase();
 
-        if (['dens', 'eta'].includes(parLower)) {
+        if (['dens', 'eta'].includes(par)) {
             palette = paletteVpts;
-            ticks = [1, 2, 5, 10, 15, 20, 25,
-                30, 50, 70, 100, 150, 200, 250,
-                300, 400, 500, 600, 800, 1000
-            ];
-        } else if (parLower === 'dbz') {
+            ticks = [1, 2, 5, 10, 15, 20, 25, 30, 50, 70, 100, 150, 200, 250, 300, 400, 500, 600, 800, 1000];
+        } else if (par === 'dbz') {
             palette = paletteVpts;
-            for (let i=-20; i<=27.5; i+=2.5) ticks.push(i);
+            for (let i = -20; i <= 27.5; i += 2.5) ticks.push(i);
         } else {
             palette = paletteViridis;
-            ticks = Array.from({length:20}, (_, i) => i + 1);
+            ticks = Array.from({ length: 20 }, (_, i) => i + 1);
         }
 
         const tckn = Math.min(...ticks);
         const tckx = Math.max(...ticks);
-        const stick = ticks.map(x => (x - tckn)/(tckx - tckn));
-        const ncolor = palette.length;
-        const colorPalette: [number, string][] = [];
-        for (let j = 0; j < ncolor; j++) {
-            const data = [stick[j], palette[j]] as [number, string];
-            colorPalette.push(data);
-        }
+        const stick = ticks.map(x => (x - tckn) / (tckx - tckn));
+
+        const colorPalette: [number, string][] = palette.map((c, i) => [stick[i], c]);
 
         return { colorPalette, ticks, tckn, tckx };
     }, [data]);
 
-    useEffect(() => {
-        if (!data) return;
 
-        const kigaliFormatter = new Intl.DateTimeFormat('en-GB', {
+    const options = useMemo<Highcharts.Options>(() => {
+
+        if (!data) return {};
+
+        Highcharts.setOptions({
+            time: { useUTC: false, timezone: 'Africa/Kigali' }
+        });
+
+        const formatter = new Intl.DateTimeFormat('en-GB', {
             timeZone: 'Africa/Kigali',
-            hour12: false,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
+            hour12: false, year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit'
         });
 
         const parseParts = (dt: Date) =>
-            Object.fromEntries(kigaliFormatter.formatToParts(dt).map(p => [p.type, p.value]));
+            Object.fromEntries(formatter.formatToParts(dt).map(p => [p.type, p.value]));
 
         const formatKigaliFull = (dt: Date) => {
             const p = parseParts(dt);
@@ -125,89 +118,81 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
 
         const xmin = Math.min(...times);
         const xmax = Math.max(...times);
-        const ymin = Math.min(...heights)+radarAltitude;
+        const ymin = Math.min(...heights) + radarAltitude;
         const ymax = Math.max(...heights);
 
         const p_ymin = ymin;
         const p_ymax = ymax + (ymax - ymin) * 0.05;
 
         const colsize = (xmax - xmin) / (times.length - 1);
-        const rowsize = heights[1]-heights[0];
+        const rowsize = heights[1] - heights[0];
 
-        // Day/Night bar 
-        const heightPb = (ymax - ymin) * 0.03; 
+
+        const heightPb = (ymax - ymin) * 0.03;
+
         const startPb: number[] = [times[0]];
-        let isDay0 = times[0]>=sunrise[0] && times[0]<=sunset[0];
-        const colorPb: string[] = [isDay0?'#f7f78f':'#162c54'];
-        const daynightPb: string[] = [isDay0?'Daytime':'Night'];
+        const colorPb: string[] = [];
+        const daynightPb: string[] = [];
         const endPb: number[] = [];
 
-        for (let j=1;j<times.length;j++){
-            const isDay = times[j]>=sunrise[j] && times[j]<=sunset[j];
-            if (isDay0!==isDay){
-                endPb.push(times[j]);
-                startPb.push(times[j]);
-                colorPb.push(isDay?'#f7f78f':'#162c54');
-                daynightPb.push(isDay?'Daytime':'Night');
+        let isDayPrev = times[0] >= sunrise[0] && times[0] <= sunset[0];
+        colorPb.push(isDayPrev ? '#f7f78f' : '#162c54');
+        daynightPb.push(isDayPrev ? 'Daytime' : 'Night');
+
+        for (let i = 1; i < times.length; i++) {
+            const isDay = times[i] >= sunrise[i] && times[i] <= sunset[i];
+            if (isDay !== isDayPrev) {
+                endPb.push(times[i]);
+                startPb.push(times[i]);
+                colorPb.push(isDay ? '#f7f78f' : '#162c54');
+                daynightPb.push(isDay ? 'Daytime' : 'Night');
             }
-            isDay0=isDay;
+            isDayPrev = isDay;
         }
-        if (endPb.length!==startPb.length) endPb.push(times[times.length-1]);
+        if (endPb.length !== startPb.length) endPb.push(times[times.length - 1]);
 
+
+        /** draw rectangles */
         const drawDayNightBar = (chart: DayNightChart) => {
-            chart.dayNightRects?.forEach(r=>r.destroy());
+            chart.dayNightRects?.forEach(el => el.destroy());
             chart.dayNightRects = [];
-            for (let j = 0; j < startPb.length; j++) {
-                const xs=startPb[j];
-                const ys=chart.yAxis[0].min! -1.6 * heightPb;
-                const xw=endPb[j] - startPb[j];
-                const yh=heightPb;
 
-                const xP=chart.xAxis[0].toPixels(xs);
-                const yP=chart.yAxis[0].toPixels(ys + yh);
-                const wP=chart.xAxis[0].toPixels(xs + xw) - xP;
-                const hP=chart.yAxis[0].toPixels(ys) - yP;
+            for (let i = 0; i < startPb.length; i++) {
+                const xs = startPb[i];
+                const xw = endPb[i] - startPb[i];
+                const ys = chart.yAxis[0].min! - 1.6 * heightPb;
+                const yh = heightPb;
 
-                const rect=chart.renderer.rect(xP, yP, wP, hP, 0)
-                    .attr({fill:colorPb[j],zIndex:5})
+                const xP = chart.xAxis[0].toPixels(xs);
+                const wP = chart.xAxis[0].toPixels(xs + xw) - xP;
+                const yP = chart.yAxis[0].toPixels(ys + yh);
+                const hP = chart.yAxis[0].toPixels(ys) - yP;
+
+                const rect = chart.renderer
+                    .rect(xP, yP, wP, hP, 0)
+                    .attr({ fill: colorPb[i], zIndex: 5 })
                     .add();
-                const tooltip= chart.renderer.label(
-                    daynightPb[j],
-                    xP + wP/ 2 - 70,
-                    yP + hP - 30,
-                    'rect',
-                    0, 0, true
-                )
-                    .attr({
-                            padding: 8,
-                            margin: '0 0 0 0',
-                            fill:'rgba(0,0,0,0.75)',
-                            zIndex: 9
-                        })
-                    .css({
-                        color:'#fff',
-                        fontSize:'11px',
-                        pointerEvents:'none',
-                    })
-                    .hide().add();
-                rect.element.addEventListener('mouseover',()=>tooltip.show());
-                rect.element.addEventListener('mouseout',()=>tooltip.hide());
-                chart.dayNightRects.push(rect);
-                chart.dayNightRects.push(tooltip);
+
+                const tooltip = chart.renderer
+                    .label(daynightPb[i], xP + wP / 2 - 50, yP + hP - 30, 'rect')
+                    .attr({ padding: 6, fill: 'rgba(0,0,0,0.75)', zIndex: 9 })
+                    .css({ color: '#fff', pointerEvents: 'none', fontSize: '11px' })
+                    .hide()
+                    .add();
+
+                rect.element.addEventListener('mouseover', () => tooltip.show());
+                rect.element.addEventListener('mouseout', () => tooltip.hide());
+
+                chart.dayNightRects.push(rect, tooltip);
             }
         };
 
-        Highcharts.setOptions({time:{useUTC:false,timezone:'Africa/Kigali'}});
 
-        //
-        const options: Highcharts.Options = {
+        return {
             exporting: {
-                buttons: {
-                    contextButton: {
-                        enabled: false,
-                    }
-                },
+                buttons: { contextButton: { enabled: false } }
             },
+
             chart: {
                 borderColor: borderBox,
                 borderWidth: 1,
@@ -218,8 +203,12 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                 events:{load(){drawDayNightBar(this as DayNightChart);}, render(){drawDayNightBar(this as DayNightChart);}},
                 zooming:{type:'x'}
             },
-            title:{text:title?`${data.name} [${data.units}]`:undefined, style:{color:chartLegendColor,fontSize:'12px'}},
-            xAxis:{
+
+            title: title
+                ? { text: `${data.name} [${data.units}]`, style: { color: chartLegendColor } }
+                : undefined,
+
+            xAxis: {
                 type:'datetime', 
                 tickLength:13, 
                 tickPixelInterval:100, 
@@ -256,23 +245,23 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                     }
                 }
             },
-            yAxis:{
-                min:p_ymin,
-                max:p_ymax,
+
+            yAxis: {
+                min: p_ymin, 
+                max: p_ymax,
                 startOnTick: false,
                 endOnTick: false,
                 lineColor: chartGridline,
                 tickColor: chartGridline,
                 softMin: p_ymin,
                 softMax: p_ymax,
-                title:{
-                    text:'Altitude (m)',
-                    style: {
+                title: { 
+                    text: 'Altitude (m)', 
+                    style: { 
                         color: chartLegendColor,
-                        fontWeight: '500',
-                    }
-                }, 
-                gridLineWidth:0, 
+                        fontWeight: '500', 
+                    } 
+                },
                 labels:{
                     useHTML: false,
                     style:{
@@ -281,31 +270,10 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                     },
                     format: '{value}'
                 },
+                gridLineWidth: 0
             },
-            series:[{
-                type:'heatmap',
-                boostThreshold: 1,
-                animation: false,
-                allowPointSelect: false,
-                name:data.name,
-                data: seriesData,
-                turboThreshold:0,
-                colsize,
-                rowsize,
-                nullColor:'#c8c8c8',
-                tooltip:{
-                    pointFormatter:function(this:Highcharts.Point){
-                    if(this.value!==null&&this.value!==undefined){
-                        return `<b>Time:</b> ${formatKigaliFull(new Date(this.x as number))}<br>
-                                <b>Altitude:</b> ${this.y} m<br>
-                                <b>${data.name}:</b> ${this.value.toFixed(2)} ${data.units}`;
-                    } return '';
-                }}
-            }],
-            tooltip:{
-                enabled:true
-            },
-            colorAxis:{
+
+            colorAxis: {
                 reversed: false,
                 min: tckn,
                 max: tckx,
@@ -317,30 +285,54 @@ const VptsHeatmapChart: React.FC<VpHeatmapChartProps> = ({
                         color: chartFontColor
                     }
                 }
-                
             },
-            legend:legend ? {
+
+            series: [{
+                type: 'heatmap',
+                name: data.name,
+                data: seriesData,
+                colsize,
+                rowsize,
+                nullColor: '#c8c8c8',
+                boostThreshold: 1,
+                tooltip: {
+                    pointFormatter: function () {
+                        if (this.value == null) return '';
+                        return `
+                            <b>Time:</b> ${formatKigaliFull(new Date(this.x as number))}<br>
+                            <b>Altitude:</b> ${this.y} m<br>
+                            <b>${data.name}:</b> ${this.value.toFixed(2)} ${data.units}
+                        `;
+                    }
+                }
+            }],
+
+            legend: legend ? {
                 align: 'right',
                 layout: 'vertical',
-                margin: 0,
-                verticalAlign: 'middle',
                 symbolHeight: 250,
-            }:{enabled:false},
-            credits:{enabled:false}
+                verticalAlign: 'middle',
+            } : { enabled: false },
+
+            credits: { enabled: false }
         };
+    }, [data, radarAltitude, borderBox, chartFontColor, title, chartLegendColor, chartGridline, tckn, tckx, colorPalette, seriesData, legend]);
 
-        chartRef.current?.chart.update(options,true,true, false);
-
-    },[data, radarAltitude, legend, title, colorPalette, chartFontColor, chartHeight, chartLegendColor]);
 
     return (
-            <ErrorBoundary
-                fallback={<div>...</div>}
-            >
-
-                <HighchartsReact containerProps={{style:{width:'100%'}}} highcharts={Highcharts} options={{}} ref={chartRef} />
-            </ErrorBoundary>
+        <ErrorBoundary fallback={<div>...</div>}>
+            <HighchartsReact
+                highcharts={Highcharts}
+                options={options}
+                ref={ref}
+                containerProps={{ style: { width: '100%' } }}
+            />
+        </ErrorBoundary>
     );
-};
+
+    }
+);
+
+
 
 export default VptsHeatmapChart;

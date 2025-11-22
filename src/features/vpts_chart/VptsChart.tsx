@@ -49,9 +49,9 @@ const VptsChart = ({className}: VptsChartProps) => {
           startTime: adjustedTimes.fresh_start,
           endTime: adjustedTimes.fresh_end,
         }
-  ));
+    ));
 
-}, [adjustedTimes, dispatch, isSuccess])
+  }, [adjustedTimes, dispatch, isSuccess])
 
   // Tanstack
   const { isLoading, data, error } = useVptsData();

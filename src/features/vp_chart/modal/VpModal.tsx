@@ -1,4 +1,4 @@
-import { useState, memo } from 'react';
+import { useState, memo, useRef } from 'react';
 import Modal from '../../../shared/components/modal/Modal';
 import { useVpImageQuery } from '../../history_charts/hooks/useQuery/useVpImageQuery';
 import { useAppSelector } from '../../../store/hooks';
@@ -9,6 +9,7 @@ import loader from '../../../assets/loader.webp';
 import VpChartHighcharts from '../../../shared/components/charts/HighchartsVP';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { capitalize } from '../../../shared/utils/text_format';
+import type HighchartsReact from 'highcharts-react-official';
 
 const VpModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +39,28 @@ const VpModal = () => {
     const handleDisplayInteractiveChart = () => {
         setDisplayMode('interactive');
     }
+
+
+    // Chart dowload
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
+    // Handler de téléchargement
+    const handleDownloadChart = () => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+
+        chart.exportChartLocal({
+            filename: `${vpPayload.species}_${vpPayload.parameter}_${vpPayload.time}`,
+            type: 'image/png',
+            sourceWidth: chart.chartWidth,
+            sourceHeight: chart.chartHeight,
+        },{
+            chart: {
+                backgroundColor: 'white'
+            }
+        });
+    };
+
   return (
     <div>
         {/* Button open modal */}
@@ -89,19 +112,20 @@ const VpModal = () => {
                             <div className="flex w-full justify-end items-end pt-1 px-1">
                             <Tooltip
                                 position="bottom"
-                                text="Download chart"
+                                text="Download as Image"
                                 display_condition={isModalOpen}
                             >
-                                <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                <LucideDownload className="w-4 h-4"/>
+                                <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                    <LucideDownload className="w-4 h-4"/>
                                 </button>
                             </Tooltip>
                             </div>
                             <VpChartHighcharts
-                            data={data}
-                            displayTitle
-                            chartHeight={500}
-                            selectedHeight={currentHeight}
+                                ref={chartRef}
+                                data={data}
+                                displayTitle
+                                chartHeight={500}
+                                selectedHeight={currentHeight}
                             />
                     </div>
                     </div>

@@ -1,13 +1,15 @@
-import {memo, useState} from 'react'
+import {memo, useRef, useState} from 'react'
 import { useTheme } from '../../../../shared/hooks/useTheme';
 import { useVtipHistData } from '../../hooks/useData/useVtipHistData';
-import { useVtipHistImageData } from '../../hooks/useData/useVtipHistImageData';
 import Tooltip from '../../../../shared/components/popups/tooltip/Tooltip';
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from 'lucide-react';
 import Modal from '../../../../shared/components/modal/Modal';
 import { capitalize } from '../../../../shared/utils/text_format';
 import HighchartVtip from '../../../../shared/components/charts/HighchartsVTIP';
 import loader from '../../../../assets/loader.webp';
+import { useAppSelector } from '../../../../store/hooks';
+import { useVtipImageQuery } from '../../hooks/useQuery/useVtipImageQuery';
+import type HighchartsReact from 'highcharts-react-official';
 
 const VtipHistModal = () => {
     // Redux 
@@ -19,7 +21,8 @@ const VtipHistModal = () => {
 
     // Data
     const { isLoading, data, error } = useVtipHistData(isModalOpen);
-    const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipHistImageData(displayMode === 'png');
+    const { vtipPayload } = useAppSelector(state => state.vtip_histchart);
+    const { data: vtipImageData, isLoading: vtipImageLoading, error: vtipImageError } = useVtipImageQuery(vtipPayload, displayMode === 'png');
 
     // Chart modal handler
     const handleOpenModal = () => {
@@ -31,6 +34,29 @@ const VtipHistModal = () => {
     const handleDisplayInteractiveChart = () => {
         setDisplayMode('interactive');
     }
+
+    // Dowload the chart
+    const chartRef = useRef<HighchartsReact.RefObject | null>(null);
+
+
+    // Handler de téléchargement
+    const handleDownloadChart = () => {
+        const chart = chartRef.current?.chart;
+        if (!chart) return;
+        
+    
+        chart.exportChartLocal({
+                filename: `${vtipPayload.species}_${vtipPayload.parameter}-${vtipPayload.startTime}_${vtipPayload.endTime}`,
+                type: 'image/png',
+                    sourceWidth: chart.chartWidth,
+                    sourceHeight: chart.chartHeight,
+            }, {
+                chart: { backgroundColor: 'white' }
+             }
+        );
+    
+    };
+    
 
 
   return (
@@ -110,10 +136,10 @@ const VtipHistModal = () => {
                         <div className="flex w-full justify-end items-center px-1">
                             <Tooltip
                             position="bottom"
-                            text="Download chart"
+                            text="Download as image"
                             display_condition={isModalOpen}
                             >
-                            <button className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                            <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                 <LucideDownload className="w-4 h-4"/>
                             </button>
                             </Tooltip>
@@ -121,7 +147,8 @@ const VtipHistModal = () => {
                         {/* The chart */}
                         <HighchartVtip
                             data={data}
-                            displayTitle
+                            title
+                            ref={chartRef}
                         />
                     </div>
                     )
