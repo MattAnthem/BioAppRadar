@@ -36,14 +36,16 @@ const Tooltip = (
       
           // arrow classes
           const arrow_classes: Record<Position, string> = {
-            bottom: "absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45",
-            top: "absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45",
-            right: "absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45",
-            left: "absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45",
-    };
+            bottom: "-top-1 left-1/2 -translate-x-1/2",
+            top: "-bottom-1 left-1/2 -translate-x-1/2",
+            right: "-left-1 top-1/2 -translate-y-1/2",
+            left: "-right-1 top-1/2 -translate-y-1/2",
+          };
       
     const themes = useTheme();
     const { bg, text_color } = themes.theme.tooltip;
+
+    const shouldDisplay = display_condition ?? true;
 
   return (
     <div className='group relative'>
@@ -51,16 +53,22 @@ const Tooltip = (
       { children }
       {/* The tooltip message */}
       {
-        display_condition && (
+        shouldDisplay && (
           <span role='tooltip' className={`
-            z-50 absolute w-max ${pos_classes[position]}
-            ${bg} ${text_color} px-2 py-1 rounded text-xs
-            opacity-0 hidden group-hover:opacity-100 group-hover:block transition-opacity
+            absolute z-50 w-max px-2 py-1 rounded text-xs select-none
+            ${bg} ${text_color} ${pos_classes[position]}
+            opacity-0 scale-95 group-hover:scale-100 group-hover:opacity-100
+            transition-all duration-150 pointer-events-none
           `}>
             
             {text}
             {/* arrow */}
-            <span className={`${arrow_classes[position]} ${bg}`} />
+            <span
+            className={`
+              absolute w-2 h-2 rotate-45 ${bg}
+              ${arrow_classes[position]}
+            `}
+          />
 
           </span>
         )

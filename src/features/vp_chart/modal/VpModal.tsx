@@ -17,6 +17,7 @@ const VpModal = () => {
 
     const themes = useTheme();
     const { bg, border, hover } = themes.theme.simpleSelect;
+    const { active_border, active_text, border: tog_border, hover: tog_hover } = themes.theme.displayTogglerBtn;
 
     // handler to open the modal
     const handleOpenModal = () => {
@@ -113,26 +114,44 @@ const VpModal = () => {
         >
 
                 {/* Handle display mode */}
-                <div className="w-full flex justify-start items-center p-1 gap-1">
-                    <Tooltip
-                    display_condition={isModalOpen}
-                    position="bottom"
-                    text="Display as interactive chart"
-                    >
-                    <button onClick={handleDisplayInteractiveChart} className={`px-2 py-0.5 ${displayMode === 'interactive' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'} rounded-sm cursor-pointer border-2`}>
-                        <ChartLine className="w-4"/>
-                    </button>
-                    </Tooltip>
+                <div className=" px-8 py-2 grid grid-cols-2 justify-start items-center gap-2">
+                        <Tooltip
+                            display_condition={isModalOpen}
+                            position="bottom"
+                            text="Display as image"
+                        >
+                        <button 
+                            onClick={handleDisplayInteractiveChart} 
+                            className={`
+                                w-full flex gap-1 justify-center items-center 
+                                px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                                ${displayMode === 'interactive' ? `${active_border} ${active_text} font-semibold` : tog_border} 
+                                ${tog_hover}
+                            `}
+                        >
+                            <ChartLine className="w-4"/>
+                            <h1>Interactive</h1>
+                        </button>
+                        </Tooltip>
 
-                    <Tooltip
-                    display_condition={isModalOpen}
-                    position="bottom"
-                    text="Display as image"
-                    >
-                    <button onClick={handleDisplayImage} value={'png'} className={`px-2 py-0.5 ${displayMode === 'png' ? 'bg-sky-800 border-sky-900 text-white hover:bg-sky-900' : 'border-gray-400 hover:bg-gray-300'}  rounded-sm cursor-pointer border-2`}>
-                        <ImageIcon className="w-4"/>
-                    </button>
-                    </Tooltip>
+                        <Tooltip
+                            display_condition={isModalOpen}
+                            position="bottom"
+                            text="Display as gif"
+                        >
+                        <button 
+                            onClick={handleDisplayImage} 
+                            className={`
+                                w-full flex gap-1 justify-center items-center 
+                                px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                                ${displayMode === 'png' ? `${active_border} ${active_text} font-semibold` : tog_border} 
+                                ${tog_hover}
+                            `}
+                            >
+                            <ImageIcon className="w-4"/>
+                            <h1>Image</h1>
+                        </button>
+                        </Tooltip>
                 </div>
 
                 { (displayMode === 'interactive' && data) && (
