@@ -1,15 +1,13 @@
 import { lazy, Suspense } from "react";
-import SectionCard from "../../../shared/components/cards/SectionCard";
 import { Unplug } from "lucide-react";
 import loader from '../../../assets/loader.webp';
-import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 import { useVtipHistData } from "../hooks/useData/useVtipHistData";
-import { capitalize } from "../../../shared/utils/text_format";
 
 
 const VtipHistPopup = lazy(() => import('./popups/VtipHistPopup'));
 const VtipHistModal = lazy(() => import('./modals/VtipHistModal'));
-
+const HighchartVtip = lazy(() => import('../../../shared/components/charts/HighchartsVTIP'));
+const SectionCard = lazy(() => import('../../../shared/components/cards/SectionCard'));
 
 type VtipChartProps = {
   className?: string;
@@ -19,6 +17,12 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
 
   // Tanstack
   const { isLoading, data, error } = useVtipHistData();
+
+  const capitalize = (s: string | undefined) => {
+    if( s === undefined) return "--";
+    return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+  }
+  
 
   return (
     <SectionCard className={`${className} w-full h-full flex flex-col`}>

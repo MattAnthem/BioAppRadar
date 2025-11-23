@@ -1,6 +1,3 @@
-import GlassHeader from '../../shared/components/cards/GlassHeader';
-import SectionCard from '../../shared/components/cards/SectionCard';
-import LeafletMap from '../../shared/components/map/LeafletMap';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
@@ -9,7 +6,7 @@ import { changeHistAltitude } from './slice/histAltitudeSlice';
 import { setAltitudeForAll, setColorbarForAll, setRadarPayloadHist } from './slice/historyMapSlice';
 import loader from '../../assets/loader.webp';
 import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQuery';
-import React,{ Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState, lazy } from 'react';
 import { Unplug } from 'lucide-react';
 import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
@@ -18,13 +15,16 @@ import { useSevipGifData } from './hooks/useData/useSevipGifData';
 import { useRadarGifData } from './hooks/useData/useRadarGifData';
 import { useClassifGifData } from './hooks/useData/useClassifGifData';
 
-const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopupHist'));
-const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
-const RadarOptionPopup =React.lazy(() => import('./components/RadarOptionPopup'));
-const SevipPopup = React.lazy(() => import('./components/SevipPopup'));
-const AltitudeSlider = React.lazy(() => import('../livemap/components/AltitudeSlider'));
-const Colorbar = React.lazy(() => import('../livemap/components/Colorbar'));
-const ElevationSlider = React.lazy(() => import('./components/ElevationSlider'));
+const ClassificationPopup = lazy(() => import('./components/ClassificationPopupHist'));
+const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
+const RadarOptionPopup = lazy(() => import('./components/RadarOptionPopup'));
+const SevipPopup = lazy(() => import('./components/SevipPopup'));
+const AltitudeSlider = lazy(() => import('../livemap/components/AltitudeSlider'));
+const Colorbar = lazy(() => import('../livemap/components/Colorbar'));
+const ElevationSlider = lazy(() => import('./components/ElevationSlider'));
+const LeafletMap = lazy(() => import('../../shared/components/map/LeafletMap'));
+const GlassHeader = lazy(() => import('../../shared/components/cards/GlassHeader'));
+const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
 
 
 const HistoryMap = () => {
@@ -39,10 +39,12 @@ const HistoryMap = () => {
 
 
     // Map boundary GeoJson
-    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
-            type: selectedBoundary.id as string,
-            json: selectedBoundaryType.id as string
-    })
+    const payload = {
+        type: selectedBoundary.id as string,
+        json: selectedBoundaryType.id as string
+    }
+
+    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery(payload, Boolean(selectedBoundary.id && selectedBoundaryType.id));
 
     
     //#region  Overlay fetching
@@ -254,24 +256,26 @@ const HistoryMap = () => {
         }
 
         {/* Map Leaflet */}
-        <LeafletMap
-            className='relative z-4 w-full h-full rounded-sm'            
-            baseMap={selectedMapBase.url as string}
-            drawable={false}
-            enableLineDraw={false}
-            center={[-2.158, 30.1131097]}
-            zoom={8}
-            overlayImg={
-                {
-                    url: (data?.data?.png || data?.data?.gif) ?? '',
-                    bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
+        <Suspense>
+            <LeafletMap
+                className='relative z-4 w-full h-full rounded-sm'            
+                baseMap={selectedMapBase.url as string}
+                drawable={false}
+                enableLineDraw={false}
+                center={[-2.158, 30.1131097]}
+                zoom={8}
+                overlayImg={
+                    {
+                        url: (data?.data?.png || data?.data?.gif) ?? '',
+                        bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
+                    }
                 }
-            }
-            overlayShapes={coverageJson}
-            onShapeClicked={(geojson) => {
-                console.log('Clicked shape:', geojson);
-            }}
-        />
+                overlayShapes={coverageJson}
+                onShapeClicked={(geojson) => {
+                    console.log('Clicked shape:', geojson);
+                }}
+            />
+        </Suspense>
 
 
         {/* Classification legends */}

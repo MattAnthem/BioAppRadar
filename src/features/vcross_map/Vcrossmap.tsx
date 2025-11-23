@@ -1,23 +1,23 @@
-import SectionCard from '../../shared/components/cards/SectionCard'
-import GlassHeader from '../../shared/components/cards/GlassHeader'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import LeafletMap from '../../shared/components/map/LeafletMap'
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { changeVcrossColorbar, setVcrossBioClassPayload, setVcrossCoordinates, setVcrossRadarPayload } from './slice/vcrossMapSlice';
-import React,{ useEffect, useRef } from 'react'
+import { useEffect, useRef, lazy } from 'react'
 import { useVcrossClassificationOverlayData } from './useData/useVcrossClassificationOverlayData';
 import { useVcrossRadarOverlayData } from './useData/useVcrossRadarOverlayData';
 import { Unplug } from 'lucide-react';
 import loader from '../../assets/loader.webp';
-import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery'
-import VcrossSevipDataPopup from './components/VcrossSevipDataPopup'
+import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundariesQuery';
 import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
-const Colorbar = React.lazy(() => import('../livemap/components/Colorbar'));
-const MapbaseVcrossPopup = React.lazy(() => import('./components/MapbaseVcrossPopup'));
-const VcrossRadarDataPopup = React.lazy(() => import('./components/VcrossRadarDataPopup'));
-const VcrossBioClsDataPopup = React.lazy(() => import('./components/VcrossBioClsDataPopup'));
+const Colorbar = lazy(() => import('../livemap/components/Colorbar'));
+const MapbaseVcrossPopup = lazy(() => import('./components/MapbaseVcrossPopup'));
+const VcrossRadarDataPopup = lazy(() => import('./components/VcrossRadarDataPopup'));
+const VcrossBioClsDataPopup = lazy(() => import('./components/VcrossBioClsDataPopup'));
+const LeafletMap = lazy(() => import('../../shared/components/map/LeafletMap'));
+const SectionCard  = lazy(() => import('../../shared/components/cards/SectionCard'));
+const GlassHeader = lazy(() => import('../../shared/components/cards/GlassHeader'));
+const VcrossSevipDataPopup = lazy(() => import('./components/VcrossSevipDataPopup'));
 
 
 const Vcrossmap = () => {
@@ -35,10 +35,14 @@ const Vcrossmap = () => {
     }, [mapMode]);
 
     // Map boundary GeoJson
-    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
-            type: selectedBoundary.id as string,
-            json: selectedBoundaryType.id as string
-    })
+    const payload = {
+        type: selectedBoundary.id as string,
+        json: selectedBoundaryType.id as string
+    }
+    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery(
+        payload, 
+        Boolean(selectedBoundary.id && selectedBoundaryType.id)
+    )
 
     //#region Overlay FETCHING
     // Fetching overlay for the map
@@ -102,8 +106,6 @@ const Vcrossmap = () => {
  
 
 //#endregion
-
-
 
 
   return (
@@ -199,4 +201,4 @@ const Vcrossmap = () => {
   )
 }
 
-export default Vcrossmap
+export default Vcrossmap;

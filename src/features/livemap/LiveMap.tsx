@@ -1,11 +1,6 @@
-import React from 'react';
-import SectionCard from '../../shared/components/cards/SectionCard';
-import GlassHeader from '../../shared/components/cards/GlassHeader';
-import LeafletMap from '../../shared/components/map/LeafletMap';
+import {lazy, Suspense} from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setSelectedTime } from './slice/livemapSlice';
-import TimelineSlider from './components/TimelineSlider';
-import AltitudeSlider from './components/AltitudeSlider';
 import { changeAltitude } from './slice/altitudeSlice';
 import { usePreloadClassificationFrames } from './hooks/usePreload/usePreloadClassificationFrames';
 import { useClassificationDataQuery } from './hooks/useQuery/useClassificationDataQuery';
@@ -18,8 +13,13 @@ import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDat
 
 
 
-const MapbasePopup = React.lazy(() => import('./components/MapbasePopup'));
-const ClassificationPopup = React.lazy(() => import('./components/ClassificationPopup'))
+const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
+const ClassificationPopup = lazy(() => import('./components/ClassificationPopup'));
+const LeafletMap = lazy(() => import('../../shared/components/map/LeafletMap'));
+const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
+const GlassHeader = lazy(() => import('../../shared/components/cards/GlassHeader'));
+const TimelineSlider = lazy(() => import('./components/TimelineSlider'));
+const AltitudeSlider = lazy(() => import('./components/AltitudeSlider'));
 
 
 const LiveMap = () => {
@@ -34,10 +34,14 @@ const LiveMap = () => {
 
 
     // Fetch Map Boundary
-    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery({
+    const payload = {
         type: selectedBoundary.id as string,
         json: selectedBoundaryType.id as string
-    })
+    }
+    const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery(
+        payload, 
+        Boolean(selectedBoundary.id && selectedBoundaryType.id)
+    );
 
 
 
@@ -127,9 +131,12 @@ const LiveMap = () => {
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-2 justify-center items-end">
-
-                <ClassificationPopup />
-                <MapbasePopup />
+                <Suspense>
+                    <ClassificationPopup />
+                </Suspense>
+                <Suspense>
+                    <MapbasePopup />
+                </Suspense>
 
             </div>
 
@@ -138,24 +145,26 @@ const LiveMap = () => {
 
 
         {/* Map Leaflet */}
-        <LeafletMap
-            className='relative z-4 w-full h-full rounded-sm'            
-            baseMap={selectedMapBase.url as string}
-            drawable={false}
-            enableLineDraw={false}
-            center={[-2.158, 30.1131097]}
-            zoom={8}
-            overlayImg={
-                {
-                    url: data?.data?.png ?? '',
-                    bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
+        <Suspense>
+            <LeafletMap
+                className='relative z-4 w-full h-full rounded-sm'            
+                baseMap={selectedMapBase.url as string}
+                drawable={false}
+                enableLineDraw={false}
+                center={[-2.158, 30.1131097]}
+                zoom={8}
+                overlayImg={
+                    {
+                        url: data?.data?.png ?? '',
+                        bounds: data?.data?.bounds as L.LatLngBoundsExpression ?? [[0,0], [0, 0]],
+                    }
                 }
-            }
-            overlayShapes={coverageJson}
-            onShapeClicked={(geojson) => {
-                console.log('Clicked shape:', geojson);
-            }}
-        />
+                overlayShapes={coverageJson}
+                onShapeClicked={(geojson) => {
+                    console.log('Clicked shape:', geojson);
+                }}
+            />
+        </Suspense>
 
         {/* Altitude slider */}
 

@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { MapIcon } from "lucide-react";
-import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import { changeBaseMap } from "../slice/baseMapPopupSlice";
-import OptionPopover from "../../../shared/components/popups/option/OptionPopover";
 import { setSelectedBoundary, setSelectedBoundaryType } from "../../../shared/slice/boundarySlice";
-import { memo } from "react";
+import { memo, lazy } from "react";
+
+const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
+const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 
 
 

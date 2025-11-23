@@ -1,17 +1,16 @@
-import SectionCard from "../../shared/components/cards/SectionCard";
-import VpChartHighcharts from "../../shared/components/charts/HighchartsVP";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import loader from '../../assets/loader.webp';
 import { Unplug } from "lucide-react";
 import { useEffect, useMemo, lazy } from "react";
-import { capitalize } from "../../shared/utils/text_format";
-import VpSpeciePopup from "./popup/VpSpeciePopup";
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import { changeVpPayload } from "./vpChartSlice";
 
 const VpModal = lazy(() => import('./modal/VpModal'));
+const VpChartHighcharts = lazy(() => import('../../shared/components/charts/HighchartsVP'));
+const VpSpeciePopup = lazy(() => import('./popup/VpSpeciePopup'));
+const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
 
 type VpChartProps = {
   className?: string;
@@ -55,7 +54,10 @@ const VpChart = ({ className }: VpChartProps) => {
   // Chart data fetching
   const { isLoading, data, error } = useVpData();
 
-
+  const capitalize = (s: string | undefined) => {
+    if( s === undefined) return "--";
+    return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+  }
 
   return (
     <SectionCard className={`${className} w-full h-full flex flex-col items-center`}>

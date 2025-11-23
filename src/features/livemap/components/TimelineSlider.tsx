@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, memo } from "react";
 import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 
@@ -140,4 +140,4 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
   );
 };
 
-export default TimelineSlider;
+export default memo(TimelineSlider);

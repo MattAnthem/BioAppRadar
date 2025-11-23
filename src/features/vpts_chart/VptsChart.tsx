@@ -1,18 +1,16 @@
 import { useEffect, useMemo, lazy } from "react";
-import SectionCard from "../../shared/components/cards/SectionCard";
-import VptsHeatmapChart from "../../shared/components/charts/HighchartsVpts";
 import { useAppDispatch } from "../../store/hooks";
 import { useVptsData } from "./hooks/useVptsData";
 import { Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
-import { capitalize } from "../../shared/utils/text_format";
-import VptsSpeciePopup from "./popup/VptsSpeciePopup";
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import { changeVptsPayload } from "./vptsChartSlice";
 
 const VptsModal = lazy(() => import('./modal/VptsModal'));
-
+const VptsHeatmapChart = lazy(() => import('../../shared/components/charts/HighchartsVpts'));
+const VptsSpeciePopup = lazy(() => import('./popup/VptsSpeciePopup'));
+const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
 
 type VptsChartProps = {
   className?: string;
@@ -55,6 +53,11 @@ const VptsChart = ({className}: VptsChartProps) => {
 
   // Tanstack
   const { isLoading, data, error } = useVptsData();
+
+  const capitalize = (s: string | undefined) => {
+    if( s === undefined) return "--";
+    return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+  }
 
 
   return (

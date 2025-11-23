@@ -1,4 +1,4 @@
-import  { useState, memo, useRef } from 'react'
+import  { useState, memo, useRef, lazy } from 'react'
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useAppSelector } from '../../../store/hooks';
 import { useVptsData } from '../hooks/useVptsData';
@@ -6,10 +6,10 @@ import { useVptsImageQuery } from '../../history_charts/hooks/useQuery/useVptsIm
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from 'lucide-react';
 import Modal from '../../../shared/components/modal/Modal';
-import { capitalize } from '../../../shared/utils/text_format';
 import loader from '../../../assets/loader.webp';
-import VptsHeatmapChart from '../../../shared/components/charts/HighchartsVpts';
 import type HighchartsReact from 'highcharts-react-official';
+
+const VptsHeatmapChart = lazy(() => import('../../../shared/components/charts/HighchartsVpts'));
 
 const VptsModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,6 +90,10 @@ const VptsModal = () => {
         URL.revokeObjectURL(url);
     }
 
+    const capitalize = (s: string | undefined) => {
+        if( s === undefined) return "--";
+        return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+    }
 
   return (
     <div>

@@ -1,15 +1,16 @@
-import {memo, useRef, useState} from 'react';
+import {memo, useRef, useState, lazy} from 'react';
 import { useTheme } from '../../../../shared/hooks/useTheme';
 import { useVptsHistData } from '../../hooks/useData/useVptsHistData';
 import Tooltip from '../../../../shared/components/popups/tooltip/Tooltip';
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from 'lucide-react';
 import Modal from '../../../../shared/components/modal/Modal';
-import { capitalize } from '../../../../shared/utils/text_format';
-import VptsHeatmapChart from '../../../../shared/components/charts/HighchartsVpts';
 import loader from '../../../../assets/loader.webp';
 import type HighchartsReact from 'highcharts-react-official';
 import { useVptsImageQuery } from '../../hooks/useQuery/useVptsImageQuery';
 import { useAppSelector } from '../../../../store/hooks';
+
+const VptsHeatmapChart = lazy(() => import('../../../../shared/components/charts/HighchartsVpts'));
+
 
 const VptsHistModal = () => {
     // Modal local state
@@ -74,6 +75,11 @@ const VptsHistModal = () => {
         link.click();
 
         URL.revokeObjectURL(url);
+    }
+
+    const capitalize = (s: string | undefined) => {
+        if( s === undefined) return "--";
+        return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
     }
   
   return (

@@ -1,17 +1,16 @@
 import { useEffect, useMemo, lazy } from "react";
-import SectionCard from "../../shared/components/cards/SectionCard";
-import HighchartVtip from "../../shared/components/charts/HighchartsVTIP";
 import { useAppDispatch } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
 import { Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
-import { capitalize } from "../../shared/utils/text_format";
-import VtipSpeciePopup from "./popup/VtipSpeciePopup";
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import { changeVtipPayload } from "./vtipChartSlice";
 
 const VtipModal = lazy(() => import("./modal/VtipModal"));
+const VtipSpeciePopup = lazy(() => import('./popup/VtipSpeciePopup'));
+const HighchartVtip = lazy(() => import('../../shared/components/charts/HighchartsVTIP'));
+const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
 
 type VtipChartProps = {
   className?: string;
@@ -53,6 +52,11 @@ const VtipChart = ({ className }: VtipChartProps) => {
 
   // Tanstack
   const { isLoading, data, error } = useVtipData();
+
+  const capitalize = (s: string | undefined) => {
+    if( s === undefined) return "--";
+    return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+  }
 
 
   return (

@@ -1,4 +1,5 @@
-import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
+import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
+import { memo } from 'react';
 
 type ElevationSliderProps = {
     elevations: number[];
@@ -44,4 +45,4 @@ const ElevationSlider = ({ elevations, handleChange, currentIdx }: ElevationSlid
   )
 }
 
-export default ElevationSlider;
+export default memo(ElevationSlider);

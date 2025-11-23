@@ -25,7 +25,6 @@ type AltitudeSliderProps = {
  */
 const AltitudeSlider = (
   { 
-
     className,
     altitudes, 
     currentIndex, 

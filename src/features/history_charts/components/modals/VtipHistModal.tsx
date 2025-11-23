@@ -1,15 +1,15 @@
-import {memo, useRef, useState} from 'react'
+import {memo, useRef, useState, lazy} from 'react'
 import { useTheme } from '../../../../shared/hooks/useTheme';
 import { useVtipHistData } from '../../hooks/useData/useVtipHistData';
 import Tooltip from '../../../../shared/components/popups/tooltip/Tooltip';
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from 'lucide-react';
 import Modal from '../../../../shared/components/modal/Modal';
-import { capitalize } from '../../../../shared/utils/text_format';
-import HighchartVtip from '../../../../shared/components/charts/HighchartsVTIP';
 import loader from '../../../../assets/loader.webp';
 import { useAppSelector } from '../../../../store/hooks';
 import { useVtipImageQuery } from '../../hooks/useQuery/useVtipImageQuery';
 import type HighchartsReact from 'highcharts-react-official';
+
+const HighchartVtip = lazy(() => import('../../../../shared/components/charts/HighchartsVTIP'));
 
 const VtipHistModal = () => {
 
@@ -85,6 +85,11 @@ const VtipHistModal = () => {
         link.click();
 
         URL.revokeObjectURL(url);
+    }
+
+    const capitalize = (s: string | undefined) => {
+        if( s === undefined) return "--";
+        return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
     }
 
   return (

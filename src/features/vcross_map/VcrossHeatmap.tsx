@@ -1,10 +1,12 @@
 import { Unplug } from "lucide-react";
 import type { CrossSectionBioClassResponse, CrossSectionRadarResponse } from "../../api/endpoints/crossSectionAPI";
-import HeatmapChart from "../../shared/components/charts/HighchartHeatmap";
 import { useAppSelector } from "../../store/hooks";
 import { useVcrossBioclassData } from "./useData/useVcrossBioclassData"
 import { useVcrossRadarData } from "./useData/useVcrossRadarData";
 import loader from '../../assets/loader.webp';
+import { lazy } from "react";
+
+const HeatmapChart = lazy(() => import('../../shared/components/charts/HighchartHeatmap'));
 
 const VcrossHeatmap = () => {
 

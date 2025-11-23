@@ -1,8 +1,10 @@
-import OptionPopover from '../../../shared/components/popups/option/OptionPopover'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { changeVpPayload, setSelectedVpSpecie } from '../vpChartSlice';
-import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import type { SelectOption } from '../../../shared/components/selects/types';
+import { lazy } from 'react';
+
+const OptionPopover = lazy(() => import("../../../shared/components/popups/option/OptionPopover"));
+const SimpleSelect = lazy(() => import("../../../shared/components/selects/SimpleSelect"));
 
 const VpSpeciePopup = () => {
     // Redux readOnly states

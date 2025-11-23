@@ -1,17 +1,18 @@
-import OptionPopover from '../../../shared/components/popups/option/OptionPopover'
-import { FlipHorizontal, ImageIcon, ImagePlayIcon } from 'lucide-react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
+import { FlipHorizontal, ImageIcon, ImagePlayIcon } from 'lucide-react';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { closeSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption, toggleSevipPopup } from '../slice/histSevipPopup';
-import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
-import  ReactDatetimePicker  from '../../../shared/components/input/ReactDatetime';
-import { useEffect, useState, memo, useMemo } from 'react';
+import { useEffect, useState, memo, useMemo, lazy } from 'react';
 import { setSevipGifPayloadHist, setSevipPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import dayjs from 'dayjs';
+
+const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
+const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
+const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
+const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/ReactDatetime'));
 
 
 

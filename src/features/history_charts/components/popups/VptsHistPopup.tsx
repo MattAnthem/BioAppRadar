@@ -1,14 +1,14 @@
-import { useEffect, useState, memo, useMemo } from "react";
-import ButtonBorder from "../../../../shared/components/buttons/borderedbtn/ButtonBorder"
-import ReactDatetimePicker from "../../../../shared/components/input/ReactDatetime";
-import OptionPopover from "../../../../shared/components/popups/option/OptionPopover"
-import SimpleSelect from "../../../../shared/components/selects/SimpleSelect"
+import { useEffect, useState, memo, useMemo, lazy } from "react";
 import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setSelectedVptsHistSpecie, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../../slices/vptsHistChartSlice";
 import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import dayjs from "dayjs";
 
+const ButtonBorder = lazy(() => import('../../../../shared/components/buttons/borderedbtn/ButtonBorder'));
+const ReactDatetimePicker = lazy(() => import('../../../../shared/components/input/ReactDatetime'));
+const OptionPopover = lazy(() => import('../../../../shared/components/popups/option/OptionPopover'));
+const SimpleSelect = lazy(() => import('../../../../shared/components/selects/SimpleSelect'));
 
 
 const VptsHistPopup = () => {

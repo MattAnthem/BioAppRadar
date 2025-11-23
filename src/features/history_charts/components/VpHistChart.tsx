@@ -1,15 +1,14 @@
-import SectionCard from "../../../shared/components/cards/SectionCard";
-import VpChartHighcharts from "../../../shared/components/charts/HighchartsVP";
 import { useAppSelector } from "../../../store/hooks";
 import { useVpHistData } from "../hooks/useData/useVpHistData";
 import loader from '../../../assets/loader.webp';
 import { Unplug } from "lucide-react";
 import { lazy, Suspense, useMemo } from "react";
-import { capitalize } from "../../../shared/utils/text_format";
 import dayjs from "dayjs";
 
 const VpHistPopup = lazy(() => import('./popups/VpHistPopup'));
 const VpHistModal = lazy(() => import('./modals/VpHistModal'));
+const VpChartHighcharts = lazy(() => import('../../../shared/components/charts/HighchartsVP'));
+const SectionCard = lazy(() => import('../../../shared/components/cards/SectionCard'));
 
 
 type VpChartProps = {
@@ -29,8 +28,13 @@ const VpHistChart = ({ className }: VpChartProps) => {
     if (!data) return null;
     const vp_time = dayjs(data.time).add(2, 'hour').format("YYYY-MM-DD HH:mm:ss");
     return { vp_time }
-  }, [data])
+  }, [data]);
 
+  
+  const capitalize = (s: string | undefined) => {
+    if( s === undefined) return "--";
+    return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+  }
 
   return (
     <SectionCard className={`${className} h-full items-center flex flex-col gap-0.5`}>

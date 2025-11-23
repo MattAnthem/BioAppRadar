@@ -1,8 +1,10 @@
-import OptionPopover from '../../../shared/components/popups/option/OptionPopover'
-import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { changeVptsPayload, setSelectedVptsSPecie } from '../vptsChartSlice'
+import { changeVptsPayload, setSelectedVptsSPecie } from '../vptsChartSlice';
+import { lazy } from 'react';
+
+const OptionPopover = lazy(() => import("../../../shared/components/popups/option/OptionPopover"));
+const SimpleSelect = lazy(() => import("../../../shared/components/selects/SimpleSelect"));
 
 const VptsSpeciePopup = () => {
 

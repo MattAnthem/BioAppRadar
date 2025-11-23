@@ -2,17 +2,17 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { closeRadarPopup, setRadarEndTimeHist, setRadarStartTimeHist, setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType, toggleRadarPopup } from '../slice/histRadarPopupSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { ImageIcon, ImagePlayIcon, RadarIcon } from 'lucide-react';
-import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
-import OptionPopover from '../../../shared/components/popups/option/OptionPopover';
-import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
-import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
-import { useEffect, useState, memo, useMemo } from 'react';
+import { useEffect, useState, memo, useMemo, lazy } from 'react';
 import { setRadarGifPayloadHist, setRadarPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import dayjs from 'dayjs';
 
+const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
+const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
+const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
+const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/ReactDatetime'));
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 

@@ -1,11 +1,12 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Map } from "lucide-react";
-import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import { changeHistBaseMap, changeHistColormap, setSelectedBoundaryHist, setSelectedBoundaryTypeHist } from "../slice/histBaseMapPopupSlice";
-import Colorbar from "../../livemap/components/Colorbar";
-import OptionPopover from "../../../shared/components/popups/option/OptionPopover";
-import { memo } from "react";
+import { memo, lazy } from "react";
+
+const SimpleSelect = lazy(() => import("../../../shared/components/selects/SimpleSelect"));
+const Colorbar = lazy(() => import("../../livemap/components/Colorbar"));
+const OptionPopover = lazy(() => import("../../../shared/components/popups/option/OptionPopover"));
 
 
 type BaseMapProps = {

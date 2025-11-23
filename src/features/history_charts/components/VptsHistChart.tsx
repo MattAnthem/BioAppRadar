@@ -1,13 +1,12 @@
 import {lazy, Suspense} from "react";
-import SectionCard from "../../../shared/components/cards/SectionCard";
 import { Unplug } from "lucide-react";
 import loader from '../../../assets/loader.webp';
-import VptsHeatmapChart from "../../../shared/components/charts/HighchartsVpts";
 import { useVptsHistData } from "../hooks/useData/useVptsHistData";
-import { capitalize } from "../../../shared/utils/text_format";
 
 const VptsHistPopup = lazy(() => import('./popups/VptsHistPopup'));
 const VptsHistModal = lazy(() => import('./modals/VptsHistModal'))
+const VptsHeatmapChart = lazy(() => import('../../../shared/components/charts/HighchartsVpts'));
+const SectionCard = lazy(() => import('../../../shared/components/cards/SectionCard'));
 
 type VptsChartProps = {
   className?: string;
@@ -17,6 +16,11 @@ const VptsHistChart = ({className}: VptsChartProps) => {
 
   // Tanstack
   const { isLoading, data, error } = useVptsHistData();
+
+  const capitalize = (s: string | undefined) => {
+    if( s === undefined) return "--";
+    return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+  }
 
   return (
     <SectionCard className={`${className} w-full h-full flex flex-col`}>

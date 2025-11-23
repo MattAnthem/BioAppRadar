@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, lazy } from "react";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import { useVtipData } from "../hooks/useVtipData";
 import { useVtipImageQuery } from "../../history_charts/hooks/useQuery/useVtipImageQuery";
@@ -6,10 +6,10 @@ import { useAppSelector } from "../../../store/hooks";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import { ChartLine, Download, Fullscreen, ImageIcon, LucideDownload, Unplug } from "lucide-react";
 import Modal from "../../../shared/components/modal/Modal";
-import { capitalize } from "../../../shared/utils/text_format";
-import HighchartVtip from "../../../shared/components/charts/HighchartsVTIP";
 import loader from '../../../assets/loader.webp';
 import type HighchartsReact from "highcharts-react-official";
+
+const HighchartVtip =  lazy(() => import("../../../shared/components/charts/HighchartsVTIP"));
 
 const VtipModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,6 +91,10 @@ const VtipModal = () => {
         URL.revokeObjectURL(url);
     }
 
+    const capitalize = (s: string | undefined) => {
+        if( s === undefined) return "--";
+        return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+    }
   return (
     <div>
 

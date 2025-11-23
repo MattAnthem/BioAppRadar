@@ -1,4 +1,4 @@
-import  { type ReactNode } from 'react';
+import  { type ReactNode, memo } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 
 type SectionCardProps = {
@@ -26,4 +26,4 @@ const SectionCard = ({children, className}: SectionCardProps) => {
   )
 }
 
-export default SectionCard;
+export default memo(SectionCard);

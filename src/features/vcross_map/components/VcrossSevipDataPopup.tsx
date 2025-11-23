@@ -1,15 +1,14 @@
 import { FlipHorizontal } from 'lucide-react';
-import OptionPopover from '../../../shared/components/popups/option/OptionPopover'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { closeVcrossSevipPopup, setSelectedVcrossSevipVariable, setVcrossSevipTime, toggleVcrossSevipPopup } from '../slice/vcrossPopupSlice';
-import SimpleSelect from '../../../shared/components/selects/SimpleSelect';
 import type { SelectOption } from '../../../shared/components/selects/types';
-import ReactDatetimePicker from '../../../shared/components/input/ReactDatetime';
-import ButtonBorder from '../../../shared/components/buttons/borderedbtn/ButtonBorder';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, lazy } from 'react';
 import { setVcrossSevipPayload } from '../slice/vcrossMapSlice';
 
-
+const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
+const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
+const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/ReactDatetime'));
+const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
 
 const VcrossSevipDataPopup = () => {
 

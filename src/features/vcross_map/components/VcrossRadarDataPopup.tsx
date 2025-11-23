@@ -1,14 +1,14 @@
-import { RadarIcon } from "lucide-react"
-import OptionPopover from "../../../shared/components/popups/option/OptionPopover"
+import { RadarIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import { closeVcrossRadarPopup, setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType, setVcrossRadarSegment, toggleVcrossRadarPopup } from "../slice/vcrossPopupSlice";
-import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
-import ButtonBorder from "../../../shared/components/buttons/borderedbtn/ButtonBorder";
-import ReactDatetimePicker from "../../../shared/components/input/ReactDatetime";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, lazy } from "react";
 import { setOverlayRadarPayload, setVcrossRadarPayload } from "../slice/vcrossMapSlice";
 
+const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
+const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
+const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
+const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/ReactDatetime'));
 
 const VcrossRadarDataPopup = () => {
 

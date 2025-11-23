@@ -1,4 +1,4 @@
-import { useState, memo, useRef } from 'react';
+import { useState, memo, useRef, lazy } from 'react';
 import Modal from '../../../shared/components/modal/Modal';
 import { useVpImageQuery } from '../../history_charts/hooks/useQuery/useVpImageQuery';
 import { useAppSelector } from '../../../store/hooks';
@@ -6,10 +6,10 @@ import { useVpData } from '../hooks/useVpData';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { ChartLine, Fullscreen, ImageIcon, LucideDownload, Unplug } from 'lucide-react';
 import loader from '../../../assets/loader.webp';
-import VpChartHighcharts from '../../../shared/components/charts/HighchartsVP';
 import { useTheme } from '../../../shared/hooks/useTheme';
-import { capitalize } from '../../../shared/utils/text_format';
 import type HighchartsReact from 'highcharts-react-official';
+
+const VpChartHighcharts = lazy(() => import('../../../shared/components/charts/HighchartsVP'));
 
 const VpModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,7 +91,10 @@ const VpModal = () => {
         URL.revokeObjectURL(url);
     }
 
-
+    const capitalize = (s: string | undefined) => {
+        if( s === undefined) return "--";
+        return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
+    }
   return (
     <div>
         {/* Button open modal */}
