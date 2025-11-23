@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import { useMemo, lazy, forwardRef, type ComponentRef, Suspense } from "react";
 import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
 import type { VtipResponse } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 import { useTheme } from "../../hooks/useTheme";
 import { ErrorBoundary } from "react-error-boundary";
 import { useHighchartsModules } from "./hook/useChartModules";
+
+const HighchartsReact = lazy(() => import("highcharts-react-official"));
 
 
 
@@ -20,7 +21,7 @@ interface DayNightChart extends Highcharts.Chart {
 }
 
 
-const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
+const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartProps>(
   ({ data, title = false, chartHeight }, ref) => {
 
     // Loading modules dynamically
@@ -273,12 +274,14 @@ const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
       <ErrorBoundary
         fallback={<div>...</div>}
       >
-        <HighchartsReact 
-          highcharts={Highcharts} 
-          options={options} 
-          ref={ref} 
-          containerProps={{ style: { width: "100%" } }} 
-        />
+        <Suspense fallback={<div></div>}>
+          <HighchartsReact 
+            highcharts={Highcharts} 
+            options={options} 
+            ref={ref} 
+            containerProps={{ style: { width: "100%" } }} 
+          />
+        </Suspense>
       </ErrorBoundary>
     );
   }

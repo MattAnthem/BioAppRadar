@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import  { useMemo, lazy, forwardRef, Suspense } from 'react';
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { VptsResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
 import { useHighchartsModules } from './hook/useChartModules';
+
+const HighchartsReact = lazy(() => import('highcharts-react-official'));
 
 
 interface VpHeatmapChartProps {
@@ -18,7 +19,7 @@ interface DayNightChart extends Highcharts.Chart {
     dayNightRects?: Highcharts.SVGElement[];
 }
 
-const VptsHeatmapChart = React.forwardRef<HighchartsReact.RefObject, VpHeatmapChartProps>(
+const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, VpHeatmapChartProps>(
     ({ data, legend, title, radarAltitude=1616}, ref) => {
 
     // Dynamic module importing
@@ -317,13 +318,15 @@ const VptsHeatmapChart = React.forwardRef<HighchartsReact.RefObject, VpHeatmapCh
     }
 
     return (
-        <ErrorBoundary fallback={<div>...</div>}>
-            <HighchartsReact
-                highcharts={Highcharts}
-                options={options}
-                ref={ref}
-                containerProps={{ style: { width: '100%' } }}
-            />
+        <ErrorBoundary fallback={<div></div>}>
+            <Suspense fallback={<div></div>}>
+                <HighchartsReact
+                    highcharts={Highcharts}
+                    options={options}
+                    ref={ref}
+                    containerProps={{ style: { width: '100%' } }}
+                />
+            </Suspense>
         </ErrorBoundary>
     );
 

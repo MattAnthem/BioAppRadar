@@ -1,11 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, lazy, Suspense } from 'react';
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
-import HCHeatmap from 'highcharts/modules/heatmap';
 import { useTheme } from '../../hooks/useTheme';
 import type { CrossSectionRadarResponse, CrossSectionBioClassResponse } from '../../../api/endpoints/crossSectionAPI';
+import { useHighchartsModules } from './hook/useChartModules';
+import { ErrorBoundary } from 'react-error-boundary';
 
-HCHeatmap(Highcharts);
+const HighchartsReact = lazy(() => import('highcharts-react-official'));
+
+
 
 type Props = {
   data: CrossSectionRadarResponse | CrossSectionBioClassResponse;
@@ -14,6 +16,8 @@ type Props = {
 const VcrossHeatmap: React.FC<Props> = ({ data }) => {
   const { theme } = useTheme();
   const { chartFontColor, chartGridline } = theme;
+
+  const isModuleReady = useHighchartsModules(['heatmap']);
 
   const options = useMemo(() => {
     const seriesData: [number, number, number | null][] = [];
@@ -95,12 +99,21 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
     };
   }, [data, chartFontColor, chartGridline]);
 
+  if (!isModuleReady) {
+    return <div></div>;
+  }
+
   return (
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={options}
-        containerProps={{ style: { width: '100%' } }}
-      />
+    <ErrorBoundary fallback={<div></div>}>
+      <Suspense fallback={<div></div>}>
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={options}
+          containerProps={{ style: { width: '100%' } }}
+        />
+      </Suspense>
+
+    </ErrorBoundary>
   );
 };
 

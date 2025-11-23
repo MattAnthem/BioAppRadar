@@ -1,11 +1,12 @@
-import { forwardRef } from 'react';
+import { forwardRef, lazy, Suspense, type ComponentRef } from 'react';
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from '../../hooks/useTheme';
 import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { ErrorBoundary } from "react-error-boundary";
 import { useHighchartsModules } from './hook/useChartModules';
 
+
+const HighchartsReact = lazy(() => import('highcharts-react-official'));
 
 
 interface VpChartHighchartsProps {
@@ -21,7 +22,7 @@ type AxisWithBands = Highcharts.Axis & {
 };
 
 
-const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHighchartsProps>(
+const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null, VpChartHighchartsProps>(
   ({ data, chartHeight, displayTitle, radarAltitude = 1616, selectedHeight = 0 }, chartRef) => {
 
 
@@ -217,12 +218,14 @@ const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHi
 
     return (
       <ErrorBoundary fallback={<div>...</div>}>
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={options}
-          ref={chartRef}
-          containerProps={{ style: { width: '100%' } }}
-        />
+        <Suspense fallback={<div></div>}>
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={options}
+            ref={chartRef}
+            containerProps={{ style: { width: '100%' } }}
+          />
+        </Suspense>
       </ErrorBoundary>
     );
   }
