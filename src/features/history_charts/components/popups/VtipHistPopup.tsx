@@ -155,7 +155,7 @@ const VtipHistPopup = () => {
 
             <ReactDatetimePicker
                 onChange={handleStartTimeChange}
-                value={adjustedTimes?.fresh_start}
+                value={locStartTime}
                 minDate={temporal?.start_time}
                 maxDate={temporal?.end_time}
             />
@@ -166,7 +166,7 @@ const VtipHistPopup = () => {
             </div>
             <ReactDatetimePicker 
                 onChange={handleEndTimeChange}
-                value={adjustedTimes?.fresh_end}
+                value={locEndTime}
                 minDate={locStartTime}
                 maxDate={temporal?.end_time}
             />

@@ -134,7 +134,7 @@ const VpHistPopup = () => {
                     </div>
                     <ReactDatetimePicker
                       onChange={handleDateChange}
-                      value={adjustedTime?.fresh_time}
+                      value={locTime}
                       minDate={temporal?.start_time}
                       maxDate={temporal?.end_time}
                     />

@@ -242,7 +242,7 @@ const SevipPopup = () => {
                     <ReactDatetimePicker
                         onChange={handleGifStartTimeChange}
                         value={locStartTime}
-                        maxDate={locEndTime}
+                        maxDate={temporal?.end_time}
                         minDate={temporal?.start_time}
                     />
 

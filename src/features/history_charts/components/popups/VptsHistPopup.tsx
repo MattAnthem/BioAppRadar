@@ -155,21 +155,21 @@ const VptsHistPopup = () => {
               <div className="border-b border-b-gray-400"/>
           </div>
           <ReactDatetimePicker
-            onChange={handleStartTimeChange}
-            value={adjustedTimes?.fresh_start}
-            minDate={temporal?.start_time}
-            maxDate={temporal?.end_time}
+                onChange={handleStartTimeChange}
+                value={locStartTime}
+                minDate={temporal?.start_time}
+                maxDate={temporal?.end_time}
           />
 
           <div className="flex flex-col gap-0.5">
               <small className='font-semibold'>End</small>
               <div className="border-b border-b-gray-400"/>
           </div>
-          <ReactDatetimePicker
-            onChange={handleEndTimeChange}
-            value={adjustedTimes?.fresh_end}
-            minDate={locStartTime}
-            maxDate={temporal?.end_time}
+          <ReactDatetimePicker 
+                onChange={handleEndTimeChange}
+                value={locEndTime}
+                minDate={locStartTime}
+                maxDate={temporal?.end_time}
           />
 
         {/* Display data button */}

@@ -12,33 +12,35 @@ type DateTimeProps = {
   maxDate?: string | moment.Moment;
 };
 
+const FORMAT = "YYYY-MM-DD HH:mm:ss";
+
 const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate, maxDate }) => {
 
   const [internalValue, setInternalValue] = useState<moment.Moment | undefined>(
-    value ? moment(value, "YYYY-MM-DD HH:mm:ss", true) : undefined
+    value ? moment(value, FORMAT, true) : undefined
   );
   const [manualInput, setManualInput] = useState<string>(
-    value ? moment(value, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") : ""
+    value ? moment(value, FORMAT).format(FORMAT) : ""
   );
   const [isValid, setIsValid] = useState(true);
 
   const pickerTheme = useAppSelector((state) => state.theme.currentTheme.datePicker);
   const isDarkMode = useAppSelector((state) => state.theme.isDarkMode);
 
-  const minMoment = minDate ? moment(minDate, "YYYY-MM-DD HH:mm:ss", true) : undefined;
-  const maxMoment = maxDate ? moment(maxDate, "YYYY-MM-DD HH:mm:ss", true) : undefined;
+  const minMoment = minDate ? moment(minDate, FORMAT, true) : undefined;
+  const maxMoment = maxDate ? moment(maxDate, FORMAT, true) : undefined;
 
 
   useEffect(() => {
     if (value) {
-      const parsed = moment(value, "YYYY-MM-DD HH:mm:ss", true);
+      const parsed = moment(value, FORMAT, true);
       setInternalValue(parsed);
-      setManualInput(parsed.format("YYYY-MM-DD HH:mm:ss"));
+      setManualInput(parsed.format(FORMAT));
     }
   }, [value]);
 
   const validateDate = (val: string): boolean => {
-    const parsed = moment(val, "YYYY-MM-DD HH:mm:ss", true);
+    const parsed = moment(val, FORMAT, true);
     if (!parsed.isValid()) return false;
 
     const [date, time] = val.split(" ");
@@ -61,7 +63,7 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
     if (maxMoment && parsed.isAfter(maxMoment)) {
       finalVal = maxMoment.clone();
     }
-    const formatted = finalVal.format("YYYY-MM-DD HH:mm:ss");
+    const formatted = finalVal.format(FORMAT);
     setInternalValue(finalVal);
     setManualInput(formatted);
     setIsValid(true);
@@ -80,7 +82,7 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
   };
 
   const handleBlur = () => {
-    const parsed = moment(manualInput, "YYYY-MM-DD HH:mm:ss", true);
+    const parsed = moment(manualInput, FORMAT, true);
     if (!parsed.isValid()) return;
     applyValidValue(parsed);
   };
@@ -95,7 +97,7 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
     <div
       className={`relative rounded-sm border ${
         isDarkMode ? "dark" : "light"
-      } ${pickerTheme.border} ${pickerTheme.bg} border`}
+      } ${pickerTheme.border} ${pickerTheme.bg}`}
     >
       <Datetime
         value={internalValue}

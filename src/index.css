@@ -50,7 +50,13 @@ body {
     @apply text-white cursor-pointer hover:bg-zinc-600
   }
   .light .rdtPicker span.rdtBtn {  
-    @apply text-gray-600 cursor-pointer hover:bg-zinc-200
+    @apply text-gray-600 bg-gray-100 cursor-pointer hover:bg-zinc-200
+  }
+  .light .rdtPicker div.rdtCount {  
+    @apply  bg-gray-100
+  }
+  .light .rdtPicker div.rdtCounterSeparator {  
+    @apply  bg-gray-100
   }
   
   .dark .rdtPicker td.rdtTimeToggle {
