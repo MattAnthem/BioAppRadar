@@ -1,5 +1,6 @@
-@import "tailwindcss";
-
+@import "tailwindcss/preflight"; /* équivalent de base */
+@import "tailwindcss/utilities";
+@reference "tailwindcss";
 
 @font-face {
   font-family: 'Work Sans';
@@ -16,90 +17,100 @@
   font-display: swap;
 }
 
-.dark .rdtPicker {
-  @apply bg-zinc-700 text-gray-100 rounded-b-sm border-gray-600 w-full;
-}
-.light .rdtPicker {
-  @apply bg-gray-100 border-gray-400 text-gray-900 rounded-b-sm w-full;
-}
-.dark .rdtPicker td.rdtActive,
-.light .rdtPicker td.rdtActive {
-  @apply bg-blue-600 text-white font-semibold;
-}
-
-.dark .rdtPicker td.rdtSwitch {
-  @apply text-white cursor-pointer hover:bg-zinc-600
-}
-.light .rdtPicker td.rdtSwitch {
-  @apply text-blue-600 cursor-pointer hover:bg-zinc-200
-}
-.dark .rdtPicker th.rdtSwitch {
-  @apply text-white cursor-pointer hover:bg-zinc-600
-}
-.light .rdtPicker th.rdtSwitch {
-  @apply text-blue-600 cursor-pointer hover:bg-zinc-200
-}
-.dark .rdtPicker span.rdtBtn {
-  @apply text-white cursor-pointer hover:bg-zinc-600
-}
-.light .rdtPicker span.rdtBtn {  
-  @apply text-gray-600 cursor-pointer hover:bg-zinc-200
-}
-
-.dark .rdtPicker td.rdtTimeToggle {
-  @apply hover:bg-zinc-600
-}
-
-.rdtPicker {
-  @apply border border-gray-300 shadow-md bg-white text-gray-600;
-  z-index: 50; 
-}
-
-
-.light .rdtPicker td.rdtDay {
-  @apply text-gray-800;
-}
-.dark .rdtPicker td.rdtDay {
-  @apply text-gray-300;
-}
-.light .rdtPicker td.rdtDay.rdtOld {
-  @apply text-gray-400;
-}
-.light .rdtPicker td.rdtDay.rdtNew {
-  @apply text-gray-400;
-}
-.dark .rdtPicker td.rdtDay.rdtOld {
-  @apply text-gray-500;
-}
-.dark .rdtPicker td.rdtDay.rdtNew {
-  @apply text-gray-500;
+body {
+  font-family: 'Work Sans', sans-serif;
 }
 
 
 
-.rdtPicker td.rdtDay:hover {
-  @apply bg-blue-500 text-gray-900 rounded-md;
-}
+  .dark .rdtPicker {
+    @apply bg-zinc-700 text-gray-100 rounded-b-sm border-gray-600 w-full;
+  }
+  .light .rdtPicker {
+    @apply bg-gray-100 border-gray-400 text-gray-900 rounded-b-sm w-full;
+  }
+  .dark .rdtPicker td.rdtActive,
+  .light .rdtPicker td.rdtActive {
+    @apply bg-blue-600 text-white font-semibold;
+  }
+  
+  .dark .rdtPicker td.rdtSwitch {
+    @apply text-white cursor-pointer hover:bg-zinc-600
+  }
+  .light .rdtPicker td.rdtSwitch {
+    @apply text-blue-600 cursor-pointer hover:bg-zinc-200
+  }
+  .dark .rdtPicker th.rdtSwitch {
+    @apply text-white cursor-pointer hover:bg-zinc-600
+  }
+  .light .rdtPicker th.rdtSwitch {
+    @apply text-blue-600 cursor-pointer hover:bg-zinc-200
+  }
+  .dark .rdtPicker span.rdtBtn {
+    @apply text-white cursor-pointer hover:bg-zinc-600
+  }
+  .light .rdtPicker span.rdtBtn {  
+    @apply text-gray-600 cursor-pointer hover:bg-zinc-200
+  }
+  
+  .dark .rdtPicker td.rdtTimeToggle {
+    @apply hover:bg-zinc-600
+  }
+  
+  .rdtPicker {
+    @apply border border-gray-300 shadow-md bg-white text-gray-600;
+    z-index: 50; 
+  }
+  
+  
+  .light .rdtPicker td.rdtDay {
+    @apply text-gray-800;
+  }
+  .dark .rdtPicker td.rdtDay {
+    @apply text-gray-300;
+  }
+  .light .rdtPicker td.rdtDay.rdtOld {
+    @apply text-gray-400;
+  }
+  .light .rdtPicker td.rdtDay.rdtNew {
+    @apply text-gray-400;
+  }
+  .dark .rdtPicker td.rdtDay.rdtOld {
+    @apply text-gray-500;
+  }
+  .dark .rdtPicker td.rdtDay.rdtNew {
+    @apply text-gray-500;
+  }
+   
+  .rdtPicker td.rdtDay:hover {
+    @apply bg-blue-500 text-gray-900 rounded-md;
+  }
+  
+  
+  .rdtPicker td.rdtActive {
+    @apply bg-blue-600 text-white font-semibold rounded-sm;
+  }
+  
+  
+  .rdtPicker .rdtTimeToggle {
+    @apply text-blue-600 hover:text-blue-800 dark:text-blue-400;
+  }
+  
+  
+  .rdtPicker thead tr:first-child th {
+    @apply font-light dark:hover:bg-gray-700;
+  }
+  
+  
+  .dark .rdtPicker .rdtCounters {
+    @apply dark:bg-zinc-700 ;
+  }
+  .light .rdtPicker .rdtCounters {
+    @apply  bg-neutral-800;
+  }
 
 
-.rdtPicker td.rdtActive {
-  @apply bg-blue-600 text-white font-semibold rounded-sm;
-}
 
-
-.rdtPicker .rdtTimeToggle {
-  @apply text-blue-600 hover:text-blue-800 dark:text-blue-400;
-}
-
-
-.rdtPicker thead tr:first-child th {
-  @apply font-light dark:hover:bg-gray-700;
-}
-
-
-.rdtPicker .rdtCounters {
-  @apply dark:bg-zinc-700 dark:bg-neutral-800;
-}
 
 :root {
     font-family: "Work Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -156,12 +167,5 @@ select {
   appearance: base-select;
 }
 
-
-
-
-
-.color{
-  color: #0077cc;
-}
 
 
