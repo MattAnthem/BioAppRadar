@@ -1,5 +1,5 @@
 import {lazy, Suspense} from "react";
-import { Unplug } from "lucide-react";
+import { Fullscreen, Settings2, Unplug } from "lucide-react";
 import loader from '../../../assets/loader.webp';
 import { useVptsHistData } from "../hooks/useData/useVptsHistData";
 
@@ -32,12 +32,20 @@ const VptsHistChart = ({className}: VptsChartProps) => {
             <div className="flex gap-2">
               
                 {/* Controls */}
-                <Suspense>
+                <Suspense fallback={
+                  <div className=" p-1 rounded-sm">
+                    <Settings2 width={15} height={15} />
+                  </div>}
+                >
                   <VptsHistPopup />
                 </Suspense>
 
                 {/* Modal */}
-                <Suspense>
+                <Suspense fallback={
+                  <div className=" p-1 rounded-sm">
+                    <Fullscreen width={15} height={15}/>
+                  </div> }
+                >
                   <VptsHistModal />
                 </Suspense>
 

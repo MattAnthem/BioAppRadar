@@ -144,6 +144,7 @@ const VcrossRadarDataPopup = () => {
         />
 
         <ButtonBorder
+            ariaLabel="Display Radar Data on map"
             onClick={handleSubmitPopup}
             className="p-2 mt-2"
             isPrimary

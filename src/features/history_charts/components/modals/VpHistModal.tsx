@@ -105,7 +105,7 @@ const VpHistModal = () => {
             display_condition={!isModalOpen}  
             text={"Open in fullscreen"}
         >                  
-            <button onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
+            <button aria-label='Open chart in fullscreen' onClick={handleOpenModal} className={`${bg} ${border} ${hover} rounded-sm p-1`}>
                 <Fullscreen width={15} height={15}/>
             </button>
         </Tooltip>
@@ -125,6 +125,7 @@ const VpHistModal = () => {
                             text="Display as image"
                         >
                         <button 
+                            aria-label='Display interactive chart'
                             onClick={handleDisplayInteractiveChart} 
                             className={`
                                 w-full flex gap-1 justify-center items-center 
@@ -144,6 +145,7 @@ const VpHistModal = () => {
                             text="Display as gif"
                         >
                         <button 
+                            aria-label='Display image chart'
                             onClick={handleDisplayImage} 
                             className={`
                                 w-full flex gap-1 justify-center items-center 
@@ -170,7 +172,7 @@ const VpHistModal = () => {
                                 text="Download as image"
                                 display_condition={isModalOpen}
                                 >
-                                <button onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                <button aria-label='Download interactive chart as png' onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                     <LucideDownload className="w-4 h-4"/>
                                 </button>
                                 </Tooltip>
@@ -198,7 +200,7 @@ const VpHistModal = () => {
                                                 text="Download image"
                                                 display_condition={isModalOpen}
                                             >
-                                                <button onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                                <button aria-label='Download chart as image' onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
                                                     <LucideDownload className="w-4 h-4"/> 
                                                 </button>
                                             </Tooltip>

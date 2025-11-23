@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Unplug } from "lucide-react";
+import { Fullscreen, Settings2, Unplug } from "lucide-react";
 import loader from '../../../assets/loader.webp';
 import { useVtipHistData } from "../hooks/useData/useVtipHistData";
 
@@ -35,12 +35,20 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
               <div className="flex gap-2">
 
                 {/* Controls popup */}
-                <Suspense>
+                <Suspense fallback={
+                  <div className=" p-1 rounded-sm">
+                    <Settings2 width={15} height={15} />
+                  </div>}
+                >
                   <VtipHistPopup />
                 </Suspense>
                 
                 {/* Modal */}
-                <Suspense>
+                <Suspense fallback={
+                  <div className=" p-1 rounded-sm">
+                    <Fullscreen width={15} height={15}/>
+                  </div> }
+                >
                   <VtipHistModal />
                 </Suspense>
 
@@ -60,7 +68,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
             {
             isLoading && (
                 <div className="w-full h-full flex items-center justify-center">
-                    <img src={loader} alt="loading-vphist" width={25} height={25}  />
+                    <img aria-label="" src={loader} alt="loading-vphist" width={25} height={25}  />
                 </div>
             )
             }

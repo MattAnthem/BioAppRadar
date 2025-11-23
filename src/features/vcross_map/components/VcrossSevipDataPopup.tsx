@@ -94,6 +94,7 @@ const VcrossSevipDataPopup = () => {
       />
 
       <ButtonBorder
+            ariaLabel='Display Sevip Data on map'
             onClick={handleSubmitPopup}
             className="p-2 mt-2"
             isPrimary

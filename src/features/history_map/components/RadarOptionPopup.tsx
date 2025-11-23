@@ -167,6 +167,7 @@ const RadarOptionPopup = () => {
                   text="Display as image"
                 >
                   <button 
+                    aria-label='Display as PNG'
                     onClick={handleSetToPngMode} 
                     className={`
                         w-full flex gap-1 justify-center items-center 
@@ -186,6 +187,7 @@ const RadarOptionPopup = () => {
                   text="Display as gif"
                 >
                   <button 
+                    aria-label='Display as GIF'
                     onClick={handleSetToGifMode} 
                     className={`
                         w-full flex gap-1 justify-center items-center 
@@ -292,6 +294,7 @@ const RadarOptionPopup = () => {
             onClick={handleSubmit}
             className='py-2 mt-2'
             isPrimary
+            ariaLabel='Display radar data on map'
         >
              Display data
         </ButtonBorder>

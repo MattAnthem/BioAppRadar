@@ -197,6 +197,7 @@ const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHi
           lineWidth: 1.5,
           vectorLength: 20,
           xOffset: vmax,
+          // xOffset: 230,
           tooltip: {
             headerFormat: '<b>{series.name}</b><br/>',
             pointFormat: `Altitude: {point.x} m<br>Speed: {point.value:.1f} m/s<br>Direction: {point.direction:.0f}°`,

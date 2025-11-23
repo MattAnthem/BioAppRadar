@@ -152,6 +152,7 @@ const SevipPopup = () => {
                   text="Display as image"
                 >
                   <button 
+                    aria-label='Display as PNG'
                     onClick={handleSetToPngMode} 
                     className={`
                         w-full flex gap-1 justify-center items-center 
@@ -171,6 +172,7 @@ const SevipPopup = () => {
                   text="Display as gif"
                 >
                   <button 
+                    aria-label='Display as GIF'
                     onClick={handleSetToGifMode} 
                     className={`
                         w-full flex gap-1 justify-center items-center 
@@ -261,6 +263,7 @@ const SevipPopup = () => {
 
         {/* Display data button */}
         <ButtonBorder
+            ariaLabel='Display Sevip data on map'
             onClick={handleSubmit}
             className='py-2 mt-2'
             isPrimary

@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../../store/hooks";
 import { useVpHistData } from "../hooks/useData/useVpHistData";
 import loader from '../../../assets/loader.webp';
-import { Unplug } from "lucide-react";
+import { Fullscreen, Settings2, Unplug } from "lucide-react";
 import { lazy, Suspense, useMemo } from "react";
 import dayjs from "dayjs";
 
@@ -46,12 +46,20 @@ const VpHistChart = ({ className }: VpChartProps) => {
             <div className="flex justify-center gap-2">
 
               {/* controls */}
-              <Suspense>
+              <Suspense fallback={
+                <div className=" p-1 rounded-sm">
+                  <Settings2 width={15} height={15} />
+                </div>}
+              >
                 <VpHistPopup />
               </Suspense>
 
               {/* Modal  */}
-              <Suspense>
+              <Suspense fallback={
+                <div className=" p-1 rounded-sm">
+                  <Fullscreen width={15} height={15}/>
+                </div> }
+              >
                 <VpHistModal />
               </Suspense>
 

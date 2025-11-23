@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useVpData } from "./hooks/useVpData";
 import loader from '../../assets/loader.webp';
-import { Unplug } from "lucide-react";
-import { useEffect, useMemo, lazy } from "react";
+import { Fullscreen, Settings2, Unplug } from "lucide-react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import { changeVpPayload } from "./vpChartSlice";
@@ -71,10 +71,22 @@ const VpChart = ({ className }: VpChartProps) => {
             <div className="flex justify-center gap-1 5">
 
               {/* Species select */}
-              <VpSpeciePopup/>
+              <Suspense fallback={
+                <div className=" p-1 rounded-sm">
+                  <Settings2 width={15} height={15} />
+                </div>}
+              >
+                <VpSpeciePopup/>
+              </Suspense>
 
               {/* Modal chart */}
-              <VpModal/>
+              <Suspense fallback={
+                <div className=" p-1 rounded-sm">
+                  <Fullscreen width={15} height={15}/>
+                </div> }
+              >
+                <VpModal/>
+              </Suspense>
 
             </div>
 

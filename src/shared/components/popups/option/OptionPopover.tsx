@@ -111,6 +111,7 @@ const OptionPopover = ({
         text={hoverText ?? ""}
       >
         <button
+          aria-label="Open options popover menu" 
           onClick={handleBtnClick}
           className={`
             ${isPrimary ? primary_bg : seconcondary_bg}  

@@ -112,6 +112,7 @@ const ClassificationPopup = () => {
         </div>
 
         <ButtonBorder
+            ariaLabel='Display classification data on map'
             onClick={submitPopupData}
             className='py-2 mt-2'
             isPrimary

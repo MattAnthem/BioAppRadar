@@ -54,6 +54,7 @@ const AltitudeSlider = (
             >
               <div  className="w-full h-full flex items-start justify-center">
                   <button
+                    aria-label={`Set altitude to ${alt} meters`}
                     onClick={() => onChangeAltitude(i)}
                     className={`${
                       i === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
@@ -67,14 +68,15 @@ const AltitudeSlider = (
 
         {/* Min altitude */}   
           <div className="flex items-center justify-center gap-0.5">
-            {/* <small className='text-[10px] text-white'>{altitudes[altitudes.length - 1]}</small> */}
             <Tooltip
               position='right'
               text="Radar altitude: 1616m"
               display_condition={true}
             >
 
-              <img src={radarIcon} className='w-5 h-5 hover:bg-gray-400 p-0.5 rounded-sm' alt="" />  
+              <img 
+                aria-label='Radar altitude indicator'
+                src={radarIcon} className='w-5 h-5 hover:bg-gray-400 p-0.5 rounded-sm' alt="radar_icon" />  
             </Tooltip>
           </div>
 

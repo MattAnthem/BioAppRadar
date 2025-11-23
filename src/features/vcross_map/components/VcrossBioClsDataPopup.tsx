@@ -150,9 +150,10 @@ const VcrossBioClsDataPopup = () => {
         onChange={handleBioClassTimeChange}
       />
       <ButtonBorder
-            onClick={handleSubmitPopup}
-            className="p-2 mt-2"
-            isPrimary
+        ariaLabel='Display Bioclass Data on map'
+        onClick={handleSubmitPopup}
+        className="p-2 mt-2"
+        isPrimary
       >
 
             Display Data

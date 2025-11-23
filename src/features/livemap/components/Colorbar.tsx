@@ -20,7 +20,7 @@ const Colorbar = ({ colorCodes, className, valueScale }: ColorbarProps) => {
       <div className="w-full h-4 rounded-b-sm border-t-gray-800/65 px-1 flex justify-between items-center pointer-events-none" style={gradientStyle}>
         {
             valueScale.map((val) => (
-                <small key={val} className="text-white [text-shadow:-1px_-0.5px_1px_black,0.5px_1px_1px_black]">{val}</small>
+                <small key={val} className="text-white lg:text-sm xl:text-sm text xs [text-shadow:-1px_-0.5px_1px_black,0.5px_1px_1px_black]">{val}</small>
             ))
         }
         

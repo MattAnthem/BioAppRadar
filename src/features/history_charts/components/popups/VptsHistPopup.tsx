@@ -174,6 +174,7 @@ const VptsHistPopup = () => {
 
         {/* Display data button */}
         <ButtonBorder
+            ariaLabel="Display VPTS data"
             onClick={handleSubmitPopupData}
             className='py-2 mt-2'
             isPrimary

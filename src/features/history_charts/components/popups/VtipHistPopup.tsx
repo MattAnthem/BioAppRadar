@@ -174,6 +174,7 @@ const VtipHistPopup = () => {
 
         {/* Display data button */}
         <ButtonBorder
+            ariaLabel='Display VTIP data'
             onClick={handleSubmitPopupData}
             className='py-2 mt-2'
             isPrimary

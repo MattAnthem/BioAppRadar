@@ -1,7 +1,7 @@
-import { useEffect, useMemo, lazy } from "react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import { useAppDispatch } from "../../store/hooks"
 import { useVtipData } from "./hooks/useVtipData";
-import { Unplug } from "lucide-react";
+import { Fullscreen, Settings2, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
@@ -67,8 +67,25 @@ const VtipChart = ({ className }: VtipChartProps) => {
               <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
 
                 <div className="z-5 flex justify-center gap-1.5">
-                    <VtipSpeciePopup/>
-                    <VtipModal/>
+
+                    {/* Species selection */}
+                    <Suspense fallback={
+                      <div className=" p-1 rounded-sm">
+                        <Settings2 width={15} height={15} />
+                      </div>}
+                    >
+                      <VtipSpeciePopup/>
+                    </Suspense>
+
+                    {/* Modal chart */}
+                    <Suspense fallback={
+                      <div className=" p-1 rounded-sm">
+                        <Fullscreen width={15} height={15}/>
+                      </div> }
+                    >
+                      <VtipModal/>
+                    </Suspense>
+
                 </div>
                 
           </div>

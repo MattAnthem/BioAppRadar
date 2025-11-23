@@ -79,6 +79,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
             width="w-full"
             value={selectedBoundary.displayText}
             className="border-0! bg-none!"
+        
           />
           {/* Select coverage Types */}
           <SimpleSelect

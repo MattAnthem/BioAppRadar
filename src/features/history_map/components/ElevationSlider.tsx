@@ -26,8 +26,9 @@ const ElevationSlider = ({ elevations, handleChange, currentIdx }: ElevationSlid
            >
              <div  className="w-full h-full flex items-start justify-center">
                  <button
-                   onClick={() => handleChange(i)}
-                   className={`${
+                    aria-label={`Set elevation to ${elev} degree`}
+                    onClick={() => handleChange(i)}
+                    className={`${
                      i === currentIdx ? 'bg-blue-800' : 'bg-gray-300'
                    } w-3 h-4 hover:w-5  relative cursor-pointer  hover:bg-blue-800`}
 

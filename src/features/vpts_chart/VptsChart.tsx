@@ -1,7 +1,7 @@
-import { useEffect, useMemo, lazy } from "react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import { useAppDispatch } from "../../store/hooks";
 import { useVptsData } from "./hooks/useVptsData";
-import { Unplug } from "lucide-react";
+import { Fullscreen, Settings2, Unplug } from "lucide-react";
 import loader from '../../assets/loader.webp';
 import dayjs from "dayjs";
 import { useVpTemporalCoverageQuery } from "../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
@@ -71,9 +71,23 @@ const VptsChart = ({className}: VptsChartProps) => {
             
             <div className="flex justify-center gap-1 5">
 
-              <VptsSpeciePopup/>
+              {/* Species selection */}
+              <Suspense fallback={
+                <div className=" p-1 rounded-sm">
+                  <Settings2 width={15} height={15} />
+                </div>}
+              >
+                <VptsSpeciePopup/>
+              </Suspense>
+
               {/* Modal */}
-              <VptsModal/>
+              <Suspense fallback={
+                <div className=" p-1 rounded-sm">
+                  <Fullscreen width={15} height={15}/>
+                </div> }
+              >
+                <VptsModal/>
+              </Suspense>
 
             </div>
         </div>           

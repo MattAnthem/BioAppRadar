@@ -175,6 +175,7 @@ return (
                   text="Display as image"
                 >
                   <button 
+                    aria-label='Display as PNG'
                     onClick={handleSetToPngMode} 
                     className={`
                         w-full flex gap-1 justify-center items-center 
@@ -194,6 +195,7 @@ return (
                   text="Display as gif"
                 >
                   <button 
+                    aria-label='Display as GIF'
                     onClick={handleSetToGifMode} 
                     className={`
                         w-full flex gap-1 justify-center items-center 
@@ -286,6 +288,7 @@ return (
 
       {/* Display data btn */}
       <ButtonBorder
+        ariaLabel='Display Classification Data on map'
         onClick={handleSubmit}
         className='py-2 mt-2'
         isPrimary

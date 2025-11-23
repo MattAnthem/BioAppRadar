@@ -82,6 +82,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
           {/* Play/Pause */}
           <button
+            aria-label="Play/Pause animation"
             onClick={() => setIsPlaying(!isPlaying)}
             className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-1"
           >
@@ -95,7 +96,9 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
               text="Step backward"
               display_condition={true}
             >
-              <button onClick={handleStepBackward} className="p-1 rounded-l-sm hover:bg-gray-700 text-gray-300">
+              <button 
+                aria-label="Step backward"
+                onClick={handleStepBackward} className="p-1 rounded-l-sm hover:bg-gray-700 text-gray-300">
                 <ChevronLeft width={17} height={17} className=" rounded-sm"/>
               </button>
 
@@ -107,7 +110,9 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
               text="Step forward" 
               display_condition={true}
             >
-              <button onClick={handleStepForward} className="p-1 rounded-r-sm hover:bg-gray-700 text-gray-300">
+              <button 
+                aria-label="Step forward"
+                onClick={handleStepForward} className="p-1 rounded-r-sm hover:bg-gray-700 text-gray-300">
                 <ChevronRight width={17} height={17} className=" rounded-sm"/>
               </button>
             </Tooltip>
@@ -120,6 +125,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
               <Tooltip key={frame} position="top" text={frame} display_condition={true}>
 
                 <button
+                  aria-label={`Select frame ${frame}`}
                   onClick={() => {
                     onFrameChange(i);
                     setIsPlaying(false); 
