@@ -1,21 +1,12 @@
 import { forwardRef } from 'react';
 import Highcharts from 'highcharts';
-import Windbarb from 'highcharts/modules/windbarb';
 import HighchartsReact from 'highcharts-react-official';
 import { useTheme } from '../../hooks/useTheme';
 import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { ErrorBoundary } from "react-error-boundary";
-import exporting from "highcharts/modules/exporting";
-import exportData from "highcharts/modules/export-data";
-import offlineExporting from "highcharts/modules/offline-exporting";
-import HCAccessibility from "highcharts/modules/accessibility";
+import { useHighchartsModules } from './hook/useChartModules';
 
-exporting(Highcharts);
-exportData(Highcharts);
-offlineExporting(Highcharts);
 
-Windbarb(Highcharts);
-HCAccessibility(Highcharts);
 
 interface VpChartHighchartsProps {
   data: VpResponse;
@@ -33,11 +24,19 @@ type AxisWithBands = Highcharts.Axis & {
 const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHighchartsProps>(
   ({ data, chartHeight, displayTitle, radarAltitude = 1616, selectedHeight = 0 }, chartRef) => {
 
+
+    // Loading dynamically module
+    const isModuleReady = useHighchartsModules(['accessibility', 'exporting', 'export-data', 'offline-exporting', 'windbarb']);
+
     const theme = useTheme();
     const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.theme.charts;
 
     const seriesData = data.height.map((h, i) => [h, data.parameter[i]]);
-    const seriesWind = data.height.map((h, i) => [h, data.ff[i], data.dd[i]]);
+
+    const seriesWind = data.height
+      .map((h, i) => [h, data.ff[i], data.dd[i]])
+      .filter(([ff]) => ff! > 0.1);
+    
     const vmax = Math.max(...data.parameter.filter((v): v is number => v !== null));
 
     const options: Highcharts.Options = {
@@ -187,6 +186,7 @@ const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHi
             headerFormat: '<b>{series.name}</b><br/>',
             pointFormat: `Altitude: {point.x} m<br>{series.name}: {point.y:.2f} ${data.units}`,
           },
+          turboThreshold: 0,
         },
         {
           type: 'windbarb',
@@ -201,12 +201,18 @@ const VpChartHighcharts = forwardRef<HighchartsReact.RefObject | null, VpChartHi
             headerFormat: '<b>{series.name}</b><br/>',
             pointFormat: `Altitude: {point.x} m<br>Speed: {point.value:.1f} m/s<br>Direction: {point.direction:.0f}°`,
           },
+          turboThreshold: 0
         },
       ],
 
       legend: { enabled: false },
       credits: { enabled: false },
     };
+
+    // Render nothing if modules are not ready
+    if (!isModuleReady) {
+      return <div></div>;
+    }
 
     return (
       <ErrorBoundary fallback={<div>...</div>}>

@@ -1,6 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+
+@font-face {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/work-sans-v24-latin-regular.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Work Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./assets/fonts/work-sans-v24-latin-700.woff2') format('woff2');
+  font-display: swap;
+}
 
 .dark .rdtPicker {
   @apply bg-zinc-700 text-gray-100 rounded-b-sm border-gray-600 w-full;

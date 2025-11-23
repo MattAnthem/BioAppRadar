@@ -1,23 +1,12 @@
 import React, { useMemo } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import HCHeatmap from 'highcharts/modules/heatmap';
-import HCAnnotations from 'highcharts/modules/annotations';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { VptsResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
-import exporting from "highcharts/modules/exporting";
-import exportData from "highcharts/modules/export-data";
-import offlineExporting from "highcharts/modules/offline-exporting";
-import HCAccessibility from "highcharts/modules/accessibility";
+import { useHighchartsModules } from './hook/useChartModules';
 
-exporting(Highcharts);
-exportData(Highcharts);
-offlineExporting(Highcharts);
 
-HCHeatmap(Highcharts);
-HCAnnotations(Highcharts);
-HCAccessibility(Highcharts);
 interface VpHeatmapChartProps {
     data: VptsResponse;
     radarAltitude?: number;
@@ -31,6 +20,10 @@ interface DayNightChart extends Highcharts.Chart {
 
 const VptsHeatmapChart = React.forwardRef<HighchartsReact.RefObject, VpHeatmapChartProps>(
     ({ data, legend, title, radarAltitude=1616}, ref) => {
+
+    // Dynamic module importing
+    const isModuleReady = useHighchartsModules(['accessibility', 'exporting', 'export-data', 'offline-exporting', 'heatmap', 'annotations']);
+    
 
 
     const { theme } = useTheme();
@@ -318,6 +311,10 @@ const VptsHeatmapChart = React.forwardRef<HighchartsReact.RefObject, VpHeatmapCh
         };
     }, [data, radarAltitude, borderBox, chartFontColor, title, chartLegendColor, chartGridline, tckn, tckx, colorPalette, seriesData, legend]);
 
+    // Fallback if module not loaded yet
+    if (!isModuleReady) {
+        return <div></div>;
+    }
 
     return (
         <ErrorBoundary fallback={<div>...</div>}>

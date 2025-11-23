@@ -3,10 +3,9 @@ import L from 'leaflet';
 import "leaflet-draw";
 import { enableDraw } from "./feature/enableDraw";
 import { enableDrawLine } from "./feature/enableDrawLine";
-import airportMarker from '../../../assets/airport.png';
 
 const planeMarker = L.icon({
-  iconUrl: airportMarker,
+  iconUrl: new URL('../../../assets/airport.png', import.meta.url).href,
   iconSize: [35, 35],
   iconAnchor: [14, 10],
 })
@@ -109,16 +108,16 @@ const LeafletMap = ({
       map.remove();
       mapRef.current = null;
     };
-  }, [boxZoom, scrollWheelZoom, baseMap]);
+  }, [boxZoom, scrollWheelZoom, baseMap, zoom, drawable, onDrawPolygon]);
 
-    useEffect(() => {
+  useEffect(() => {
       const map = mapRef.current;
       if (!map) return;
     
       if (enableLineDraw) {
         enableDrawLine(map, onDrawLine);
       } 
-    }, [enableLineDraw, onDrawLine]);
+  }, [enableLineDraw, onDrawLine]);
 
 
   // Add GeoJSON layers according to users parameters

@@ -1,22 +1,12 @@
 import React, { useMemo } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import windbarb from "highcharts/modules/windbarb";
-import annotations from "highcharts/modules/annotations";
-import accessibility from "highcharts/modules/accessibility";
-import exporting from "highcharts/modules/exporting";
-import exportData from "highcharts/modules/export-data";
-import offlineExporting from "highcharts/modules/offline-exporting";
 import type { VtipResponse } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 import { useTheme } from "../../hooks/useTheme";
 import { ErrorBoundary } from "react-error-boundary";
+import { useHighchartsModules } from "./hook/useChartModules";
 
-windbarb(Highcharts);
-annotations(Highcharts);
-accessibility(Highcharts);
-exporting(Highcharts);
-exportData(Highcharts);
-offlineExporting(Highcharts);
+
 
 
 interface VtipChartProps {
@@ -32,6 +22,9 @@ interface DayNightChart extends Highcharts.Chart {
 
 const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
   ({ data, title = false, chartHeight }, ref) => {
+
+    // Loading modules dynamically
+    const isModuleReady = useHighchartsModules(["accessibility", "windbarb", "annotations", "exporting", "export-data", "offline-exporting"])
 
     const { theme } = useTheme();
     const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.charts;
@@ -64,7 +57,11 @@ const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
       const sunset = data.sunset.map(t => Date.parse(t.replace(" ", "T") + "Z"));
 
       const seriesData = times.map((t, i) => [t, data.parameter[i]]);
-      const seriesWind = times.map((t, i) => [t, data.ff[i], data.dd[i]]);
+
+      const seriesWind = times.reduce<number[][]>((acc, t, i) => {
+        if (data.ff[i] > 0.1) acc.push([t, data.ff[i], data.dd[i]]);
+        return acc;
+      }, []);
 
       let pmin = Math.min(...data.parameter);
       let pmax = Math.max(...data.parameter);
@@ -211,7 +208,8 @@ const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
             type: 'area', 
             id: 'parameter', 
             data: seriesData, 
-            name: data.name 
+            name: data.name ,
+            turboThreshold: 0,
           },
           { 
             type: 'windbarb', 
@@ -220,8 +218,9 @@ const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
             name: 'Wind', 
             color: 'red', 
             lineWidth: 1.5, 
-            vectorLength: 20 
-          }
+            turboThreshold: 0,
+            vectorLength: 20, 
+          },
         ],
         tooltip: {
           shared: true,
@@ -265,6 +264,10 @@ const VtipChart = React.forwardRef<HighchartsReact.RefObject, VtipChartProps>(
         }
       };
     }, [borderBox, chartFontColor, chartGridline, chartLegendColor, data, title]);
+
+    if (!isModuleReady) {
+      return <div></div>;
+    }
 
     return (
       <ErrorBoundary
