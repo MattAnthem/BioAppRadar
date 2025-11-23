@@ -36,7 +36,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
     <SectionCard className={`${className} h-full items-center flex flex-col gap-0.5`}>
 
         {/* Heading */}
-        <div className="p-1 w-full flex justify-between items-center">
+        <div className="p-1 relative w-full flex justify-between items-center">
             <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec) ?? '--'} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
             
             <div className="flex justify-center gap-2">

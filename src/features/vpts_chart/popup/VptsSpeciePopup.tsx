@@ -2,23 +2,15 @@ import OptionPopover from '../../../shared/components/popups/option/OptionPopove
 import SimpleSelect from '../../../shared/components/selects/SimpleSelect'
 import type { SelectOption } from '../../../shared/components/selects/types'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { changeVptsPayload, closeSpeciesPopup, setSelectedVptsSPecie, toggleSpeciesPopup } from '../vptsChartSlice'
+import { changeVptsPayload, setSelectedVptsSPecie } from '../vptsChartSlice'
 
 const VptsSpeciePopup = () => {
 
-    const { isSpeciesPopupOpen, speciesOptions, selectedSpecie } = useAppSelector(state => state.vptschart)
+    const { speciesOptions, selectedSpecie } = useAppSelector(state => state.vptschart)
 
 
     const dispatch = useAppDispatch();
 
-
-    // Popup handler
-    const togglePopup = () => {
-        dispatch(toggleSpeciesPopup())
-    }
-    const closePopup = () => {
-        dispatch(closeSpeciesPopup());
-    }
 
     // Input handler
     const handleSpecieChange = (option: SelectOption) => {
@@ -30,9 +22,6 @@ const VptsSpeciePopup = () => {
 
   return (
     <OptionPopover
-        isOpen={isSpeciesPopupOpen}
-        onOpen={togglePopup}
-        onClose={closePopup}
         hoverText='Change species'
         isSimpleSelect
     >

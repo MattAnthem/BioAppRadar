@@ -69,6 +69,7 @@ const OptionPopover = ({
     const popup = popupContentRef.current;
     const containerRect = popupRef.current.getBoundingClientRect();
 
+
     popup.style.visibility = "hidden";
     popup.style.opacity = '0';
     popup.style.pointerEvents = 'none';
@@ -84,6 +85,12 @@ const OptionPopover = ({
     const spaceBelow = window.innerHeight - containerRect.bottom;
     const spaceAbove = containerRect.top;
 
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      setOpenUpwards(false);
+      return;
+    }
+
     if (spaceBelow >= height) {
       setOpenUpwards(false);
     } else if (spaceAbove >= height) {
@@ -93,6 +100,8 @@ const OptionPopover = ({
     }
 
   }, [isPopupOpen]);
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
   return (
     <div ref={popupRef} className={`lg:relative md:relative inline-block`}>
@@ -118,8 +127,13 @@ const OptionPopover = ({
       <div
         ref={popupContentRef}
         className={`
-          ${options_bg} ${border} z-20 border shadow-sm flex flex-col gap-2 justify-center ${isSimpleSelect ? 'lg:w-[10vw] md:w-[25vw]' : 'lg:w-[25vw] md:w-[45vw] w-full'}    
-          absolute right-0 ${openUpwards ? "bottom-full mb-1 origin-bottom-right" : "top-full origin-top-right"}
+          ${options_bg} ${border} z-20 border shadow-sm flex flex-col gap-2 justify-center 
+          ${isSimpleSelect ? 'lg:w-[10vw] md:w-[25vw]' : 'lg:w-[25vw] md:w-[45vw] w-full'}    
+          absolute right-0 
+          ${openUpwards ? "bottom-full mb-1 origin-bottom-right" : "top-full origin-top-right"}
+          ${
+            isMobile ? "top-full left-0 origin-top-right" : '' 
+          }
           p-2 rounded-sm transition-transform duration-100 ease-ou
           ${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none hidden"}
         `}

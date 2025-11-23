@@ -2,23 +2,16 @@ import OptionPopover from "../../../shared/components/popups/option/OptionPopove
 import SimpleSelect from "../../../shared/components/selects/SimpleSelect";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { changeVtipPayload, closeSpeciesPopup, setSelectedVtipSpecie, toggleSpeciesPopup } from "../vtipChartSlice";
-
+import { changeVtipPayload, setSelectedVtipSpecie } from "../vtipChartSlice";
+import { memo } from "react";
 
 const VtipSpeciePopup = () => {
 
     // Redux readOnly states
-    const { isSpeciesPopupOpen, speciesOptions, selectedSpecie } = useAppSelector(state => state.vtipchart);
+    const { speciesOptions, selectedSpecie } = useAppSelector(state => state.vtipchart);
 
     const dispatch = useAppDispatch();
 
-    // Popup handler
-    const togglePopup = () => {
-        dispatch(toggleSpeciesPopup())
-    }
-    const closePopup = () => {
-        dispatch(closeSpeciesPopup());
-    }
 
     // Input handler
     const handleSpecieChange = (option: SelectOption) => {
@@ -30,9 +23,6 @@ const VtipSpeciePopup = () => {
 
   return (
     <OptionPopover
-        isOpen={isSpeciesPopupOpen}
-        onOpen={togglePopup}
-        onClose={closePopup}
         hoverText='Change species'
         isSimpleSelect
     >
@@ -50,4 +40,4 @@ const VtipSpeciePopup = () => {
   )
 }
 
-export default VtipSpeciePopup
+export default memo(VtipSpeciePopup);
