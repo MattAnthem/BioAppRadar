@@ -50,7 +50,7 @@ const NavContent = (
             {/* Badge if have some */}
             {
                 badge && (
-                    <small className={`${isNav_minimized ? 'absolute -top-4 -right-2' : ''} p-1 h-6 text-[11px] flex items-center justify-center text-center bg-red-500 text-white rounded-sm`}>{badge}</small>
+                    <small className={`${isNav_minimized ? 'absolute -top-4 -right-2' : ''} p-1 h-6 text-[11px] flex items-center justify-center text-center bg-red-600 text-white rounded-sm`}>{badge}</small>
                 )
             }
         

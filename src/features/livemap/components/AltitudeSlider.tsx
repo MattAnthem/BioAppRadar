@@ -34,11 +34,11 @@ const AltitudeSlider = (
 
 
   return (
-    <div className={` ${className} z-10 border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
+    <div className={`${className} z-10 border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
       
 
       {/* Altitude band */}
-      <div className="h-fit flex flex-col justify-center items-center">
+      <div className="h-full flex flex-col justify-center items-center py-1">
 
         <small className='text-[10px] text-xs text-center font-light'>Height in meters</small>
 
@@ -58,7 +58,7 @@ const AltitudeSlider = (
                     onClick={() => onChangeAltitude(i)}
                     className={`${
                       i === currentIndex ? 'bg-blue-800' : 'bg-gray-300'
-                    } w-3 h-1 hover:w-5  relative cursor-pointer  hover:bg-blue-800`}
+                    } w-3 h-1 hover:w-5 cursor-pointer  hover:bg-blue-800`}
                   >
                   </button>
               </div>

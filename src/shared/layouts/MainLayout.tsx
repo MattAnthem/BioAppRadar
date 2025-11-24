@@ -3,6 +3,7 @@ import  { type ReactNode } from 'react';
 type LayoutProps = {
     className?: string;
     children?: ReactNode;
+    id?: string;
 }
 
 /**
@@ -11,9 +12,9 @@ type LayoutProps = {
  * @param className: Additional tailwind classes
  * @returns React.JSX.Element
  */
-const MainLayout = ({ className, children }: LayoutProps) => {
+const MainLayout = ({ className, children, id }: LayoutProps) => {
   return (
-    <div className={`${className} w-full h-screen min-h-screen px-4 pt-10  overflow-y-auto overflow-x-hidden`}>
+    <div id={id} className={`${className} w-full h-screen min-h-screen px-4 pt-10  overflow-y-auto overflow-x-hidden`}>
       {children}
     </div>
   )

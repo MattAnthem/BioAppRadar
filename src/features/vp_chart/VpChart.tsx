@@ -65,7 +65,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 relative w-full flex justify-between items-center">
-            <h3 className='tracking-wider text-xs font-semibold'>{capitalize(data?.query_spec)} - {data?.name ?? '--'} ({data?.units ?? '--'})</h3>
+            <h1 className='tracking-wider text-xs font-semibold'>{capitalize(data?.query_spec)} - {data?.name ?? '--'} ({data?.units ?? '--'})</h1>
 
             {/* Open the modal */}
             <div className="flex justify-center gap-1 5">

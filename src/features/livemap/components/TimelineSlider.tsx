@@ -59,11 +59,9 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
   return (
     <div className="z-5 absolute bottom-0 left-0 w-full">
-      <div className="relative w-full">
-
 
         {/* Timeline controls */}
-        <div className="flex w-full justify-start items-center 2xl:gap-2 gap-1 mt-2 border-white/20 bg-gray-900/45 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
+        <div className="flex w-full justify-start items-center 2xl:gap-2 gap-1 border-white/20 bg-gray-900/45 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
 
            {/* Timestamp indicator */}
            {currentFrame ? (
@@ -132,7 +130,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
                   }}
                   className={`${
                     currentIndex === i ? "bg-blue-800" : "bg-gray-300"
-                    } hover:bg-blue-700 h-3 w-3  cursor-pointer 2xl:rounded-xs`}
+                    } hover:bg-blue-700 h-6 w-6 p-1 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>
             ))}
@@ -141,7 +139,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
 
 
         </div>
-      </div>
+
     </div>
   );
 };

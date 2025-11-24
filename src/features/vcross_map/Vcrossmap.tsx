@@ -142,7 +142,7 @@ const Vcrossmap = () => {
               className='z-20 p-1 flex justify-between items-center'
             >
 
-                <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
+                <h1 className='text-white tracking-wider text-xs'>{data?.info.name}</h1>
 
                 {/* Data popover Options */}
                 <div className="z-5 flex gap-2 justify-center items-end">

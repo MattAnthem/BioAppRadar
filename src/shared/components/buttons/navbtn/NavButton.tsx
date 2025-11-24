@@ -76,6 +76,8 @@ const NavButton = (
     handleActivate(menu_to);
   }
 
+
+
   return (
     <>
     {/* Wrap the nav with a tooltip to show text when the navbar is minimized */}
@@ -83,11 +85,10 @@ const NavButton = (
 
       {/* The actual Nav button */}
       <button 
-          role='menuitem' 
-          onKeyUp={() => handleNavigation()}
+          onKeyUp={handleNavigation}
           aria-label={ariaLabel}
           aria-controls={ariaControls}
-          onClick={() => handleNavigation()}
+          onClick={handleNavigation}
           className={`
                       flex rounded-sm w-full items-start justify-between p-2 my-2 gap-1.5 cursor-pointer 
                       focus-visible:outline-2 outline-offset-1 outline-blue-800

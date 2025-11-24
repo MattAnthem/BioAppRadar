@@ -23,7 +23,7 @@ const SubnavBtn = (
   return (
 
         <button 
-          aria-label='nav-submenu'
+          aria-label={`Navigate to ${sub}`}
           aria-controls='subnav'
           key={sub} 
           onKeyDown={() => handleNavSubmenue(sub)} 

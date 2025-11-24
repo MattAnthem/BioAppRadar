@@ -1,9 +1,10 @@
-import React, { useState, useEffect, memo } from "react";
-import Datetime from "react-datetime";
+import React, { useState, useEffect, memo, lazy, Suspense } from "react";
 import moment from "moment";
 import "react-datetime/css/react-datetime.css";
 import { useAppSelector } from "../../../store/hooks";
 import { Calendar } from "lucide-react";
+
+const Datetime = lazy(() => import('react-datetime'));
 
 type DateTimeProps = {
   value?: string;
@@ -99,25 +100,27 @@ const ReactDatetimePicker: React.FC<DateTimeProps> = ({ value, onChange, minDate
         isDarkMode ? "dark" : "light"
       } ${pickerTheme.border} ${pickerTheme.bg}`}
     >
-      <Datetime
-        value={internalValue}
-        dateFormat="YYYY-MM-DD"
-        timeFormat="HH:mm:ss"
-        onChange={handleChange}
-        isValidDate={isValidCalendarDate}
-        inputProps={{
-          value: manualInput,
-          onChange: handleManualChange,
-          onBlur: handleBlur,
-          placeholder: "YYYY-MM-DD HH:mm:ss",
-          className: `rounded-[2px] p-1.5  text-sm w-full outline-none transition-opacity ${
-            isValid
-              ? "border-gray-400 focus:ring-1 focus:ring-offset-2 focus:ring-blue-700"
-              : "border-red-500 focus:ring-1 focus:ring-offset-2 focus:ring-red-400"
-          } ${pickerTheme.text}`,
-        }}
-        closeOnSelect
-      />
+      <Suspense>
+        <Datetime
+          value={internalValue}
+          dateFormat="YYYY-MM-DD"
+          timeFormat="HH:mm:ss"
+          onChange={handleChange}
+          isValidDate={isValidCalendarDate}
+          inputProps={{
+            value: manualInput,
+            onChange: handleManualChange,
+            onBlur: handleBlur,
+            placeholder: "YYYY-MM-DD HH:mm:ss",
+            className: `rounded-[2px] p-1.5  text-sm w-full outline-none transition-opacity ${
+              isValid
+                ? "border-gray-400 focus:ring-1 focus:ring-offset-2 focus:ring-blue-700"
+                : "border-red-500 focus:ring-1 focus:ring-offset-2 focus:ring-red-400"
+            } ${pickerTheme.text}`,
+          }}
+          closeOnSelect
+        />
+      </Suspense>
       <Calendar className="absolute w-4 h-4 right-2 bottom-2"/>
     </div>
   );

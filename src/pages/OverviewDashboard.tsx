@@ -8,7 +8,7 @@ const VtipChart = React.lazy(() => import("../features/vtip_chart/VtipChart"));
 
 const OverviewDashboard = () => {
   return (
-    <MainLayout className="w-full min-h-screen">
+    <MainLayout id="overview-dashboard" className="w-full min-h-screen">
       
       <div 
         className={`

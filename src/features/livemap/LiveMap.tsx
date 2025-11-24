@@ -127,7 +127,7 @@ const LiveMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20 p-1 flex justify-between items-center'>
 
-            <h3 className='text-white tracking-wider text-xs'>{data?.info.name}</h3>
+            <h1 className='text-white tracking-wider text-xs'>{data?.info.name}</h1>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-2 justify-center items-end">
@@ -168,7 +168,7 @@ const LiveMap = () => {
 
         {/* Altitude slider */}
 
-        <div className="lg:h-full h-[70%] absolute lg:bottom-0 bottom-[10vh] right-2 flex lg:items-center items-start lg:py-16 ">
+        <div className="lg:h-full h-[80%] absolute lg:bottom-3 bottom-[6vh] right-2 flex lg:items-center items-start lg:py-12 ">
                 <AltitudeSlider
                     currentIndex={currentAltitudeIndex}
                     onChangeAltitude={handleAltitudeChange}

@@ -9,7 +9,7 @@ const CrossSection = () => {
 
 
   return (
-    <MainLayout className='h-full min-h-screen'>
+    <MainLayout id='vertical-transect' className='h-full min-h-screen'>
         
 
         <div 

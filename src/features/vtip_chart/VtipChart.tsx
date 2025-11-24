@@ -64,7 +64,7 @@ const VtipChart = ({ className }: VtipChartProps) => {
   
           {/* Heading */}
           <div className="p-1 relative w-full flex items-center justify-between">
-              <h3 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h3>
+              <h1 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h1>
 
                 <div className="z-5 flex justify-center gap-1.5">
 

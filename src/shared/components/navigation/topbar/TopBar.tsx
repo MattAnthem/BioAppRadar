@@ -29,7 +29,7 @@ const TopBar = () => {
 
       {/* Left Controls */}
       {/* Menu toggler button for smaller screen */}
-      <button aria-labelledby='collapse sidebar' name='toggle_sidebar' onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.icon_color} lg:hidden rounded-sm p-1`}>
+      <button aria-label='Minimize sidebar' aria-labelledby='collapse sidebar' name='toggle_sidebar' onClick={handleToggleSidebar} className={`${topbar.contents.toggler_hover} ${topbar.contents.icon_color} lg:hidden rounded-sm p-1`}>
         <Menu className='w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4'/>
       </button>
       
@@ -44,8 +44,7 @@ const TopBar = () => {
             isActive={isDarkMode}
             height={15}
             width={30}
-            ariaLabel='Toggle theme'
-            ariaControls='App theme'
+            ariaLabel={`Change application theme to ${isDarkMode ? 'light mode' : 'dark mode'}`}
         />
         
         <Moon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.icon_color}`}/>

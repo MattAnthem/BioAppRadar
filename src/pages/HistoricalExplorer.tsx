@@ -8,7 +8,7 @@ const VtipHistChart = React.lazy(() => import("../features/history_charts/compon
 
 const HistoricalExplorer = () => {
   return (
-    <MainLayout className="w-full min-h-screen">
+    <MainLayout id='historical-explorer' className="w-full min-h-screen">
       
       <div 
         className={`

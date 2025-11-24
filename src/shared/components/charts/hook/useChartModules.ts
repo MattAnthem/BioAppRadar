@@ -60,6 +60,11 @@ const moduleMap: Record<ModuleName, () => Promise<HighchartsModule>> = {
     ),
 };
 
+/**
+ * Dynamically loading higcharts Modules
+ * @param modules module names 
+ * @returns isModuleReady boolean
+ */
 export const useHighchartsModules = (modules: ModuleName[]) => {
   const [loaded, setLoaded] = useState(false);
 
