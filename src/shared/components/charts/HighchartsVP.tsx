@@ -1,5 +1,4 @@
 import { forwardRef, lazy, Suspense, type ComponentRef } from 'react';
-import Highcharts from 'highcharts';
 import { useTheme } from '../../hooks/useTheme';
 import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { ErrorBoundary } from "react-error-boundary";
@@ -26,9 +25,11 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
   ({ data, chartHeight, displayTitle, radarAltitude = 1616, selectedHeight = 0 }, chartRef) => {
 
 
-    // Loading dynamically module
-    const isModuleReady = useHighchartsModules(['accessibility', 'exporting', 'export-data', 'offline-exporting', 'windbarb']);
+    // Loading dynamically module and highchart
+    const [Highcharts, loaded]= useHighchartsModules(['accessibility', 'exporting', 'export-data', 'offline-exporting', 'windbarb']);
 
+
+    // theme
     const theme = useTheme();
     const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.theme.charts;
 
@@ -212,7 +213,7 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
     };
 
     // Render nothing if modules are not ready
-    if (!isModuleReady) {
+    if (!loaded || !Highcharts) {
       return <div></div>;
     }
 

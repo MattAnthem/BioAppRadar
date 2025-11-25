@@ -5,7 +5,7 @@ import { changeHistBaseMap, changeHistColormap, setSelectedBoundaryHist, setSele
 import { memo, lazy } from "react";
 
 const SimpleSelect = lazy(() => import("../../../shared/components/selects/SimpleSelect"));
-const Colorbar = lazy(() => import("../../livemap/components/Colorbar"));
+const Colorbar = lazy(() => import("../../../shared/components/legends/Colorbar"));
 const OptionPopover = lazy(() => import("../../../shared/components/popups/option/OptionPopover"));
 
 

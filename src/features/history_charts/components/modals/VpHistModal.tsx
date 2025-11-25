@@ -11,6 +11,10 @@ import type HighchartsReact from 'highcharts-react-official';
 
 const VpChartHighcharts = lazy(() => import('../../../../shared/components/charts/HighchartsVP'));
 
+/**
+ * Modal component to display the vertical profile historical chart
+ * @returns VpHistModal component JSX.Element
+ */
 const VpHistModal = () => {
     const themes = useTheme();
     const { bg, border, hover } = themes.theme.simpleSelect;
@@ -43,7 +47,7 @@ const VpHistModal = () => {
         setDisplayMode('interactive');
     }
 
-    //  Chart download
+    //  Chart download 
     const chartRef = useRef<HighchartsReact.RefObject | null>(null);
     
     const handleDownloadChart = () => {

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Highcharts from "highcharts";
 
 
-type HighchartsModule = (H: typeof Highcharts) => void;
+type HighchartsModule = (H: typeof import("highcharts")) => void;
 
-type ModuleName =
+
+export type ModuleName =
   | "exporting"
   | "export-data"
   | "offline-exporting"
@@ -14,69 +14,43 @@ type ModuleName =
   | "heatmap";
 
 
-type ModuleImport = HighchartsModule | { default: HighchartsModule };
-
 const moduleMap: Record<ModuleName, () => Promise<HighchartsModule>> = {
   exporting: () =>
-    import("highcharts/modules/exporting").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
-
+    import("highcharts/modules/exporting").then(mod => mod.default || mod),
   "export-data": () =>
-    import("highcharts/modules/export-data").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
-
+    import("highcharts/modules/export-data").then(mod => mod.default || mod),
   "offline-exporting": () =>
-    import("highcharts/modules/offline-exporting").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
-
+    import("highcharts/modules/offline-exporting").then(mod => mod.default || mod),
   accessibility: () =>
-    import("highcharts/modules/accessibility").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
-
+    import("highcharts/modules/accessibility").then(mod => mod.default || mod),
   windbarb: () =>
-    import("highcharts/modules/windbarb").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
-
+    import("highcharts/modules/windbarb").then(mod => mod.default || mod),
   annotations: () =>
-    import("highcharts/modules/annotations").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
-
+    import("highcharts/modules/annotations").then(mod => mod.default || mod),
   heatmap: () =>
-    import("highcharts/modules/heatmap").then(
-      (mod: ModuleImport) =>
-        (typeof mod === "function" ? mod : mod.default)
-    ),
+    import("highcharts/modules/heatmap").then(mod => mod.default || mod),
 };
 
-/**
- * Dynamically loading higcharts Modules
- * @param modules module names 
- * @returns isModuleReady boolean
- */
-export const useHighchartsModules = (modules: ModuleName[]) => {
+
+export const useHighchartsModules = (modules: ModuleName[]): [typeof import("highcharts") | null, boolean] => {
+  const [Highcharts, setHighcharts] = useState<typeof import("highcharts") | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
     const load = async () => {
+
+      const H = (await import("highcharts")).default;
+      if (!mounted) return;
+
       for (const name of modules) {
         const moduleFn = await moduleMap[name]();
-        moduleFn(Highcharts);
+        moduleFn(H);
       }
-      if (mounted) setLoaded(true);
+
+      setHighcharts(H);
+      setLoaded(true);
     };
 
     load();
@@ -86,5 +60,5 @@ export const useHighchartsModules = (modules: ModuleName[]) => {
     };
   }, [modules]);
 
-  return loaded;
+  return [Highcharts, loaded];
 };

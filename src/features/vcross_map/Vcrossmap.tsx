@@ -10,7 +10,7 @@ import { useVcrossSevipOverlayData } from './useData/useVcrossSevipOverlayData'
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
-const Colorbar = lazy(() => import('../livemap/components/Colorbar'));
+const Colorbar = lazy(() => import('../../shared/components/legends/Colorbar'));
 const MapbaseVcrossPopup = lazy(() => import('./components/MapbaseVcrossPopup'));
 const VcrossRadarDataPopup = lazy(() => import('./components/VcrossRadarDataPopup'));
 const VcrossBioClsDataPopup = lazy(() => import('./components/VcrossBioClsDataPopup'));

@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { visualizer } from 'rollup-plugin-visualizer';
+import compression from 'vite-plugin-compression';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,6 +15,8 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
     }),
+    compression({ algorithm: "brotliCompress", ext: ".br" }),
+    compression({ algorithm: "gzip", ext: ".gz" })
   ],
   build: {
     target: 'es2022',          
@@ -44,17 +47,14 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom', 'react-redux', '@reduxjs/toolkit'],
-          query: [
-            '@tanstack/react-query',
-            '@tanstack/react-query-devtools',
-            '@tanstack/react-query-persist-client',
-            '@tanstack/query-sync-storage-persister'
-          ],
-          chart: ['highcharts', 'highcharts-react-official'],
-          leaflet: ['leaflet', 'leaflet-draw', 'react-leaflet'],
-          utils: ['axios', 'dayjs', 'moment', 'moment-timezone', 'idb-keyval'],
+ 
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/@reduxjs')) {
+            return 'react';
+          }
+          if (id.includes('node_modules/@tanstack')) return 'query';
+          if (id.includes('node_modules/leaflet')) return 'leaflet';
+          if (id.includes('node_modules/axios') || id.includes('node_modules/dayjs') || id.includes('node_modules/moment')) return 'utils';
         },
         entryFileNames: `assets/js/[name].[hash].js`,
         chunkFileNames: `assets/js/[name].[hash].js`,
@@ -64,7 +64,8 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 500, 
+
+    chunkSizeWarningLimit: 500,
   },
   optimizeDeps: {
     include: [
@@ -72,7 +73,6 @@ export default defineConfig({
       '@tanstack/react-query', '@tanstack/react-query-devtools',
       '@tanstack/react-query-persist-client', '@tanstack/query-sync-storage-persister',
       'axios', 'dayjs', 'moment', 'moment-timezone', 'idb-keyval',
-      'highcharts', 'highcharts-react-official',
       'leaflet', 'leaflet-draw', 'react-leaflet',
     ],
   },

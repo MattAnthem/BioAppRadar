@@ -8,7 +8,7 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
-const Colorbar = lazy(() => import('../../livemap/components/Colorbar'));
+const Colorbar = lazy(() => import('../../../shared/components/legends/Colorbar'));
 
 type MapbaseProps = {
     displayColorbarOption?: boolean;

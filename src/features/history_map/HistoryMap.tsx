@@ -20,11 +20,12 @@ const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
 const RadarOptionPopup = lazy(() => import('./components/RadarOptionPopup'));
 const SevipPopup = lazy(() => import('./components/SevipPopup'));
 const AltitudeSlider = lazy(() => import('../livemap/components/AltitudeSlider'));
-const Colorbar = lazy(() => import('../livemap/components/Colorbar'));
+const Colorbar = lazy(() => import('../../shared/components/legends/Colorbar'));
 const ElevationSlider = lazy(() => import('./components/ElevationSlider'));
 const LeafletMap = lazy(() => import('../../shared/components/map/LeafletMap'));
 const GlassHeader = lazy(() => import('../../shared/components/cards/GlassHeader'));
 const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
+const ClassifLegend = lazy(() => import('../../shared/components/legends/ClassifLegend'));
 
 
 const HistoryMap = () => {
@@ -145,9 +146,6 @@ const HistoryMap = () => {
 
     //#endregion
 
-
-
-
   return (
     <SectionCard className='relative w-full h-full'>
 
@@ -206,11 +204,13 @@ const HistoryMap = () => {
         {/* Colorbar */}
         {
             (!isClassif && !isClassifGif) && (
-                <Colorbar
-                    colorCodes={(data as SpatialDataResponse)?.ckeys?.colors ?? []}
-                    valueScale={(data as SpatialDataResponse)?.ckeys?.labels.map(Number)  ?? []}
-                    className='absolute bottom-0 left-0 z-10'
-                />
+                <Suspense>
+                    <Colorbar
+                        colorCodes={(data as SpatialDataResponse)?.ckeys?.colors ?? []}
+                        valueScale={(data as SpatialDataResponse)?.ckeys?.labels.map(Number)  ?? []}
+                        className='absolute bottom-0 left-0 z-10'
+                    />
+                </Suspense>
             )
         }
 
@@ -218,11 +218,13 @@ const HistoryMap = () => {
         {
             (isClassif || isClassifGif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
                 <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
-                    <AltitudeSlider
-                        currentIndex={currentAltitudeIndex}
-                        onChangeAltitude={handleAltitudeChange}
-                        altitudes={altitudeOptions}
-                    />
+                    <Suspense>
+                        <AltitudeSlider
+                            currentIndex={currentAltitudeIndex}
+                            onChangeAltitude={handleAltitudeChange}
+                            altitudes={altitudeOptions}
+                        />
+                    </Suspense>
                 </div>
             )
         }
@@ -231,11 +233,13 @@ const HistoryMap = () => {
         <div className="h-full absolute right-2 bottom-0 flex items-end justify-center py-10">
             {
                 (mapModeHist === 'radar' && radarPayloadHist.type === 'polar') && (
-                    <ElevationSlider
-                        currentIdx={currentElevationIndex}
-                        elevations={elevations}
-                        handleChange={handleElevationChange}
-                    />
+                    <Suspense>
+                        <ElevationSlider
+                            currentIdx={currentElevationIndex}
+                            elevations={elevations}
+                            handleChange={handleElevationChange}
+                        />
+                    </Suspense>
                 )
             } 
         </div>
@@ -282,26 +286,20 @@ const HistoryMap = () => {
         {
             (isClassif || isClassifGif) && (
                 <div className=" absolute flex flex-col gap-0.5 z-10 lg:w-1/7 h-16 p-2 right-2 bottom-1 border-white/20 bg-gray-900/55 rounded-sm">
-                    
-                    {/* Color 0 */}
-                    <div className="flex justify-start items-center gap-0.5 text-xs">
-                        <div className='lg:w-4 lg:h-4 xl:w-4 xl:h-4 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_0?.color}}/>
-                        <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_0?.name}</small>
-                    </div>
-                    {/* Color 1 */}
-                    <div className="flex justify-start items-center gap-2 text-xs">
-                        <div className='lg:w-4 lg:h-4 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: (data as ClassificationDataResponse)?.legend?.class_1?.color}}/>
-                        <small className='text-white tracking-wide'>{(data as ClassificationDataResponse)?.legend?.class_1?.name}</small>
-                    </div>
-                    <div className="lg:text-xs text-[10px]">
-                        <small className='text-white tracking-wide'>Height: {data?.info.height}</small>
-                    </div>
+                    <Suspense>
+                        <ClassifLegend
+                            classColor0={(data as ClassificationDataResponse)?.legend?.class_0?.color}
+                            class0Name={(data as ClassificationDataResponse)?.legend?.class_0?.name}
+                            classColor1={(data as ClassificationDataResponse)?.legend?.class_1?.color}
+                            class1Name={(data as ClassificationDataResponse)?.legend?.class_1?.name}
+                            height={data?.info.height || 0}
+                        />
+                    </Suspense>
 
                 </div>
             )
         }
 
-      
     </SectionCard>
   )
 }

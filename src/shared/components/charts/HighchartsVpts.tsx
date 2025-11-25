@@ -1,5 +1,4 @@
 import  { useMemo, lazy, forwardRef, Suspense } from 'react';
-import Highcharts from 'highcharts';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { VptsResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { useTheme } from '../../hooks/useTheme';
@@ -23,8 +22,8 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
     ({ data, legend, title, radarAltitude=1616}, ref) => {
 
     // Dynamic module importing
-    const isModuleReady = useHighchartsModules(['accessibility', 'exporting', 'export-data', 'offline-exporting', 'heatmap', 'annotations']);
-    
+    const [ Highcharts, loaded ] = useHighchartsModules(['accessibility', 'exporting', 'export-data', 'offline-exporting', 'heatmap', 'annotations']);
+
 
 
     const { theme } = useTheme();
@@ -87,7 +86,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
 
         if (!data) return {};
 
-        Highcharts.setOptions({
+        Highcharts?.setOptions({
             time: { useUTC: false, timezone: 'Africa/Kigali' }
         });
 
@@ -313,7 +312,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
     }, [data, radarAltitude, borderBox, chartFontColor, title, chartLegendColor, chartGridline, tckn, tckx, colorPalette, seriesData, legend]);
 
     // Fallback if module not loaded yet
-    if (!isModuleReady) {
+    if (!loaded || !Highcharts) {
         return <div></div>;
     }
 

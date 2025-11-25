@@ -1,5 +1,4 @@
 import React, { useMemo, lazy, Suspense } from 'react';
-import Highcharts from 'highcharts';
 import { useTheme } from '../../hooks/useTheme';
 import type { CrossSectionRadarResponse, CrossSectionBioClassResponse } from '../../../api/endpoints/crossSectionAPI';
 import { useHighchartsModules } from './hook/useChartModules';
@@ -17,7 +16,11 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
   const { theme } = useTheme();
   const { chartFontColor, chartGridline } = theme;
 
-  const isModuleReady = useHighchartsModules(['heatmap']);
+  
+
+  const [ Highcharts, loaded] = useHighchartsModules(['heatmap']);
+
+
 
   const options = useMemo(() => {
     const seriesData: [number, number, number | null][] = [];
@@ -99,7 +102,7 @@ const VcrossHeatmap: React.FC<Props> = ({ data }) => {
     };
   }, [data, chartFontColor, chartGridline]);
 
-  if (!isModuleReady) {
+  if (!loaded || !Highcharts) {
     return <div></div>;
   }
 

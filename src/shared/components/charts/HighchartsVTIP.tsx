@@ -1,13 +1,10 @@
 import { useMemo, lazy, forwardRef, type ComponentRef, Suspense } from "react";
-import Highcharts from "highcharts";
 import type { VtipResponse } from "../../../api/endpoints/verical_profile/verticalProfilesAPI";
 import { useTheme } from "../../hooks/useTheme";
 import { ErrorBoundary } from "react-error-boundary";
 import { useHighchartsModules } from "./hook/useChartModules";
 
 const HighchartsReact = lazy(() => import("highcharts-react-official"));
-
-
 
 
 interface VtipChartProps {
@@ -25,7 +22,8 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
   ({ data, title = false, chartHeight }, ref) => {
 
     // Loading modules dynamically
-    const isModuleReady = useHighchartsModules(["accessibility", "windbarb", "annotations", "exporting", "export-data", "offline-exporting"])
+    const [ Highcharts, loaded] = useHighchartsModules(["accessibility", "windbarb", "annotations", "exporting", "export-data", "offline-exporting"]);
+
 
     const { theme } = useTheme();
     const { chartFontColor, chartGridline, chartLegendColor, borderBox } = theme.charts;
@@ -33,7 +31,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
     const options = useMemo(() => {
       if (!data) return {};
 
-      Highcharts.setOptions({ time: { useUTC: false, timezone: undefined } });
+      Highcharts?.setOptions({ time: { useUTC: false, timezone: undefined } });
 
       const kigaliFormatter = new Intl.DateTimeFormat("en-GB", {
         timeZone: "Africa/Kigali",
@@ -233,7 +231,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
             let tooltip = "";
             this.points?.forEach((p) => {
               if (p.series.type === "area") {
-                tooltip += `<b>${p.series.name}</b><br/>Value: ${Highcharts.numberFormat(
+                tooltip += `<b>${p.series.name}</b><br/>Value: ${Highcharts?.numberFormat(
                   p.y as number,
                   2
                 )} ${data.units}<br/><hr>`;
@@ -266,7 +264,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
       };
     }, [borderBox, chartFontColor, chartGridline, chartLegendColor, data, title]);
 
-    if (!isModuleReady) {
+    if (!loaded || !Highcharts) {
       return <div></div>;
     }
 
