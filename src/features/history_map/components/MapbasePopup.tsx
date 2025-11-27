@@ -62,7 +62,6 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
             options={mapBaseOptions}
             width="w-full"
             value={selectedMapBase.displayText}
-            className="border-0! bg-none!"
           />
 
 
@@ -78,7 +77,6 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
             options={boundaryOptions}
             width="w-full"
             value={selectedBoundary.displayText}
-            className="border-0! bg-none!"
         
           />
           {/* Select coverage Types */}
@@ -87,7 +85,6 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
             options={boundaryTypes}
             width="w-full"
             value={selectedBoundaryType.displayText}
-            className="border-0! bg-none!"
           />
 
           {/* Select colormap */}
@@ -103,7 +100,6 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
                   options={colormapOptions}
                   width="w-full"
                   value={selectedColormap.displayText}
-                  className="border-0! bg-none!"
                 />
 
                 {/* Colormap preview */}

@@ -216,7 +216,7 @@ const HistoryMap = () => {
         {/* altitude slider */}
         {
             (isClassif || isClassifGif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
-                <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
+                <div className="lg:h-full  h-[70%] absolute lg:-top-4 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <Suspense>
                         <CustomSlider
                             maxAltitude={5000}

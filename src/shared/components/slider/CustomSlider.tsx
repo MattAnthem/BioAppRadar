@@ -42,9 +42,9 @@ const CustomSlider = ({
   return (
     <div className={`${className} z-10 border-white/20 bg-gray-900/60 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
         
-    {/* Altitude band */}
+      {/* Altitude band */}
       <div className="h-full flex flex-col justify-center items-center py-2">
-        <small className='text-xs text-center font-light'>Height in meters</small>
+        <small className='text-xs text-center font-light text-gray-300'>Height in meters</small>
         
         {/* Max altitude */}
         <small className='text-[12px] text-white'>{maxAltitude}</small>

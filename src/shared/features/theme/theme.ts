@@ -142,7 +142,7 @@ export const dark: ThemeElements = {
         active_border: 'border-b-sky-600',
         active_text: 'text-sky-600',
         border: 'border-gray-400',
-        hover: 'hover:bg-zinc-500'
+        hover: 'hover:bg-zinc-700'
     },
     cards: {
         background: 'bg-zinc-700',

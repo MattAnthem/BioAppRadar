@@ -148,17 +148,17 @@ const Sidebar = () => {
         <div className="h-full w-full flex flex-col items-end justify-end gap-2">
         <div className={`${main.section_line} w-full h-0.5`}/>
 
-            <div className="flex flex-col justify-center items-center p-2 gap-2 w-full">
+            <div className={`${sidebar.main.logos} flex flex-col justify-center items-center p-2 gap-2 w-full`}>
                 
-                    <div className={`${isMinimized ? 'hidden' : ''} w-full ${sidebar.main.logos} p-1 rounded-sm flex justify-center`}>
+                    <div className={`${isMinimized ? 'hidden' : ''} w-full  p-1 rounded-sm flex justify-center`}>
                         <img src={mtorwlogo} alt="mtorw-logo" className={`w-30 `} />
                     </div>
                 
-                    <div className={`${isMinimized ? 'hidden' : ''} w-full ${sidebar.main.logos} p-1 rounded-sm flex justify-center`}>
+                    <div className={`${isMinimized ? 'hidden' : ''} w-full p-1 rounded-sm flex justify-center`}>
                         <img src={pasetlogo} alt="paset-logo" className={`w-30`} />
                     </div>
                 
-                    <div className={`${isMinimized ? 'hidden' : ''} w-full ${sidebar.main.logos} p-1 rounded-sm flex justify-center`}>
+                    <div className={`${isMinimized ? 'hidden' : ''} w-full p-1 rounded-sm flex justify-center`}>
                         <img src={rsiflogo} alt="rsif-logo" className={` w-30`} />
                     </div>
                 
