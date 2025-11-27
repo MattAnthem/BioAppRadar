@@ -130,8 +130,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
                     setIsPlaying(false); 
                   }}
                   className={`${
-                    currentIndex === i ? "bg-blue-800 border-b-3 border-b-blue-950" : "bg-gray-300"
-                    } hover:bg-blue-700 h-6 w-6 p-1 cursor-pointer 2xl:rounded-xs`}
+                    currentIndex === i ? "bg-blue-800" : "bg-gray-300"
+                    } hover:bg-blue-700 lg:h-6 lg:w-6 w-4 h-4 p-1 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>
             ))}
