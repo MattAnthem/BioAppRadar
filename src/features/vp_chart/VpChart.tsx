@@ -19,8 +19,7 @@ type VpChartProps = {
 const VpChart = ({ className }: VpChartProps) => {
 
   // Redux
-  const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
-  const currentHeight = altitudeOptions[currentAltitudeIndex];
+  const { currentAltitude } = useAppSelector(state => state.altitude);
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects  ---
@@ -55,7 +54,7 @@ const VpChart = ({ className }: VpChartProps) => {
   const { isLoading, data, error } = useVpData();
 
   const capitalize = (s: string | undefined) => {
-    if( s === undefined) return "--";
+    if( s === undefined) return "";
     return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
   }
 
@@ -65,7 +64,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 relative w-full flex justify-between items-center">
-            <h1 className='tracking-wider text-xs font-semibold'>{capitalize(data?.query_spec)} - {data?.name ?? '--'} ({data?.units ?? '--'})</h1>
+            <h1 className='tracking-wide text-[clamp(0.8em,0.8vw,1em)]'>{capitalize(data?.query_spec)} - {data?.name ?? ''} ({data?.units ?? ''})</h1>
 
             {/* Open the modal */}
             <div className="flex justify-center gap-1 5">
@@ -99,7 +98,7 @@ const VpChart = ({ className }: VpChartProps) => {
 
                 <VpChartHighcharts
                   data={data}
-                  selectedHeight={currentHeight}
+                  selectedHeight={currentAltitude}
                 />
 
             )}

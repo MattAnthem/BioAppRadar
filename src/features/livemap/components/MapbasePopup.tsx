@@ -55,7 +55,6 @@ const MapbasePopup = () => {
           options={mapBaseOptions}
           width="w-full"
           value={selectedMapBase.displayText}
-          className="border-0! bg-none!"
         />
 
 
@@ -70,7 +69,6 @@ const MapbasePopup = () => {
           options={boundaryOptions}
           width="w-full"
           value={selectedBoundary.displayText}
-          className="border-0! bg-none!"
         />
         {/* Select coverage Types */}
         <SimpleSelect
@@ -78,7 +76,6 @@ const MapbasePopup = () => {
           options={boundaryTypes}
           width="w-full"
           value={selectedBoundaryType.displayText}
-          className="border-0! bg-none!"
         />
         
     </OptionPopover>

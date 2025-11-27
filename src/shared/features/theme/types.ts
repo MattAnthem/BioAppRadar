@@ -4,7 +4,6 @@ export interface ThemeElements {
     mainBg: string;
     sidebar: SidebarTheme;
     topbar: TopbarTheme;
-    scattererCard: ScattererCardTheme;
     sectionCard: SectionCardTheme;
     simpleSelect: SelectTheme;
     switchBtn : SwitchBtnTheme;
@@ -118,15 +117,6 @@ type SectionCardTheme = {
 
 // ---------------- Components -----------------------
 
-    // +++++++++++++++ Scatterers card +++++++++++++++
-    type ScattererCardTheme = {
-        bg: string;
-        primary_text: string;
-        secondary_text: string;
-        border: string;
-        shadow: string;
-        details_bg: string;
-    }
 
     // ++++++++++++++++++++ Simple Select ++++++++
     type SelectTheme = {

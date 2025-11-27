@@ -55,7 +55,7 @@ const VptsChart = ({className}: VptsChartProps) => {
   const { isLoading, data, error } = useVptsData();
 
   const capitalize = (s: string | undefined) => {
-    if( s === undefined) return "--";
+    if( s === undefined) return "";
     return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
   }
 
@@ -66,7 +66,7 @@ const VptsChart = ({className}: VptsChartProps) => {
 
         {/* Heading */}
         <div className="p-1 relative w-full flex items-center justify-between">
-            <h1 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h1>
+            <h1 className='tracking-wide text-[clamp(0.8em,0.8vw,1em)]'>{`${capitalize(data?.query_spec)} - ${data?.name ?? ''} ${data?.units ?? ''}`}</h1>
             {/* Controls */}
             
             <div className="flex justify-center gap-1 5">

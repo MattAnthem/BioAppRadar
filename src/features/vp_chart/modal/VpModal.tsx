@@ -1,5 +1,4 @@
-import { useState, memo, useRef, lazy } from 'react';
-import Modal from '../../../shared/components/modal/Modal';
+import { useState, memo, useRef, lazy, Suspense } from 'react';
 import { useVpImageQuery } from '../../history_charts/hooks/useQuery/useVpImageQuery';
 import { useAppSelector } from '../../../store/hooks';
 import { useVpData } from '../hooks/useVpData';
@@ -10,6 +9,7 @@ import { useTheme } from '../../../shared/hooks/useTheme';
 import type HighchartsReact from 'highcharts-react-official';
 
 const VpChartHighcharts = lazy(() => import('../../../shared/components/charts/HighchartsVP'));
+const Modal = lazy(() => import('../../../shared/components/modal/Modal'));
 
 const VpModal = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,9 +25,7 @@ const VpModal = () => {
     }
 
     // Redux
-    const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
-    const currentHeight = altitudeOptions[currentAltitudeIndex];
-
+    const { currentAltitude } = useAppSelector(state => state.altitude);
     const { vpPayload } = useAppSelector(state => state.vpchart);
     const { isLoading, data, error } = useVpData(isModalOpen);
     const { data: vpImageData, isLoading: vpImageLoading, error: vpImageError } = useVpImageQuery(vpPayload, displayMode === 'png');
@@ -109,127 +107,130 @@ const VpModal = () => {
                 <Fullscreen width={15} height={15}/>
             </button>
         </Tooltip>
+        
+        <Suspense fallback={<div></div>}>
+            <Modal
+                isOpen={isModalOpen}
+                title={`${capitalize(data?.query_spec)} ${data?.name ?? '--'}`}
+                handle_toggle_mdl={handleOpenModal}
+                ariaLabelledBy='vp-mdl'
 
-        <Modal
-            isOpen={isModalOpen}
-            title={`${capitalize(data?.query_spec)} ${data?.name ?? '--'}`}
-            handle_toggle_mdl={handleOpenModal}
-            ariaLabelledBy='vp-mdl'
+            >
 
-        >
-
-                {/* Handle display mode */}
-                <div className=" px-8 py-2 grid grid-cols-2 justify-start items-center gap-2">
-                        <Tooltip
-                            display_condition={isModalOpen}
-                            position="bottom"
-                            text="Display as image"
-                        >
-                        <button 
-                            aria-label='Display interactive chart'
-                            onClick={handleDisplayInteractiveChart} 
-                            className={`
-                                w-full flex gap-1 justify-center items-center 
-                                px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
-                                ${displayMode === 'interactive' ? `${active_border} ${active_text} font-semibold` : tog_border} 
-                                ${tog_hover}
-                            `}
-                        >
-                            <ChartLine className="w-4"/>
-                            <h1>Interactive</h1>
-                        </button>
-                        </Tooltip>
-
-                        <Tooltip
-                            display_condition={isModalOpen}
-                            position="bottom"
-                            text="Display as gif"
-                        >
-                        <button 
-                            aria-label='Display image chart'
-                            onClick={handleDisplayImage} 
-                            className={`
-                                w-full flex gap-1 justify-center items-center 
-                                px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
-                                ${displayMode === 'png' ? `${active_border} ${active_text} font-semibold` : tog_border} 
-                                ${tog_hover}
-                            `}
+                    {/* Handle display mode */}
+                    <div className=" px-8 py-2 grid grid-cols-2 justify-start items-center gap-2">
+                            <Tooltip
+                                display_condition={isModalOpen}
+                                position="bottom"
+                                text="Display as image"
                             >
-                            <ImageIcon className="w-4"/>
-                            <h1>Image</h1>
-                        </button>
-                        </Tooltip>
-                </div>
+                            <button 
+                                aria-label='Display interactive chart'
+                                onClick={handleDisplayInteractiveChart} 
+                                className={`
+                                    w-full flex gap-1 justify-center items-center 
+                                    px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                                    ${displayMode === 'interactive' ? `${active_border} ${active_text} font-semibold` : tog_border} 
+                                    ${tog_hover}
+                                `}
+                            >
+                                <ChartLine className="w-4"/>
+                                <h1>Interactive</h1>
+                            </button>
+                            </Tooltip>
 
-                { (displayMode === 'interactive' && data) && (
-                    <div className="w-full h-full flex flex-col  items-center justify-center">
-                        <div className="lg:w-1/2 w-full h-full">
-                                {/* Download : Dataset/Image */}
-                                <div className="flex w-full justify-end items-end pt-1 px-1">
-                                    <Tooltip
-                                        position="bottom"
-                                        text="Download as Image"
-                                        display_condition={isModalOpen}
-                                    >
-                                        <button 
-                                            aria-label='download-interactive-chart'
-                                            onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                            <LucideDownload className="w-4 h-4"/>
-                                        </button>
-                                    </Tooltip>
-                                </div>
-                                <VpChartHighcharts
-                                    ref={chartRef}
-                                    data={data}
-                                    displayTitle
-                                    chartHeight={500}
-                                    selectedHeight={currentHeight}
-                                />
-                        </div>
+                            <Tooltip
+                                display_condition={isModalOpen}
+                                position="bottom"
+                                text="Display as gif"
+                            >
+                            <button 
+                                aria-label='Display image chart'
+                                onClick={handleDisplayImage} 
+                                className={`
+                                    w-full flex gap-1 justify-center items-center 
+                                    px-2 py-0.5 cursor-pointer border-b-2 rounded-t-sm
+                                    ${displayMode === 'png' ? `${active_border} ${active_text} font-semibold` : tog_border} 
+                                    ${tog_hover}
+                                `}
+                                >
+                                <ImageIcon className="w-4"/>
+                                <h1>Image</h1>
+                            </button>
+                            </Tooltip>
                     </div>
 
-                )}
-
-                {
-                    vpImageData && !vpImageLoading && !vpImageError && (displayMode === 'png') && (
-                        <div className="w-full h-full flex flex-col items-center justify-center">
-                                <div className="lg:w-1/2 w-full h-full flex flex-col">
-                                    {/* Download image */}
-                                    <div className="flex justify-end items-center pt-1 px-1">
+                    { (displayMode === 'interactive' && data) && (
+                        <div className="w-full h-full flex flex-col  items-center justify-center">
+                            <div className="lg:w-1/2 w-full h-full">
+                                    {/* Download : Dataset/Image */}
+                                    <div className="flex w-full justify-end items-end pt-1 px-1">
                                         <Tooltip
                                             position="bottom"
-                                            text="Download image"
+                                            text="Download as Image"
                                             display_condition={isModalOpen}
                                         >
-                                            <button
-                                                aria-label='download-chart-image'
-                                                 onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                                <LucideDownload className="w-4 h-4"/> 
+                                            <button 
+                                                aria-label='download-interactive-chart'
+                                                onClick={handleDownloadChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                                <LucideDownload className="w-4 h-4"/>
                                             </button>
                                         </Tooltip>
                                     </div>
-                                    <img ref={chartImgRef} src={vpImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
-                                </div>
+                                    <VpChartHighcharts
+                                        ref={chartRef}
+                                        data={data}
+                                        displayTitle
+                                        chartHeight={500}
+                                        selectedHeight={currentAltitude}
+                                    />
+                            </div>
                         </div>
-                    )
-                }
-                {
-                    (vpImageLoading || isLoading) && (
-                        <div className="w-full h-full flex items-center justify-center">
-                            <img src={loader} alt="loading-data" width={35} height={35}  />
-                        </div>
-                    )
-                }
-                {         
-                    (vpImageError || error) && (
-                    <div className="w-full h-full flex flex-col items-center justify-center">
-                        <Unplug width={30} height={30} className='text-red-500'/>
-                        <p className='font-semibold text-xs tracking-wider text-red-600'>Error fetching data</p>
-                    </div>
-                )}
 
-        
-        </Modal>
+                    )}
+
+                    {
+                        vpImageData && !vpImageLoading && !vpImageError && (displayMode === 'png') && (
+                            <div className="w-full h-full flex flex-col items-center justify-center">
+                                    <div className="lg:w-1/2 w-full h-full flex flex-col">
+                                        {/* Download image */}
+                                        <div className="flex justify-end items-center pt-1 px-1">
+                                            <Tooltip
+                                                position="bottom"
+                                                text="Download image"
+                                                display_condition={isModalOpen}
+                                            >
+                                                <button
+                                                    aria-label='download-chart-image'
+                                                    onClick={handleDowloadChartImg} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                                    <LucideDownload className="w-4 h-4"/> 
+                                                </button>
+                                            </Tooltip>
+                                        </div>
+                                        <img ref={chartImgRef} src={vpImageData} alt="VTIP Chart" className="max-w-full max-h-full object-contain"/>
+                                    </div>
+                            </div>
+                        )
+                    }
+                    {
+                        (vpImageLoading || isLoading) && (
+                            <div className="w-full h-full flex items-center justify-center">
+                                <img src={loader} alt="loading-data" width={35} height={35}  />
+                            </div>
+                        )
+                    }
+                    {         
+                        (vpImageError || error) && (
+                        <div className="w-full h-full flex flex-col items-center justify-center">
+                            <Unplug width={30} height={30} className='text-red-500'/>
+                            <p className='font-semibold text-xs tracking-wider text-red-600'>Error fetching data</p>
+                        </div>
+                    )}
+
+            
+            </Modal>
+        </Suspense>
+
     </div>
   )
 }

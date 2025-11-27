@@ -61,7 +61,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
     <div className="z-5 absolute bottom-0 left-0 w-full">
 
         {/* Timeline controls */}
-        <div className="flex w-full justify-start items-center 2xl:gap-2 gap-1 border-white/20 bg-gray-900/45 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
+        <div className="flex w-full justify-start items-center 2xl:gap-2 gap-1 border-white/20 bg-gray-900/60 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
 
            {/* Timestamp indicator */}
            {currentFrame ? (
@@ -86,8 +86,9 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
           >
             {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}
           </button>
+
           {/* Frame jump btns + speed*/}
-          <div className="lg:flex hidden items-center justify-center bg-gray-800 rounded-sm">
+          <div className="lg:flex hidden items-center h-full justify-center bg-gray-800 rounded-sm">
             {/* Back to one past frame */}
             <Tooltip
               position="top"
@@ -96,8 +97,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
             >
               <button 
                 aria-label="Step backward"
-                onClick={handleStepBackward} className="p-1 rounded-l-sm hover:bg-gray-700 text-gray-300">
-                <ChevronLeft width={17} height={17} className=" rounded-sm"/>
+                onClick={handleStepBackward} className="p-1 h-full rounded-l-sm hover:bg-gray-700 text-gray-300">
+                <ChevronLeft width={20} height={20} className=" rounded-sm"/>
               </button>
 
             </Tooltip>
@@ -110,8 +111,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
             >
               <button 
                 aria-label="Step forward"
-                onClick={handleStepForward} className="p-1 rounded-r-sm hover:bg-gray-700 text-gray-300">
-                <ChevronRight width={17} height={17} className=" rounded-sm"/>
+                onClick={handleStepForward} className="p-1 h-full rounded-r-sm hover:bg-gray-700 text-gray-300">
+                <ChevronRight width={20} height={20} className=" rounded-sm"/>
               </button>
             </Tooltip>
 
@@ -129,7 +130,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
                     setIsPlaying(false); 
                   }}
                   className={`${
-                    currentIndex === i ? "bg-blue-800" : "bg-gray-300"
+                    currentIndex === i ? "bg-blue-800 border-b-3 border-b-blue-950" : "bg-gray-300"
                     } hover:bg-blue-700 h-6 w-6 p-1 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>

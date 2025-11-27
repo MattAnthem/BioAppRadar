@@ -19,7 +19,7 @@ const ClassificationPopup = lazy(() => import('./components/ClassificationPopupH
 const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
 const RadarOptionPopup = lazy(() => import('./components/RadarOptionPopup'));
 const SevipPopup = lazy(() => import('./components/SevipPopup'));
-const AltitudeSlider = lazy(() => import('../livemap/components/AltitudeSlider'));
+const CustomSlider = lazy(() => import('../../shared/components/slider/CustomSlider'));
 const Colorbar = lazy(() => import('../../shared/components/legends/Colorbar'));
 const ElevationSlider = lazy(() => import('./components/ElevationSlider'));
 const LeafletMap = lazy(() => import('../../shared/components/map/LeafletMap'));
@@ -34,7 +34,6 @@ const HistoryMap = () => {
     // Redux call
     // Selected Radar type and Radar Parameter
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
-    const { altitudeOptions, currentAltitudeIndex } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
     const { mapModeHist, radarPayloadHist, radarGifPayloadHist } = useAppSelector(state => state.historymap);
 
@@ -130,9 +129,9 @@ const HistoryMap = () => {
     }
 
     // Altitude change for classification and radar grid
-    const handleAltitudeChange = (altIndex: number) => {
-        dispatch(changeHistAltitude(altIndex));
-        dispatch(setAltitudeForAll(altitudeOptions[altIndex]));
+    const handleAltitudeChange = (alt: number) => {
+        dispatch(changeHistAltitude(alt));
+        dispatch(setAltitudeForAll(alt));
     }
 
     // Elevation change for polar radar
@@ -179,7 +178,7 @@ const HistoryMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20  p-1 flex justify-between items-center'>
 
-            <h1 className='text-white tracking-wider text-xs'>{data?.info.name}</h1>
+            <h1 className='text-white tracking-wide text-[clamp(0.8em,0.8vw,1em)] '>{data?.info.name}</h1>
 
             <div className="z-5 flex gap-2 justify-center items-end">
 
@@ -219,10 +218,9 @@ const HistoryMap = () => {
             (isClassif || isClassifGif || (isRadar && radarPayloadHist.type === 'grid') || (isRadarGif && radarGifPayloadHist.type === 'grid')) && (
                 <div className="lg:h-full  h-[70%] absolute lg:bottom-2 bottom-[12vh] right-2 flex lg:items-center items-start lg:py-16 ">
                     <Suspense>
-                        <AltitudeSlider
-                            currentIndex={currentAltitudeIndex}
+                        <CustomSlider
+                            maxAltitude={5000}
                             onChangeAltitude={handleAltitudeChange}
-                            altitudes={altitudeOptions}
                         />
                     </Suspense>
                 </div>
@@ -248,12 +246,12 @@ const HistoryMap = () => {
         {/* Map Time */}
         {
             (isSevipGif || isRadarGif || isClassifGif) ? (
-                <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 2xl:1/6 lg:w-2/7 w:1/3 ${(isClassif || isClassifGif) ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+                <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 2xl:1/6 lg:w-2/7 w:1/3 ${(isClassif || isClassifGif) ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
                     <small className='text-white tracking-wide'>Time: {data?.info.time[0]} - {data?.info.time[data.info.time.length - 1]}</small>
                 </div>
             ):
             (
-                <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+                <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
                     <small className='text-white tracking-wide'>Time: {data?.info.time ?? ''}</small>
                 </div>
             )

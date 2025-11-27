@@ -11,17 +11,14 @@ import { Unplug } from 'lucide-react';
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
 
-
-
-
 const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
 const ClassificationPopup = lazy(() => import('./components/ClassificationPopup'));
 const LeafletMap = lazy(() => import('../../shared/components/map/LeafletMap'));
 const SectionCard = lazy(() => import('../../shared/components/cards/SectionCard'));
 const GlassHeader = lazy(() => import('../../shared/components/cards/GlassHeader'));
 const TimelineSlider = lazy(() => import('./components/TimelineSlider'));
-const AltitudeSlider = lazy(() => import('./components/AltitudeSlider'));
 const ClassifLegend = lazy(() => import('../../shared/components/legends/ClassifLegend'));
+const CustomSlider = lazy(() => import('../../shared/components/slider/CustomSlider'))
 
 
 const LiveMap = () => {
@@ -31,7 +28,7 @@ const LiveMap = () => {
     // Coverage
     const { selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
     const { selectedMapBase } = useAppSelector(state => state.basemappopup);
-    const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.altitude);
+    const { currentAltitude } = useAppSelector(state => state.altitude);
     const dispatch = useAppDispatch()
 
 
@@ -48,7 +45,7 @@ const LiveMap = () => {
 
 
     // ALtitude
-    const currentHeight = altitudeOptions[currentAltitudeIndex];
+    const currentHeight = currentAltitude;
     const handleAltitudeChange = (altitudeIndex: number) => {
         dispatch(changeAltitude(altitudeIndex))
     }
@@ -96,8 +93,6 @@ const LiveMap = () => {
     
     const data = cachedFrame ?? classifData;
 
-
-
   return (
     <SectionCard className='relative w-full h-full'>
 
@@ -111,7 +106,7 @@ const LiveMap = () => {
         
         {
             (isPreloading) && (
-                <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
+                <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
                     <p className='text-gray-700'>{`Loading animation ${progress}%...`}</p>
                 </div>
@@ -119,7 +114,7 @@ const LiveMap = () => {
         }
         {
             ( coverageLoading ) && (
-                <div className="absolute z-10 w-full h-full flex flex-col items-center justify-center">
+                <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
                     <p className='text-gray-700'>Loading coverage</p>
                 </div>
@@ -129,7 +124,7 @@ const LiveMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20 p-1 flex justify-between items-center'>
 
-            <h1 className='text-white tracking-wider text-xs'>{data?.info.name}</h1>
+            <h1 className='text-white tracking-wider text-[clamp(0.8em,0.8vw,1em)]'>{data?.info.name}</h1>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-2 justify-center items-end">
@@ -172,10 +167,9 @@ const LiveMap = () => {
 
         <div className="lg:h-full h-[80%] absolute lg:bottom-3 bottom-[6vh] right-2 flex lg:items-center items-start lg:py-12 ">
             <Suspense>
-                <AltitudeSlider
-                    currentIndex={currentAltitudeIndex}
+                <CustomSlider
+                    maxAltitude={5000}
                     onChangeAltitude={handleAltitudeChange}
-                    altitudes={altitudeOptions}
                 />
             </Suspense>
         </div>
@@ -193,7 +187,7 @@ const LiveMap = () => {
 
         {/* Classification legends */}
 
-            <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-4 lg:bottom-4 bottom-1">
+            <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-4 lg:bottom-3 bottom-1">
                 <Suspense>                
                     <ClassifLegend
                         classColor0={(data as ClassificationDataResponse)?.legend?.class_0?.color}

@@ -61,14 +61,6 @@ export const light: ThemeElements = {
             icon_color: 'text-gray-950'
         }
     },
-    scattererCard: {
-        bg: 'bg-gray-100',
-        primary_text: 'text-gray-800',
-        secondary_text: 'text-gray-500',
-        border: 'border-gray-300',
-        shadow: 'shadow-sm hover:shadow-lg transition-shadow',
-        details_bg: 'bg-gray-800 text-white'
-    },
     sectionCard: {
         bg: 'bg-neutral-200',
         primary_text: 'text-gray-800',
@@ -161,18 +153,18 @@ export const dark: ThemeElements = {
         primary: 'text-gray-400',
         secondary: 'text-gray-600'
     },
-    mainBg: 'bg-gradient-to-tl from-gray-800 to-zinc-800',
+    mainBg: 'bg-[#111217]',
     sidebar: {
         main: {
-            background: 'bg-zinc-800',
-            border: 'border-zinc-700',
+            background: 'bg-[#181B1F]',
+            border: 'border-[#2E3136]',
             section_line: 'bg-zinc-700',
             toggler_side_bg: 'bg-zinc-700',
             toogler_hover: 'hover:bg-zinc-600',
             logos: 'bg-stone-300'
         },
         navs: {
-            text: 'text-zinc-100',
+            text: 'text-zinc-300',
             text_hover: 'hover:text-zinc-200',
             text_active: 'text-zinc-300',
             bg_active: 'bg-zinc-600',
@@ -184,7 +176,7 @@ export const dark: ThemeElements = {
     },
     topbar: {
         main: {
-            bg: 'bg-zinc-800',
+            bg: 'bg-[#181B1F]',
             border: 'border-zinc-700'
         },
         contents: {
@@ -193,32 +185,24 @@ export const dark: ThemeElements = {
             icon_color: 'text-gray-100'
         }
     },
-    scattererCard: {
-        bg: 'bg-zinc-700',
-        primary_text: 'text-zinc-300',
-        secondary_text: 'text-zinc-400',
-        border: 'border-zinc-600',
-        shadow: 'shadow-sm shadow-zinc-950 hover:shadow-lg transition-shadow',
-        details_bg: 'bg-zinc-800 text-white'
-    },
     sectionCard: {
-        bg: 'bg-zinc-800',
-        primary_text: 'text-zinc-200',
-        secondary_text: 'text-zinc-400',
-        border: 'border-zinc-700',
-        shadow: 'shadow-slate-700',
+        bg: 'bg-[#22252B]',
+        primary_text: 'text-[#CCCCDC]',
+        secondary_text: 'text-[#CCCCDC]',
+        border: 'border-[#373941]',
+        shadow: '',
     },
     simpleSelect: {
-        bg: 'bg-zinc-700',
-        border: 'border-zinc-500',
-        hover: 'hover:bg-zinc-500',
+        bg: 'bg-[#181B1F]',
+        border: 'border-zinc-700',
+        hover: 'hover:bg-zinc-700',
         text: 'text-zinc-300',
         icon_color: 'text-zinc-400',
         shadow: 'shadow-zinc-900',
-        options_bg: 'bg-zinc-600 border-zinc-500',
-        option_hover: 'hover:bg-zinc-500',
+        options_bg: 'bg-[#181B1F] border-zinc-500',
+        option_hover: 'hover:bg-zinc-800',
         secondary_text: 'text-zinc-400',
-        selected_option: 'bg-zinc-500'
+        selected_option: 'bg-zinc-700'
     },
     switchBtn: {
         bg: 'bg-gray-400',
@@ -226,7 +210,7 @@ export const dark: ThemeElements = {
         cursor_bg: 'bg-sky-900'
     },
     tooltip: {
-        bg: 'bg-gray-600',
+        bg: 'bg-gray-900',
         text_color: 'text-gray-50'
     },
     userPopup: {

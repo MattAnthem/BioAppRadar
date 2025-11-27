@@ -18,8 +18,7 @@ type VpChartProps = {
 const VpHistChart = ({ className }: VpChartProps) => {
 
   // Redux
-  const { currentAltitudeIndex, altitudeOptions } = useAppSelector(state => state.hist_altitude);
-  const currentHeight = altitudeOptions[currentAltitudeIndex];
+  const { currentAltitude } = useAppSelector(state => state.hist_altitude);
 
   // Chart data fetching
   const { isLoading, data, error } = useVpHistData();
@@ -32,7 +31,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
   
   const capitalize = (s: string | undefined) => {
-    if( s === undefined) return "--";
+    if( s === undefined) return "";
     return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
   }
 
@@ -41,7 +40,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
 
         {/* Heading */}
         <div className="p-1 relative w-full flex justify-between items-center">
-            <h1 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec) ?? '--'} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h1>
+            <h1 className='tracking-wide text-[clamp(0.8em,0.8vw,1em)]'>{`${capitalize(data?.query_spec) ?? ''} - ${data?.name ?? ''} (${data?.units ?? ''})`}</h1>
             
             <div className="flex justify-center gap-2">
 
@@ -72,7 +71,7 @@ const VpHistChart = ({ className }: VpChartProps) => {
           {(data && !error) && (
               <VpChartHighcharts
                 data={data}
-                selectedHeight={currentHeight}
+                selectedHeight={currentAltitude}
               />
 
           )}

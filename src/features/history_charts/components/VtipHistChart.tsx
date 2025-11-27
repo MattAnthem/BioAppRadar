@@ -19,7 +19,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
   const { isLoading, data, error } = useVtipHistData();
 
   const capitalize = (s: string | undefined) => {
-    if( s === undefined) return "--";
+    if( s === undefined) return "";
     return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
   }
   
@@ -29,7 +29,7 @@ const VtipHistChart = ({ className }: VtipChartProps) => {
       
           {/* Heading */}
           <div className="p-1 relative w-full flex items-center justify-between">
-              <h1 className='tracking-wider text-xs font-semibold'>{`${capitalize(data?.query_spec)} - ${data?.name ?? '--'} (${data?.units ?? '--'})`}</h1>
+              <h1 className='tracking-wide text-[clamp(0.8em,0.8vw,1em)] '>{`${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})`}</h1>
 
 
               <div className="flex gap-2">
