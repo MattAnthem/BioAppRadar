@@ -84,7 +84,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
 
     const options = useMemo<Highcharts.Options>(() => {
 
-        if (!data) return {};
+        if (!data || !Highcharts) return {};
 
         Highcharts?.setOptions({
             time: { useUTC: false, timezone: 'Africa/Kigali' }
@@ -309,7 +309,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
 
             credits: { enabled: false }
         };
-    }, [data, radarAltitude, borderBox, chartFontColor, title, chartLegendColor, chartGridline, tckn, tckx, colorPalette, seriesData, legend]);
+    }, [data, Highcharts, radarAltitude, borderBox, chartFontColor, title, chartLegendColor, chartGridline, tckn, tckx, colorPalette, seriesData, legend]);
 
     // Fallback if module not loaded yet
     if (!loaded || !Highcharts) {
@@ -318,7 +318,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
 
     return (
         <ErrorBoundary fallback={<div></div>}>
-            <Suspense fallback={<div></div>}>
+            <Suspense fallback={<div className='h-fit grid px-2 pb-2'></div>}>
                 <HighchartsReact
                     highcharts={Highcharts}
                     options={options}

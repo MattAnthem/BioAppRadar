@@ -1,4 +1,4 @@
-import { forwardRef, lazy, Suspense, type ComponentRef } from 'react';
+import { forwardRef, lazy, Suspense, useMemo, type ComponentRef } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import type { VpResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 import { ErrorBoundary } from "react-error-boundary";
@@ -41,176 +41,180 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
     
     const vmax = Math.max(...data.parameter.filter((v): v is number => v !== null));
 
-    const options: Highcharts.Options = {
-      exporting: { buttons: { contextButton: { enabled: false } } },
+    const options = useMemo<Highcharts.Options>(() => {
+      if (!data || !Highcharts) return {};
+      return {      
+        exporting: { buttons: { contextButton: { enabled: false } } },
 
-      chart: {
-        inverted: true,
-        reflow: true,
-        backgroundColor: 'transparent',
-        height: chartHeight ?? null,
-        borderColor: borderBox,
-        borderWidth: 1,
-        borderRadius: 3,
+        chart: {
+          inverted: true,
+          reflow: true,
+          backgroundColor: 'transparent',
+          height: chartHeight ?? null,
+          borderColor: borderBox,
+          borderWidth: 1,
+          borderRadius: 3,
 
-        events: {
-          load: function () {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
-            const chart = this;
-            const yPos = chart.plotLeft;
-            const xPix = chart.xAxis[0].toPixels(radarAltitude);
-            const arrowLen = 15;
-            const halfH = 6;
-            const offset = 16;
+          events: {
+            load: function () {
+              // eslint-disable-next-line @typescript-eslint/no-this-alias
+              const chart = this;
+              const yPos = chart.plotLeft;
+              const xPix = chart.xAxis[0].toPixels(radarAltitude);
+              const arrowLen = 15;
+              const halfH = 6;
+              const offset = 16;
 
-            const arrowPath: Highcharts.SVGPathArray = [
-              ['M', yPos - offset, xPix - halfH],
-              ['L', yPos - offset + arrowLen, xPix],
-              ['L', yPos - offset, xPix + halfH],
-              ['Z']
-            ];
+              const arrowPath: Highcharts.SVGPathArray = [
+                ['M', yPos - offset, xPix - halfH],
+                ['L', yPos - offset + arrowLen, xPix],
+                ['L', yPos - offset, xPix + halfH],
+                ['Z']
+              ];
 
-            const arrow = chart.renderer.path(arrowPath)
-              .attr({
-                fill: 'orange',
-                stroke: 'red',
-                'stroke-width': 2,
-                zIndex: 5,
-                cursor: 'pointer',
-              })
-              .add();
+              const arrow = chart.renderer.path(arrowPath)
+                .attr({
+                  fill: 'orange',
+                  stroke: 'red',
+                  'stroke-width': 2,
+                  zIndex: 5,
+                  cursor: 'pointer',
+                })
+                .add();
 
-            const tooltip = chart.renderer
-              .label(`Radar altitude: ${radarAltitude} m`, yPos + 15, xPix - 20)
-              .attr({
-                fill: 'rgba(0,0,0,0.75)',
-                padding: 6,
-                r: 4,
-                zIndex: 999,
-              })
-              .css({
-                color: '#FFFFFF',
-                fontSize: '12px',
-                pointerEvents: 'none',
-              })
-              .hide()
-              .add();
+              const tooltip = chart.renderer
+                .label(`Radar altitude: ${radarAltitude} m`, yPos + 15, xPix - 20)
+                .attr({
+                  fill: 'rgba(0,0,0,0.75)',
+                  padding: 6,
+                  r: 4,
+                  zIndex: 999,
+                })
+                .css({
+                  color: '#FFFFFF',
+                  fontSize: '12px',
+                  pointerEvents: 'none',
+                })
+                .hide()
+                .add();
 
-            arrow.element.addEventListener('mouseover', () => tooltip.show());
-            arrow.element.addEventListener('mouseout', () => tooltip.hide());
-          },
+              arrow.element.addEventListener('mouseover', () => tooltip.show());
+              arrow.element.addEventListener('mouseout', () => tooltip.hide());
+            },
 
-          redraw: function () {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
-            const chart = this;
-          
-            const axis = chart.xAxis[0] as AxisWithBands;
-          
-            axis.plotLinesAndBands?.forEach(plb => plb.destroy());
-          
-            axis.addPlotLine({
-              id: 'selectedHeightLine',
-              color: 'brown',
-              width: 2,
-              value: radarAltitude + selectedHeight
-            });
+            redraw: function () {
+              // eslint-disable-next-line @typescript-eslint/no-this-alias
+              const chart = this;
+            
+              const axis = chart.xAxis[0] as AxisWithBands;
+            
+              axis.plotLinesAndBands?.forEach(plb => plb.destroy());
+            
+              axis.addPlotLine({
+                id: 'selectedHeightLine',
+                color: 'brown',
+                width: 2,
+                value: radarAltitude + selectedHeight
+              });
+            }
+            
+            
           }
-          
-          
-        }
-      },
+        },
 
-      title: { 
-        text: displayTitle ? `${data.name} [${data.units}]` : undefined, 
-        style: { color: chartFontColor, fontSize: '13px' },
-      },
-      xAxis: [
-        {
-          min: radarAltitude - 250,
-          max: radarAltitude + 5000,
-          tickInterval: 500,
-          lineColor: chartGridline,
-          tickColor: chartGridline,
-          lineWidth: 1,
-          reversed: false,
+        title: { 
+          text: displayTitle ? `${data.name} [${data.units}]` : undefined, 
+          style: { color: chartFontColor, fontSize: '13px' },
+        },
+        xAxis: [
+          {
+            min: radarAltitude - 250,
+            max: radarAltitude + 5000,
+            tickInterval: 500,
+            lineColor: chartGridline,
+            tickColor: chartGridline,
+            lineWidth: 1,
+            reversed: false,
+            title: {
+              text: 'Altitude [m]',
+              style: { color: chartLegendColor, fontSize: '11px' },
+            },
+            labels: {
+              format: '{value}',
+              style: { color: chartFontColor, fontSize: '11px' },
+            },
+            gridLineColor: chartGridline,
+            gridLineWidth: 1,
+            plotLines: [
+              {
+                color: 'brown',
+                width: 2,
+                value: radarAltitude + selectedHeight,
+              },
+            ],
+          },
+          {
+            id: 'windbarb-axis',
+            opposite: true,
+            linkedTo: 0,
+            labels: { enabled: false },
+            lineWidth: 1,
+            tickLength: 0,
+          },
+        ],
+
+        yAxis: {
           title: {
-            text: 'Altitude [m]',
-            style: { color: chartLegendColor, fontSize: '11px' },
+            text: `${data.name} [${data.units}]`,
+            style: { color: chartLegendColor, fontSize: '11px', },
           },
           labels: {
             format: '{value}',
-            style: { color: chartFontColor, fontSize: '11px' },
+            style: { color: chartFontColor, fontSize: '11px',  },
           },
+          lineColor: chartGridline,
           gridLineColor: chartGridline,
-          gridLineWidth: 1,
-          plotLines: [
-            {
-              color: 'brown',
-              width: 2,
-              value: radarAltitude + selectedHeight,
-            },
-          ],
-        },
-        {
-          id: 'windbarb-axis',
-          opposite: true,
-          linkedTo: 0,
-          labels: { enabled: false },
           lineWidth: 1,
-          tickLength: 0,
+          tickColor: chartGridline,
         },
-      ],
 
-      yAxis: {
-        title: {
-          text: `${data.name} [${data.units}]`,
-          style: { color: chartLegendColor, fontSize: '11px', },
-        },
-        labels: {
-          format: '{value}',
-          style: { color: chartFontColor, fontSize: '11px',  },
-        },
-        lineColor: chartGridline,
-        gridLineColor: chartGridline,
-        lineWidth: 1,
-        tickColor: chartGridline,
-      },
-
-      series: [
-        {
-          type: 'spline',
-          name: data.name,
-          data: seriesData,
-          color: '#0077cc',
-          lineWidth: 2,
-          marker: { enabled: true, radius: 3 },
-          tooltip: {
-            headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: `Altitude: {point.x} m<br>{series.name}: {point.y:.2f} ${data.units}`,
+        series: [
+          {
+            type: 'spline',
+            name: data.name,
+            data: seriesData,
+            color: '#0077cc',
+            lineWidth: 2,
+            marker: { enabled: true, radius: 3 },
+            tooltip: {
+              headerFormat: '<b>{series.name}</b><br/>',
+              pointFormat: `Altitude: {point.x} m<br>{series.name}: {point.y:.2f} ${data.units}`,
+            },
+            turboThreshold: 0,
           },
-          turboThreshold: 0,
-        },
-        {
-          type: 'windbarb',
-          xAxis: 'windbarb-axis',
-          data: seriesWind,
-          name: 'Wind',
-          color: 'red',
-          lineWidth: 1.5,
-          vectorLength: 20,
-          xOffset: vmax,
-          // xOffset: 230,
-          tooltip: {
-            headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: `Altitude: {point.x} m<br>Speed: {point.value:.1f} m/s<br>Direction: {point.direction:.0f}°`,
+          {
+            type: 'windbarb',
+            xAxis: 'windbarb-axis',
+            data: seriesWind,
+            name: 'Wind',
+            color: 'red',
+            lineWidth: 1.5,
+            vectorLength: 20,
+            xOffset: vmax,
+            // xOffset: 230,
+            tooltip: {
+              headerFormat: '<b>{series.name}</b><br/>',
+              pointFormat: `Altitude: {point.x} m<br>Speed: {point.value:.1f} m/s<br>Direction: {point.direction:.0f}°`,
+            },
+            turboThreshold: 0
           },
-          turboThreshold: 0
-        },
-      ],
+        ],
 
-      legend: { enabled: false },
-      credits: { enabled: false },
-    };
+        legend: { enabled: false },
+        credits: { enabled: false },
+
+      }
+    }, [Highcharts, borderBox, chartFontColor, chartGridline, chartHeight, chartLegendColor, data, displayTitle, radarAltitude, selectedHeight, seriesData, seriesWind, vmax]) 
 
     // Render nothing if modules are not ready
     if (!loaded || !Highcharts) {
