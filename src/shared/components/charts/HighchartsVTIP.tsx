@@ -3,6 +3,7 @@ import type { VtipResponse } from "../../../api/endpoints/verical_profile/vertic
 import { useTheme } from "../../hooks/useTheme";
 import { ErrorBoundary } from "react-error-boundary";
 import { useHighchartsModules } from "./hook/useChartModules";
+import type { Point } from "highcharts";
 
 const HighchartsReact = lazy(() => import("highcharts-react-official"));
 
@@ -224,6 +225,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
         tooltip: {
           shared: true,
           useHTML: true,
+          split: false,
           backgroundColor: "rgba(255,255,255,0.95)",
           borderColor: "#aaa",
           borderWidth: 1,
@@ -231,18 +233,13 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
             let tooltip = "";
             this.points?.forEach((p) => {
               if (p.series.type === "area") {
-                tooltip += `<b>${p.series.name}</b><br/>Value: ${Highcharts?.numberFormat(
-                  p.y as number,
-                  2
-                )} ${data.units}<br/><hr>`;
+                tooltip += `<b>${p.series.name}</b><br/>Value: ${Highcharts?.numberFormat((p.point).y!, 2 )} ${data.units}<br/><hr>`;
               } else if (p.series.type === "windbarb") {
                 const point = p.point as unknown as {
                   value: number;
                   direction: number;
                 };
-                tooltip += `<b>${p.series.name}</b><br/>Speed: ${point.value.toFixed(
-                  1
-                )} m/s<br>Direction: ${point.direction.toFixed(
+                tooltip += `<b>${p.series.name}</b><br/>Speed: ${point.value.toFixed(1)} m/s<br>Direction: ${point.direction.toFixed(
                   0
                 )}°<br/><hr>`;
               }

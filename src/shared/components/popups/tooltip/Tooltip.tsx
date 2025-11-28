@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { useTheme } from "../../../hooks/useTheme";
 
 type Position = "top" | "left" | "right" | "bottom";
@@ -32,15 +32,15 @@ const Tooltip = (
             top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
             right: "left-full top-1/2 -translate-y-1/2 ml-4",
             left: "right-full top-1/2 -translate-y-1/2 mr-2",
-          }
+    }
       
-          // arrow classes
-          const arrow_classes: Record<Position, string> = {
+    // arrow classes
+    const arrow_classes: Record<Position, string> = {
             bottom: "-top-1 left-1/2 -translate-x-1/2",
             top: "-bottom-1 left-1/2 -translate-x-1/2",
             right: "-left-1 top-1/2 -translate-y-1/2",
             left: "-right-1 top-1/2 -translate-y-1/2",
-          };
+    };
       
     const themes = useTheme();
     const { bg, text_color } = themes.theme.tooltip;
@@ -77,4 +77,4 @@ const Tooltip = (
   )
 }
 
-export default Tooltip;
+export default memo(Tooltip);

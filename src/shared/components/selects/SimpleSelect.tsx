@@ -63,7 +63,7 @@ const SimpleSelect = ({icon, options, value, width='w-40', responsive, ariaContr
                 aria-controls={ariaControls}
                 onKeyDown={handleKeyDown}
                 onClick={handleOpen}  
-                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full  ${isDisabled ? 'border-dashed' : 'border'} p-1.5 flex justify-between items-center gap-2 cursor-pointer`}
+                className={`${bg} ${border} ${hover} ${className} focus-visible:outline-2 outline-offset-1 outline-blue-800 rounded-sm w-full  ${isDisabled ? 'bg-[repeating-linear-gradient(135deg,rgba(0,0,0,0.1)_0,rgba(0,0,0,0.1)_1px,transparent_1px,transparent_6px)]' : 'border'} p-1.5 flex justify-between items-center gap-2 cursor-pointer`}
             >
 
                 <span className={`${text} flex gap-3 text-xs lg:text-sm xl:text-sm`}>

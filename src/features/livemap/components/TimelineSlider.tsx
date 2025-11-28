@@ -56,6 +56,12 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
     }
   }
 
+  // Controls handlers
+  // --- Play/Pause ---- 
+  const handlePlayPauseAnim = () => {
+    setIsPlaying(!isPlaying)
+  }
+
 
   return (
     <div className="z-5 absolute bottom-0 left-0 w-full">
@@ -81,7 +87,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
           {/* Play/Pause */}
           <button
             aria-label="Play/Pause animation"
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={handlePlayPauseAnim}
             className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-1"
           >
             {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}

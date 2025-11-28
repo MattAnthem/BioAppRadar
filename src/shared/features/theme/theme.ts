@@ -63,7 +63,7 @@ export const light: ThemeElements = {
     },
     sectionCard: {
         bg: 'bg-neutral-200',
-        primary_text: 'text-gray-800',
+        primary_text: 'text-gray-950',
         secondary_text: 'text-gray-600',
         border: 'border-gray-300',
         shadow: 'shadow-gray-300'
