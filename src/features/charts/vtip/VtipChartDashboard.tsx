@@ -51,6 +51,8 @@ const VtipChartDashboard = () => {
       return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
     }
   
+    const title = data ? `${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})` : '';
+
   return (
     <VtipChartWrapper
         ModalComponent={VtipMdlDashboard}
@@ -58,7 +60,7 @@ const VtipChartDashboard = () => {
         data={data}
         error={error}
         isLoading={(isLoading || isRefetching)}
-        title={`${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})`} 
+        title={title} 
         ChartComponent={VtipChart}
     />
   )

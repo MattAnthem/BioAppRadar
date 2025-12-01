@@ -51,9 +51,12 @@ const VptsChartDashboard = () => {
     if( s === undefined) return "";
     return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
   }
+
+  const title = data ? `${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})` : '';
+
   return (
     <VptsChartWrapper
-        title={`${capitalize(data?.query_spec)} - ${data?.name ?? ''} ${data?.units ?? ''}`}
+        title={title}
         ModalComponent={VptsMdlDashboard}
         PopupComponent={VptsSpeciePopup}
         data={data}

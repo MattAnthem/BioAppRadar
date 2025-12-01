@@ -55,10 +55,12 @@ const VpChartDashboard = ({ className }: VpChartDashProps) => {
       if( s === undefined) return "";
       return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
     }
+
+    const title = data ? `${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})` : '';
   
   return (
     <VpChartWrapper
-      title={`${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})`}
+      title={title}
       ModalComponent={VpMdlDashboard}
       PopupComponent={VpSpeciePopup}
       selectedHeight={currentAltitude}

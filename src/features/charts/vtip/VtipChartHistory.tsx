@@ -10,15 +10,16 @@ const VtipChartHistory = () => {
   // Tanstack
   const { isLoading, data, error } = useVtipHistData();
 
-  console.log("RENDERING VTIP HIST")
-
   const capitalize = (s: string | undefined) => {
     if( s === undefined) return "";
     return s ? s[0].toLocaleUpperCase() + s.slice(1) : s;
   }
+
+  const title = data ? `${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})` : '';
+
   return (
     <VtipChartWrapper
-        title={`${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})`}
+        title={title}
         ModalComponent={VtipMdlHistory}
         PopupComponent={VtipHistPopup}
         data={data}

@@ -21,7 +21,7 @@ const CustomSlider = ({
             window.clearTimeout(debounceRef.current);
           }
         };
-      }, []);
+    }, []);
 
     const handleAltitudeChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
         const alt = Number(evt.target.value);
@@ -75,7 +75,7 @@ const CustomSlider = ({
         />
 
         {/* Current altitude */}
-        <small className='text-blue-500 text-[12px] font-semibold'>{index}</small>
+        <small className='text-sky-300 text-[12px] font-semibold'>{index}</small>
 
         {/* Min altitude */}   
           <div className="flex items-center justify-center gap-0.5">
