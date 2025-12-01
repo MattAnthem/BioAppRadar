@@ -7,9 +7,7 @@ import alertReducer from '../shared/components/popups/alert/alertSlice';
 import basemappopupReducer from '../features/livemap/slice/baseMapPopupSlice';
 import livemapReducer from '../features/livemap/slice/livemapSlice';
 import altitudeReducer from "../features/livemap/slice/altitudeSlice";
-import vpchartReducer from '../features/vp_chart/vpChartSlice';
-import vptschartReducer from '../features/vpts_chart/vptsChartSlice';
-import vtipchartReducer from '../features/vtip_chart/vtipChartSlice';
+
 import historymapReducer from '../features/history_map/slice/historyMapSlice';
 import basemaphistoryReducer from '../features/history_map/slice/histBaseMapPopupSlice';
 
@@ -20,11 +18,15 @@ import vcrossMapReducer from '../features/vcross_map/slice/vcrossMapSlice';
 import histAltitudeReducer from '../features/history_map/slice/histAltitudeSlice';
 import histRadarPopupReducer from '../features/history_map/slice/histRadarPopupSlice'
 import histSevipPopupReducer from '../features/history_map/slice/histSevipPopup';
-import vpHistChartReducer from '../features/history_charts/slices/vpHistChartSlice';
-import vptsHistChartReducer from '../features/history_charts/slices/vptsHistChartSlice';
-import vtipHistChartReducer from '../features/history_charts/slices/vtipHistChartSlice';
 import boundaryReducer from "../shared/slice/boundarySlice";
 import basemapvcrossReducer from '../features/vcross_map/slice/vcrossMapbaseSlice';
+
+import vpchartReducer from '../features/charts/vp/slices/vpChartSlice';
+import vpHistChartReducer from '../features/charts/vp/slices/vpHistChartSlice';
+import vptschartReducer from '../features/charts/vpts/slices/vptsChartSlice';
+import vptsHistChartReducer from '../features/charts/vpts/slices/vptsHistChartSlice';
+import vtipchartReducer from '../features/charts/vtip/slices/vtipChartSlice';
+import vtipHistChartReducer from '../features/charts/vtip/slices/vtipHistChartSlice';
 
 
 export const store = configureStore({
@@ -56,8 +58,6 @@ export const store = configureStore({
         // vcross
         vcross_basemap: basemapvcrossReducer,
 
-
-        // Refactor
         classificationpopup: classificationpopupReducer,
         vcrosspopup: vcrossPopupReducer,
         vcrossmap: vcrossMapReducer,

@@ -1,0 +1,19 @@
+import { useQuery } from "@tanstack/react-query";
+import { fetchVPTS, type VptsPayload, type VptsResponse } from "../../../../../api/endpoints/verical_profile/verticalProfilesAPI";
+
+
+export const useVptsDataQuery = (payload: VptsPayload, enabled?: boolean) => {
+    return useQuery<VptsResponse>({
+        queryKey: ["vpts_data", payload.startTime, payload.endTime, payload.parameter, payload.species],
+        queryFn: async () => {
+            try {
+                return await fetchVPTS(payload);
+            } catch (error) {
+                console.error('Failed to fetch VPTS data');
+                throw error;
+            }
+        },
+        enabled: Boolean(payload.parameter && payload.startTime && payload.endTime && payload.species) && (enabled ?? true),
+        refetchOnWindowFocus: false,
+    })
+}

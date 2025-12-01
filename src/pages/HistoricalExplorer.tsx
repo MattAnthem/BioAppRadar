@@ -2,9 +2,9 @@ import React, { Suspense } from 'react';
 import MainLayout from '../shared/layouts/MainLayout';
 import SectionCard from '../shared/components/cards/SectionCard';
 const HistoryMap = React.lazy(() => import("../features/history_map/HistoryMap"));
-const VpHistChart = React.lazy(() => import("../features/history_charts/components/VpHistChart"));
-const VptsHistChart = React.lazy(() => import("../features/history_charts/components/VptsHistChart"));
-const VtipHistChart = React.lazy(() => import("../features/history_charts/components/VtipHistChart"));
+const VpChartHistory = React.lazy(() => import("../features/charts/vp/VpChartHistory"));
+const VptsChartHistory = React.lazy(() => import("../features/charts/vpts/VptsChartHistory"));
+const VtipChartHistory = React.lazy(() => import("../features/charts/vtip/VtipChartHistory"));
 
 const HistoricalExplorer = () => {
   return (
@@ -57,7 +57,7 @@ const HistoricalExplorer = () => {
                     <SectionCard className='w-full h-full animate-pulse'/>}
                   >
                     {/* Vp Chart */}
-                    <VpHistChart/>
+                    <VpChartHistory/>
 
                   </Suspense>
               </div>
@@ -85,7 +85,7 @@ const HistoricalExplorer = () => {
                     <SectionCard className='w-full h-full animate-pulse'/>}
                   >
                     {/* Vtip chart */}
-                    <VtipHistChart/>
+                    <VtipChartHistory/>
                   </Suspense>
 
               </div>
@@ -98,7 +98,7 @@ const HistoricalExplorer = () => {
                 <Suspense fallback={<SectionCard className='w-full h-full animate-pulse'/>} >
 
                   {/* Vpts Chart */}
-                  <VptsHistChart/>
+                  <VptsChartHistory/>
 
                 </Suspense>
               </div>
