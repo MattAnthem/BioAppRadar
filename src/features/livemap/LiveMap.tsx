@@ -186,7 +186,7 @@ const LiveMap = () => {
 
         {/* Classification legends */}
 
-            <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-4 lg:bottom-3 bottom-1">
+            <div className="absolute lg:flex lg:flex-col lg:gap-0.5 z-10 lg:w-1/10 h-10  right-0 lg:bottom-4 bottom-1">
                 <Suspense>                
                     <ClassifLegend
                         classColor0={(data as ClassificationDataResponse)?.legend?.class_0?.color}

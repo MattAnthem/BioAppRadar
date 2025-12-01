@@ -48,7 +48,7 @@ const Tooltip = (
     const shouldDisplay = display_condition ?? true;
 
   return (
-    <div className='group relative'>
+    <div className='group flex items-center justify-center relative'>
       {/* Place the children here */}
       { children }
       {/* The tooltip message */}

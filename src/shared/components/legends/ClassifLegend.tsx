@@ -24,19 +24,19 @@ const ClassifLegend = ({
     height
 }:ClassifLegendProps) => {
   return (
-    <div>
+    <div className='space-y-0'>
         {/* Class 0 */}
-        <div className="flex justify-start items-center gap-1 text-sm">
+        <div className="flex justify-start items-center gap-1 text-[clamp(0.8em,0.8vw,1em)]">
             <div className='lg:w-3 lg:h-3 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: classColor0}}/>
             <small className='text-white tracking-wide'>{class0Name}</small>
         </div>
 
         {/* Class 1 */}
-        <div className="flex justify-start items-center gap-1 text-sm">
+        <div className="flex justify-start items-center gap-1 text-[clamp(0.8em,0.8vw,1em)]">
             <div className='lg:w-3 lg:h-3 w-2 h-2  rounded-full border border-gray-400' style={{backgroundColor: classColor1}}/>
             <small className='text-white tracking-wide'>{class1Name}</small>
         </div>
-        <div className="lg:text-sm text-[10px]">
+        <div className="flex justify-start items-start text-[clamp(0.7em,0.7vw,1em)]">
             <small className='text-white tracking-wide'>Height: {height}</small>
         </div>
     </div>

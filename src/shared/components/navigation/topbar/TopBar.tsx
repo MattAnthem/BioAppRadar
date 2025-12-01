@@ -60,14 +60,16 @@ const TopBar = () => {
 
             <div className='flex flex-col gap-2 p-2'>
                 <button 
+                    aria-label='Change theme to light'
                     onClick={setThemeLight} 
-                    className={`w-full text-left px-3 py-1 rounded-sm ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${!isDarkMode ? 'font-semibold underline' : ''}`}
+                    className={`w-full text-left px-3 py-1 rounded-sm ${!isDarkMode ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${!isDarkMode ? 'font-semibold underline' : ''}`}
                 >
                     Light Theme
                 </button>
                 <button 
+                    aria-label='Change theme to dark'
                     onClick={setThemeDark} 
-                    className={`w-full text-left px-3 py-1 rounded-sm ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${isDarkMode ? 'font-semibold underline' : ''}`}
+                    className={`w-full text-left px-3 py-1 rounded-sm ${isDarkMode ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${isDarkMode ? 'font-semibold underline' : ''}`}
                 >
                     Dark Theme
                 </button>

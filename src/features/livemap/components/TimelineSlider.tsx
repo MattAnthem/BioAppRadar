@@ -93,8 +93,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
             {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}
           </button>
 
-          {/* Frame jump btns + speed*/}
-          <div className="lg:flex hidden items-center h-full justify-center bg-gray-800 rounded-sm">
+          {/* Frame jump btns */}
+          <div className="lg:flex hidden items-center h-full justify-end bg-gray-800 rounded-sm">
             {/* Back to one past frame */}
             <Tooltip
               position="top"
@@ -104,7 +104,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
               <button 
                 aria-label="Step backward"
                 onClick={handleStepBackward} className="p-1 h-full rounded-l-sm hover:bg-gray-700 text-gray-300">
-                <ChevronLeft width={20} height={20} className=" rounded-sm"/>
+                <ChevronLeft width={20} height={20} />
               </button>
 
             </Tooltip>
@@ -118,7 +118,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
               <button 
                 aria-label="Step forward"
                 onClick={handleStepForward} className="p-1 h-full rounded-r-sm hover:bg-gray-700 text-gray-300">
-                <ChevronRight width={20} height={20} className=" rounded-sm"/>
+                <ChevronRight width={20} height={20} />
               </button>
             </Tooltip>
 
@@ -137,7 +137,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
                   }}
                   className={`${
                     currentIndex === i ? "bg-blue-800" : "bg-gray-300"
-                    } hover:bg-blue-700 lg:h-6 lg:w-6 w-4 h-4 p-1 cursor-pointer 2xl:rounded-xs`}
+                  } hover:bg-blue-700 lg:h-6 lg:w-6 w-4 h-4 p-1 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>
             ))}

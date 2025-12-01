@@ -100,6 +100,7 @@ type TopbarContents = {
         text: string;
         option_hover: string;
         option_active?: string;
+        active_bg?: string;
     }
 }
 

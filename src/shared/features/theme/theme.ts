@@ -62,7 +62,8 @@ export const light: ThemeElements = {
             popover: {
                 text: 'text-gray-900',
                 option_hover: 'hover:bg-gray-200',
-                option_active: 'bg-gray-300 text-gray-950'
+                option_active: 'bg-gray-300 text-gray-950',
+                active_bg: 'bg-gray-200'
             }
         }
     },
@@ -191,7 +192,8 @@ export const dark: ThemeElements = {
             popover: {
                 text: 'text-gray-200',
                 option_hover: 'hover:bg-zinc-600',
-                option_active: 'bg-zinc-700 text-gray-100'
+                option_active: 'bg-zinc-700 text-gray-100',
+                active_bg: 'bg-zinc-700'
             }
         }
     },

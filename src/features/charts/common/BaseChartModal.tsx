@@ -162,7 +162,10 @@ function BaseChartModal<TData>({
                                                 </Tooltip>
                                             </div>
                                             {/* Chart image */}
+                                            <div className="w-full h-full flex justify-center">
+
                                             {renderImage(chartImgRef)}
+                                            </div>
                                         </div>
                                 </div>
                             )

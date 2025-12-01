@@ -65,7 +65,7 @@ function BaseChart<TData>({
           {/* Chart */}
           <div className="w-full h-full  grid px-2 pb-2">
             {
-              (data && !error) && (
+              (data && !error && !isLoading) && (
                 <ChartComponent
                   data={data}
                   selectedHeight={selectedHeight}
