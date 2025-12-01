@@ -96,6 +96,11 @@ type TopbarContents = {
     toggler_hover: string;
     togller_color: string;
     icon_color: string;
+    popover: {
+        text: string;
+        option_hover: string;
+        option_active?: string;
+    }
 }
 
 type TopbarTheme = {

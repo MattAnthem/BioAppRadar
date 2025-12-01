@@ -28,10 +28,22 @@ const themeSlice = createSlice({
             state.currentTheme = state.themeName === 'light' ? light : dark;
             state.isDarkMode = !state.isDarkMode;
             localStorage.setItem('theme', state.themeName);
-        } 
+        } ,
+        setToLightTheme: (state) => {
+            state.themeName = 'light';
+            state.currentTheme = light;
+            state.isDarkMode = false;
+            localStorage.setItem('theme', 'light');
+        },
+        setToDarkTheme: (state) => {
+            state.themeName = 'dark';
+            state.currentTheme = dark;
+            state.isDarkMode = true;
+            localStorage.setItem('theme', 'dark');
+        }
     }
 })
 
 
-export const { toggleTheme } = themeSlice.actions;
+export const { toggleTheme, setToDarkTheme, setToLightTheme } = themeSlice.actions;
 export default themeSlice.reducer;

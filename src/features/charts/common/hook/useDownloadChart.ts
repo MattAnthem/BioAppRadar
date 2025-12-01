@@ -8,7 +8,7 @@ type UseDownloadChartParams = {
 };
 
 /**
- * Hooks to download chart as image or CSV data
+ * Hooks to download chart as image/PDF or CSV data
  * 
  * @param filename - The filename for the downloaded chart 
  * @param highchartsRef - RefObject to HighchartsReact component

@@ -32,11 +32,11 @@ function BaseChart<TData>({
     time
 }: Readonly<BaseChartProps<TData>>){
     return (
-        <SectionCard className={`${className} w-full h-full flex flex-col justify-center items-center`}>
+        <SectionCard className={`${className} lg:w-full lg:h-full h-[60vh] flex flex-col justify-center items-center`}>
   
           {/* Heading */}
-          <div className="p-1 relative w-full flex items-center justify-between">
-              <h1 className='tracking-wide text-[clamp(0.8em,0.8vw,1em)] font-semibold'>{title}</h1>
+          <div className="py-1 px-2 relative w-full flex items-center justify-between">
+              <h1 className='tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[600]'>{title}</h1>
 
                 <div className="z-10 flex justify-center gap-1.5">
 
@@ -63,7 +63,7 @@ function BaseChart<TData>({
           </div>
 
           {/* Chart */}
-          <div className="h-full w-full grid px-2 pb-2">
+          <div className="w-full h-full  grid px-2 pb-2">
             {
               (data && !error) && (
                 <ChartComponent
@@ -82,7 +82,7 @@ function BaseChart<TData>({
             }
             {         
               error && (
-                <div className="flex items-center justify-center">
+                <div className="w-full h-full flex flex-col items-center justify-center">
                   <Unplug width={25} height={25} className='text-red-500'/>
                 </div> 
             )}

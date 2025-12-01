@@ -113,10 +113,9 @@ const LiveMap = () => {
             )
         }
         {
-            ( coverageLoading ) && (
+            (coverageLoading && isPreloading) && (
                 <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
-                    <p className='text-gray-700'>Loading coverage</p>
                 </div>
             )
         }
@@ -124,7 +123,7 @@ const LiveMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20 p-1 flex justify-between items-center'>
 
-            <h1 className='text-white tracking-wider text-[clamp(0.8em,0.8vw,1em)]'>{data?.info.name}</h1>
+            <h1 className='text-white tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name}</h1>
 
             {/* Overlay controller */}
             <div className="z-5 flex gap-2 justify-center items-end">

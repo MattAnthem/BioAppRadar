@@ -58,7 +58,12 @@ export const light: ThemeElements = {
         contents: {
             toggler_hover: 'hover:bg-gray-200',
             togller_color: 'text-gray-400',
-            icon_color: 'text-gray-950'
+            icon_color: 'text-gray-950',
+            popover: {
+                text: 'text-gray-900',
+                option_hover: 'hover:bg-gray-200',
+                option_active: 'bg-gray-300 text-gray-950'
+            }
         }
     },
     sectionCard: {
@@ -182,12 +187,17 @@ export const dark: ThemeElements = {
         contents: {
             toggler_hover: 'hover:bg-zinc-700',
             togller_color: 'text-zinc-400',
-            icon_color: 'text-gray-100'
+            icon_color: 'text-gray-100',
+            popover: {
+                text: 'text-gray-200',
+                option_hover: 'hover:bg-zinc-600',
+                option_active: 'bg-zinc-700 text-gray-100'
+            }
         }
     },
     sectionCard: {
         bg: 'bg-[#22252B]',
-        primary_text: 'text-[#CCCCDC]',
+        primary_text: 'text-neutral-200',
         secondary_text: 'text-[#CCCCDC]',
         border: 'border-[#373941]',
         shadow: '',
