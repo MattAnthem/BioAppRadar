@@ -48,7 +48,7 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
 
         chart: {
           inverted: true,
-          reflow: true,
+          // reflow: true,
           backgroundColor: 'transparent',
           height: chartHeight ?? null,
           borderColor: borderBox,

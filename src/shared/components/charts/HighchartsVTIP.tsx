@@ -129,7 +129,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
           borderRadius: 3,
           height: chartHeight ?? null,
           backgroundColor: "transparent",
-          reflow: true,
+          // reflow: true,
           events: {
             load: function () {
               drawDayNightBar(this as unknown as DayNightChart);

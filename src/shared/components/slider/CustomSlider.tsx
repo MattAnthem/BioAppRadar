@@ -51,6 +51,7 @@ const CustomSlider = ({
         
         <input
             id='altitude-slider' 
+            aria-label='Altitude slider'
             name='altitudes'
             onChange={handleAltitudeChange}
             type="range" 

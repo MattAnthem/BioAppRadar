@@ -94,7 +94,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
           </button>
 
           {/* Frame jump btns */}
-          <div className="lg:flex hidden items-center h-full justify-end bg-gray-800 rounded-sm">
+          <div className="lg:flex hidden relative items-center h-full justify-end bg-gray-800 rounded-sm">
             {/* Back to one past frame */}
             <Tooltip
               position="top"
@@ -136,7 +136,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
                     setIsPlaying(false); 
                   }}
                   className={`${
-                    currentIndex === i ? "bg-blue-800" : "bg-gray-300"
+                    currentIndex === i ? "bg-sky-800 border-b-2 border-b-sky-950" : "bg-gray-300"
                   } hover:bg-blue-700 lg:h-6 lg:w-6 w-4 h-4 p-1 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>

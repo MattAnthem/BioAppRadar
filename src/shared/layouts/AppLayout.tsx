@@ -3,8 +3,7 @@ import { useTheme } from '../hooks/useTheme';
 import Sidebar from '../components/navigation/sidebar/Sidebar';
 import TopBar from '../components/navigation/topbar/TopBar';
 import { Suspense } from 'react';
-import loadWebp from '../../assets/loader.webp';
-
+import SectionCard from '../components/cards/SectionCard';
 /**
  * The Dashboard Main Layout, Responsible for placing the Sidebar, Topbar and the pages in their correct position
  */
@@ -27,11 +26,8 @@ const AppLayout = () => {
         
         <Suspense 
           fallback={
-            <div className='w-full h-full flex items-center justify-center'>
-              <div className="flex flex-col items-center justify-center">
-                <img className='w-8 h-8' src={loadWebp} alt="loading" />
-                <p className='text-blue-700 tracking-wide'>Loading page...</p>
-              </div>
+            <div className='w-full h-screen flex items-center justify-center'>
+              <SectionCard className='w-full h-full px-4 pt-10 animate-pulse'/>
             </div>
           }
         >
