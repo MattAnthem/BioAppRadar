@@ -3,7 +3,7 @@ import { MapIcon } from "lucide-react";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import { changeBaseMap } from "../slice/baseMapPopupSlice";
 import { setSelectedBoundary, setSelectedBoundaryType } from "../../../shared/slice/boundarySlice";
-import { memo, lazy } from "react";
+import { memo, lazy, useState } from "react";
 
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
@@ -11,6 +11,8 @@ const OptionPopover = lazy(() => import('../../../shared/components/popups/optio
 
 
 const MapbasePopup = () => {
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // redux 
   const {
@@ -24,7 +26,9 @@ const MapbasePopup = () => {
 
   //#region  handlers
   const handleChangeBase = (option: SelectOption) => {
-    dispatch(changeBaseMap(option))
+    dispatch(changeBaseMap(option));
+    setIsPopupOpen(false);
+
   }
 
   // Coverage
@@ -33,17 +37,28 @@ const MapbasePopup = () => {
   }
   const handleChangeCoverageType = (option: SelectOption) => {
     dispatch(setSelectedBoundaryType(option));
+    setIsPopupOpen(false);
   }
   
   //#endregion
 
 
+    // ---  Controls of the popup ---
+  const handleTooglePopup = () => {
+        setIsPopupOpen(!isPopupOpen);
+  }
+  const closePopup = () => {
+        setIsPopupOpen(false);
+  }
 
   return (
     <OptionPopover
       customIcon={<MapIcon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4`}/>}
       hoverText="Change Base Map"
       isPrimary
+      isOpen={isPopupOpen}
+      onOpen={handleTooglePopup}
+      onClose={closePopup}
     >
        {/* Select map base */}
        <div className="flex flex-col gap-0.5">

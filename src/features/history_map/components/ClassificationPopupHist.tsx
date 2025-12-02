@@ -2,7 +2,7 @@ import { BirdIcon, ImageIcon, ImagePlayIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { useEffect, useState, memo, useMemo, lazy } from 'react';
-import { closeClassifPopup, setHistClassifEndTime, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifStartTime, setHistClassifTime, setSelectedHistClassificationOption, toggleClassifPopup } from '../slice/histClassificationPopupSlice'
+import { setHistClassifEndTime, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifStartTime, setHistClassifTime, setSelectedHistClassificationOption } from '../slice/histClassificationPopupSlice'
 import { setClassifGifPayloadHist, setClassifPayloadHist } from '../slice/historyMapSlice'
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery'
@@ -18,12 +18,14 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const ClassificationPopup = () => {
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   // Themes 
   const themes = useTheme();
   const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
   // Read only redux states
-  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, isPopupOpen, endTimeClassif, startTimeClassif } = useAppSelector(state=> state.hist_classifpopup);
+  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, endTimeClassif, startTimeClassif } = useAppSelector(state=> state.hist_classifpopup);
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects ---
@@ -55,13 +57,13 @@ const ClassificationPopup = () => {
   }, [adjustedTimes, dispatch, isSuccess])
   
   // --- Local state for the inputs
-  const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);
-  const [locSelectedVar, setLocSelectedVar] = useState(selectedVariable);
-  const [locColor0, setLocColor0] = useState(color_0);
-  const [locColor1, setLocColor1] = useState(color_1);
-  const [locTime, setLocTime] = useState(histClassifTime);
-  const [locStartTime, setLocStartTime] = useState(startTimeClassif);
-  const [locEndTime, setLocEndTime] = useState(endTimeClassif);
+  const [locAvailableVars, setLocAvailableVars] = useState(availableVariables ?? []);
+  const [locSelectedVar, setLocSelectedVar] = useState(selectedVariable ?? null);
+  const [locColor0, setLocColor0] = useState(color_0 ?? '');
+  const [locColor1, setLocColor1] = useState(color_1 ?? '');
+  const [locTime, setLocTime] = useState(histClassifTime ?? '');
+  const [locStartTime, setLocStartTime] = useState(startTimeClassif ?? '');
+  const [locEndTime, setLocEndTime] = useState(endTimeClassif ?? '');
   const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
 
   // --- Sync local states with redux states on mount and when redux states change ---
@@ -112,10 +114,10 @@ const ClassificationPopup = () => {
 
   // --- Redux controls of the popup ---
   const handleTooglePopup = () => {
-    dispatch(toggleClassifPopup())
+    setIsPopupOpen(!isPopupOpen);
   }
   const closePopup = () => {
-    dispatch(closeClassifPopup());
+    setIsPopupOpen(false);
   }
 
   // --- Submit handler:  ---
@@ -135,7 +137,8 @@ const ClassificationPopup = () => {
       dispatch(setSelectedHistClassificationOption(locSelectedVar));
   
       // --- close on submit (only if the fields are validated) ---
-      dispatch(closeClassifPopup());
+      setIsPopupOpen(false)
+
     } else if (overlayMode === 'gif') {
       dispatch(setClassifGifPayloadHist({
         class: locSelectedVar.id as string,
@@ -151,7 +154,7 @@ const ClassificationPopup = () => {
       dispatch(setHistClassifStartTime(locStartTime));
       dispatch(setHistClassifEndTime(locEndTime));
 
-      dispatch(closeClassifPopup());
+      setIsPopupOpen(false);
     }
 
     

@@ -43,11 +43,11 @@ const VpHistPopup = () => {
   }, [adjustedTime, dispatch, isSuccess])
 
   // Local state variables for the inputs 
-  const [locParams, setLocParams] = useState(parameterOptions);
-  const [locSpecies, setLocSpecies] = useState(speciesOptions);
-  const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
-  const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
-  const [locTime, setLocTime] = useState(vpTime);
+  const [locParams, setLocParams] = useState(parameterOptions ?? []);
+  const [locSpecies, setLocSpecies] = useState(speciesOptions ?? []);
+  const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie ?? null);
+  const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter ?? null);
+  const [locTime, setLocTime] = useState(vpTime ?? '');
 
   // --- Sync Local states with redux state on mount ----
   useEffect(() => {

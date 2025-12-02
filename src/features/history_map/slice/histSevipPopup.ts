@@ -4,7 +4,6 @@ import { sevip_options, species_options } from "../../../shared/static/select-op
 
 
 interface SevipPopupState {
-    isPopupOpen: boolean;
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
     speciesOptions: SelectOption[];
@@ -21,7 +20,6 @@ interface SevipPopupState {
 
 
 const initialState: SevipPopupState = {
-    isPopupOpen: false,
 
     selectedVariable: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType[0] : null,
     availableVariables: Array.isArray(sevip_options[0].availableType) ? sevip_options[0].availableType : [],
@@ -52,14 +50,8 @@ const histSevippopupSlice = createSlice({
         setHistSevipTimeEnd: (state, action) => {
           state.endTimeSevip = action.payload;
         },
-        toggleSevipPopup: (state) => {
-          state.isPopupOpen = !state.isPopupOpen;
-        },
-        closeSevipPopup: (state) => {
-          state.isPopupOpen = false;
-        }
     }
 })
 
-export const { setSelectedHistSevipOption, setHistTimeSevip, closeSevipPopup, toggleSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart, setSelectedHistSevipSpecie } = histSevippopupSlice.actions;
+export const { setSelectedHistSevipOption, setHistTimeSevip, setHistSevipTimeEnd, setHistSevipTimeStart, setSelectedHistSevipSpecie } = histSevippopupSlice.actions;
 export default histSevippopupSlice.reducer;

@@ -55,12 +55,12 @@ const VtipHistPopup = () => {
     }, [adjustedTimes, dispatch, isSuccess])
 
     // --- Local state variables for controlling popup form inputs ---
-    const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions);
-    const [locSelectedParameter, setLocSelectedParameter] = useState<SelectOption>(selectedParameter);
-    const [locSpecies, setLocSpecies] = useState(speciesOptions);
-    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
-    const [locStartTime, setLocStartTime] = useState<string>(vtipStartTime);
-    const [locEndTime, setLocEndTime] = useState<string>(vtipEndTime);
+    const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions ?? []);
+    const [locSelectedParameter, setLocSelectedParameter] = useState<SelectOption>(selectedParameter ?? null);
+    const [locSpecies, setLocSpecies] = useState(speciesOptions ?? []);
+    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie ?? null);
+    const [locStartTime, setLocStartTime] = useState<string>(vtipStartTime ?? '');
+    const [locEndTime, setLocEndTime] = useState<string>(vtipEndTime ?? '');
 
     // ---Sync with Redux store---
     useEffect(() => {

@@ -12,19 +12,13 @@ import { map_baseOptions } from "../../../shared/static/select-options";
  * @var selectedMapBase: Selected Map Base
  */
 interface VarPopupState {
-    isMapBasePopupOpen: boolean;
     mapBaseOptions: SelectOption[];
     selectedMapBase: SelectOption;
 }
 
 const initialState: VarPopupState = {
-    isMapBasePopupOpen: false,
     mapBaseOptions: map_baseOptions,
-    selectedMapBase: {
-      id: 'carto_light',
-      displayText: 'CARTO Light',
-      url: 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png'
-    },
+    selectedMapBase: map_baseOptions[0],
 }
 
 const baseMapPopupSlice = createSlice({
@@ -34,19 +28,10 @@ const baseMapPopupSlice = createSlice({
         changeBaseMap: (state, action) => {
             state.selectedMapBase = action.payload;
         },
-        toggleShowMapBasePopup: (state) => {
-            state.isMapBasePopupOpen = !state.isMapBasePopupOpen;
-        },
-
-        hideMapBasePopup: (state) => {
-            state.isMapBasePopupOpen = false;
-        },
 
     }
 })
 
-export const {  
-  hideMapBasePopup, 
-  toggleShowMapBasePopup, 
+export const { 
   changeBaseMap  } = baseMapPopupSlice.actions;
 export default baseMapPopupSlice.reducer;

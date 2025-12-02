@@ -1,7 +1,7 @@
 import { BirdIcon } from 'lucide-react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import type { SelectOption } from '../../../shared/components/selects/types';
-import { closeVcrossBioclassPopup, setSelectedBioclassTime, setSelectedVcrossBioCls, setVcrossBioclassSegment, setVcrossClassificationColorOne, setVcrossClassificationColorZero, toggleVcrossBioclassPopup } from '../slice/vcrossPopupSlice';
+import { setSelectedBioclassTime, setSelectedVcrossBioCls, setVcrossBioclassSegment, setVcrossClassificationColorOne, setVcrossClassificationColorZero } from '../slice/vcrossPopupSlice';
 import { useEffect, useState, memo, lazy } from 'react';
 import { setOverlayClassificationPayload, setVcrossBioClassPayload } from '../slice/vcrossMapSlice';
 
@@ -13,8 +13,10 @@ const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borde
 
 const VcrossBioClsDataPopup = () => {
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // --- Redux read only states ----
-    const { availableBioClass, selectedBioClass, timeBioClass, color_0, color_1, segmentBioclass, isClassifPopupOpen } = useAppSelector(state => state.vcrosspopup);
+    const { availableBioClass, selectedBioClass, timeBioClass, color_0, color_1, segmentBioclass } = useAppSelector(state => state.vcrosspopup);
     
     // --- Local state variables for editions on the input ---
     const [locAvailableBioclass, setLocAvailableBioclass] = useState(availableBioClass);
@@ -26,7 +28,7 @@ const VcrossBioClsDataPopup = () => {
 
     // --- Sync with redux when the popup opens or the Redux states changes ---
     useEffect(() => {
-      if(isClassifPopupOpen) {
+      if(isPopupOpen) {
         setLocAvailableBioclass(availableBioClass)
         setLocSelectedBioclass(selectedBioClass)
         setLocTime(timeBioClass)
@@ -34,7 +36,7 @@ const VcrossBioClsDataPopup = () => {
         setLocColor1(color_1)
         setLocSegment(segmentBioclass)
       }
-    }, [availableBioClass, color_0, color_1, isClassifPopupOpen, segmentBioclass, selectedBioClass, timeBioClass])
+    }, [availableBioClass, color_0, color_1, isPopupOpen, segmentBioclass, selectedBioClass, timeBioClass])
 
 
     // --- Local input handlers for when the user edits ---
@@ -58,10 +60,10 @@ const VcrossBioClsDataPopup = () => {
 
     // Popup opening/closing
     const handleTogglePopup = () => {
-      dispatch(toggleVcrossBioclassPopup())
+      setIsPopupOpen(!isPopupOpen);
     }
     const handleClosePopup = () => {
-      dispatch(closeVcrossBioclassPopup())
+      setIsPopupOpen(false);
     }
 
     const dispatch = useAppDispatch();
@@ -91,14 +93,15 @@ const VcrossBioClsDataPopup = () => {
         dispatch(setSelectedBioclassTime(locTime));
         dispatch(setVcrossBioclassSegment(locSegment))
 
-      dispatch(closeVcrossBioclassPopup());
+        setIsPopupOpen(false);
+        
     }
 
   return (
     <OptionPopover
         hoverText='Select Classification Data'
         customIcon={<BirdIcon className='w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4'/>}
-        isOpen={isClassifPopupOpen}
+        isOpen={isPopupOpen}
         onClose={handleClosePopup}
         onOpen={handleTogglePopup}
     >

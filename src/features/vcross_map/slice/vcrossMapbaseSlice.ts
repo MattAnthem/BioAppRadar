@@ -3,7 +3,6 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import { colormapsOptions, map_baseOptions, map_boundarieOptions } from "../../../shared/static/select-options";
 
 interface VcrossMapBaseState {
-    isPopupOpen: boolean;
     mapBaseOptions: SelectOption[];
     selectedMapBase: SelectOption;
     //colormap
@@ -17,7 +16,6 @@ interface VcrossMapBaseState {
 }
 
 const initialState: VcrossMapBaseState = {
-    isPopupOpen: false,
     mapBaseOptions: map_baseOptions,
     colormapOptions: colormapsOptions,
     selectedColormap: colormapsOptions[0],
@@ -39,13 +37,6 @@ const vcrossBaseMapSlice = createSlice({
         changeVcrossColormap: (state, action) => {
             state.selectedColormap = action.payload;
         },
-        toggleShowVcrossMapBasePopup: (state) => {
-            state.isPopupOpen = !state.isPopupOpen;
-        },
-
-        hideVcrossMapBasePopup: (state) => {
-            state.isPopupOpen = false;
-        },
         setSelectedBoundaryVcross: (state, action) => {
           state.boundaryTypes = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
           state.selectedBoundaryType = state.boundaryTypes[0];
@@ -56,5 +47,5 @@ const vcrossBaseMapSlice = createSlice({
         },
     }
 });
-export const { changeVcrossColormap, changeVcrossBaseMap, hideVcrossMapBasePopup, setSelectedBoundaryTypeVcross, setSelectedBoundaryVcross, toggleShowVcrossMapBasePopup } = vcrossBaseMapSlice.actions;
+export const { changeVcrossColormap, changeVcrossBaseMap, setSelectedBoundaryTypeVcross, setSelectedBoundaryVcross } = vcrossBaseMapSlice.actions;
 export default vcrossBaseMapSlice.reducer;

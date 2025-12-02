@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { closeRadarPopup, setRadarEndTimeHist, setRadarStartTimeHist, setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType, toggleRadarPopup } from '../slice/histRadarPopupSlice';
+import { setRadarEndTimeHist, setRadarStartTimeHist, setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType } from '../slice/histRadarPopupSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { ImageIcon, ImagePlayIcon, RadarIcon } from 'lucide-react';
 import { useEffect, useState, memo, useMemo, lazy } from 'react';
@@ -17,13 +17,16 @@ const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const RadarOptionPopup = () => {
+
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // Themes 
     const themes = useTheme();
     const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
 
     // Redux read only states
-    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, isPopupOpen, endTimeRadar, startTimeRadar, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_radarpopup);
+    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, endTimeRadar, startTimeRadar, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_radarpopup);
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
@@ -102,10 +105,10 @@ const RadarOptionPopup = () => {
 
     // --- popup toggle open/close --- 
     const handleTooglePopup = () => {
-        dispatch(toggleRadarPopup())
+        setIsPopupOpen(!isPopupOpen);
     }
     const closePopup = () => {
-        dispatch(closeRadarPopup());
+        setIsPopupOpen(false);
     }
 
     // --- Gif animated handlers ---
@@ -147,7 +150,7 @@ const RadarOptionPopup = () => {
             dispatch(setSelectedHistRadarType(locSelectedType));
         }
 
-        dispatch(closeRadarPopup());
+        setIsPopupOpen(false);
     }
 
   return (

@@ -1,7 +1,7 @@
 import { RadarIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { closeVcrossRadarPopup, setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType, setVcrossRadarSegment, toggleVcrossRadarPopup } from "../slice/vcrossPopupSlice";
+import { setSelectedVcrossRadarParameter, setSelectedVcrossRadarTime, setSelectedVcrossRadarType, setVcrossRadarSegment } from "../slice/vcrossPopupSlice";
 import { useEffect, useState, memo, lazy } from "react";
 import { setOverlayRadarPayload, setVcrossRadarPayload } from "../slice/vcrossMapSlice";
 
@@ -12,8 +12,10 @@ const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/
 
 const VcrossRadarDataPopup = () => {
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // Redux states (read only)
-    const {  availableRadarParameters, avalaibleRadarTypes, selectedRadarParameter, selectedRadarType, timeRadar, isRadarPopupOpen, segmentRadar } = useAppSelector(state => state.vcrosspopup);
+    const {  availableRadarParameters, avalaibleRadarTypes, selectedRadarParameter, selectedRadarType, timeRadar, segmentRadar } = useAppSelector(state => state.vcrosspopup);
     
     // Local states for input changes
     const [locAvailableParams, setLocAvailableParams] = useState(availableRadarParameters);
@@ -26,7 +28,7 @@ const VcrossRadarDataPopup = () => {
 
     //  --- Sync with Redux ---
     useEffect(() => {
-        if (isRadarPopupOpen) {
+        if (isPopupOpen) {
             setLocAvailableParams(availableRadarParameters);
             setLocAvailableTypes(avalaibleRadarTypes);
             setLocSelectedType(selectedRadarType);
@@ -34,7 +36,7 @@ const VcrossRadarDataPopup = () => {
             setLocSegment(segmentRadar);
             setLocTime(timeRadar)
         }
-    }, [availableRadarParameters, avalaibleRadarTypes, isRadarPopupOpen, segmentRadar, selectedRadarParameter, selectedRadarType, timeRadar])
+    }, [availableRadarParameters, avalaibleRadarTypes, isPopupOpen, segmentRadar, selectedRadarParameter, selectedRadarType, timeRadar])
 
     //  --- Local input handlers ---
     const handleRadarTypeChange = (type: SelectOption) => {
@@ -55,11 +57,12 @@ const VcrossRadarDataPopup = () => {
 
     // --- popup controls ---
     const handleTooglePopup = () => {
-        dispatch(toggleVcrossRadarPopup())
-      }
-      const closePopup = () => {
-        dispatch(dispatch(closeVcrossRadarPopup()));
-      }
+        setIsPopupOpen(!isPopupOpen)
+    }
+
+    const closePopup = () => {
+        setIsPopupOpen(false)
+    }
     
     const dispatch = useAppDispatch();
 
@@ -87,7 +90,7 @@ const VcrossRadarDataPopup = () => {
         dispatch(setVcrossRadarSegment(locSegment));
 
         // --- Close on submit ---
-        dispatch(closeVcrossRadarPopup());
+        setIsPopupOpen(false);
     }
   
 
@@ -95,7 +98,7 @@ const VcrossRadarDataPopup = () => {
     <OptionPopover
         hoverText="Select Radar Data"
         customIcon={<RadarIcon className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4"/>}
-        isOpen={isRadarPopupOpen}
+        isOpen={isPopupOpen}
         onClose={closePopup}
         onOpen={handleTooglePopup}
     >

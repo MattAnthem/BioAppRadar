@@ -3,7 +3,6 @@ import type { SelectOption } from "../../../shared/components/selects/types";
 import { classif_Options, species_options } from "../../../shared/static/select-options";
 
 interface HistClassificationPopupState {
-    isPopupOpen: boolean,
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
 
@@ -23,7 +22,6 @@ interface HistClassificationPopupState {
 }
 
 const initialState: HistClassificationPopupState = {
-    isPopupOpen: false,
     selectedVariable: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : null,
     availableVariables: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     speciesOptions: species_options,
@@ -62,15 +60,9 @@ const HistclassificationpopupSlice = createSlice({
         },
         setHistClassifEndTime: (state, action) => {
             state.endTimeClassif = action.payload;
-        },
-        toggleClassifPopup: (state) => {
-            state.isPopupOpen = !state.isPopupOpen;
-        },
-        closeClassifPopup: (state) => {
-            state.isPopupOpen = false;
         }
     }
 })
 
-export const { setHistClassificationColorOne, setHistClassifEndTime, setSelectedClassifHistSpecie, setHistClassifStartTime, setHistClassificationColorZero,closeClassifPopup, toggleClassifPopup,  setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
+export const { setHistClassificationColorOne, setHistClassifEndTime, setSelectedClassifHistSpecie, setHistClassifStartTime, setHistClassificationColorZero, setSelectedHistClassificationOption,  setHistClassifTime } = HistclassificationpopupSlice.actions;
 export default HistclassificationpopupSlice.reducer;

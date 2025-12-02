@@ -51,11 +51,8 @@ const vpChartSlice = createSlice({
                 species: action.payload.id,
             }
         },
-        setVpData: (state, action: PayloadAction<VpResponse | null>) => {
-            state.vpData = action.payload;
-        },
     }
 }) 
 
-export const { changeVpPayload, setSelectedVpParameterOption, setVpData, setSelectedVpSpecie } = vpChartSlice.actions;
+export const { changeVpPayload, setSelectedVpParameterOption, setSelectedVpSpecie } = vpChartSlice.actions;
 export default vpChartSlice.reducer;

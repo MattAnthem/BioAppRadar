@@ -5,8 +5,6 @@ import { colormapsOptions, map_baseOptions, map_boundarieOptions } from "../../.
 
 
 interface HistoryBaseMapState {
-    isMapBasePopupOpen: boolean;
-    mapBaseOptions: SelectOption[];
     selectedMapBase: SelectOption;
     colormapOptions: SelectOption[];
     selectedColormap: SelectOption;
@@ -15,13 +13,13 @@ interface HistoryBaseMapState {
     boundaryTypes: SelectOption[];
     selectedBoundaryType: SelectOption;
     selectedBoundary: SelectOption;
+    mapBaseOptions: SelectOption[]
 }
 
 const initialState: HistoryBaseMapState =  {
-    isMapBasePopupOpen: false,
-    mapBaseOptions: map_baseOptions,
     colormapOptions: colormapsOptions,
     selectedColormap: colormapsOptions[0],
+    mapBaseOptions: map_baseOptions,
     selectedMapBase: map_baseOptions[0],
 
     boundaryOptions: map_boundarieOptions,
@@ -40,13 +38,6 @@ const historyBaseMapSlice = createSlice({
           changeHistColormap: (state, action) => {
               state.selectedColormap = action.payload;
           },
-          toggleShowHistMapBasePopup: (state) => {
-              state.isMapBasePopupOpen = !state.isMapBasePopupOpen;
-          },
-  
-          hideHistMapBasePopup: (state) => {
-              state.isMapBasePopupOpen = false;
-          },
           setSelectedBoundaryHist: (state, action) => {
             state.boundaryTypes = Array.isArray(action.payload.availableType) ? action.payload.availableType : [];
             state.selectedBoundaryType = state.boundaryTypes[0];
@@ -58,5 +49,5 @@ const historyBaseMapSlice = createSlice({
     }
 });
 
-export const { changeHistBaseMap, setSelectedBoundaryHist, setSelectedBoundaryTypeHist,  changeHistColormap, hideHistMapBasePopup,  toggleShowHistMapBasePopup} = historyBaseMapSlice.actions;
+export const { changeHistBaseMap, setSelectedBoundaryHist, setSelectedBoundaryTypeHist,  changeHistColormap} = historyBaseMapSlice.actions;
 export default historyBaseMapSlice.reducer;

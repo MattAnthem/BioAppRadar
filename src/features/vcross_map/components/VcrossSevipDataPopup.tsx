@@ -1,6 +1,6 @@
 import { FlipHorizontal } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { closeVcrossSevipPopup, setSelectedVcrossSevipVariable, setVcrossSevipTime, toggleVcrossSevipPopup } from '../slice/vcrossPopupSlice';
+import { setSelectedVcrossSevipVariable, setVcrossSevipTime } from '../slice/vcrossPopupSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { useEffect, useState, memo, lazy } from 'react';
 import { setVcrossSevipPayload } from '../slice/vcrossMapSlice';
@@ -12,8 +12,11 @@ const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borde
 
 const VcrossSevipDataPopup = () => {
 
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   // --- Redux read only states ---
-  const { sevipTime, sevipVariables, selectedSevipVar, isSevipPopupOpen } = useAppSelector(state => state.vcrosspopup);
+  const { sevipTime, sevipVariables, selectedSevipVar } = useAppSelector(state => state.vcrosspopup);
   
   // --- Local states for the inputs ---
   const [locTime, setLocTime] = useState(sevipTime);
@@ -23,12 +26,12 @@ const VcrossSevipDataPopup = () => {
 
   // --- Sync local states when states from redux changes or on mount and if the popup opens ---
   useEffect(() => {
-    if (isSevipPopupOpen) {
+    if (isPopupOpen) {
       setLocTime(sevipTime);
       setLocVariables(sevipVariables);
       setLocSelectedVar(selectedSevipVar);
     }
-  }, [isSevipPopupOpen, selectedSevipVar, sevipTime, sevipVariables]);
+  }, [isPopupOpen, selectedSevipVar, sevipTime, sevipVariables]);
 
   // --- Local input handlers for edition on this popup ---
   const handleVariableChange = (variable: SelectOption) => {
@@ -40,10 +43,10 @@ const VcrossSevipDataPopup = () => {
 
   // --- Redux popup control ---
   const handleTogglePopup = () => {
-    dispatch(toggleVcrossSevipPopup())
+    setIsPopupOpen(!isPopupOpen);
   }
   const handleClosePopup = () => {
-    dispatch(closeVcrossSevipPopup());
+    setIsPopupOpen(false);
   }
 
   const dispatch = useAppDispatch();
@@ -59,12 +62,12 @@ const VcrossSevipDataPopup = () => {
     dispatch(setSelectedVcrossSevipVariable(locSelectedVar));
     dispatch(setVcrossSevipTime(locTime));
 
-    dispatch(closeVcrossSevipPopup());
+    setIsPopupOpen(false);
   }
 
   return (
     <OptionPopover
-      isOpen={isSevipPopupOpen}
+      isOpen={isPopupOpen}
       onClose={handleClosePopup}
       onOpen={handleTogglePopup}
       customIcon={<FlipHorizontal className="w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4"/>}

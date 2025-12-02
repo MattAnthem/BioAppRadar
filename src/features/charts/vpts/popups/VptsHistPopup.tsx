@@ -54,12 +54,12 @@ const VptsHistPopup = () => {
     }, [adjustedTimes, dispatch, isSuccess]);
 
     // --- Local states for the inputs ---
-    const [locParams, setLocParams] = useState(parameterOptions);
-    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
-    const [locSpecies, setLocSpecies] = useState(speciesOptions);
-    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
-    const [locStartTime, setLocStartTime] = useState(vptsStartTime);
-    const [locEndTime, setLocEndTime] = useState(vptsEndTime);
+    const [locParams, setLocParams] = useState(parameterOptions ?? []);
+    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter ?? null);
+    const [locSpecies, setLocSpecies] = useState(speciesOptions ?? []);
+    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie ?? null);
+    const [locStartTime, setLocStartTime] = useState(vptsStartTime ?? '');
+    const [locEndTime, setLocEndTime] = useState(vptsEndTime ?? '');
 
     // ---- Synch with redux states on mount ---
     useEffect(() => {

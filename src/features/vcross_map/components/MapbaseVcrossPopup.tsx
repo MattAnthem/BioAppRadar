@@ -2,7 +2,7 @@ import { MapIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { changeVcrossColormap, changeVcrossBaseMap, setSelectedBoundaryTypeVcross, setSelectedBoundaryVcross } from '../slice/vcrossMapbaseSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
-import { memo, lazy } from 'react';
+import { memo, lazy, useState } from 'react';
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
@@ -16,6 +16,9 @@ type MapbaseProps = {
 }
 
 const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: MapbaseProps) => {
+
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // Redux states 
     const { boundaryOptions, boundaryTypes, colormapOptions, mapBaseOptions, selectedBoundary, selectedBoundaryType, selectedColormap, selectedMapBase } = useAppSelector(state => state.vcross_basemap);
     const dispatch = useAppDispatch();
@@ -23,6 +26,7 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
     // Coverage
     const handleChangeCoverageGenre = (option: SelectOption) => {
         dispatch(setSelectedBoundaryVcross(option));
+        setIsPopupOpen(false);
     }
 
     const handleChangeCoverageType = (option: SelectOption) => {
@@ -32,19 +36,30 @@ const MapbaseVcrossPopup = ({ displayColorbarOption, onChangeOverlayColor }: Map
     // handlers
     const handleChangeBase = (option: SelectOption) => {
         dispatch(changeVcrossBaseMap(option))
+        setIsPopupOpen(false);  
     }
-      
-      
-        
+            
     const handleChangeColormap = (option: SelectOption) => {
-          dispatch(changeVcrossColormap(option));
-          onChangeOverlayColor?.(option.id as string)
-    }
+              dispatch(changeVcrossColormap(option));
+              onChangeOverlayColor?.(option.id as string);
+              setIsPopupOpen(false);  
+      }
+
+  // ---  Controls of the popup ---
+  const handleTooglePopup = () => {
+        setIsPopupOpen(!isPopupOpen);
+  }
+  const closePopup = () => {
+        setIsPopupOpen(false);
+  }
   return (
     <OptionPopover
         customIcon={<MapIcon className={iconSize}/>}
         hoverText='Change Base Map'
         isPrimary
+        isOpen={isPopupOpen}
+        onClose={closePopup}
+        onOpen={handleTooglePopup}
     >
 
         <div className="flex flex-col gap-0.5">

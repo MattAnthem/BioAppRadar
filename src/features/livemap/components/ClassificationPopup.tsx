@@ -1,7 +1,7 @@
 import { BirdIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types'
-import { closeClassifPopup, setClassificationColorOne, setClassificationColorZero, setSelectedClassificationOption, toggleClassifPopup } from '../slice/classificationPopupSlice';
+import { setClassificationColorOne, setClassificationColorZero, setSelectedClassificationOption } from '../slice/classificationPopupSlice';
 import { useEffect, useState, memo, lazy } from 'react'
 import { setClassificationPayload } from '../slice/livemapSlice';
 
@@ -15,8 +15,10 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const ClassificationPopup = () => {
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // redux read only states
-    const { availableVariables, selectedVariable, color_0, color_1, isPopupOpen } = useAppSelector(state=> state.classificationpopup);
+    const { availableVariables, selectedVariable, color_0, color_1 } = useAppSelector(state=> state.classificationpopup);
 
     // Local states for the inputs
     const [locAvailableVars, setLocAvailableVars] = useState(availableVariables); 
@@ -49,12 +51,12 @@ const ClassificationPopup = () => {
         setLocColor1(color);
     }
 
-    // --- Redux controls of the popup ---
+    // ---  Controls of the popup ---
     const handleTooglePopup = () => {
-        dispatch(toggleClassifPopup())
+        setIsPopupOpen(!isPopupOpen);
     }
     const closePopup = () => {
-        dispatch(closeClassifPopup());
+        setIsPopupOpen(false);
     }
 
     const dispatch = useAppDispatch();
@@ -73,7 +75,7 @@ const ClassificationPopup = () => {
         dispatch(setClassificationColorOne(locColor1));
 
         // ---- close on submit ---
-        dispatch(closeClassifPopup());
+        setIsPopupOpen(false);
     }
 
   return (

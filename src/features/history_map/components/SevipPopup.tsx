@@ -1,7 +1,7 @@
 import { FlipHorizontal, ImageIcon, ImagePlayIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types';
-import { closeSevipPopup, setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption, toggleSevipPopup } from '../slice/histSevipPopup';
+import { setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption } from '../slice/histSevipPopup';
 import { useEffect, useState, memo, useMemo, lazy } from 'react';
 import { setSevipGifPayloadHist, setSevipPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
@@ -20,12 +20,14 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const SevipPopup = () => {
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // Themes 
     const themes = useTheme();
     const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
     // --- Read only redux states ---
-    const { selectedVariable, availableVariables, histTimeSevip, isPopupOpen,  startTimeSevip, endTimeSevip, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_sevippopup);
+    const { selectedVariable, availableVariables, histTimeSevip,  startTimeSevip, endTimeSevip, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_sevippopup);
 
     const dispatch = useAppDispatch();
 
@@ -91,10 +93,10 @@ const SevipPopup = () => {
         setLocTime(time);
     }
     const handleTogglePopup = () => {
-        dispatch(toggleSevipPopup())
+        setIsPopupOpen(!isPopupOpen);
     }
     const handleClosePopup = () => {
-        dispatch(closeSevipPopup())
+        setIsPopupOpen(false);
     }
 
 
@@ -132,7 +134,7 @@ const SevipPopup = () => {
             dispatch(setHistSevipTimeStart(locStartTime));
             dispatch(setHistSevipTimeEnd(locEndTime));
         }
-        dispatch(closeSevipPopup());
+        setIsPopupOpen(false);
     }
 
   return (

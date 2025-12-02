@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { Map } from "lucide-react";
 import type { SelectOption } from "../../../shared/components/selects/types";
 import { changeHistBaseMap, changeHistColormap, setSelectedBoundaryHist, setSelectedBoundaryTypeHist } from "../slice/histBaseMapPopupSlice";
-import { memo, lazy } from "react";
+import { memo, lazy, useState } from "react";
 
 const SimpleSelect = lazy(() => import("../../../shared/components/selects/SimpleSelect"));
 const Colorbar = lazy(() => import("../../../shared/components/legends/Colorbar"));
@@ -17,32 +17,45 @@ const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
 const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: BaseMapProps) => {
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   // redux 
   const {  mapBaseOptions, colormapOptions, selectedMapBase, selectedColormap, selectedBoundary, boundaryTypes, selectedBoundaryType, boundaryOptions } = useAppSelector(state => state.hist_basemap);
  
 
   const dispatch = useAppDispatch();
 
-    // Coverage
-    const handleChangeCoverageGenre = (option: SelectOption) => {
+  // Coverage
+  const handleChangeCoverageGenre = (option: SelectOption) => {
       dispatch(setSelectedBoundaryHist(option));
-    }
-    const handleChangeCoverageType = (option: SelectOption) => {
+  }
+  const handleChangeCoverageType = (option: SelectOption) => {
       dispatch(setSelectedBoundaryTypeHist(option));
-    }
+      setIsPopupOpen(false);
+  }
 
   // handlers
   const handleChangeBase = (option: SelectOption) => {
-    dispatch(changeHistBaseMap(option))
+    dispatch(changeHistBaseMap(option));
+    setIsPopupOpen(false);
   }
 
 
   
   const handleChangeColormap = (option: SelectOption) => {
     dispatch(changeHistColormap(option));
-    onChangeOverlayColor?.(option.id as string)
+    onChangeOverlayColor?.(option.id as string);
+
+    setIsPopupOpen(false);
   }
 
+      // --- popup toggle open/close --- 
+  const handleTooglePopup = () => {
+        setIsPopupOpen(!isPopupOpen);
+  }
+  const closePopup = () => {
+        setIsPopupOpen(false);
+  }
 
 
   return (
@@ -50,6 +63,9 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
       customIcon={<Map className={iconSize}/>}
       hoverText='Change Base Map'
       isPrimary
+      isOpen={isPopupOpen}
+      onOpen={handleTooglePopup}
+      onClose={closePopup}
     >
 
           {/* Select map base */}

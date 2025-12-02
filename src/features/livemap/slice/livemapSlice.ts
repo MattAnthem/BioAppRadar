@@ -1,21 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ClassificationDataPayload } from "../../../api/endpoints/spatial/classificationAPI";
 
-// const avalaibleTimes: string[] = [
-//     "2020-11-12 00:05:00",
-//     "2020-11-12 00:05:05",
-//     "2020-11-12 00:05:10",
-//     "2020-11-12 00:05:15",
-//     "2020-11-12 00:05:20",
-//     "2020-11-12 00:05:25",
-//     "2020-11-12 00:05:30",
-//     "2020-11-12 00:05:35",
-//     "2020-11-12 00:05:40",
-//     "2020-11-12 00:05:45",
-//     "2020-11-12 00:05:50",
-//     "2020-11-12 00:05:55"
-// ]
-
 
 const avalaibleTimes: string[] = [
     "2020-11-10 12:00:33",

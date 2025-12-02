@@ -6,10 +6,6 @@ import { classif_Options, radar_ParameterOptions, radar_TypeOptions, sevip_optio
 
 interface VcrossState {
 
-    isRadarPopupOpen: boolean;
-    isSevipPopupOpen: boolean;
-    isClassifPopupOpen: boolean;
-
     selectedBioClass: SelectOption;
     availableBioClass: SelectOption[];
     timeBioClass: string;
@@ -30,9 +26,6 @@ interface VcrossState {
 }
 
 const initialState: VcrossState = {
-    isRadarPopupOpen: false,
-    isSevipPopupOpen: false,
-    isClassifPopupOpen: false,
 
     availableBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     selectedBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : {id: '', displayText: ''},
@@ -67,12 +60,6 @@ const vcrossPopupSlice = createSlice({
         setVcrossBioclassSegment: (state, action) => {
             state.segmentBioclass = action.payload;
         },
-        toggleVcrossBioclassPopup: (state) => {
-            state.isClassifPopupOpen = !state.isClassifPopupOpen;
-        },
-        closeVcrossBioclassPopup: (state) => {
-            state.isClassifPopupOpen = false;
-        },
         setVcrossClassificationColorZero: (state, action) => {
             state.color_0 = action.payload
         },
@@ -89,14 +76,8 @@ const vcrossPopupSlice = createSlice({
         setSelectedVcrossRadarTime: (state, action) => {
             state.timeRadar = action.payload;
         },
-        closeVcrossRadarPopup: (state) => {
-            state.isRadarPopupOpen = false
-        },
         setVcrossRadarSegment: (state, action) => {
             state.segmentRadar = action.payload;
-        },
-        toggleVcrossRadarPopup: (state) => {
-            state.isRadarPopupOpen = !state.isRadarPopupOpen;
         },
         // --- sevip --
         setSelectedVcrossSevipVariable: (state, action) => {
@@ -105,12 +86,6 @@ const vcrossPopupSlice = createSlice({
         setVcrossSevipTime: (state, action) => {
             state.sevipTime = action.payload;
         },
-        toggleVcrossSevipPopup: (state) => {
-            state.isSevipPopupOpen = !state.isSevipPopupOpen;
-        },
-        closeVcrossSevipPopup: (state) => {
-            state.isSevipPopupOpen = false;
-        }
     }
 });
 
@@ -119,18 +94,12 @@ export const {
     setVcrossRadarSegment,
     setVcrossClassificationColorOne,
     setVcrossClassificationColorZero,
-    closeVcrossRadarPopup, 
-    toggleVcrossRadarPopup, 
     setSelectedVcrossBioCls, 
-    closeVcrossBioclassPopup,
-    toggleVcrossBioclassPopup,
     setSelectedBioclassTime, 
     setSelectedVcrossRadarParameter, 
     setSelectedVcrossRadarTime, 
     setSelectedVcrossRadarType,
     setSelectedVcrossSevipVariable,
     setVcrossSevipTime,
-    closeVcrossSevipPopup,
-    toggleVcrossSevipPopup 
 } = vcrossPopupSlice.actions;
 export default vcrossPopupSlice.reducer;

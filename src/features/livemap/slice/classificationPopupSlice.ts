@@ -4,8 +4,6 @@ import { classif_Options } from "../../../shared/static/select-options";
 
 
 interface ClassificationPopupState {
-    isPopupOpen: boolean;
-
     selectedVariable: SelectOption;
     availableVariables: SelectOption[];
     color_0: string;
@@ -15,8 +13,6 @@ interface ClassificationPopupState {
 }
 
 const initialState: ClassificationPopupState = {
-    isPopupOpen: false,
-
     selectedVariable: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : null,
     availableVariables: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     color_0: '#dc3545',
@@ -37,14 +33,8 @@ const classificationpopupSlice = createSlice({
         setClassificationColorOne: (state, action) => {
             state.color_1 = action.payload
         },
-        closeClassifPopup: (state) => {
-            state.isPopupOpen = false
-        },
-        toggleClassifPopup: (state) => {
-            state.isPopupOpen = !state.isPopupOpen;
-        }
     }
 })
 
-export const { setSelectedClassificationOption, setClassificationColorOne, setClassificationColorZero, closeClassifPopup, toggleClassifPopup } = classificationpopupSlice.actions;
+export const { setSelectedClassificationOption, setClassificationColorOne, setClassificationColorZero } = classificationpopupSlice.actions;
 export default classificationpopupSlice.reducer;
