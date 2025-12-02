@@ -7,7 +7,7 @@ export function useRwandaClock() {
         const update = () => {
           const now = new Date();
     
-          const rwandaTime = new Intl.DateTimeFormat("en-GB", {
+          const rwandaTime = new Intl.DateTimeFormat("en-CA", {
             timeZone: "Africa/Kigali",
             year: "numeric",
             month: "2-digit",
