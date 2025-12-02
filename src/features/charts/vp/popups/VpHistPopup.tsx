@@ -3,7 +3,7 @@ import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import dayjs from 'dayjs';
-import { changeVpHistPayload, closeVpHistPopup, setSelectedVpHistParameterOption, setSelectedVpHistSpecie, setVpHistTime, toggleVpHistPopup } from "../slices/vpHistChartSlice";
+import { changeVpHistPayload, setSelectedVpHistParameterOption, setSelectedVpHistSpecie, setVpHistTime } from "../slices/vpHistChartSlice";
 
 const SimpleSelect = lazy(() => import('../../../../shared/components/selects/SimpleSelect'));
 const ReactDatetimePicker = lazy(() => import('../../../../shared/components/input/ReactDatetime'));
@@ -11,9 +11,11 @@ const OptionPopover = lazy(() => import('../../../../shared/components/popups/op
 const ButtonBorder = lazy(() => import('../../../../shared/components/buttons/borderedbtn/ButtonBorder'));
 
 const VpHistPopup = () => {
+  // Control the popup so that we can close it on submit 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // Redux read only states
-  const { parameterOptions, selectedParameter, isPopupOpen, vpTime, speciesOptions, selectedSpecie } = useAppSelector(state => state.vp_histchart);
+  const { parameterOptions, selectedParameter, vpTime, speciesOptions, selectedSpecie } = useAppSelector(state => state.vp_histchart);
   const dispatch = useAppDispatch()
 
   // --- Temporal coverages to restrict time selects ---
@@ -71,10 +73,10 @@ const VpHistPopup = () => {
 
   // --- popup controls ---
   const handleTogglePopup = () => {
-    dispatch(toggleVpHistPopup())
+    setIsPopupOpen(!isPopupOpen);
   }
   const handleClosePopup = () => {
-    dispatch(closeVpHistPopup())
+    setIsPopupOpen(false);
   }
 
   
@@ -93,7 +95,7 @@ const VpHistPopup = () => {
     dispatch(setSelectedVpHistSpecie(locSelectedSpecie));
 
 
-    dispatch(closeVpHistPopup())
+    setIsPopupOpen(false);
   }
 
   return (

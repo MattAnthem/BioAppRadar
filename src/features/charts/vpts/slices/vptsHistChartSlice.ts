@@ -6,7 +6,6 @@ import { species_options, vp_parameterOptions } from "../../../../shared/static/
 
 interface VptsChartState {
     // UI states
-    isPopupOpen: boolean;
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
     speciesOptions: SelectOption[];
@@ -18,9 +17,6 @@ interface VptsChartState {
 }
 
 const initialState: VptsChartState = {
-    isPopupOpen: false,
-    
-
     parameterOptions: vp_parameterOptions,
     selectedParameter: vp_parameterOptions[0],
     speciesOptions: species_options,
@@ -56,15 +52,9 @@ const vptsHistChartSlice = createSlice({
         setVptsHistEndTime: (state, action) => {
             state.vptsEndTime = action.payload
         },
-        toggleVptsHistPopup: (state) => {
-            state.isPopupOpen = !state.isPopupOpen
-        },
-        closeVptsHistPopup: (state) => {
-            state.isPopupOpen = false;
-        }
 
     }
 });
 
-export const { changeVptsHistPayload, setSelectedVptsHistParameterOption, closeVptsHistPopup, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup, setSelectedVptsHistSpecie } = vptsHistChartSlice.actions;
+export const { changeVptsHistPayload, setSelectedVptsHistParameterOption, setVptsHistEndTime, setVptsHistStartTime, setSelectedVptsHistSpecie } = vptsHistChartSlice.actions;
 export default vptsHistChartSlice.reducer;

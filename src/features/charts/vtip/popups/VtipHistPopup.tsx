@@ -3,7 +3,7 @@ import type { SelectOption } from '../../../../shared/components/selects/types';
 import { useEffect, useState, memo, useMemo, lazy } from 'react';
 import { useVpTemporalCoverageQuery } from '../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import dayjs from 'dayjs';
-import { changeVtipHistPayload, closeVtipHistPopup, setSelectedVtipHistParameterOption, setSelectedVtipHistSpecie, setVtipHistEndTime, setVtipHistStartTime, toggleVtipHistPopup } from '../slices/vtipHistChartSlice';
+import { changeVtipHistPayload, setSelectedVtipHistParameterOption, setSelectedVtipHistSpecie, setVtipHistEndTime, setVtipHistStartTime } from '../slices/vtipHistChartSlice';
 
 const SimpleSelect = lazy(() => import('../../../../shared/components/selects/SimpleSelect'));
 const ButtonBorder = lazy(() => import('../../../../shared/components/buttons/borderedbtn/ButtonBorder'));
@@ -12,8 +12,12 @@ const ReactDatetimePicker = lazy(() => import('../../../../shared/components/inp
 
 
 const VtipHistPopup = () => {
+
+    // Control the popup so that we can close it select value 
+     const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     // --- Read only state from Redux store
-    const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, isPopupOpen, selectedSpecie, speciesOptions } = useAppSelector(state => state.vtip_histchart);
+    const { parameterOptions, selectedParameter, vtipStartTime, vtipEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vtip_histchart);
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects only on mount ---
@@ -50,7 +54,7 @@ const VtipHistPopup = () => {
 
     }, [adjustedTimes, dispatch, isSuccess])
 
-    // --- Local state variables for controlling popup visibility and form inputs ---
+    // --- Local state variables for controlling popup form inputs ---
     const [locParameters, setLocParameters] = useState<SelectOption[]>(parameterOptions);
     const [locSelectedParameter, setLocSelectedParameter] = useState<SelectOption>(selectedParameter);
     const [locSpecies, setLocSpecies] = useState(speciesOptions);
@@ -86,10 +90,10 @@ const VtipHistPopup = () => {
 
     //  --- Popup toggler handlers ---
     const handleTogglePopup = () => {
-        dispatch(toggleVtipHistPopup());
+        setIsPopupOpen(!isPopupOpen);
     }
     const handleClosePopup = () => {
-        dispatch(closeVtipHistPopup());
+        setIsPopupOpen(false);
     }
 
 
@@ -110,9 +114,7 @@ const VtipHistPopup = () => {
         dispatch(setSelectedVtipHistParameterOption(locSelectedParameter));
         dispatch(setSelectedVtipHistSpecie(locSelectedSpecie));
 
-
-        
-        dispatch(closeVtipHistPopup());
+        setIsPopupOpen(false);
     }
 
   return (

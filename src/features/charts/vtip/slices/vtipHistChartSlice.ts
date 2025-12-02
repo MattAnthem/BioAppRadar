@@ -5,7 +5,6 @@ import { species_options, vtip_parameterOptions } from "../../../../shared/stati
 
 
 interface VtipChartState {
-    isPopupOpen: boolean;
     parameterOptions: SelectOption[];
     selectedParameter: SelectOption;
     speciesOptions: SelectOption[];
@@ -18,7 +17,6 @@ interface VtipChartState {
 
 
 const initialState: VtipChartState = {
-    isPopupOpen: false,
 
     parameterOptions: vtip_parameterOptions,
     selectedParameter: vtip_parameterOptions[0],
@@ -55,15 +53,8 @@ const vtipHistChartSlice = createSlice({
         setVtipHistEndTime: (state, action) => {
             state.vtipEndTime = action.payload
         },
-        toggleVtipHistPopup: (state) => {
-            state.isPopupOpen = !state.isPopupOpen
-        },
-        closeVtipHistPopup: (state) => {
-            state.isPopupOpen = false;
-        }
-
     }
 });
 
-export const { changeVtipHistPayload, setSelectedVtipHistSpecie, setSelectedVtipHistParameterOption, closeVtipHistPopup, setVtipHistEndTime, setVtipHistStartTime,  toggleVtipHistPopup } = vtipHistChartSlice.actions;
+export const { changeVtipHistPayload, setSelectedVtipHistSpecie, setSelectedVtipHistParameterOption, setVtipHistEndTime, setVtipHistStartTime } = vtipHistChartSlice.actions;
 export default vtipHistChartSlice.reducer;

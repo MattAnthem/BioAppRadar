@@ -3,7 +3,7 @@ import type { SelectOption } from "../../../../shared/components/selects/types";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { useVpTemporalCoverageQuery } from "../../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import dayjs from "dayjs";
-import { changeVptsHistPayload, closeVptsHistPopup, setSelectedVptsHistParameterOption, setSelectedVptsHistSpecie, setVptsHistEndTime, setVptsHistStartTime, toggleVptsHistPopup } from "../slices/vptsHistChartSlice";
+import { changeVptsHistPayload, setSelectedVptsHistParameterOption, setSelectedVptsHistSpecie, setVptsHistEndTime, setVptsHistStartTime } from "../slices/vptsHistChartSlice";
 
 const ButtonBorder = lazy(() => import('../../../../shared/components/buttons/borderedbtn/ButtonBorder'));
 const ReactDatetimePicker = lazy(() => import('../../../../shared/components/input/ReactDatetime'));
@@ -13,8 +13,11 @@ const SimpleSelect = lazy(() => import('../../../../shared/components/selects/Si
 
 const VptsHistPopup = () => {
 
+    // Control the popup so that we can close it select value 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+  
     // --- read only redux states ----
-    const { parameterOptions, selectedParameter, vptsStartTime, isPopupOpen, vptsEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vpts_histchart);
+    const { parameterOptions, selectedParameter, vptsStartTime, vptsEndTime, selectedSpecie, speciesOptions } = useAppSelector(state => state.vpts_histchart);
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects only on mount  ---
@@ -87,14 +90,13 @@ const VptsHistPopup = () => {
 
     // --- Popup togglers ---
     const handleTogglePopup = () => {
-      dispatch(toggleVptsHistPopup())
+      setIsPopupOpen(!isPopupOpen);
     }
     const handleClosePopup = () => {
-      dispatch(closeVptsHistPopup())
+      setIsPopupOpen(false);
     }
 
     
-
 
     const handleSubmitPopupData = () => {
       dispatch(changeVptsHistPayload(
@@ -113,7 +115,7 @@ const VptsHistPopup = () => {
       dispatch(setSelectedVptsHistParameterOption(locSelectedParam));
 
       
-      dispatch(closeVptsHistPopup());
+      setIsPopupOpen(false);
     }
 
   return (
