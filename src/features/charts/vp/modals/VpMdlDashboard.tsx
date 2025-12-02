@@ -53,13 +53,12 @@ const VpMdlDashboard = () => {
             <img ref={imgRef} src={vpImageData} alt='vp-image-dashboard'/>
         )}
         renderInteractive={(chartRef) => (
-            <div className="lg:w-1/2 w-full">
+            <div className="lg:w-1/2 flex h-full w-full">
                 <VpChartHighcharts 
                     data={data!} 
                     selectedHeight={currentAltitude} 
                     ref={chartRef} 
                     displayTitle={true} 
-                    chartHeight={500} 
                 />
             </div>
         )}

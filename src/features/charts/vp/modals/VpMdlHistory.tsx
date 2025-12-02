@@ -57,11 +57,10 @@ const VpMdlHistory = () => {
             <img ref={imgRef} src={vpImageData} alt='vp-image-history'/>
         )}
         renderInteractive={(chartRef) => (
-            <div className="lg:w-1/2 w-full">
+            <div className="lg:w-1/2 flex h-full w-full">
                 <VpChartHighcharts
                     data={data!}
                     ref={chartRef}
-                    chartHeight={500}
                     displayTitle
                 />
             </div>

@@ -54,7 +54,6 @@ const VtipMdlHistory = () => {
             <VtipChart
                 ref={chartRef}
                 data={data!}
-                chartHeight={500}
                 title
             />
         )}

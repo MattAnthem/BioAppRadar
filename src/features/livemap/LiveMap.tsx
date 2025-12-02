@@ -105,24 +105,10 @@ const LiveMap = () => {
         }
         
         {
-            (isPreloading) && (
+            (coverageLoading || isPreloading) && (
                 <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
-                    <p className='text-gray-700'>{`Loading animation ${progress}%...`}</p>
-                </div>
-            )
-        }
-        {
-            (coverageLoading) && (
-                <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
-                    <img src={loader} alt="loading-data" width={35} height={35}  />
-                </div>
-            )
-        }
-        {
-            (coverageLoading && isPreloading) && (
-                <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
-                    <img src={loader} alt="loading-data" width={35} height={35}  />
+                    {isPreloading ? <p className='text-gray-700'>{`Loading animation ${progress}%...`}</p> : ''}
                 </div>
             )
         }

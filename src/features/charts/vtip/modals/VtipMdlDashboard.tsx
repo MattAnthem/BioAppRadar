@@ -57,7 +57,6 @@ const VtipMdlDashboard = () => {
                 ref={chartRef}
                 data={data!}
                 title
-                chartHeight={500}
             />
         )}
     />

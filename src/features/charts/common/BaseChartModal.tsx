@@ -97,47 +97,48 @@ function BaseChartModal<TData>({
                             tog_hover={tog_hover}
                         />
 
-                        { (displayMode === 'interactive' && data) && (
-                            <div className="w-full h-full flex flex-col  items-center justify-center">
-                                        {/* Download : Dataset/Image/Pdf */}
-                                        <div className="flex w-full justify-end items-end pt-1 px-1 gap-1.5">
-                                            <Tooltip
-                                                position="bottom"
-                                                text="Download as Image"
-                                                display_condition={isModalOpen}
-                                            >
-                                                <button 
-                                                    aria-label='download-interactive-chart-img'
-                                                    onClick={downloadInteractiveChart} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                                    <LucideDownload className="w-4 h-4"/>
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip
-                                                position="bottom"
-                                                text="Download as PDF"
-                                                display_condition={isModalOpen}
-                                            >
-                                                <button 
-                                                    aria-label='download-interactive-chart-pdf'
-                                                    onClick={dowloadChartAsPDF} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                                    <FileTextIcon className="w-4 h-4"/>
-                                                </button>
-                                            </Tooltip>
-                                            <Tooltip
-                                                position="bottom"
-                                                text="Download as CSV"
-                                                display_condition={isModalOpen}
-                                            >
-                                                <button 
-                                                    aria-label='download-interactive-chart-data-csv'
-                                                    onClick={dowloadDataCSV} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                                    <SheetIcon className="w-4 h-4"/>
-                                                </button>
-                                            </Tooltip>
-                                        </div>
+                        <div className="w-full flex justify-end gap-1.5 px-8 py-2">
+                            <Tooltip
+                                position="bottom"
+                                text="Download as Image"
+                                display_condition={isModalOpen}
+                            >
+                                <button 
+                                    aria-label='download-interactive-chart-img'
+                                    onClick={displayMode === "interactive" ? downloadInteractiveChart : downloadChartImage} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
+                                    <LucideDownload className="w-4 h-4"/>
+                                </button>
+                            </Tooltip>
+                            <Tooltip
+                                position="bottom"
+                                text="Download as PDF"
+                                display_condition={isModalOpen}
+                            >
+                                <button 
+                                    aria-label='download-interactive-chart-pdf'
+                                    onClick={dowloadChartAsPDF} className={`${displayMode === 'png' ? 'hidden' : ''} p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white`}>
+                                    <FileTextIcon className="w-4 h-4"/>
+                                </button>
+                            </Tooltip>
+                            <Tooltip
+                                position="bottom"
+                                text="Download as CSV"
+                                display_condition={isModalOpen}
+                            >
+                                <button 
+                                    aria-label='download-interactive-chart-data-csv'
+                                    onClick={dowloadDataCSV} className={`${displayMode === 'png' ? 'hidden' : ''} p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white`}>
+                                    <SheetIcon className="w-4 h-4"/>
+                                </button>
+                            </Tooltip>
+                        </div>
 
+                        { (displayMode === 'interactive' && data) && (
+                            <div className="w-full h-full flex flex-col items-center justify-center">
                                         {/* interactive chart */}
-                                        {renderInteractive(chartRef)}
+                                        <div className="w-full h-full flex justify-center p-2">
+                                            {renderInteractive(chartRef)}
+                                        </div>
 
                             </div>
 
@@ -146,27 +147,10 @@ function BaseChartModal<TData>({
                         {
                             ImageData && !imageLoading && !imageError && (displayMode === 'png') && (
                                 <div className="w-full h-full flex flex-col items-center justify-center">
-                                        <div className=" w-full h-full flex flex-col">
-                                            {/* Download image */}
-                                            <div className="flex justify-end items-center pt-1 px-1">
-                                                <Tooltip
-                                                    position="bottom"
-                                                    text="Download image"
-                                                    display_condition={isModalOpen}
-                                                >
-                                                    <button
-                                                        aria-label='download-chart-image'
-                                                        onClick={downloadChartImage} className="p-1 bg-sky-800 hover:bg-sky-900 rounded-sm text-white">
-                                                        <LucideDownload className="w-4 h-4"/> 
-                                                    </button>
-                                                </Tooltip>
-                                            </div>
                                             {/* Chart image */}
-                                            <div className="w-full h-full flex justify-center">
-
-                                            {renderImage(chartImgRef)}
+                                            <div className="w-full h-full flex justify-center p-2">
+                                                {renderImage(chartImgRef)}
                                             </div>
-                                        </div>
                                 </div>
                             )
                         }
