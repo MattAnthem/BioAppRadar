@@ -128,7 +128,7 @@ const Sidebar = () => {
 
         </div>
 
-        <div className={`${main.section_line} w-full h-0.5`}/>
+        <div className={`${main.section_line} w-full mb-1 h-0.5`}/>
 
 
         {/* Notification center */}

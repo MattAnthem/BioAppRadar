@@ -142,7 +142,7 @@ const Vcrossmap = () => {
               className='z-20 p-1 flex justify-between items-center'
             >
 
-                <h1 className='text-white tracking-wider text-xs'>{data?.info.name}</h1>
+                <h1 className='text-gray-50 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name}</h1>
 
                 {/* Data popover Options */}
                 <div className="z-5 flex gap-2 justify-center items-end">
@@ -191,7 +191,7 @@ const Vcrossmap = () => {
             />
 
             {/* Map Time */}
-            <div className={`absolute  text-xs flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${mapMode === 'vcross_bioclass' ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+            <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 lg:w-1/4 w:1/3 ${mapMode === 'vcross_bioclass' ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
 
                 <small className='text-white tracking-wide'>Time: {data?.info.time}</small>
 

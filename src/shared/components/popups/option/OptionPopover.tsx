@@ -117,6 +117,7 @@ const OptionPopover = ({
             ${isPrimary ? primary_bg : seconcondary_bg}  
             ${isPrimary ? primary_text : secondary_text} 
             ${isPrimary ? primary_hover : secondary_hover}
+            ${isPopupOpen ? 'outline-2 outline-blue-800' : ''}
             p-1 rounded-sm
           `}
         >
@@ -128,6 +129,7 @@ const OptionPopover = ({
       <div
         ref={popupContentRef}
         className={`
+          mt-0.5
           ${options_bg} ${border} z-20 border shadow-sm flex flex-col gap-2 justify-center 
           ${isSimpleSelect ? 'lg:w-[10vw] md:w-[25vw]' : 'lg:w-[25vw] md:w-[45vw] w-full'}    
           absolute right-0 

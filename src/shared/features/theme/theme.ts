@@ -188,7 +188,7 @@ export const dark: ThemeElements = {
         contents: {
             toggler_hover: 'hover:bg-zinc-700',
             togller_color: 'text-zinc-400',
-            icon_color: 'text-gray-100',
+            icon_color: 'text-gray-400',
             popover: {
                 text: 'text-gray-200',
                 option_hover: 'hover:bg-zinc-600',
@@ -199,7 +199,7 @@ export const dark: ThemeElements = {
     },
     sectionCard: {
         bg: 'bg-[#22252B]',
-        primary_text: 'text-neutral-200',
+        primary_text: 'text-gray-300',
         secondary_text: 'text-[#CCCCDC]',
         border: 'border-[#373941]',
         shadow: '',
@@ -244,10 +244,10 @@ export const dark: ThemeElements = {
         primary_text: 'text-white'
     },
     charts: {
-        chartFontColor: '#bebebe',
+        chartFontColor: '#b3b3b3',
         chartGridline: '#7a7a7a',
-        chartLegendColor: '#bebebe',
-        borderBox: '#585858'
+        chartLegendColor: '#b1b1b1',
+        borderBox: '#424242'
     },
     popupBtn: {
         primary_bg: 'bg-sky-800',

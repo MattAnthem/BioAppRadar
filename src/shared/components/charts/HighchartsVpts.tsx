@@ -214,7 +214,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
                     align: 'center',
                     style: {
                         whiteSpace: 'normal',
-                        fontSize: '11px',
+                        fontSize: '12px',
                         lineHeight: '13px',
                         color: chartFontColor,
                     },
@@ -253,6 +253,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
                     style: { 
                         color: chartLegendColor,
                         fontWeight: '500', 
+                        fontSize: '12px'
                     } 
                 },
                 labels:{

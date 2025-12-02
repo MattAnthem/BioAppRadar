@@ -29,7 +29,6 @@ body {
 }
 
 
-
   .dark .rdtPicker {
     @apply bg-zinc-700 text-gray-100 rounded-b-sm border-gray-600 w-full;
   }

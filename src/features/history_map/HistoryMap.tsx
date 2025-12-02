@@ -178,7 +178,7 @@ const HistoryMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20  p-1 flex justify-between items-center'>
 
-            <h1 className='text-white tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name}</h1>
+            <h1 className='text-gray-50 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name}</h1>
 
             <div className="z-5 flex gap-2 justify-center items-end">
 

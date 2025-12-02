@@ -76,14 +76,15 @@ function BaseChart<TData>({
                 (isLoading) && (
                     <div className="w-full h-full flex flex-col items-center justify-center">
                         <img src={loader} alt="loading-vp" width={25} height={25}  />
-                        <small>Updating data...</small>
+                        <small className="text-gray-500">Updating data...</small>
                     </div>
                 )
             }
             {         
               error && (
                 <div className="w-full h-full flex flex-col items-center justify-center">
-                  <Unplug width={25} height={25} className='text-red-500'/>
+                  <Unplug width={25} height={25} className='text-red-600'/>
+                  <small className="text-gray-500">{error.message}</small>
                 </div> 
             )}
           </div>

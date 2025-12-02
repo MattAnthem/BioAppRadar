@@ -137,14 +137,14 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
             reversed: false,
             title: {
               text: 'Altitude [m]',
-              style: { color: chartLegendColor, fontSize: '11px' },
+              style: { color: chartLegendColor, fontSize: '12px' },
             },
             labels: {
               format: '{value}',
-              style: { color: chartFontColor, fontSize: '11px' },
+              style: { color: chartFontColor, fontSize: '12px' },
             },
             gridLineColor: chartGridline,
-            gridLineWidth: 1,
+            gridLineWidth: 0.8,
             plotLines: [
               {
                 color: 'brown',
@@ -166,15 +166,16 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
         yAxis: {
           title: {
             text: `${data.name} [${data.units}]`,
-            style: { color: chartLegendColor, fontSize: '11px', },
+            style: { color: chartLegendColor, fontSize: '12px', },
           },
           labels: {
             format: '{value}',
-            style: { color: chartFontColor, fontSize: '11px',  },
+            style: { color: chartFontColor, fontSize: '12px',  },
           },
           lineColor: chartGridline,
           gridLineColor: chartGridline,
           lineWidth: 1,
+          gridLineWidth: 0.8,
           tickColor: chartGridline,
         },
 
