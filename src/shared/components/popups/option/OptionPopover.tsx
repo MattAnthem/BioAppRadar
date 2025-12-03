@@ -137,7 +137,7 @@ const OptionPopover = ({
           ${
             isMobile ? "top-full left-0 origin-top-right" : '' 
           }
-          p-2 rounded-sm transition-transform duration-100 ease-ou
+          p-2 rounded-sm transition-transform duration-300 ease-out origin-top-right
           ${isPopupOpen ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none hidden"}
         `}
       >

@@ -88,13 +88,13 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
           <button
             aria-label="Play/Pause animation"
             onClick={handlePlayPauseAnim}
-            className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-1"
+            className="bg-gray-800 hover:bg-gray-700 rounded-sm text-gray-300 p-1 ring-1 ring-gray-500"
           >
             {isPlaying ? <Pause width={20} height={20} /> : <Play width={20} height={20} />}
           </button>
 
           {/* Frame jump btns */}
-          <div className="lg:flex hidden relative items-center h-full justify-end bg-gray-800 rounded-sm">
+          <div className="lg:flex hidden relative items-center h-full justify-end bg-gray-800 rounded-sm ring-1 ring-gray-500">
             {/* Back to one past frame */}
             <Tooltip
               position="top"
@@ -136,8 +136,8 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
                     setIsPlaying(false); 
                   }}
                   className={`${
-                    currentIndex === i ? "bg-sky-800 border-b-2 border-b-sky-950" : "bg-gray-300"
-                  } hover:bg-blue-700 lg:h-6 lg:w-6 w-4 h-4 p-1 cursor-pointer 2xl:rounded-xs`}
+                    currentIndex === i ? "bg-sky-700 outline-2" : "bg-gray-400"
+                  } hover:bg-sky-800 lg:h-6 lg:w-6 w-4 h-4 p-1 cursor-pointer 2xl:rounded-xs`}
                 />
               </Tooltip>
             ))}

@@ -122,7 +122,7 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
 
         title: { 
           text: displayTitle ? `${data.name} [${data.units}]` : undefined, 
-          style: { color: chartFontColor, fontSize: '13px' },
+          style: { color: chartFontColor, fontSize: '14px' },
         },
         xAxis: [
           {

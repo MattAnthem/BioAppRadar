@@ -17,10 +17,10 @@ const SectionCard = ({children, className}: SectionCardProps) => {
 
     const { theme } = useTheme();
 
-    const { bg, border, shadow, primary_text } = theme.sectionCard;
+    const { bg, border, primary_text } = theme.sectionCard;
 
   return (
-    <section className={`${className} ${bg} ${border} ${shadow} ${primary_text} overflow-visible rounded-sm border`}>
+    <section className={`${className} ${bg} ${border} ${primary_text} overflow-visible rounded-sm border`}>
       {children}
     </section>
   )

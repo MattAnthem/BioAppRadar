@@ -1,4 +1,4 @@
-import { useState, memo, useRef, useEffect, useCallback } from 'react';
+import { useState, memo, useRef, useCallback } from 'react';
 import radarIcon from '../../../assets/radarIcon.webp';
 import Tooltip from '../popups/tooltip/Tooltip';
 
@@ -13,38 +13,32 @@ const CustomSlider = ({
 }: AltitudeSliderProps) => {
     const [index, setIndex] = useState<number>(0);
 
-    const debounceRef = useRef<number | null>(null);   
-    
-    useEffect(() => {
-        return () => {
-          if (debounceRef.current) {
-            window.clearTimeout(debounceRef.current);
-          }
-        };
-    }, []);
+
+    const lastSentAlt = useRef<number | null>(null);
+
 
     const handleAltitudeChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
         const alt = Number(evt.target.value);
-
         // Update UI
         setIndex(alt);
 
-        if(debounceRef.current) {
-            window.clearTimeout(debounceRef.current);
-        }
+    }, [])
 
-        debounceRef.current = window.setTimeout(() => {
-            onChangeAltitude?.(alt)
-        }, 250)
+    // Call api when slider stops moving
+    const handleChangeEnd = useCallback(() => {
+      if (lastSentAlt.current === index) return;
+      lastSentAlt.current = index;
+      onChangeAltitude?.(index);
+    }, [index, onChangeAltitude])
 
-    }, [onChangeAltitude])
+
 
   return (
     <div className={`${className} z-10 border-white/20 bg-gray-900/60 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center`}>
         
       {/* Altitude band */}
       <div className="h-full flex flex-col justify-center items-center py-2">
-        <small className='text-[clamp(0.5em,0.7vw,1em)] text-center font-light text-gray-300'>Height in meters</small>
+        <small className='text-[clamp(0.6em,0.7vw,1em)] text-center text-gray-300'>Height in meters</small>
         
         {/* Max altitude */}
         <small className='text-[12px] text-white'>{maxAltitude}</small>
@@ -54,6 +48,8 @@ const CustomSlider = ({
             aria-label='Altitude slider'
             name='altitudes'
             onChange={handleAltitudeChange}
+            onMouseUp={handleChangeEnd}
+            onTouchEnd={handleChangeEnd}
             type="range" 
             className="
                     cursor-pointer
@@ -62,7 +58,7 @@ const CustomSlider = ({
                     [writing-mode:vertical-rl]
                     rotate-180
                     [&::-webkit-slider-runnable-track]:rounded-[2px]
-                    [&::-webkit-slider-runnable-track]:bg-gray-300
+                    [&::-webkit-slider-runnable-track]:bg-gray-400
                     [&::-webkit-slider-thumb]:appearance-none 
                     [&::-webkit-slider-thumb]:h-5 
                     [&::-webkit-slider-thumb]:w-5 

@@ -198,7 +198,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
             },
 
             title: title
-                ? { text: `${data.name} [${data.units}]`, style: { color: chartLegendColor } }
+                ? { text: `${data.name} [${data.units}]`, style: { color: chartLegendColor, fontSize: '14px'  } }
                 : undefined,
 
             xAxis: {

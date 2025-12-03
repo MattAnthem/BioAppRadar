@@ -41,7 +41,7 @@ const VcrossHeatmap = () => {
 
         {/* Heaader title */}
         <div className="p-1 w-full flex items-center justify-between">
-        <h3 className='tracking-wider text-xs font-semibold'>{`Vertical cross section of ${data?.info.name ?? '--'}`}</h3>
+        <h3 className='tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[600]'>{`Vertical cross section of ${data?.info.name ?? '--'}`}</h3>
         </div>
 
         <div className="w-full h-full relative items-center">

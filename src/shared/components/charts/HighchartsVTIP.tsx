@@ -139,7 +139,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
         },
         title: {
           text: title ? `${data.name} [${data.units}]` : undefined,
-          style: { color: chartLegendColor, fontSize: "13px" },
+          style: { color: chartLegendColor, fontSize: "14px" },
         },
         xAxis: {
           type: "datetime",

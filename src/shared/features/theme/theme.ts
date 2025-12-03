@@ -120,8 +120,8 @@ export const light: ThemeElements = {
         borderBox: '#979797'
     },
     popupBtn: {
-        primary_bg: 'bg-sky-800',
-        primary_hover: 'hover:bg-sky-900',
+        primary_bg: 'bg-sky-800 outline-1 outline-sky-950',
+        primary_hover: 'hover:bg-sky-800',
         primary_text: 'text-white',
         seconcondary_bg: 'bg-zinc-200',
         secondary_hover: 'hover:bg-zinc-300',
@@ -250,7 +250,7 @@ export const dark: ThemeElements = {
         borderBox: '#424242'
     },
     popupBtn: {
-        primary_bg: 'bg-sky-800',
+        primary_bg: 'bg-sky-800 outline-1 outline-sky-950',
         primary_hover: 'hover:bg-sky-900',
         primary_text: 'text-white',
         seconcondary_bg: 'bg-zinc-700',

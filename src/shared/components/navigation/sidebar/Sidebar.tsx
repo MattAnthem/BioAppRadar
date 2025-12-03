@@ -62,7 +62,7 @@ const Sidebar = () => {
                     fixed z-60 h-screen lg:flex lg:sticky lg:flex-col max-h-screen p-2 shadow-[2px] 
                     ${isMinimized ? 'lg:w-[60px] hidden' : 'lg:w-[260px]'} 
                     transition-all duration-200 ease-out drop-shadow-xs antialiased 
-                    text-xs md:text-sm lg:text-sm 
+                    text-[clamp(0.675rem, 0.5vw + 0.5rem, 1rem)]
         `}
     >
 

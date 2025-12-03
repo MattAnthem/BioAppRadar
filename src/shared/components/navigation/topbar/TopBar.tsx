@@ -97,7 +97,7 @@ const TopBar = () => {
                     Dark
                 </button>
                 <button 
-                    aria-label='Change theme to dark'
+                    aria-label='Synchronize with browser theme'
                     onClick={setToSystemThemes} 
                     className={`flex tracking-wide items-center justify-start gap-1.5 w-full text-sm px-2 text-left  py-1 rounded-sm ${themeName === 'system' ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${themeName === 'system' ? 'font-semibold' : ''}`}
                 >
