@@ -69,7 +69,7 @@ export const light: ThemeElements = {
     },
     sectionCard: {
         bg: 'bg-neutral-200',
-        primary_text: 'text-gray-950',
+        primary_text: 'text-[#1C2B33]',
         secondary_text: 'text-gray-600',
         border: 'border-gray-300',
         shadow: 'shadow-gray-300'
@@ -191,8 +191,8 @@ export const dark: ThemeElements = {
             icon_color: 'text-gray-400',
             popover: {
                 text: 'text-gray-200',
-                option_hover: 'hover:bg-zinc-600',
-                option_active: 'bg-zinc-700 text-gray-100',
+                option_hover: 'hover:bg-zinc-700',
+                option_active: 'bg-zinc-800 text-gray-100',
                 active_bg: 'bg-zinc-700'
             }
         }

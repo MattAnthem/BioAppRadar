@@ -8,11 +8,17 @@ import { Route, Routes } from 'react-router-dom';
 import AppLayout from './shared/layouts/AppLayout';
 import React from 'react';
 import Notifications from './pages/Notifications';
+import { useAppSelector } from './store/hooks';
+import { useSyncTheme } from './shared/hooks/useSyncTheme';
 const OverviewDashboard = React.lazy(() => import('./pages/OverviewDashboard'));
 const HistoricalExplorer = React.lazy(() => import('./pages/HistoricalExplorer'));
 const CrossSection = React.lazy(() => import('./pages/CrossSection'));
 
 function App() {
+
+  const currentTheme = useAppSelector(state => state.theme.themeName);
+
+  useSyncTheme(currentTheme);
 
   return (
     <>

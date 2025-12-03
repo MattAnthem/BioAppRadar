@@ -46,7 +46,7 @@ const Modal = (
                 <SectionCard  className={`relative lg:w-[70%] w-[90%] min-h-[20%] h-[90vh]  p-2 flex flex-col`}>
                   <div className="w-full flex justify-between items-baseline">
                     {/* Heading */}
-                    <h1 className="p-2 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[600]">{title}</h1>
+                    <h1 className="p-2 tracking-wider text-[clamp(0.8em,0.9vw,1.5em)] font-[700]">{title}</h1>
 
                     <ButtonBorder ariaLabel='Modal close' isDisabled={false} ariaExpanded={isOpen} ariaControls='Modal close' onClick={handle_toggle_mdl!} className=' flex items-center justify-center'>
                       <X className='w-4 h-4'/>

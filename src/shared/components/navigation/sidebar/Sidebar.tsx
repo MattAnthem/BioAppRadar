@@ -71,7 +71,7 @@ const Sidebar = () => {
 
             <div className={`w-full ${sidebar.main.logos} flex justify-center items-center p-1 rounded-sm`}>
                 <img aria-label="BioAppRadar logo" src={logo_svg} className={`${isMinimized ? 'hidden' : ''} h-11`} alt="BioAppRadar logo"  />
-                <h1 className={`text-lg font-semibold text-black! ${isMinimized ? 'hidden' : navs.text} transition-opacity duration-100 ease-in-out tracking-wider`}>BioAppRadar</h1>
+                <h1 className={`text-lg font-semibold text-[#1C2B33]! ${isMinimized ? 'hidden' : navs.text} transition-opacity duration-100 ease-in-out tracking-wider`}>BioAppRadar</h1>
 
 
                 {/* Toggle minimize sidebar */}
@@ -93,7 +93,7 @@ const Sidebar = () => {
 
                 <NavButton 
                     handleActivate={handleActiveButton}
-                    title="Overview Dashboard"
+                    title="Overview dashboard"
                     menu_to=""
                     active={activeButton}
                     icon={<Home  className={iconSize}/>}
@@ -104,7 +104,7 @@ const Sidebar = () => {
 
                 <NavButton 
                     handleActivate={handleActiveButton}
-                    title="Cross Section"
+                    title="Cross section"
                     menu_to="cross_section"
                     active={activeButton}
                     icon={<FlipHorizontal className={iconSize}/>}
@@ -115,7 +115,7 @@ const Sidebar = () => {
                 
                 <NavButton 
                     handleActivate={handleActiveButton}
-                    title="Historical Explorer"
+                    title="Historical explorer"
                     menu_to="history_explorer"
                     active={activeButton}
                     icon={<CalendarClock className={iconSize}/>}

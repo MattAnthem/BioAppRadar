@@ -10,7 +10,6 @@ const HighchartsReact = lazy(() => import("highcharts-react-official"));
 interface VtipChartProps {
   data: VtipResponse;
   title?: boolean;
-  chartHeight?: number;
 }
 
 interface DayNightChart extends Highcharts.Chart {
@@ -19,7 +18,7 @@ interface DayNightChart extends Highcharts.Chart {
 
 
 const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartProps>(
-  ({ data, title = false, chartHeight }, ref) => {
+  ({ data, title = false }, ref) => {
 
     // Loading modules dynamically
     const [ Highcharts, loaded] = useHighchartsModules(["accessibility", "windbarb", "annotations", "exporting", "export-data", "offline-exporting"]);
@@ -127,9 +126,8 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
           borderColor: borderBox,
           borderWidth: 1,
           borderRadius: 3,
-          height: chartHeight ?? null,
           backgroundColor: "transparent",
-          // reflow: true,
+          reflow: true,
           events: {
             load: function () {
               drawDayNightBar(this as unknown as DayNightChart);
@@ -262,7 +260,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
           fallbackToExportServer: false,
         }
       };
-    }, [Highcharts, borderBox, chartFontColor, chartGridline, chartHeight, chartLegendColor, data, title]);
+    }, [Highcharts, borderBox, chartFontColor, chartGridline, chartLegendColor, data, title]);
 
     if (!loaded || !Highcharts) {
       return <div></div>;
@@ -270,7 +268,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
 
     return (
       <ErrorBoundary
-        fallback={<div>...</div>}
+        fallback={<div className="w-full h-full">...</div>}
       >
         <Suspense fallback={<div style={{width: '100%', height: '100%'}}></div>}>
           <HighchartsReact 

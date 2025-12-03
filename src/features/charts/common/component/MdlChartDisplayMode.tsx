@@ -40,7 +40,7 @@ const MdlChartDisplayMode = ({
             `}
         >
             <ChartLine className="w-4"/>
-            <h1>Interactive</h1>
+            <h1 className='text-[clamp(0.8rem,0.8vw,2rem)]'>Interactive</h1>
         </button>
         </Tooltip>
 
@@ -60,7 +60,7 @@ const MdlChartDisplayMode = ({
             `}
             >
             <ImageIcon className="w-4"/>
-            <h1>Image</h1>
+            <h1 className='text-[clamp(0.8rem,0.8vw,2rem)]'>Image</h1>
         </button>
         </Tooltip>
     </div>

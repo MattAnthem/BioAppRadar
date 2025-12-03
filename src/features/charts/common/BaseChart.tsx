@@ -63,7 +63,7 @@ function BaseChart<TData>({
           </div>
 
           {/* Chart */}
-          <div className="w-full h-full  grid px-2 pb-2">
+          <div className="w-full h-full grid px-2 pb-2">
             {
               (data && !error && !isLoading) && (
                 <ChartComponent
@@ -88,10 +88,10 @@ function BaseChart<TData>({
                 </div> 
             )}
           </div>
-
           {time && (
-            <small className="font-semibold">{time?.split(' ')[0] ?? ' '} <span className="font-normal">{`${time?.split(' ')[1] ?? ' '}`}</span> </small>
+            <small className="font-semibold text-center">{time?.split(' ')[0] ?? ' '} <span className="font-normal">{`${time?.split(' ')[1] ?? ' '}`}</span> </small>
           )}
+
 
     </SectionCard>
     )

@@ -1,7 +1,7 @@
-import { Menu, Moon, Sun } from 'lucide-react';
+import { LucideComputer, Menu, Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../../hooks/useTheme';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { setToDarkTheme, setToLightTheme } from '../../../features/theme/themeSlice';
+import { setToDarkTheme, setToLightTheme, setToSystemTheme } from '../../../features/theme/themeSlice';
 import { toggleMinimize } from '../sidebar/sidebarSlice';
 import React, { useState } from 'react';
 import OptionPopover from '../../popups/option/OptionPopover';
@@ -14,7 +14,7 @@ const TopBar = () => {
 
     const themes = useTheme();
     const { topbar } = themes.theme;
-
+    const themeName = themes.themeName;
     const dispatch = useAppDispatch();
 
     const { isDarkMode } = useAppSelector(state => state.theme);
@@ -29,6 +29,12 @@ const TopBar = () => {
     const setThemeLight = () => {
         dispatch(setToLightTheme());
         setPopupThemeOpen(false);
+    }
+
+    const setToSystemThemes = () => {
+      dispatch(setToSystemTheme());
+      setPopupThemeOpen(false);
+
     }
 
     const toggleOpenPopupTheme = () => {
@@ -73,20 +79,30 @@ const TopBar = () => {
             onClose={closePopupTheme}
         >
 
-            <div className='flex flex-col gap-2 p-2'>
+            <div className='flex flex-col gap-2 '>
                 <button 
                     aria-label='Change theme to light'
                     onClick={setThemeLight} 
-                    className={`w-full text-sm text-left px-3 py-1 rounded-sm ${!isDarkMode ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${!isDarkMode ? 'font-semibold' : ''}`}
+                    className={`flex tracking-wide items-center justify-start gap-1.5 w-full text-sm px-2 text-left  py-1 rounded-sm ${themeName === 'light' ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${themeName === 'light' ? 'font-semibold' : ''}`}
                 >
-                    Light Theme
+                    <Sun className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.icon_color}`}/>
+                    Light
                 </button>
                 <button 
                     aria-label='Change theme to dark'
                     onClick={setThemeDark} 
-                    className={`w-full text-sm text-left px-3 py-1 rounded-sm ${isDarkMode ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${isDarkMode ? 'font-semibold' : ''}`}
+                    className={`flex tracking-wide items-center justify-start gap-1.5 w-full text-sm px-2 text-left  py-1 rounded-sm ${themeName === 'dark' ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${themeName === 'dark' ? 'font-semibold' : ''}`}
                 >
-                    Dark Theme
+                    <Moon className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.icon_color}`}/>
+                    Dark
+                </button>
+                <button 
+                    aria-label='Change theme to dark'
+                    onClick={setToSystemThemes} 
+                    className={`flex tracking-wide items-center justify-start gap-1.5 w-full text-sm px-2 text-left  py-1 rounded-sm ${themeName === 'system' ? topbar.contents.popover.active_bg : ''} ${topbar.contents.popover.text} ${topbar.contents.popover.option_hover} ${themeName === 'system' ? 'font-semibold' : ''}`}
+                >
+                    <LucideComputer className={`w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4 ${topbar.contents.icon_color}`}/>
+                    System
                 </button>
             </div>
 

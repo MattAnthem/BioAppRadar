@@ -39,7 +39,7 @@ const VpMdlHistory = () => {
     }
   return (
     <BaseChartModal
-        title={`${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})`}
+        title={`${capitalize(data?.query_spec)}  ${data?.name ?? ''}`}
         selectedHeight={currentAltitude}
         data={data}
         dataError={error}

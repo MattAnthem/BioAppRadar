@@ -191,7 +191,7 @@ const VptsHeatmapChart = forwardRef<React.ComponentRef<typeof HighchartsReact>, 
                 borderWidth: 1,
                 borderRadius: 3,
                 backgroundColor:'transparent',
-                // reflow: true,
+                reflow: true,
                 style:{fontFamily:'Inter, sans-serif',color:chartFontColor,fontSize:'14px'},
                 events:{load(){drawDayNightBar(this as DayNightChart);}, render(){drawDayNightBar(this as DayNightChart);}},
                 zooming:{type:'x'}

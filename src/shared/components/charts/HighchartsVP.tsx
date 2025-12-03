@@ -13,7 +13,6 @@ interface VpChartHighchartsProps {
   radarAltitude?: number;
   selectedHeight?: number;
   displayTitle?: boolean;
-  chartHeight?: number | string;
 }
 
 type AxisWithBands = Highcharts.Axis & {
@@ -22,7 +21,7 @@ type AxisWithBands = Highcharts.Axis & {
 
 
 const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null, VpChartHighchartsProps>(
-  ({ data, chartHeight, displayTitle, radarAltitude = 1616, selectedHeight = 0 }, chartRef) => {
+  ({ data, displayTitle, radarAltitude = 1616, selectedHeight = 0 }, chartRef) => {
 
 
     // Loading dynamically module and highchart
@@ -48,9 +47,8 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
 
         chart: {
           inverted: true,
-          // reflow: true,
+          reflow: true,
           backgroundColor: 'transparent',
-          height: chartHeight ?? null,
           borderColor: borderBox,
           borderWidth: 1,
           borderRadius: 3,
@@ -215,7 +213,7 @@ const VpChartHighcharts = forwardRef<ComponentRef<typeof HighchartsReact> | null
         credits: { enabled: false },
 
       }
-    }, [Highcharts, borderBox, chartFontColor, chartGridline, chartHeight, chartLegendColor, data, displayTitle, radarAltitude, selectedHeight, seriesData, seriesWind, vmax]) 
+    }, [Highcharts, borderBox, chartFontColor, chartGridline, chartLegendColor, data, displayTitle, radarAltitude, selectedHeight, seriesData, seriesWind, vmax]) 
 
     // Render nothing if modules are not ready
     if (!loaded || !Highcharts) {

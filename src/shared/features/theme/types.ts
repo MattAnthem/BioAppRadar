@@ -1,4 +1,4 @@
-export type theme = "light" | "dark";
+export type theme = "light" | "dark" | "system";
 
 export interface ThemeElements {
     mainBg: string;

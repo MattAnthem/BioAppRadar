@@ -37,7 +37,7 @@ const VptsMdlHistory = () => {
     }
   return (
     <BaseChartModal
-        title={`${capitalize(data?.query_spec)} - ${data?.name ?? ''} (${data?.units ?? ''})`}
+        title={`${capitalize(data?.query_spec)} ${data?.name ?? ''}`}
         data={data}
         dataError={error}
         dataImage={vptsImageData}
