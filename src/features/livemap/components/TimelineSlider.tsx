@@ -67,7 +67,7 @@ const TimelineSlider = ({ frames, currentIndex, onFrameChange, preloadingFrames 
     <div className="z-5 absolute bottom-0 left-0 w-full">
 
         {/* Timeline controls */}
-        <div className="flex w-full justify-start items-center 2xl:gap-2 gap-1 border-white/20 bg-gray-900/60 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-sm">
+        <div className="flex w-full justify-start items-center 2xl:gap-2 gap-1 border-white/20 bg-gray-900/60 shadow-md ring-1 ring-black/5 backdrop-blur-sm p-2 rounded-b-[3px]">
 
            {/* Timestamp indicator */}
            {currentFrame ? (

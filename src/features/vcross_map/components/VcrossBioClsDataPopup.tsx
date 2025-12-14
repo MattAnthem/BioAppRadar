@@ -9,7 +9,7 @@ const OptionPopover = lazy(() => import('../../../shared/components/popups/optio
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/ReactDatetime'));
 const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
-
+const ColorInput = lazy(() => import('../../../shared/components/input/ColorInput'))
 
 const VcrossBioClsDataPopup = () => {
 
@@ -43,14 +43,8 @@ const VcrossBioClsDataPopup = () => {
     const handleBioClassChange = (option: SelectOption) => {
       setLocSelectedBioclass(option);
     }
-    const handleColorZeroChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-      const color = evt.target.value;
-      setLocColor0(color);
-    }
-    const handleColorOneChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-      const color = evt.target.value;
-      setLocColor1(color)
-    };
+
+
     const handleBioClassTimeChange = (date: string) => {
       setLocTime(date);
     }
@@ -124,14 +118,18 @@ const VcrossBioClsDataPopup = () => {
           <div className="border-b border-b-gray-400"/>
       </div>
 
-      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
-          <small className='w-fit'>{ locSelectedBioclass['type0'] as string}:</small>
-          <input onChange={handleColorZeroChange} value={locColor0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
-      </div>
-      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
-          <small className='w-fit'>{ locSelectedBioclass['type1'] as string}:</small>
-          <input onChange={handleColorOneChange} value={locColor1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
-      </div>
+
+      <ColorInput
+        initialColor={locColor0}
+        onColorCommit={setLocColor0}
+        label={locSelectedBioclass['type0'] as string}
+      />
+
+      <ColorInput
+        initialColor={locColor1}
+        onColorCommit={setLocColor1}
+        label={locSelectedBioclass['type1'] as string}
+      />
 
       {/* Toggle on/off segment */}
       <div className="flex flex-col gap-0.5">
@@ -139,7 +137,7 @@ const VcrossBioClsDataPopup = () => {
           <div className="border-b border-b-gray-400"/>
       </div>
       <div className="flex items-center justify-start gap-2 px-2">
-        <input type="checkbox" checked={locSegment} onChange={handleToggleSegment} name="vcross-bioclass-segment" id="vcross_bioclass_segment" />
+        <input  type="checkbox" checked={locSegment} onChange={handleToggleSegment} name="vcross-bioclass-segment" id="vcross_bioclass_segment" />
         <small>Toggle on/off segement</small>
       </div>
 

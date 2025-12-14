@@ -11,6 +11,7 @@ type AltitudeSliderProps = {
 const CustomSlider = ({
     maxAltitude, onChangeAltitude, className
 }: AltitudeSliderProps) => {
+  
     const [index, setIndex] = useState<number>(0);
 
 

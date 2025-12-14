@@ -13,6 +13,8 @@ const OptionPopover = lazy(() => import('../../../shared/components/popups/optio
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
 const ReactDatetimePicker = lazy(() => import('../../../shared/components/input/ReactDatetime'));
+const ColorInput = lazy(() => import('../../../shared/components/input/ColorInput'));
+
 
 const iconSize = "w-4 h-4 sm:w-4 sm:h-4 md:w-4 md:h-4 lg:w-4 lg:h-4";
 
@@ -92,14 +94,6 @@ const ClassificationPopup = () => {
     setLocSelectedVar(variable);
   }
 
-  const handleInputColor0Change = (evt: React.ChangeEvent<HTMLInputElement>)  => {
-    const color = evt.target.value;
-    setLocColor0(color);
-  }
-  const handleInputColor1Change = (evt: React.ChangeEvent<HTMLInputElement>)  => {
-    const color = evt.target.value;
-    setLocColor1(color);
-  }
   const handleTimeChange = (date: string) => {
     setLocTime(date);
   }
@@ -232,14 +226,19 @@ return (
             <div className="border-b border-b-gray-400"/>
       </div>
 
-      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-center capitalize items-center">
-          <small className='w-fit'>{ locSelectedVar['type0'] as string}:</small>
-          <input onChange={handleInputColor0Change} value={locColor0}  className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
-      </div>
-      <div className="grid px-2 grid-cols-2 w-1/2 gap-0.5 justify-start items-center capitalize">
-          <small className='w-fit'>{ locSelectedVar['type1'] as string}:</small>
-          <input onChange={handleInputColor1Change} value={locColor1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
-      </div>
+
+      <ColorInput
+        label={locSelectedVar['type0'] as string}
+        initialColor={locColor0}
+        onColorCommit={setLocColor0}
+      />
+      
+      <ColorInput
+        label={ locSelectedVar['type1'] as string}
+        initialColor={locColor1}
+        onColorCommit={setLocColor1}
+      />
+
 
       {/* Time for still image */}
       {

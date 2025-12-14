@@ -20,11 +20,7 @@ export const light: ThemeElements = {
             popupBg: 'bg-white',
             popupBorder: 'border-gray-300',
     },
-    cards: {
-        background: 'bg-gray-100',
-        border: 'border-gray-500',
-        element_hover: 'hover:bg-gray-200'
-    },
+
     texts: {
         primary: 'text-gray-950',
         secondary: 'text-gray-500'
@@ -68,7 +64,7 @@ export const light: ThemeElements = {
         }
     },
     sectionCard: {
-        bg: 'bg-neutral-200',
+        bg: 'bg-stone-100',
         primary_text: 'text-[#1C2B33]',
         secondary_text: 'text-gray-600',
         border: 'border-gray-300',
@@ -136,10 +132,10 @@ export const dark: ThemeElements = {
     chartFontColor: '#adadad',
     chartLegendColor: "#929292", 
     datePicker: {
-        bg: 'bg-zinc-700',
-        border: 'border-gray-600',
-        text: 'text-gray-100',
-        hover: 'hover:bg-blue-400 hover:text-gray-900',
+        bg: 'bg-[#181B1F]',
+        border: 'border-zinc-700',
+        text: 'text-zinc-300',
+        hover: 'hover:bg-zinc-700',
         selectedDay: 'bg-blue-600 text-white font-semibold',
         popupBg: 'bg-neutral-800',
         popupBorder: 'border-gray-700',
@@ -150,11 +146,7 @@ export const dark: ThemeElements = {
         border: 'border-gray-400',
         hover: 'hover:bg-zinc-700'
     },
-    cards: {
-        background: 'bg-zinc-700',
-        border: 'border-zinc-500',
-        element_hover: 'hover:bg-zinc-600 '
-    },
+
     texts: {
         primary: 'text-gray-400',
         secondary: 'text-gray-600'

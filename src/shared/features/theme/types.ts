@@ -11,7 +11,6 @@ export interface ThemeElements {
     userPopup: PopupTheme;
     btnBorder: BtnBorderTheme;
     charts: ChartsTheme;
-    cards: cards;
     texts: Texts;
     chartFontColor: string;
     chartGridline: string;
@@ -53,11 +52,6 @@ type Texts = {
     secondary: string;
 }
 
-type cards = {
-    background: string;
-    border: string;
-    element_hover?: string;
-}
 
 
 // ---------------------- Sidebar ------------

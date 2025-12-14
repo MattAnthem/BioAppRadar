@@ -2,12 +2,13 @@ import { BirdIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types'
 import { setClassificationColorOne, setClassificationColorZero, setSelectedClassificationOption } from '../slice/classificationPopupSlice';
-import { useEffect, useState, memo, lazy } from 'react'
+import { useEffect, useState, memo, lazy} from 'react'
 import { setClassificationPayload } from '../slice/livemapSlice';
 
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const ButtonBorder = lazy(() => import('../../../shared/components/buttons/borderedbtn/ButtonBorder'));
+const ColorInput = lazy(() => import('../../../shared/components/input/ColorInput'));
 
 
 
@@ -40,15 +41,6 @@ const ClassificationPopup = () => {
     // --- Local input handlers (for edition : proper to the popup only) ---
     const handleInputVarChange = (variable: SelectOption) => {
         setLocSelectedVar(variable);
-    }
-
-    const handleInputColor0Change = (evt: React.ChangeEvent<HTMLInputElement>)  => {
-        const color = evt.target.value;
-        setLocColor0(color);
-    }
-    const handleInputColor1Change = (evt: React.ChangeEvent<HTMLInputElement>)  => {
-        const color = evt.target.value;
-        setLocColor1(color);
     }
 
     // ---  Controls of the popup ---
@@ -104,14 +96,19 @@ const ClassificationPopup = () => {
               <div className="border-b border-b-gray-400"/>
           </div>
 
-        <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start capitalize items-center">
-            <small>{locSelectedVar['type0'] as string}:</small>
-            <input onChange={handleInputColor0Change} value={locColor0} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm' type="color" name="color_0" id="color_0" />
-        </div>
-        <div className="grid grid-cols-2 w-1/2 gap-0.5 justify-start capitalize items-center">
-            <small>{locSelectedVar['type1'] as string}:</small>
-            <input onChange={handleInputColor1Change} value={locColor1} className='w-10 h-8 cursor-pointer hover:ring-1 ring-offset-0 rounded-sm'  type="color" name="color_1" id="color_0" />
-        </div>
+
+        {/* color 1 */}
+        <ColorInput
+            label={locSelectedVar['type0'] as string}
+            initialColor={locColor0}
+            onColorCommit={setLocColor0}
+        />
+        <ColorInput
+            label={locSelectedVar['type1'] as string}
+            initialColor={locColor1}
+            onColorCommit={setLocColor1}
+        />
+
 
         <ButtonBorder
             ariaLabel='Display classification data on map'
