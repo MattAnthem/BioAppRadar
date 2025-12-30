@@ -1,13 +1,13 @@
 import { BirdIcon, ImageIcon, ImagePlayIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types';
-import { useEffect, useState, memo, useMemo, lazy } from 'react';
+import { useEffect, useState, memo, lazy } from 'react';
 import { setHistClassifEndTime, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifStartTime, setHistClassifTime, setSelectedHistClassificationOption } from '../slice/histClassificationPopupSlice'
 import { setClassifGifPayloadHist, setClassifPayloadHist } from '../slice/historyMapSlice'
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery'
 import { useTheme } from '../../../shared/hooks/useTheme';
-import dayjs from 'dayjs';
+import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
 
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
@@ -38,14 +38,7 @@ const ClassificationPopup = () => {
     enabled: true,
   });
 
-  const adjustedTimes = useMemo(() => {
-    if (!temporal) return null;
-  
-    const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
-    const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
-  
-    return { fresh_start, fresh_end };
-  }, [temporal]);
+  const { adjustedStartEndTime: adjustedTimes } = useFreshDates(temporal);
 
   // --- Sync store to the temporal coverage ---
   useEffect(() => {

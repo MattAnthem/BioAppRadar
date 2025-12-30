@@ -16,13 +16,14 @@ interface HistorymapSliceState {
 } 
 
 const initialState: HistorymapSliceState = {
-    mapModeHist: 'classification',
+    mapModeHist: 'sevip',
     radarPayloadHist: {
         colorbar: 'viridis',
         parameter: 'ref',
         time: '2020-11-10 12:00:33',
         type: 'grid',
         height: 0,
+        radarID: 1
     },
     classifPayloadHist: {
         class: 'species',
@@ -34,15 +35,19 @@ const initialState: HistorymapSliceState = {
     sevipPayloadHist: {
         parameter: 'vid',
         colorbar: 'viridis',
+        species: 'bird',
         time: '2020-11-10 12:00:33',
+        radarID: 1
     },
 
     // Gif animated default payloads
     sevipGifPayloadHist: {
         colorbar: 'viridis',
+        species: 'bird',
         parameter: 'vid',
         startTime: '2020-11-10 12:00:33',
-        endTime: '2020-11-10 12:50:00'
+        endTime: '2020-11-10 12:50:00',
+        radarID: 1
     },
     radarGifPayloadHist: {
         colorbar: 'viridis',
@@ -50,7 +55,8 @@ const initialState: HistorymapSliceState = {
         startTime: '2020-11-10 12:00:33',
         endTime: '2020-11-10 12:50:00',
         type: 'grid',
-        height: 0
+        height: 0,
+        radarID: 1
     },
     classifGifPayloadHist: {
         class: 'species',
@@ -100,6 +106,7 @@ const historymapSlice = createSlice({
               parameter: incoming.parameter ?? "ref",
               time: incoming.time ?? "2020-11-10 12:00:33",
               colorbar: incoming.colorbar ?? "viridis",
+              radarID: incoming.radarID ?? 1,
               height: (incoming as Partial<RadarGridPayload>).height ?? 0,
             };
           } else {
@@ -108,6 +115,7 @@ const historymapSlice = createSlice({
               parameter: incoming.parameter ?? "ref",
               time: incoming.time ?? "2020-11-10 12:00:33",
               colorbar: incoming.colorbar ?? "viridis",
+              radarID: incoming.radarID ?? 1,
               elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
             };
           }
@@ -128,6 +136,7 @@ const historymapSlice = createSlice({
               startTime: incoming.startTime ?? "2020-11-10 12:00:33",
               endTime: incoming.endTime ?? '2020-11-10 12:50:00',
               colorbar: incoming.colorbar ?? "viridis",
+              radarID: incoming.radarID ?? 1,
               height: (incoming as Partial<RadarGridPayload>).height ?? 0,
             };
           } else {
@@ -137,6 +146,7 @@ const historymapSlice = createSlice({
               startTime: incoming.startTime ?? "2020-11-10 12:00:33",
               endTime: incoming.endTime ?? '2020-11-10 12:50:00',
               colorbar: incoming.colorbar ?? "viridis",
+              radarID: incoming.radarID ?? 1,
               elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
             };
           }

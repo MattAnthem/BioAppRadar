@@ -1,9 +1,9 @@
-import { useEffect, useMemo, lazy } from 'react';
+import { useEffect, lazy } from 'react';
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useAppDispatch } from '../../../store/hooks';
-import dayjs from 'dayjs';
 import { changeVptsPayload } from './slices/vptsChartSlice';
 import { useVptsData } from './hooks/useData/useVptsData';
+import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
 
 const VptsMdlDashboard = lazy(() => import('./modals/VptsMdlDashboard'));
 const VptsSpeciePopup = lazy(() => import('./popups/VptsSpeciePopup'));
@@ -23,14 +23,7 @@ const VptsChartDashboard = () => {
   });
 
   // --Adjust time to use fresh timerange from the time coverage ---
-  const adjustedTimes = useMemo(() => {
-        if (!temporal) return null;
-      
-        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
-        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
-      
-        return { fresh_start, fresh_end };
-  }, [temporal]);
+  const {adjustedStartEndTime: adjustedTimes} = useFreshDates( temporal );
 
   // --- Hydrate Redux Slice if the query succeed
   useEffect(() => {

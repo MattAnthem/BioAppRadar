@@ -1,4 +1,4 @@
-import {lazy, Suspense} from 'react';
+import {lazy, Suspense, memo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setSelectedTime } from './slice/livemapSlice';
 import { changeAltitude } from './slice/altitudeSlice';
@@ -10,6 +10,8 @@ import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundari
 import { Unplug } from 'lucide-react';
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
+import { useVpTemporalCoverageQuery } from '../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
+import { useFreshDates } from '../../shared/hooks/dates/useFreshDates';
 
 const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
 const ClassificationPopup = lazy(() => import('./components/ClassificationPopup'));
@@ -20,7 +22,16 @@ const TimelineSlider = lazy(() => import('./components/TimelineSlider'));
 const ClassifLegend = lazy(() => import('../../shared/components/legends/ClassifLegend'));
 const CustomSlider = lazy(() => import('../../shared/components/slider/CustomSlider'))
 
-
+/**
+ * LiveMap Component, shows the live map with classification overlays
+ * Data Flow:
+ * - Fetch temporal coverage to get fresh time range
+ * - Fetch classification data for the selected time, class and altitude
+ * - Fetch boundary data for overlay shapes
+ * - Render Leaflet map with base map and overlay
+ * - Render timeline slider to select time
+ * - Render altitude slider to select altitude
+ */
 const LiveMap = () => {
 
     // Redux states
@@ -29,8 +40,20 @@ const LiveMap = () => {
     const { selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.boundary);
     const { selectedMapBase } = useAppSelector(state => state.basemappopup);
     const { currentAltitude } = useAppSelector(state => state.altitude);
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
+    // --- Temporal coverages   ---
+    const { data: temporal, isSuccess, isRefetching } = useVpTemporalCoverageQuery(1, {
+        staleTime: 1000 * 60 * 5,
+        refetchInterval: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+        enabled: true,
+    });
+
+    // --Adjust time to use fresh timerange from the time coverage ---
+    const { createdTimeFrames } = useFreshDates(temporal);
+
+    console.log(createdTimeFrames?.timeFrame)
 
     // Fetch Map Boundary
     const payload = {
@@ -45,7 +68,6 @@ const LiveMap = () => {
 
 
     // ALtitude
-    const currentHeight = currentAltitude;
     const handleAltitudeChange = (altitudeIndex: number) => {
         dispatch(changeAltitude(altitudeIndex))
     }
@@ -67,7 +89,7 @@ const LiveMap = () => {
         classificationPayload.class,
         classificationPayload.color_0,
         classificationPayload.color_1,
-        currentHeight,
+        currentAltitude,
     )
 
     const { data: classifData, error } = useClassificationDataQuery({
@@ -75,7 +97,7 @@ const LiveMap = () => {
         time: selectedMapTime,
         color_0: classificationPayload.color_0,
         color_1: classificationPayload.color_1,
-        height: currentHeight,
+        height: currentAltitude,
     })
 
     const queryKey = [
@@ -84,7 +106,7 @@ const LiveMap = () => {
         classificationPayload.class, 
         classificationPayload.color_0, 
         classificationPayload.color_1,
-        currentHeight,
+        currentAltitude,
     ]
 
     // Check if already cached
@@ -97,7 +119,7 @@ const LiveMap = () => {
     <SectionCard className='relative w-full h-full'>
 
         {
-            (error || coverageError) && (
+            (error || coverageError || !isSuccess) && (
                 <div className="absolute z-10 w-full h-full flex items-center justify-center">
                     <Unplug width={35} height={35} className='text-red-500'/>
                 </div>
@@ -105,7 +127,7 @@ const LiveMap = () => {
         }
         
         {
-            (coverageLoading || isPreloading) && (
+            (coverageLoading || isPreloading || isRefetching) && (
                 <div className="absolute z-20 w-full h-full flex flex-col items-center justify-center">
                     <img src={loader} alt="loading-data" width={35} height={35}  />
                     {isPreloading ? <p className='text-gray-700'>{`Loading animation ${progress}%...`}</p> : ''}
@@ -162,6 +184,7 @@ const LiveMap = () => {
                 <CustomSlider
                     maxAltitude={5000}
                     onChangeAltitude={handleAltitudeChange}
+                    currentALtitude={currentAltitude}
                 />
             </Suspense>
         </div>
@@ -195,4 +218,4 @@ const LiveMap = () => {
   )
 }
 
-export default LiveMap;
+export default memo(LiveMap);

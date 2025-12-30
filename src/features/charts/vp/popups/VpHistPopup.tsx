@@ -138,7 +138,7 @@ const VpHistPopup = () => {
                       onChange={handleDateChange}
                       value={locTime}
                       minDate={temporal?.start_time}
-                      maxDate={temporal?.end_time}
+                      maxDate={adjustedTime?.fresh_time}
                     />
 
         {/* Display data button */}

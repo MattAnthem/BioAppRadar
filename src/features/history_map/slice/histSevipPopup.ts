@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { sevip_options, species_options } from "../../../shared/static/select-options";
+import { radar_options, sevip_options, species_options } from "../../../shared/static/select-options";
 
 
 interface SevipPopupState {
@@ -8,6 +8,8 @@ interface SevipPopupState {
     availableVariables: SelectOption[];
     speciesOptions: SelectOption[];
     selectedSpecie: SelectOption;
+    radars: SelectOption[];
+    selectedRadar: SelectOption;
 
     // time for png image
     histTimeSevip: string;
@@ -26,6 +28,8 @@ const initialState: SevipPopupState = {
     speciesOptions: species_options,
     selectedSpecie: species_options[0],
     histTimeSevip: '2020-11-10 12:00:33',
+    radars: radar_options,
+    selectedRadar: radar_options[0],
     
     startTimeSevip: '2020-11-10 12:00:33',
     endTimeSevip: '2020-11-10 12:50:00'
@@ -50,8 +54,11 @@ const histSevippopupSlice = createSlice({
         setHistSevipTimeEnd: (state, action) => {
           state.endTimeSevip = action.payload;
         },
+        setSelectedRadar: (state, action) => {
+          state.selectedRadar = action.payload;
+        }
     }
 })
 
-export const { setSelectedHistSevipOption, setHistTimeSevip, setHistSevipTimeEnd, setHistSevipTimeStart, setSelectedHistSevipSpecie } = histSevippopupSlice.actions;
+export const { setSelectedHistSevipOption, setHistTimeSevip, setHistSevipTimeEnd, setHistSevipTimeStart, setSelectedHistSevipSpecie, setSelectedRadar } = histSevippopupSlice.actions;
 export default histSevippopupSlice.reducer;

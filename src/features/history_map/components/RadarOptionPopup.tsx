@@ -2,12 +2,12 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setRadarEndTimeHist, setRadarStartTimeHist, setRadarTimeHist, setSelectedHistRadarParameter, setSelectedHistRadarType } from '../slice/histRadarPopupSlice';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { ImageIcon, ImagePlayIcon, RadarIcon } from 'lucide-react';
-import { useEffect, useState, memo, useMemo, lazy } from 'react';
+import { useEffect, useState, memo, lazy } from 'react';
 import { setRadarGifPayloadHist, setRadarPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
-import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useTheme } from '../../../shared/hooks/useTheme';
-import dayjs from 'dayjs';
+import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
+import { useRadarPolarTemporalCov } from '../../../shared/hooks/useQuery/useRadarPolarTemporalCov';
 
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
@@ -26,24 +26,19 @@ const RadarOptionPopup = () => {
 
 
     // Redux read only states
-    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, endTimeRadar, startTimeRadar, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_radarpopup);
+    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, endTimeRadar, startTimeRadar,  radars, selectedRadar } = useAppSelector(state => state.hist_radarpopup);
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
-    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, {
+    const { data: temporal, isSuccess } = useRadarPolarTemporalCov(1, {
         staleTime: 0,
         refetchInterval: false,
         refetchOnWindowFocus: false,
         enabled: true,
     });
-    const adjustedTimes = useMemo(() => {
-        if (!temporal) return null;
-      
-        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
-        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
-      
-        return { fresh_start, fresh_end };
-    }, [temporal]);
+
+    // always use the latest time (1hour past)
+    const { adjustedStartEndTime: adjustedTimes } = useFreshDates(temporal);
 
     // --- Sync store to the temporal coverage ---
     useEffect(() => {
@@ -53,7 +48,8 @@ const RadarOptionPopup = () => {
         dispatch(setRadarStartTimeHist(adjustedTimes.fresh_start));
         dispatch(setRadarEndTimeHist(adjustedTimes.fresh_end));
         dispatch(setRadarTimeHist(adjustedTimes.fresh_end));
-        
+
+
     }, [adjustedTimes, dispatch, isSuccess])
 
 
@@ -61,6 +57,8 @@ const RadarOptionPopup = () => {
     const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
     const [locAvailableParams, setLocAvailableParams] = useState(availableParameters);
     const [locSelectedType, setLocSelectedType] = useState(selectedType);
+    const [locRadars, setLocRadars] = useState(radars);
+    const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
     const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
     const [locTime, setLocTime] = useState(radarTimeHist);
     const [locStartTime, setLocStartTime] = useState(startTimeRadar);
@@ -78,8 +76,9 @@ const RadarOptionPopup = () => {
             setLocTime(radarTimeHist);
             setLocStartTime(startTimeRadar);
             setLocEndTime(endTimeRadar);
+            setLocRadars(radars);
         }
-    }, [availableParameters, availableTypes, endTimeRadar, isPopupOpen, radarTimeHist, selectedParameter, selectedType, startTimeRadar])
+    }, [availableParameters, availableTypes, endTimeRadar, isPopupOpen, radarTimeHist, radars, selectedParameter, selectedType, startTimeRadar])
 
 
     // --- Toggle overlay mode handlers --- 
@@ -100,6 +99,9 @@ const RadarOptionPopup = () => {
     }
     const handleTimeChange = (date: string) => {
         setLocTime(date);
+    }
+    const handleRadarChange = (radar: SelectOption) => {
+        setLocSelectedRadar(radar);
     }
 
 
@@ -129,6 +131,7 @@ const RadarOptionPopup = () => {
                 type: locSelectedType.id as 'polar' | 'grid',
                 parameter: locSelectedParam.id as string,
                 time: locTime,
+                radarID: Number(locSelectedRadar.id),
             }))
     
             // --- Update slice states ---
@@ -141,7 +144,8 @@ const RadarOptionPopup = () => {
                 type: locSelectedType.id as 'polar' | 'grid',
                 parameter: locSelectedParam.id as string,
                 startTime: locStartTime,
-                endTime: locEndTime
+                endTime: locEndTime,
+                radarID: Number(locSelectedRadar.id),
             }));
             // -- update the slices
             dispatch(setRadarStartTimeHist(locStartTime));
@@ -205,18 +209,17 @@ const RadarOptionPopup = () => {
                 </Tooltip>
         </div>
 
+        {/* Radar select */}
         <div className="flex flex-col gap-0.5">
-            <small className='font-semibold'>Specie</small>
+            <small className='font-semibold'>Radar ID</small>
             <div className="border-b border-b-gray-400"/>
         </div>
         <SimpleSelect
-            options={speciesOptions}
-            value={selectedSpecie.displayText}
+            options={locRadars}
+            value={locSelectedRadar.displayText}
             width='w-full'
-            onSelectValue={() => {}}
-            isDisabled
+            onSelectValue={handleRadarChange}
         />
-
 
         <div className="flex flex-col gap-0.5">
             <small className='font-semibold'>Projection type</small>
@@ -254,7 +257,7 @@ const RadarOptionPopup = () => {
                         onChange={handleTimeChange}
                         value={locTime}
                         minDate={temporal?.start_time}
-                        maxDate={temporal?.end_time}
+                        maxDate={adjustedTimes?.fresh_end}
                     />
                 </>
             )
@@ -273,7 +276,7 @@ const RadarOptionPopup = () => {
                     onChange={handleGifStartTimeChange}
                     value={locStartTime}
                     minDate={temporal?.start_time}
-                    maxDate={temporal?.end_time}
+                    maxDate={adjustedTimes?.fresh_end}
                 />
 
                 {/* End time for the gif */}
@@ -285,7 +288,7 @@ const RadarOptionPopup = () => {
                     onChange={handleGifEndTimeChange}
                     value={locEndTime}
                     minDate={locStartTime}
-                    maxDate={temporal?.end_time}
+                    maxDate={adjustedTimes?.fresh_end}
                 />
             </>
             )

@@ -159,7 +159,7 @@ const VtipHistPopup = () => {
                 onChange={handleStartTimeChange}
                 value={locStartTime}
                 minDate={temporal?.start_time}
-                maxDate={temporal?.end_time}
+                maxDate={adjustedTimes?.fresh_end}
             />
 
             <div className="flex flex-col gap-0.5">
@@ -170,7 +170,7 @@ const VtipHistPopup = () => {
                 onChange={handleEndTimeChange}
                 value={locEndTime}
                 minDate={locStartTime}
-                maxDate={temporal?.end_time}
+                maxDate={adjustedTimes?.fresh_end}
             />
 
 

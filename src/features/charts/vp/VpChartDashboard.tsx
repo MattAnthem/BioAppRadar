@@ -1,9 +1,9 @@
-import { useEffect, useMemo, lazy,memo } from "react";
+import { useEffect, lazy,memo } from "react";
 import { useVpTemporalCoverageQuery } from "../../../shared/hooks/useQuery/useVpTemporalCoverageQuery";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import dayjs from "dayjs";
 import { changeVpPayload } from "./slices/vpChartSlice";
 import { useVpData } from "./hooks/useData/useVpData";
+import { useFreshDates } from "../../../shared/hooks/dates/useFreshDates";
 
 
 const VpChartWrapper = lazy(() => import('../common/wrappers/VpChartWrapper'));
@@ -29,20 +29,14 @@ const VpChartDashboard = ({ className }: VpChartDashProps) => {
     });
   
     // --Adjust time to use fresh timerange from the time coverage ---
-    const adjustedTimes = useMemo(() => {
-          if (!temporal) return null;
-        
-          const fresh_time = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
-  
-          return { fresh_time };
-    }, [temporal]);
+    const { adjustedStartEndTime: adjustedTimes } = useFreshDates( temporal );
   
       // --- Hydrate Redux Slice if the query succeed
     useEffect(() => {
         if(!isSuccess || !adjustedTimes) return;
         dispatch(changeVpPayload(
           {
-            time: adjustedTimes.fresh_time
+            time: adjustedTimes.fresh_end,
           }
         ));
   
@@ -67,7 +61,7 @@ const VpChartDashboard = ({ className }: VpChartDashProps) => {
       data={data}
       error={error}
       isLoading={(isLoading || isRefetching )}
-      time={adjustedTimes?.fresh_time}
+      time={adjustedTimes?.fresh_end}
       className={className}
       ChartComponent={VpChartHighcharts}
     />

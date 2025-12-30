@@ -14,6 +14,7 @@ export const useRadarGifDataQuery = (payload: RadarPayload, enabled?: boolean) =
         payload.endTime,
         payload.colorbar,
         payload.height,
+        payload.radarID
       ]
     : [
         "radar_gif_data",
@@ -23,6 +24,7 @@ export const useRadarGifDataQuery = (payload: RadarPayload, enabled?: boolean) =
         payload.endTime,
         payload.colorbar,
         payload.elevation_angle,
+        payload.radarID
       ];
     return useQuery<SpatialDataResponse>({
       queryKey,

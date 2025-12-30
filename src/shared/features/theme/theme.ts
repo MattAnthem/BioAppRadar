@@ -111,7 +111,7 @@ export const light: ThemeElements = {
     },
     charts: {
         chartFontColor: '#222222',
-        chartGridline: '#7a7a7a',
+        chartGridline: '#868686',
         chartLegendColor: '#4e4e4e',
         borderBox: '#979797'
     },

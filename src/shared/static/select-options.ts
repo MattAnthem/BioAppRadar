@@ -1,5 +1,13 @@
 import type { SelectOption } from "../components/selects/types";
 
+// --- Radars ---
+export const radar_options: SelectOption[] = [
+    {
+        id: 1,
+        displayText: 'Radar 1'
+    },
+]
+
 // --- Species Options ---
 export const species_options: SelectOption[] = [
     {

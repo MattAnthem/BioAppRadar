@@ -9,7 +9,7 @@ const VpHistPopup = lazy(() => import('./popups/VpHistPopup'));
 const VpChartHighcharts = lazy(() => import('../../../shared/components/charts/HighchartsVP'));
 
 const VpChartHistory = () => {
-      // Redux
+  // Redux
   const { currentAltitude } = useAppSelector(state => state.hist_altitude);
 
   // Chart data fetching

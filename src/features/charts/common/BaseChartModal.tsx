@@ -1,4 +1,4 @@
-import { Suspense, useRef, type RefObject, lazy } from "react";
+import { Suspense, useRef, type RefObject, lazy, memo } from "react";
 import { useTheme } from "../../../shared/hooks/useTheme";
 import Tooltip from "../../../shared/components/popups/tooltip/Tooltip";
 import { FileTextIcon, Fullscreen, LucideDownload, SheetIcon, Unplug } from "lucide-react";
@@ -30,6 +30,19 @@ type BaseChartModalProps<TData> = {
     renderImage: (imgRef: React.RefObject<HTMLImageElement | null>) => React.ReactNode;
 }
 
+/**
+ * Parent controlled Modal component attached to a Chart card component that display chart in full screen
+ * 
+ * Features:
+ *  - Download chart in PDF, PNG, CSV
+ *  - Displays the chart in Image or Interactive mode (via renderprops)
+ * 
+ * Data Flow:
+ *  - Generic TData from api call is passed via props
+ *  - Checks for any errors and displaying a spinner on data loading
+ *  - Displays by default an interactive chart 
+ * @returns React.JSX.Element
+ */
 function BaseChartModal<TData>({
     data,
     dataError,
@@ -177,4 +190,4 @@ function BaseChartModal<TData>({
 
 }
 
-export default BaseChartModal;
+export default memo(BaseChartModal);

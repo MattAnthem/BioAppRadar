@@ -8,7 +8,7 @@ export const useSevipHistDataQuery = (payload: SevipPayload, enabled?: boolean) 
             try{
                 return await fetchSevip(payload);
             } catch (error) {
-                console.error('Failed to QUERY Hist SEVIP data');
+                console.error('Failed to QUERY Hist SEVIP data with error :', error, 'payload :', payload);
                 throw error;
             }
         } ,

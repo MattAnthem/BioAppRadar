@@ -73,7 +73,7 @@ export const fetchVCrossBioClass = async (payload: CrossSectionBioClassPayload):
     const { data } = await axiosClient.post('/vcross_section_bioclass', payload);
 
     if (data.status !== 0) {
-        throw new Error('Error fetching VCrossSectionBioClass data ERROR message: ');
+        throw new Error('Error fetching VCrossSectionBioClass data ERROR message: ', data.message);
     }
     return data.data;
 }

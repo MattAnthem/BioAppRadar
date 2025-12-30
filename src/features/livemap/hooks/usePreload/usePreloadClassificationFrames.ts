@@ -57,7 +57,7 @@ export const usePreloadClassificationFrames = (
     return () => {
       isCancelled = true;
     };
-  }, [classType, color0, color1, frames, height, enabled]);
+  }, [classType, color0, color1, frames, height, enabled, queryClient]);
 
   return { isPreloading, progress, preloaded  };
 };

@@ -19,6 +19,20 @@ export type BaseChartProps<TData> = {
     ChartComponent: React.ComponentType<{data: TData, selectedHeight?: number}>;
 }
 
+/**
+ * Reusable chart card component
+ * 
+ * Core features :
+ *  - Takes in a Chart Component to be displayed
+ *  - A Modal component to display the chart in fullscreen (portal)
+ *  - A popup to configure the displayed data
+ * 
+ * Data flow :
+ *  - Generic data `TData` passed via props from an API call
+ *  - If isLoading === false and error === null --> Render the ChartComponent with TData
+ * 
+ * @returns React.JSX.Element
+ */
 function BaseChart<TData>({
     ChartComponent,
     ModalComponent,
@@ -40,7 +54,7 @@ function BaseChart<TData>({
 
                 <div className="z-10 flex justify-center gap-1.5">
 
-                    {/* Species selection */}
+                    {/* Options popup */}
                     <Suspense fallback={
                       <div className=" p-1 rounded-sm">
                         <Settings2 width={15} height={15} />
@@ -49,7 +63,7 @@ function BaseChart<TData>({
                       <PopupComponent/>
                     </Suspense>
 
-                    {/* Modal chart */}
+                    {/* Modal chart (fullscreen mode) */}
                     <Suspense fallback={
                       <div className=" p-1 rounded-sm">
                         <Fullscreen width={15} height={15}/>
@@ -64,6 +78,7 @@ function BaseChart<TData>({
 
           {/* Chart */}
           <div className="w-full h-full grid px-2 pb-2">
+            {/* Render the chart component only if there are no error and the data is ready */}
             {
               (data && !error && !isLoading) && (
                 <ChartComponent
@@ -72,6 +87,7 @@ function BaseChart<TData>({
                 />
               )
             }
+            {/* Display a spinner if the data is loading */}
             {
                 (isLoading) && (
                     <div className="w-full h-full flex flex-col items-center justify-center">
@@ -80,6 +96,7 @@ function BaseChart<TData>({
                     </div>
                 )
             }
+            {/* Display an error message if an error occured */}
             {         
               error && (
                 <div className="w-full h-full flex flex-col items-center justify-center">
@@ -88,6 +105,7 @@ function BaseChart<TData>({
                 </div> 
             )}
           </div>
+          {/* Useful if the chart is not a timeserie (prop time is optional) */}
           {time && (
             <small className="font-semibold text-center">{time?.split(' ')[0] ?? ' '} <span className="font-normal">{`${time?.split(' ')[1] ?? ' '}`}</span> </small>
           )}

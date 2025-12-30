@@ -1,9 +1,9 @@
-import { useEffect, useMemo, lazy } from 'react';
+import { useEffect, lazy } from 'react';
 import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useAppDispatch } from '../../../store/hooks';
-import dayjs from 'dayjs';
 import { changeVtipPayload } from './slices/vtipChartSlice';
 import { useVtipData } from './hooks/useData/useVtipData';
+import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
 
 const VtipMdlDashboard = lazy(() => import('./modals/VtipMdlDashboard'));
 const VtipSpeciePopup = lazy(() => import('./popups/VtipSpeciePopup'));
@@ -22,26 +22,19 @@ const VtipChartDashboard = () => {
     });
 
     // --Adjust time to use fresh timerange from the time coverage ---
-    const adjustedTimes = useMemo(() => {
-          if (!temporal) return null;
-        
-          const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
-          const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
-        
-          return { fresh_start, fresh_end };
-    }, [temporal]);
+    const {adjustedStartEndTime} = useFreshDates( temporal );
   
     // --- Hydrate Redux Slice if the query succeed
     useEffect(() => {
-        if(!isSuccess || !adjustedTimes) return;
+        if(!isSuccess || !adjustedStartEndTime) return;
         dispatch(changeVtipPayload(
             {
-              startTime: adjustedTimes.fresh_start,
-              endTime: adjustedTimes.fresh_end,
+              startTime: adjustedStartEndTime.fresh_start,
+              endTime: adjustedStartEndTime.fresh_end,
             }
     ));
   
-    }, [adjustedTimes, dispatch, isSuccess]);
+    }, [adjustedStartEndTime, dispatch, isSuccess]);
   
     // Tanstack
     const { isLoading, data, error } = useVtipData();

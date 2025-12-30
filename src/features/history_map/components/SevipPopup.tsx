@@ -2,12 +2,12 @@ import { FlipHorizontal, ImageIcon, ImagePlayIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types';
 import { setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption } from '../slice/histSevipPopup';
-import { useEffect, useState, memo, useMemo, lazy } from 'react';
+import { useEffect, useState, memo, lazy } from 'react';
 import { setSevipGifPayloadHist, setSevipPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
-import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useTheme } from '../../../shared/hooks/useTheme';
-import dayjs from 'dayjs';
+import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
+import { useSevipTemporalCovQuery } from '../../../shared/hooks/useQuery/useSevipTemporalCovQuery';
 
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
@@ -27,25 +27,19 @@ const SevipPopup = () => {
     const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
     // --- Read only redux states ---
-    const { selectedVariable, availableVariables, histTimeSevip,  startTimeSevip, endTimeSevip, selectedSpecie, speciesOptions } = useAppSelector(state => state.hist_sevippopup);
+    const { selectedVariable, availableVariables, histTimeSevip, startTimeSevip, endTimeSevip, selectedSpecie, speciesOptions, radars, selectedRadar } = useAppSelector(state => state.hist_sevippopup);
 
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages to restrict time selects ---
-    const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1, {
+    const { data: temporal, isSuccess } = useSevipTemporalCovQuery(selectedRadar.id as number, {
         staleTime: 0,
         refetchInterval: false,
         refetchOnWindowFocus: false,
         enabled: true,
     });
-    const adjustedTimes = useMemo(() => {
-        if (!temporal) return null;
-      
-        const fresh_end = dayjs(temporal.end_time).add(2, "hour").format("YYYY-MM-DD HH:mm:ss");
-        const fresh_start = dayjs(fresh_end).subtract(1, "hour").format("YYYY-MM-DD HH:mm:ss");
-      
-        return { fresh_start, fresh_end };
-    }, [temporal]);
+
+    const { adjustedStartEndTime: adjustedTimes } = useFreshDates(temporal);
 
     // --- Sync store to the temporal coverage ---
     useEffect(() => {
@@ -56,11 +50,21 @@ const SevipPopup = () => {
         dispatch(setHistSevipTimeEnd(adjustedTimes.fresh_end));
         dispatch(setHistTimeSevip(adjustedTimes.fresh_end));
 
+        dispatch(setSevipPayloadHist({
+            time: adjustedTimes.fresh_end,
+            startTime: adjustedTimes.fresh_start,
+            endTime: adjustedTimes.fresh_end,
+        }));
+
     }, [adjustedTimes, dispatch, isSuccess])
 
     // --- Local states for the inputs ---
     const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);
     const [locSelectedVar, setLocSelectedVar] = useState(selectedVariable);
+    const [locRadars, setLocRadars] = useState(radars);
+    const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
+    const [availableSpecies, setAvailableSpecies] = useState(speciesOptions);
+    const [locSelectedSpecie, setLocSelectedSpecie] = useState(selectedSpecie);
     const [locTime, setLocTime] = useState(histTimeSevip);
     const [locStartTime, setLocStartTime] = useState(startTimeSevip);
     const [locEndTime, setLocEndTime] = useState(endTimeSevip);
@@ -70,12 +74,15 @@ const SevipPopup = () => {
     useEffect(() => {
         if (isPopupOpen) {
             setLocAvailableVars(availableVariables);
+            setAvailableSpecies(speciesOptions);
+            setLocSelectedSpecie(selectedSpecie);
             setLocSelectedVar(selectedVariable);
             setLocTime(histTimeSevip);
             setLocStartTime(startTimeSevip);
             setLocEndTime(endTimeSevip);
+            setLocRadars(radars);
         }
-    }, [availableVariables, endTimeSevip, histTimeSevip, isPopupOpen, selectedVariable, startTimeSevip])
+    }, [availableVariables, endTimeSevip, histTimeSevip, isPopupOpen, selectedVariable, startTimeSevip, speciesOptions, selectedSpecie, radars])
 
      // --- Toggle overlay mode handlers --- 
      const handleSetToPngMode = () => {
@@ -98,6 +105,12 @@ const SevipPopup = () => {
     const handleClosePopup = () => {
         setIsPopupOpen(false);
     }
+    const handleSpecieChange = (specie: SelectOption) => {
+        setLocSelectedSpecie(specie);
+    }
+    const handleRadarChange = (radar: SelectOption) => {
+        setLocSelectedRadar(radar);
+    }
 
 
     // --- Gif animated handlers ---
@@ -117,7 +130,9 @@ const SevipPopup = () => {
         if (overlayMode === 'png') {
             dispatch(setSevipPayloadHist({
                 time: locTime,
-                parameter: locSelectedVar.id as string
+                parameter: locSelectedVar.id as string,
+                species: locSelectedSpecie.id as string,
+                radarID: Number(locSelectedRadar.id),
             }))
             // --- update the sevip slice states ---
             dispatch(setHistTimeSevip(locTime));
@@ -127,7 +142,9 @@ const SevipPopup = () => {
             dispatch(setSevipGifPayloadHist({
                 parameter: locSelectedVar.id as string,
                 startTime: locStartTime,
+                species: locSelectedSpecie.id as string,
                 endTime: locEndTime,
+                radarID: Number(locSelectedRadar.id),
             }));
             // --- Update slices ---
             dispatch(setSelectedHistSevipOption(locSelectedVar));
@@ -189,18 +206,27 @@ const SevipPopup = () => {
                 </Tooltip>
         </div>
 
-
+        {/* Radar select */}
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Radar ID</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
+        <SimpleSelect
+            options={locRadars}
+            value={locSelectedRadar.displayText}
+            width='w-full'
+            onSelectValue={handleRadarChange}
+        />
         {/* Species select */}
         <div className="flex flex-col gap-0.5">
             <small className='font-semibold'>Specie</small>
             <div className="border-b border-b-gray-400"/>
         </div>
         <SimpleSelect
-            options={speciesOptions}
-            value={selectedSpecie.displayText}
+            options={availableSpecies}
+            value={locSelectedSpecie.displayText}
             width='w-full'
-            onSelectValue={() => {}}
-            isDisabled
+            onSelectValue={handleSpecieChange}
         />
 
         <div className="flex flex-col gap-0.5">
@@ -226,7 +252,7 @@ const SevipPopup = () => {
                         onChange={handleTimeChange}
                         value={locTime}
                         minDate={temporal?.start_time}
-                        maxDate={temporal?.end_time}
+                        maxDate={adjustedTimes?.fresh_end}
                     />
                 </>
             )
@@ -244,8 +270,8 @@ const SevipPopup = () => {
                     <ReactDatetimePicker
                         onChange={handleGifStartTimeChange}
                         value={locStartTime}
-                        maxDate={temporal?.end_time}
                         minDate={temporal?.start_time}
+                        maxDate={adjustedTimes?.fresh_end}
                     />
 
                     {/* End time for the gif */}
@@ -257,7 +283,7 @@ const SevipPopup = () => {
                         onChange={handleGifEndTimeChange}
                         value={locEndTime}
                         minDate={locStartTime}
-                        maxDate={temporal?.end_time}
+                        maxDate={adjustedTimes?.fresh_end}
                     />
                 </>
             )

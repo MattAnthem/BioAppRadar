@@ -6,6 +6,7 @@ export interface ClassificationDataPayload {
     time?: string;
     startTime?: string;
     endTime?: string;
+    radarID?: string;
     height: number;
     color_0: string;
     color_1: string;
@@ -34,7 +35,10 @@ export interface ClassificationDataResponse {
         class: string;
     }
 }
-
+/**
+ * Rest API Client to get classification data 
+ * @returns ClassificationDataResponse
+ */
 export const fetchClassificationData = async (payload: ClassificationDataPayload): Promise<ClassificationDataResponse> => {
     const { data } = await axiosClient.post('/get_bioclass', payload);
     if (data.status !== 0) {

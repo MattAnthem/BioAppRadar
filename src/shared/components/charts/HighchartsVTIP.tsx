@@ -199,6 +199,7 @@ const VtipChart = forwardRef<ComponentRef<typeof HighchartsReact> , VtipChartPro
             style: { color: chartFontColor, fontSize: "11px" },
           },
           gridLineColor: chartGridline,
+          gridLineWidth: 0.8,
         },
         series: [
           { 

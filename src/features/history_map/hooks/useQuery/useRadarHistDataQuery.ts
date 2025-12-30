@@ -11,6 +11,7 @@ export const useRadarHistDataQuery = (payload: RadarPayload, enabled?: boolean) 
           payload.time,
           payload.colorbar,
           payload.height,
+          payload.radarID
         ]
       : [
           "radar_hist_data",
@@ -19,6 +20,7 @@ export const useRadarHistDataQuery = (payload: RadarPayload, enabled?: boolean) 
           payload.time,
           payload.colorbar,
           payload.elevation_angle,
+          payload.radarID
         ];
       return useQuery<SpatialDataResponse>({
         queryKey,
@@ -26,7 +28,7 @@ export const useRadarHistDataQuery = (payload: RadarPayload, enabled?: boolean) 
           try {
             return await fetchRadarData(payload);
           } catch (error) {
-            console.error("Failed to fetch Radar Data", error, "sent payload:", payload);
+            console.error("Failed to fetch Radar Data", error, "sent payload:");
             throw error;
           }
         },

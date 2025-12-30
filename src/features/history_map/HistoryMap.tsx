@@ -3,7 +3,7 @@ import { useClassifData } from './hooks/useData/useClassifData';
 import { useRadarData } from './hooks/useData/useRadarData';
 import { useSevipData } from './hooks/useData/useSevipData';
 import { changeHistAltitude } from './slice/histAltitudeSlice';
-import { setAltitudeForAll, setColorbarForAll, setRadarPayloadHist } from './slice/historyMapSlice';
+import { setAltitudeForAll, setColorbarForAll, setElevation } from './slice/historyMapSlice';
 import loader from '../../assets/loader.webp';
 import { useElevationsQuery } from '../../shared/hooks/useQuery/useElevationsQuery';
 import { Suspense, useEffect, useMemo, useState, lazy } from 'react';
@@ -34,8 +34,9 @@ const HistoryMap = () => {
     // Redux call
     // Selected Radar type and Radar Parameter
     const { selectedMapBase, selectedBoundary, selectedBoundaryType } = useAppSelector(state => state.hist_basemap);
+    const { currentAltitude } = useAppSelector(state => state.hist_altitude);
     const dispatch = useAppDispatch();
-    const { mapModeHist, radarPayloadHist, radarGifPayloadHist } = useAppSelector(state => state.historymap);
+    const { mapModeHist, radarPayloadHist, radarGifPayloadHist, sevipPayloadHist, classifPayloadHist } = useAppSelector(state => state.historymap);
 
 
     // Map boundary GeoJson
@@ -68,37 +69,49 @@ const HistoryMap = () => {
     let data: ClassificationDataResponse | SpatialDataResponse | null = null;
     let isLoading = false;
     let error = null;
+    let mapTime = undefined;
+    let startTime = undefined;
+    let endTime = undefined;
     
     switch (true) {
         case isRadar: 
             data = radarData as SpatialDataResponse
             isLoading = radarDataLoading;
             error = radarError;
+            mapTime = radarPayloadHist.time;
             break;
         case isSevip:
             data = sevipData as SpatialDataResponse;
             isLoading = sevipDataLoading;
             error = sevipError;
+            mapTime = sevipPayloadHist.time;
             break;
         case isClassif:
             data = classifData as ClassificationDataResponse;
             isLoading = classifDataLoading;
             error = classifError;
+            mapTime = classifPayloadHist.time;
             break;
         case isSevipGif: 
             data = sevipGifData as SpatialDataResponse;
             isLoading = sevipGifLoading;
             error = sevipGifError;
+            startTime = sevipPayloadHist.startTime;
+            endTime = sevipPayloadHist.endTime;
             break;
         case isRadarGif:
             data = radarGifData as SpatialDataResponse;
             isLoading = radarGifLoading;
             error = radarGifError;
+            startTime = radarGifPayloadHist.startTime;
+            endTime = radarGifPayloadHist.endTime;
             break;
         case isClassifGif:
             data = classifGifData as ClassificationDataResponse;
             isLoading = classifGifLoading;
             error = classifGifError;
+            startTime = classifPayloadHist.startTime;
+            endTime = classifPayloadHist.endTime;
             break;
     }
     
@@ -106,11 +119,11 @@ const HistoryMap = () => {
 
             
     //#region Fetch default elevations for polar radar mode
-    const { data: defaultElevations } = useElevationsQuery(isRadar && radarPayloadHist.type === 'polar');
+    const { data: defaultElevations } = useElevationsQuery(1, isRadar && radarPayloadHist.type === 'polar');
 
     const elevations = useMemo(() => {
         if (!defaultElevations) return [];
-        return [...defaultElevations].reverse();
+        return [...new Set(defaultElevations)].reverse();
     }, [defaultElevations]);
 
     useEffect(() => {
@@ -138,9 +151,7 @@ const HistoryMap = () => {
     const handleElevationChange = (elevIndex: number) => {
         setCurrentElevationIndex(elevIndex);
         const selectedElevation = elevations[elevIndex];
-        dispatch(setRadarPayloadHist({
-            elevation_angle: selectedElevation
-        }));
+        dispatch(setElevation(selectedElevation));
     }
 
     //#endregion
@@ -178,7 +189,7 @@ const HistoryMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20  p-1 flex justify-between items-center'>
 
-            <h1 className='text-gray-50 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name}</h1>
+            <h1 className='text-gray-50 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name} {`: ${(data as SpatialDataResponse)?.info.units ?? ''}`}</h1>
 
             <div className="z-5 flex gap-2 justify-center items-end">
 
@@ -221,6 +232,7 @@ const HistoryMap = () => {
                         <CustomSlider
                             maxAltitude={5000}
                             onChangeAltitude={handleAltitudeChange}
+                            currentALtitude={currentAltitude}
                         />
                     </Suspense>
                 </div>
@@ -230,7 +242,7 @@ const HistoryMap = () => {
         {/* Elevation angles */}
         <div className="h-full absolute right-2 bottom-0 flex items-end justify-center py-10">
             {
-                (mapModeHist === 'radar' && radarPayloadHist.type === 'polar') && (
+                (radarPayloadHist.type === 'polar') && (
                     <Suspense>
                         <ElevationSlider
                             currentIdx={currentElevationIndex}
@@ -246,13 +258,13 @@ const HistoryMap = () => {
         {/* Map Time */}
         {
             (isSevipGif || isRadarGif || isClassifGif) ? (
-                <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 2xl:1/6 lg:w-2/7 w:1/3 ${(isClassif || isClassifGif) ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
-                    <small className='text-white tracking-wide'>Time: {data?.info.time[0]} - {data?.info.time[data.info.time.length - 1]}</small>
+                <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 2xl:1/5 lg:w-2/7 w:1/3 ${(isClassif || isClassifGif) ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
+                    <small className='text-white tracking-wide'>Time: {startTime} - {endTime}</small>
                 </div>
             ):
             (
                 <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
-                    <small className='text-white tracking-wide'>Time: {data?.info.time ?? ''}</small>
+                    <small className='text-white tracking-wide'>Time: {mapTime}</small>
                 </div>
             )
         }
