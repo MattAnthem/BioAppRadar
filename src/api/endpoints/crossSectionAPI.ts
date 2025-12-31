@@ -62,7 +62,7 @@ export interface CrossSectionBioClassResponse extends CrossSectionResponse {
 
 
 // Temporal coverage for bioclass cross-section
-export const fetchVcrossBioClassTemporalCoverage = async (payload: {radarID: number}): Promise<{start_time: string; end_time: string}> => {
+export const fetchBioClassTemporalCoverage = async (payload: {radarID: number}): Promise<{start_time: string; end_time: string}> => {
     const { data } = await axiosClient.post('/bioclass_temporal_coverage', payload);
     if (data.status !== 0) {
         throw new Error('Error fetching VCrossBioClass temporal coverage data');

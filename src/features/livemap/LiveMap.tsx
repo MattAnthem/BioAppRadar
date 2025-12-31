@@ -1,6 +1,6 @@
-import {lazy, Suspense, memo } from 'react';
+import {lazy, Suspense, memo, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setSelectedTime } from './slice/livemapSlice';
+import { setClassificationPayload, setMapTimeRange, setSelectedTime } from './slice/livemapSlice';
 import { changeAltitude } from './slice/altitudeSlice';
 import { usePreloadClassificationFrames } from './hooks/usePreload/usePreloadClassificationFrames';
 import { useClassificationDataQuery } from './hooks/useQuery/useClassificationDataQuery';
@@ -10,8 +10,8 @@ import { useBoundariesQuery } from '../../shared/hooks/useBoundaries/useBoundari
 import { Unplug } from 'lucide-react';
 import type { ClassificationDataResponse } from '../../api/endpoints/spatial/classificationAPI';
 import type { SpatialDataResponse } from '../../api/endpoints/spatial/spatialDataAPI';
-import { useVpTemporalCoverageQuery } from '../../shared/hooks/useQuery/useVpTemporalCoverageQuery';
 import { useFreshDates } from '../../shared/hooks/dates/useFreshDates';
+import { useBioclassCovQuery } from '../../shared/hooks/useQuery/useBioclassTemporalCov';
 
 const MapbasePopup = lazy(() => import('./components/MapbasePopup'));
 const ClassificationPopup = lazy(() => import('./components/ClassificationPopup'));
@@ -33,6 +33,7 @@ const CustomSlider = lazy(() => import('../../shared/components/slider/CustomSli
  * - Render altitude slider to select altitude
  */
 const LiveMap = () => {
+    // const [locMaptimerange, setLocMaptimerange] =  useState<string[]>([]);
 
     // Redux states
     const { selectedMapTime, mapTimeRange, classificationPayload } = useAppSelector(state => state.livemap);
@@ -43,7 +44,7 @@ const LiveMap = () => {
     const dispatch = useAppDispatch();
 
     // --- Temporal coverages   ---
-    const { data: temporal, isSuccess, isRefetching } = useVpTemporalCoverageQuery(1, {
+    const { data: temporal, isSuccess, isRefetching } = useBioclassCovQuery(1, {
         staleTime: 1000 * 60 * 5,
         refetchInterval: 1000 * 60 * 5,
         refetchOnWindowFocus: false,
@@ -53,7 +54,17 @@ const LiveMap = () => {
     // --Adjust time to use fresh timerange from the time coverage ---
     const { createdTimeFrames } = useFreshDates(temporal);
 
-    console.log(createdTimeFrames?.timeFrame)
+    // Sync redux timerange with created time frames
+    useEffect(() => {
+        if (!isSuccess || !createdTimeFrames) return;
+
+        // Set time range
+        dispatch(setMapTimeRange(createdTimeFrames.timeFrame));
+
+        dispatch(setClassificationPayload({
+            time: createdTimeFrames.timeFrame[0]
+        }))
+    }, [createdTimeFrames, dispatch, isSuccess])
 
     // Fetch Map Boundary
     const payload = {
@@ -90,6 +101,7 @@ const LiveMap = () => {
         classificationPayload.color_0,
         classificationPayload.color_1,
         currentAltitude,
+        1, // radarID
     )
 
     const { data: classifData, error } = useClassificationDataQuery({
@@ -98,6 +110,7 @@ const LiveMap = () => {
         color_0: classificationPayload.color_0,
         color_1: classificationPayload.color_1,
         height: currentAltitude,
+        radarID: 1,
     })
 
     const queryKey = [

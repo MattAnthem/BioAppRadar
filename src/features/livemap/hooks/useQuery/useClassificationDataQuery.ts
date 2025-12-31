@@ -3,14 +3,14 @@ import { fetchClassificationData, type ClassificationDataPayload, type Classific
 
 export const useClassificationDataQuery = (payload: ClassificationDataPayload) => {
 
-    const key = ["classification_data", payload.time, payload.class, payload.color_0, payload.color_1, payload.height];
+    const key = ["classification_data", payload.time, payload.class, payload.color_0, payload.color_1, payload.height, payload.radarID];
     return useQuery<ClassificationDataResponse>({
         queryKey: key,
         queryFn: async () => {
             try {
                 return await fetchClassificationData(payload);
             } catch (error) {
-                console.error('Failed to fetch Classification data');
+                console.error('Failed to fetch Classification data, ', error);
                 throw error;
             }
         },

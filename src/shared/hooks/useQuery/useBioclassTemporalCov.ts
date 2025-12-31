@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchVcrossBioClassTemporalCoverage } from "../../../api/endpoints/crossSectionAPI";
+import { fetchBioClassTemporalCoverage } from "../../../api/endpoints/crossSectionAPI";
 
 export const useBioclassCovQuery = (radarID: number, options = {}) => {
     const queryKey = ["sevip_temporalcov", radarID];
@@ -7,7 +7,7 @@ export const useBioclassCovQuery = (radarID: number, options = {}) => {
         queryKey,
         queryFn: async () => {
             try {
-                return await fetchVcrossBioClassTemporalCoverage({radarID});
+                return await fetchBioClassTemporalCoverage({radarID});
             } catch (error) {
                 console.error("Failed to fetch Bioclass temporal coverage ", error);
                 throw error   

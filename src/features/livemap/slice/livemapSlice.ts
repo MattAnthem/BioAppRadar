@@ -23,6 +23,7 @@ interface LivemapState {
     classificationPayload: ClassificationDataPayload;
     mapTimeRange: string[],
     selectedMapTime: string;
+
 }
 
 
@@ -33,6 +34,7 @@ const initialState: LivemapState = {
         color_1: '#0d6efd',
         height: 0,
         time: '2020-11-10 12:00:33',
+        radarID: 1
     },
     mapTimeRange: avalaibleTimes,
     selectedMapTime: avalaibleTimes[0]   
@@ -48,11 +50,14 @@ const livemapSlice = createSlice({
 
         setSelectedTime: (state, action) => {
             state.selectedMapTime = action.payload;
+        },
+        setMapTimeRange: (state, action: PayloadAction<string[]>) => {  
+            state.mapTimeRange = action.payload;
         }
         
     }
 })
 
-export const { setSelectedTime, setClassificationPayload } = livemapSlice.actions;
+export const { setSelectedTime, setClassificationPayload, setMapTimeRange } = livemapSlice.actions;
 export default livemapSlice.reducer;
 

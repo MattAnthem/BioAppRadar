@@ -8,6 +8,7 @@ export const usePreloadClassificationFrames = (
   color0: string,
   color1: string,
   height: number,
+  radar_id?: number,
   options?: { enabled?: boolean }
 ) => {
   const queryClient = useQueryClient();
@@ -39,6 +40,7 @@ export const usePreloadClassificationFrames = (
               color_0: color0,
               color_1: color1,
               height,
+              radarID: radar_id,
             }),
           staleTime: Infinity,
           gcTime: 1000 * 60 * 60 * 24
@@ -57,7 +59,7 @@ export const usePreloadClassificationFrames = (
     return () => {
       isCancelled = true;
     };
-  }, [classType, color0, color1, frames, height, enabled, queryClient]);
+  }, [classType, color0, color1, frames, height, enabled, queryClient, radar_id]);
 
   return { isPreloading, progress, preloaded  };
 };
