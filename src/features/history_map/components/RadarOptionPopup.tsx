@@ -8,6 +8,8 @@ import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
 import { useRadarPolarTemporalCov } from '../../../shared/hooks/useQuery/useRadarPolarTemporalCov';
+import { useRadarGridTemporalCov } from '../../../shared/hooks/useQuery/useRadarGridTemporalCov';
+import type { TemporalCovResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
 
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
@@ -29,13 +31,49 @@ const RadarOptionPopup = () => {
     const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, endTimeRadar, startTimeRadar,  radars, selectedRadar } = useAppSelector(state => state.hist_radarpopup);
     const dispatch = useAppDispatch();
 
-    // --- Temporal coverages to restrict time selects ---
-    const { data: temporal, isSuccess } = useRadarPolarTemporalCov(1, {
+
+    // --- Local state for the inputs
+    const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
+    const [locAvailableParams, setLocAvailableParams] = useState(availableParameters);
+    const [locSelectedType, setLocSelectedType] = useState(selectedType);
+    const [locRadars, setLocRadars] = useState(radars);
+    const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
+    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
+    const [locTime, setLocTime] = useState(radarTimeHist);
+    const [locStartTime, setLocStartTime] = useState(startTimeRadar);
+    const [locEndTime, setLocEndTime] = useState(endTimeRadar);
+    const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
+
+
+    let temporal: TemporalCovResponse | undefined;
+    let isSuccess = false;
+
+    // --- Temporal coverages to restrict time selects (polar) ---
+    const { data: temporalPolar, isSuccess: isSuccessPolar } = useRadarPolarTemporalCov(1, {
         staleTime: 0,
         refetchInterval: false,
         refetchOnWindowFocus: false,
-        enabled: true,
+        enabled: locSelectedType.id === 'polar',
     });
+
+    // --- temporal coverage Grid ---
+    const { data: temporalGrid, isSuccess: isSuccessGrid } = useRadarGridTemporalCov(1, {
+        staleTime: 0,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        enabled: locSelectedType.id === 'grid',
+    });
+
+    switch (locSelectedType.id) {
+        case 'polar':
+            temporal = temporalPolar;
+            isSuccess = isSuccessPolar;
+            break;
+        case 'grid':
+            temporal = temporalGrid;
+            isSuccess = isSuccessGrid;
+            break;
+    }
 
     // always use the latest time (1hour past)
     const { adjustedStartEndTime: adjustedTimes } = useFreshDates(temporal);
@@ -53,17 +91,7 @@ const RadarOptionPopup = () => {
     }, [adjustedTimes, dispatch, isSuccess])
 
 
-    // --- Local state for the inputs
-    const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
-    const [locAvailableParams, setLocAvailableParams] = useState(availableParameters);
-    const [locSelectedType, setLocSelectedType] = useState(selectedType);
-    const [locRadars, setLocRadars] = useState(radars);
-    const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
-    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
-    const [locTime, setLocTime] = useState(radarTimeHist);
-    const [locStartTime, setLocStartTime] = useState(startTimeRadar);
-    const [locEndTime, setLocEndTime] = useState(endTimeRadar);
-    const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
+
     
 
     // --- Sync local states with redux state on mount or when the popup opens

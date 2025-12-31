@@ -113,6 +113,14 @@ export const fetchPolarRadarTemporalCoverage = async (payload: {radarID: number}
     return data.data;
 }
 
+// grid radar data temporal coverage
+export const fetchGridRadarTemporalCoverage = async (payload: {radarID: number}): Promise<{start_time: string; end_time: string}> => {
+    const { data } = await axiosClient.post('/rgrid_temporal_coverage', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching Grid Radar temporal coverage');
+    } 
+    return data.data;
+}
 
 export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialDataResponse> => {
     const payloadT = payload.type === "polar"

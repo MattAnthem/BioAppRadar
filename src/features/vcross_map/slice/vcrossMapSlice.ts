@@ -56,7 +56,8 @@ const initialState: VcrossMapState = {
     vcrossSevipOvrlayPayload: {
         colorbar: 'viridis',
         time: '2020-11-10 12:00:33',
-        parameter: 'vir'
+        parameter: 'vir',
+        radarID: 1,
     },
     coordinates: {
         startLon: 29.394,

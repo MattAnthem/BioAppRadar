@@ -7,6 +7,7 @@ export interface CrossSectionBioClassPayload {
     startLat: number;
     endLon: number;
     endLat: number;
+    radarID?: number;
     segment: boolean;
 }
 
@@ -18,6 +19,7 @@ export interface CrossSectionRadarPayload {
     startLat: number;
     endLon: number;
     endLat: number;
+    radarID?: number;
     segment: boolean;
 }
 
@@ -59,6 +61,14 @@ export interface CrossSectionBioClassResponse extends CrossSectionResponse {
 }
 
 
+// Temporal coverage for bioclass cross-section
+export const fetchVcrossBioClassTemporalCoverage = async (payload: {radarID: number}): Promise<{start_time: string; end_time: string}> => {
+    const { data } = await axiosClient.post('/bioclass_temporal_coverage', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching VCrossBioClass temporal coverage data');
+    }
+    return data.data;
+}
 
 
 export const fetchVcrossRadar = async (payload: CrossSectionRadarPayload): Promise<CrossSectionRadarResponse> => {
@@ -67,6 +77,14 @@ export const fetchVcrossRadar = async (payload: CrossSectionRadarPayload): Promi
         throw new Error('Error fetching VCrossSectionRadar data');
     }
     return data.data;
+}
+
+export const fetchVcrossSectionRadarImage = async (payload: CrossSectionRadarPayload): Promise<CrossSectionRadarResponse> => {
+    const { data } = await axiosClient.post('/vcross_section_image', payload);
+    if (data.status !== 0) {
+        throw new Error('Error fetching VCrossSectionRadarImage data');
+    }
+    return data.data.image;
 }
 
 export const fetchVCrossBioClass = async (payload: CrossSectionBioClassPayload): Promise<CrossSectionBioClassResponse> => {

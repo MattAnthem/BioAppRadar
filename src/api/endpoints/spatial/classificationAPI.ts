@@ -6,7 +6,7 @@ export interface ClassificationDataPayload {
     time?: string;
     startTime?: string;
     endTime?: string;
-    radarID?: string;
+    radarID?: number;
     height: number;
     color_0: string;
     color_1: string;
