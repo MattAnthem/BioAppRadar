@@ -5,9 +5,9 @@ import { useEffect, useState, memo, lazy } from 'react';
 import { setHistClassifEndTime, setHistClassificationColorOne, setHistClassificationColorZero, setHistClassifStartTime, setHistClassifTime, setSelectedHistClassificationOption } from '../slice/histClassificationPopupSlice'
 import { setClassifGifPayloadHist, setClassifPayloadHist } from '../slice/historyMapSlice'
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
-import { useVpTemporalCoverageQuery } from '../../../shared/hooks/useQuery/useVpTemporalCoverageQuery'
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
+import { useBioclassCovQuery } from '../../../shared/hooks/useQuery/useBioclassTemporalCov';
 
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
@@ -27,11 +27,11 @@ const ClassificationPopup = () => {
   const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
   // Read only redux states
-  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, endTimeClassif, startTimeClassif } = useAppSelector(state=> state.hist_classifpopup);
+  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, endTimeClassif, startTimeClassif, radars, selectedRadar } = useAppSelector(state=> state.hist_classifpopup);
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects ---
-  const { data: temporal, isSuccess } = useVpTemporalCoverageQuery(1,{
+  const { data: temporal, isSuccess } = useBioclassCovQuery(1,{
     staleTime: 0,
     refetchInterval: false,
     refetchOnWindowFocus: false,
@@ -54,6 +54,8 @@ const ClassificationPopup = () => {
   // --- Local state for the inputs
   const [locAvailableVars, setLocAvailableVars] = useState(availableVariables ?? []);
   const [locSelectedVar, setLocSelectedVar] = useState(selectedVariable ?? null);
+  const [locRadars, setLocRadars] = useState(radars);
+  const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
   const [locColor0, setLocColor0] = useState(color_0 ?? '');
   const [locColor1, setLocColor1] = useState(color_1 ?? '');
   const [locTime, setLocTime] = useState(histClassifTime ?? '');
@@ -65,14 +67,15 @@ const ClassificationPopup = () => {
   useEffect(() => {
     if (isPopupOpen) {
       setLocAvailableVars(availableVariables);
-      setLocSelectedVar(selectedVariable);
+      setLocSelectedVar(selectedVariable);    
       setLocColor0(color_0);
       setLocColor1(color_1);
       setLocTime(histClassifTime);
       setLocStartTime(startTimeClassif);
       setLocEndTime(endTimeClassif);
+      setLocRadars(radars);
     }
-  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable, isPopupOpen, startTimeClassif, endTimeClassif])
+  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable, isPopupOpen, startTimeClassif, endTimeClassif, radars])
 
   // --- Toggle overlay mode handlers --- 
   const handleSetToPngMode = () => {
@@ -90,6 +93,10 @@ const ClassificationPopup = () => {
   const handleTimeChange = (date: string) => {
     setLocTime(date);
   }
+
+  const handleRadarChange = (radar: SelectOption) => {
+    setLocSelectedRadar(radar);
+}
 
       // --- Gif animated handlers ---
   const handleGifStartTimeChange = (time: string) => {
@@ -115,7 +122,8 @@ const ClassificationPopup = () => {
           class: locSelectedVar.id as string,
           color_0: locColor0,
           color_1: locColor1,
-          time: locTime
+          time: locTime,
+          radarID: Number(locSelectedRadar.id),
       }))
       // --- Update slice states ---
       dispatch(setHistClassifTime(locTime));
@@ -132,7 +140,8 @@ const ClassificationPopup = () => {
         color_0: locColor0,
         color_1: locColor1,
         startTime: locStartTime,
-        endTime: locEndTime
+        endTime: locEndTime,
+        radarID: Number(locSelectedRadar.id),
       }));
       // --- update states of the popups slice
       dispatch(setHistClassificationColorOne(locColor1));
@@ -199,6 +208,18 @@ return (
                   </button>
                 </Tooltip>
         </div>
+
+        {/* Radar select */}
+        <div className="flex flex-col gap-0.5">
+            <small className='font-semibold'>Radar ID</small>
+            <div className="border-b border-b-gray-400"/>
+        </div>
+        <SimpleSelect
+            options={locRadars}
+            value={locSelectedRadar.displayText}
+            width='w-full'
+            onSelectValue={handleRadarChange}
+        />
 
       {/* Variable selection */}
       <div className="flex flex-col gap-0.5">

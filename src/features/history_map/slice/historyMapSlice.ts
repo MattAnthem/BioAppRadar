@@ -16,7 +16,7 @@ interface HistorymapSliceState {
 } 
 
 const initialState: HistorymapSliceState = {
-    mapModeHist: 'sevip',
+    mapModeHist: 'classification',
     radarPayloadHist: {
         colorbar: 'viridis',
         parameter: 'ref',
@@ -31,6 +31,7 @@ const initialState: HistorymapSliceState = {
         color_1: '#0d6efd',
         height: 0,
         time: '2020-11-10 12:00:33',
+        radarID: 1,
     },
     sevipPayloadHist: {
         parameter: 'vid',

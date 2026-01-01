@@ -50,11 +50,11 @@ const SevipPopup = () => {
         dispatch(setHistSevipTimeEnd(adjustedTimes.fresh_end));
         dispatch(setHistTimeSevip(adjustedTimes.fresh_end));
 
-        dispatch(setSevipPayloadHist({
-            time: adjustedTimes.fresh_end,
-            startTime: adjustedTimes.fresh_start,
-            endTime: adjustedTimes.fresh_end,
-        }));
+        // dispatch(setSevipPayloadHist({
+        //     time: adjustedTimes.fresh_end,
+        //     startTime: adjustedTimes.fresh_start,
+        //     endTime: adjustedTimes.fresh_end,
+        // }));
 
     }, [adjustedTimes, dispatch, isSuccess])
 
