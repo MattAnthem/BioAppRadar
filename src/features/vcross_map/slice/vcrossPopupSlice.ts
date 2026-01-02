@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { classif_Options, radar_options, radar_ParameterOptions, radar_TypeOptions, sevip_options } from "../../../shared/static/select-options";
+import { classif_Options, radar_options, radar_ParameterOptions, radar_TypeOptions, sevip_options, species_options } from "../../../shared/static/select-options";
 
 
 
@@ -15,6 +15,9 @@ interface VcrossState {
 
     radars: SelectOption[];
     selectedRadar: SelectOption;
+
+    speciesOptions: SelectOption[];
+    selectedSpecie: SelectOption;
 
     sevipVariables: SelectOption[];
     selectedSevipVar: SelectOption;
@@ -33,6 +36,10 @@ const initialState: VcrossState = {
     availableBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
     selectedBioClass: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : {id: '', displayText: ''},
     timeBioClass: '2020-11-10 12:00:33',
+
+    speciesOptions: species_options,
+    selectedSpecie: species_options[0],
+
     segmentBioclass: true,
     color_0: '#dc3545',
     color_1: '#0d6efd',
@@ -94,7 +101,10 @@ const vcrossPopupSlice = createSlice({
         },
         setSelectedVcrossRadar: (state, action) => {
             state.selectedRadar = action.payload;
-        }
+        },
+        setSelectedVcrossSevipSpecie: (state, action) => {
+            state.selectedSpecie = action.payload;
+        },
     }
 });
 
@@ -110,6 +120,7 @@ export const {
     setSelectedVcrossRadarType,
     setSelectedVcrossSevipVariable,
     setVcrossSevipTime,
-    setSelectedVcrossRadar
+    setSelectedVcrossRadar,
+    setSelectedVcrossSevipSpecie
 } = vcrossPopupSlice.actions;
 export default vcrossPopupSlice.reducer;

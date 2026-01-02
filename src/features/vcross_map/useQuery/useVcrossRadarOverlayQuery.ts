@@ -9,6 +9,7 @@ export const useVcrossRadarOvrlayDataQuery = (payload: RadarPayload, enabled?: b
         payload.time,
         payload.type,
         payload.colorbar,
+        payload.radarID
       ],
       queryFn: async () => {
         try {

@@ -139,9 +139,7 @@ export const fetchRadarData = async (payload: RadarPayload): Promise<SpatialData
             colorbar: payload.colorbar,
             height: payload.height,
             radarID: payload.radarID,
-          };
-
-    console.log(payloadT)      
+          };     
     const { data } = await axiosClient.post("/get_radar", payloadT);
     if (data.status !== 0) throw new Error("Error fetching Radar data");
     return data.data;

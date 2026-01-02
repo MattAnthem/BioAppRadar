@@ -27,14 +27,16 @@ const initialState: VcrossMapState = {
         startLat: -2.325,
         endLon: 30.530,
         endLat: -1.602,
-        segment: true
+        segment: true,
+        radarID: 1,
     },
     vcrossBioclassOvrlayPayload: {
         class: 'species',
         color_0: '#dc3545',
         color_1: '#0d6efd',
         height: 0,
-        time: '2020-11-10 12:00:33'
+        time: '2020-11-10 12:00:33',
+        radarID: 1,
     },
     vcrossRadarPayload: {
         type: 'polar',
@@ -44,7 +46,8 @@ const initialState: VcrossMapState = {
         startLat: -2.325,
         endLon: 30.530,
         endLat: -1.602,
-        segment: true
+        segment: true,
+        radarID: 1,
     },
     vcrossRadarOvrlayPayload: {
         colorbar: 'viridis',
@@ -52,6 +55,7 @@ const initialState: VcrossMapState = {
         time: '2020-11-10 12:00:33', 
         type: 'grid',
         height: 0,
+        radarID: 1,
     },
     vcrossSevipOvrlayPayload: {
         colorbar: 'viridis',
@@ -103,6 +107,7 @@ const vcrossMapSlice = createSlice({
                 time: incoming.time ?? "2020-11-10 12:00:33",
                 colorbar: incoming.colorbar ?? "viridis",
                 height: (incoming as Partial<RadarGridPayload>).height ?? 0,
+                radarID: (incoming as Partial<RadarGridPayload>).radarID ?? 1,
               };
             } else {
               state.vcrossRadarOvrlayPayload = {
@@ -110,7 +115,8 @@ const vcrossMapSlice = createSlice({
                 parameter: incoming.parameter ?? "ref",
                 time: incoming.time ?? "2020-11-10 12:00:33",
                 colorbar: incoming.colorbar ?? "viridis",
-                elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
+                elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 1.5,
+                radarID: (incoming as Partial<RadarPolarPayload>).radarID ?? 1,
               };
             }
         },

@@ -1,22 +1,22 @@
-import { ChartLine, ImageIcon, Unplug } from "lucide-react";
+import { Unplug } from "lucide-react";
 import type { CrossSectionBioClassResponse, CrossSectionRadarResponse } from "../../api/endpoints/crossSectionAPI";
 import { useAppSelector } from "../../store/hooks";
 import { useVcrossBioclassData } from "./useData/useVcrossBioclassData"
 import { useVcrossRadarData } from "./useData/useVcrossRadarData";
 import loader from '../../assets/loader.webp';
-import { lazy, useState } from "react";
-import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
-import { useTheme } from "../../shared/hooks/useTheme";
+import { lazy } from "react";
+// import Tooltip from "../../shared/components/popups/tooltip/Tooltip";
+// import { useTheme } from "../../shared/hooks/useTheme";
 
 const HeatmapChart = lazy(() => import('../../shared/components/charts/HighchartHeatmap'));
 
 const VcrossHeatmap = () => {
-    const themes = useTheme();
-    const { active_border, active_text, border: tog_border, hover: tog_hover } = themes.theme.displayTogglerBtn;
+    // const themes = useTheme();
+    // const { active_border, active_text, border: tog_border, hover: tog_hover } = themes.theme.displayTogglerBtn;
 
 
     const { mapMode } = useAppSelector(state => state.vcrossmap);
-    const [displayMode, setDisplayMode] =  useState<'png' | 'interactive'>('interactive');
+    // const [displayMode, setDisplayMode] =  useState<'png' | 'interactive'>('interactive');
     const isBioclass = mapMode === 'vcross_bioclass';
     const isRadar = mapMode === 'vcross_radar';
 
@@ -40,13 +40,13 @@ const VcrossHeatmap = () => {
             error = radarError;
     }
 
-    const handleDisplayInteractiveChart = () => {
-        setDisplayMode('interactive');
-    };
+    // const handleDisplayInteractiveChart = () => {
+    //     setDisplayMode('interactive');
+    // };
 
-    const handleDisplayImage = () => {
-        setDisplayMode('png');
-    }
+    // const handleDisplayImage = () => {
+    //     setDisplayMode('png');
+    // }
 
   return (
     <div className=' w-full h-full flex flex-col items-center justify-start'>
@@ -59,7 +59,7 @@ const VcrossHeatmap = () => {
 
         <div className="w-full h-full relative items-center">
 
-            <div className=" px-8 py-2 grid grid-cols-2 justify-start items-center gap-2">
+            {/* <div className=" px-8 py-2 grid grid-cols-2 justify-start items-center gap-2">
                 <Tooltip
                     display_condition={true}
                     position="bottom"
@@ -99,7 +99,7 @@ const VcrossHeatmap = () => {
                     <h1 className='text-[clamp(0.8rem,0.8vw,2rem)]'>Image</h1>
                 </button>
                 </Tooltip>
-            </div>
+            </div> */}
 
             {
                 (error) && (

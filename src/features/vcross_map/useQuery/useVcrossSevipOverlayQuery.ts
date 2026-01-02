@@ -8,7 +8,7 @@ export const useSevipVcrossDataQuery = (payload: SevipPayload, enabled?: boolean
             try{
                 return await fetchSevip(payload);
             } catch (error) {
-                console.error('Failed to QUERY vcross SEVIP data');
+                console.error('Failed to QUERY vcross SEVIP data', error);
                 throw error;
             }
         } ,
