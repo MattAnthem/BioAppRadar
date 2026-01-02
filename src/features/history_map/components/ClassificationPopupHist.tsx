@@ -48,8 +48,14 @@ const ClassificationPopup = () => {
     dispatch(setHistClassifStartTime(adjustedTimes.fresh_start));
     dispatch(setHistClassifEndTime(adjustedTimes.fresh_end));
     dispatch(setHistClassifTime(adjustedTimes.fresh_end));
+
+    dispatch(setClassifPayloadHist({
+      class: selectedVariable?.id as string,
+      time: adjustedTimes.fresh_end,
+      radarID: Number(selectedRadar?.id),
+    }))
     
-  }, [adjustedTimes, dispatch, isSuccess])
+  }, [adjustedTimes, dispatch, isSuccess, selectedRadar?.id, selectedVariable?.id])
   
   // --- Local state for the inputs
   const [locAvailableVars, setLocAvailableVars] = useState(availableVariables ?? []);

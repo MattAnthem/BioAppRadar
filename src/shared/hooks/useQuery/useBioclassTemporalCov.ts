@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBioClassTemporalCoverage } from "../../../api/endpoints/crossSectionAPI";
 
 export const useBioclassCovQuery = (radarID: number, options = {}) => {
-    const queryKey = ["sevip_temporalcov", radarID];
+    const queryKey = ["bioclass_temporalcov", radarID];
     return useQuery<{start_time: string; end_time: string}>({
         queryKey,
         queryFn: async () => {
