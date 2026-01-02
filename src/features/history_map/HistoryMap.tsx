@@ -47,6 +47,7 @@ const HistoryMap = () => {
 
     const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery(payload, Boolean(selectedBoundary.id && selectedBoundaryType.id));
 
+
     
     //#region  Overlay fetching
     const isRadar = mapModeHist === 'radar';
@@ -189,7 +190,17 @@ const HistoryMap = () => {
         {/* Heading */}
         <GlassHeader className='z-20  p-1 flex justify-between items-center'>
 
-            <h1 className='text-gray-50 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>{data?.info.name} {`: ${(data as SpatialDataResponse)?.info.units ?? ''}`}</h1>
+            <h1 className='text-gray-50 tracking-wider text-[clamp(0.8em,0.8vw,1em)] font-[500]'>
+                {data?.info.name}  
+                {((!isLoading && !error) && (data as SpatialDataResponse)?.info.units) ? ` | units: ${(data as SpatialDataResponse)?.info.units}` : ''}
+                {
+                    ((!isLoading && !error) && ((isRadar || isRadarGif) && radarPayloadHist.type === 'polar')) ? `, elevation: ${(data as SpatialDataResponse)?.info.elevation_angle}` : ''
+                }
+                {
+                    ((!isLoading && !error) && ((isRadar || isRadarGif) && radarPayloadHist.type === 'grid')) ? `, height: ${(data as SpatialDataResponse)?.info.height}` : ''
+                }
+
+            </h1>
 
             <div className="z-5 flex gap-2 justify-center items-end">
 
@@ -242,7 +253,7 @@ const HistoryMap = () => {
         {/* Elevation angles */}
         <div className="h-full absolute right-2 bottom-0 flex items-end justify-center py-10">
             {
-                (radarPayloadHist.type === 'polar') && (
+                (isRadar && radarPayloadHist.type === 'polar') && (
                     <Suspense>
                         <ElevationSlider
                             currentIdx={currentElevationIndex}
@@ -257,15 +268,15 @@ const HistoryMap = () => {
 
         {/* Map Time */}
         {
-            (isSevipGif || isRadarGif || isClassifGif) ? (
+            ((isSevipGif || isRadarGif || isClassifGif) && !isLoading) ? (
                 <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 2xl:1/5 lg:w-2/7 w:1/3 ${(isClassif || isClassifGif) ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
                     <small className='text-white tracking-wide'>Time: {startTime} - {endTime}</small>
                 </div>
             ):
-            (
+            ( !isLoading && (
                 <div className={`absolute text-lg flex flex-col justify-center gap-1.5 z-10 lg:w-1/6 w:1/3 ${isClassif ? 'bottom-1' : 'bottom-8' } p-2 left-2  border-white/20 bg-gray-900/55 rounded-sm`}>
                     <small className='text-white tracking-wide'>Time: {mapTime}</small>
-                </div>
+                </div>)
             )
         }
 

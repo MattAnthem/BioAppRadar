@@ -10,6 +10,7 @@ import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
 import { useRadarPolarTemporalCov } from '../../../shared/hooks/useQuery/useRadarPolarTemporalCov';
 import { useRadarGridTemporalCov } from '../../../shared/hooks/useQuery/useRadarGridTemporalCov';
 import type { TemporalCovResponse } from '../../../api/endpoints/verical_profile/verticalProfilesAPI';
+import { radar_options, radar_ParameterOptions, radar_TypeOptions } from '../../../shared/static/select-options';
 
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
@@ -28,20 +29,18 @@ const RadarOptionPopup = () => {
 
 
     // Redux read only states
-    const { availableTypes, selectedType, availableParameters, selectedParameter, radarTimeHist, endTimeRadar, startTimeRadar,  radars, selectedRadar } = useAppSelector(state => state.hist_radarpopup);
+    const {  radarTimeHist, endTimeRadar, startTimeRadar, selectedParameter, selectedRadar, selectedType } = useAppSelector(state => state.hist_radarpopup);
+    
     const dispatch = useAppDispatch();
 
 
     // --- Local state for the inputs
-    const [locAvailableTypes, setLocAvailableTypes] = useState(availableTypes);
-    const [locAvailableParams, setLocAvailableParams] = useState(availableParameters);
-    const [locSelectedType, setLocSelectedType] = useState(selectedType);
-    const [locRadars, setLocRadars] = useState(radars);
-    const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
-    const [locSelectedParam, setLocSelectedParam] = useState(selectedParameter);
-    const [locTime, setLocTime] = useState(radarTimeHist);
-    const [locStartTime, setLocStartTime] = useState(startTimeRadar);
-    const [locEndTime, setLocEndTime] = useState(endTimeRadar);
+    const [locSelectedType, setLocSelectedType] = useState(radar_TypeOptions[0]);
+    const [locSelectedParam, setLocSelectedParam] = useState(radar_ParameterOptions[0]);
+    const [locSelectedRadar, setLocSelectedRadar] = useState(radar_options[0]);
+    const [locTime, setLocTime] = useState('2020-11-10 12:00:33');
+    const [locStartTime, setLocStartTime] = useState('2020-11-10 12:00:33');
+    const [locEndTime, setLocEndTime] = useState('2020-11-10 12:50:00');
     const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
 
 
@@ -87,8 +86,11 @@ const RadarOptionPopup = () => {
         dispatch(setRadarEndTimeHist(adjustedTimes.fresh_end));
         dispatch(setRadarTimeHist(adjustedTimes.fresh_end));
 
+        setLocTime(radarTimeHist);
+        setLocStartTime(startTimeRadar);
+        setLocEndTime(endTimeRadar);
 
-    }, [adjustedTimes, dispatch, isSuccess])
+    }, [adjustedTimes, dispatch, endTimeRadar, isSuccess, radarTimeHist, startTimeRadar])
 
 
 
@@ -96,17 +98,11 @@ const RadarOptionPopup = () => {
 
     // --- Sync local states with redux state on mount or when the popup opens
     useEffect(() => {
-        if (isPopupOpen) {
-            setLocAvailableParams(availableParameters);
-            setLocAvailableTypes(availableTypes);
-            setLocSelectedType(selectedType);
-            setLocSelectedParam(selectedParameter);
-            setLocTime(radarTimeHist);
-            setLocStartTime(startTimeRadar);
-            setLocEndTime(endTimeRadar);
-            setLocRadars(radars);
-        }
-    }, [availableParameters, availableTypes, endTimeRadar, isPopupOpen, radarTimeHist, radars, selectedParameter, selectedType, startTimeRadar])
+        if (!isPopupOpen) return;
+        setLocSelectedType(selectedType);
+        setLocSelectedParam(selectedParameter);
+        setLocSelectedRadar(selectedRadar);
+    }, [isPopupOpen, selectedParameter, selectedRadar, selectedType]);
 
 
     // --- Toggle overlay mode handlers --- 
@@ -243,7 +239,7 @@ const RadarOptionPopup = () => {
             <div className="border-b border-b-gray-400"/>
         </div>
         <SimpleSelect
-            options={locRadars}
+            options={radar_options}
             value={locSelectedRadar.displayText}
             width='w-full'
             onSelectValue={handleRadarChange}
@@ -256,7 +252,7 @@ const RadarOptionPopup = () => {
 
         {/* Type Select */}
         <SimpleSelect
-            options={locAvailableTypes}
+            options={radar_TypeOptions}
             value={locSelectedType.displayText}
             width='w-full'
             onSelectValue={handleTypeChange}
@@ -267,7 +263,7 @@ const RadarOptionPopup = () => {
             <div className="border-b border-b-gray-400"/>
         </div>
         <SimpleSelect
-            options={locAvailableParams}
+            options={radar_ParameterOptions}
             value={locSelectedParam.displayText}
             width='w-full'
             onSelectValue={handleParamChange}

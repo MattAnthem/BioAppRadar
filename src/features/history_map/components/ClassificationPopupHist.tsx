@@ -266,7 +266,7 @@ return (
               onChange={handleTimeChange}
               value={locTime}
               minDate={temporal?.start_time}
-              maxDate={temporal?.end_time}
+              maxDate={adjustedTimes?.fresh_end}
             />
           </>
         )
@@ -284,7 +284,7 @@ return (
                 onChange={handleGifStartTimeChange}
                 value={locStartTime}
                 minDate={temporal?.start_time}
-                maxDate={temporal?.end_time}
+                maxDate={adjustedTimes?.fresh_end}
             />
 
             {/* End time for the gif */}
@@ -296,7 +296,7 @@ return (
                 onChange={handleGifEndTimeChange}
                 value={locEndTime}
                 minDate={locStartTime}
-                maxDate={temporal?.end_time}
+                maxDate={adjustedTimes?.fresh_end}
             />
           </>
         )

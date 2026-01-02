@@ -1,7 +1,7 @@
 import { FlipHorizontal, ImageIcon, ImagePlayIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import type { SelectOption } from '../../../shared/components/selects/types';
-import { setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption } from '../slice/histSevipPopup';
+import { setHistSevipTimeEnd, setHistSevipTimeStart, setHistTimeSevip, setSelectedHistSevipOption, setSelectedHistSevipSpecie } from '../slice/histSevipPopup';
 import { useEffect, useState, memo, lazy } from 'react';
 import { setSevipGifPayloadHist, setSevipPayloadHist } from '../slice/historyMapSlice';
 import Tooltip from '../../../shared/components/popups/tooltip/Tooltip';
@@ -50,13 +50,12 @@ const SevipPopup = () => {
         dispatch(setHistSevipTimeEnd(adjustedTimes.fresh_end));
         dispatch(setHistTimeSevip(adjustedTimes.fresh_end));
 
-        // dispatch(setSevipPayloadHist({
-        //     time: adjustedTimes.fresh_end,
-        //     startTime: adjustedTimes.fresh_start,
-        //     endTime: adjustedTimes.fresh_end,
-        // }));
+        setLocTime(histTimeSevip);
+        setLocStartTime(startTimeSevip);
+        setLocEndTime(endTimeSevip);
 
-    }, [adjustedTimes, dispatch, isSuccess])
+
+    }, [adjustedTimes, dispatch, endTimeSevip, histTimeSevip, isSuccess, startTimeSevip])
 
     // --- Local states for the inputs ---
     const [locAvailableVars, setLocAvailableVars] = useState(availableVariables);
@@ -77,12 +76,10 @@ const SevipPopup = () => {
             setAvailableSpecies(speciesOptions);
             setLocSelectedSpecie(selectedSpecie);
             setLocSelectedVar(selectedVariable);
-            setLocTime(histTimeSevip);
-            setLocStartTime(startTimeSevip);
-            setLocEndTime(endTimeSevip);
+
             setLocRadars(radars);
         }
-    }, [availableVariables, endTimeSevip, histTimeSevip, isPopupOpen, selectedVariable, startTimeSevip, speciesOptions, selectedSpecie, radars])
+    }, [isPopupOpen, availableVariables, speciesOptions, selectedSpecie, selectedVariable, radars]);
 
      // --- Toggle overlay mode handlers --- 
      const handleSetToPngMode = () => {
@@ -137,6 +134,7 @@ const SevipPopup = () => {
             // --- update the sevip slice states ---
             dispatch(setHistTimeSevip(locTime));
             dispatch(setSelectedHistSevipOption(locSelectedVar));
+            dispatch(setSelectedHistSevipSpecie(locSelectedSpecie));
         }  
         if (overlayMode === 'gif') {
             dispatch(setSevipGifPayloadHist({
@@ -148,6 +146,7 @@ const SevipPopup = () => {
             }));
             // --- Update slices ---
             dispatch(setSelectedHistSevipOption(locSelectedVar));
+            dispatch(setSelectedHistSevipSpecie(locSelectedSpecie));
             dispatch(setHistSevipTimeStart(locStartTime));
             dispatch(setHistSevipTimeEnd(locEndTime));
         }

@@ -12,9 +12,9 @@ const ElevationSlider = ({ elevations, handleChange, currentIdx }: ElevationSlid
     <div className="z-10 border-white/20 bg-gray-900/50 shadow-md ring-1 ring-black/5 backdrop-blur-sm text-gray-100 w-22 h-full rounded-sm  flex justify-center items-center">
 
       <div className="h-fit flex flex-col gap-0.5 justify-around items-center">
-        <small className='text-[10px] text-sm text-center font-light'>Elevation in degree</small>
+        <small className='text-[clamp(0.6em,0.7vw,1em)] text-center text-gray-300'>Elevation in degree</small>
         {/* max elevation */}
-        <small className='text-[10px] text-white'>{elevations?.[0]}</small>
+        <small className='text-[12px] text-white'>{elevations?.[0]}</small>
         
 
         { elevations?.map((elev: number, i: number) => (
@@ -39,7 +39,7 @@ const ElevationSlider = ({ elevations, handleChange, currentIdx }: ElevationSlid
         ))}
 
         {/* Min elevation */}
-        <small className='text-[10px] text-white'>{elevations?.[elevations?.length - 1]}</small>
+        <small className='text-[12px] text-white'>{elevations?.[elevations?.length - 1]}</small>
       </div>
 
     </div>

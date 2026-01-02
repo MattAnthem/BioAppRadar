@@ -117,7 +117,7 @@ const historymapSlice = createSlice({
               time: incoming.time ?? "2020-11-10 12:00:33",
               colorbar: incoming.colorbar ?? "viridis",
               radarID: incoming.radarID ?? 1,
-              elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
+              elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 1.5,
             };
           }
         },
@@ -148,7 +148,7 @@ const historymapSlice = createSlice({
               endTime: incoming.endTime ?? '2020-11-10 12:50:00',
               colorbar: incoming.colorbar ?? "viridis",
               radarID: incoming.radarID ?? 1,
-              elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 0.5,
+              elevation_angle: (incoming as Partial<RadarPolarPayload>).elevation_angle ?? 1.5,
             };
           }
         },
