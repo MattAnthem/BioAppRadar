@@ -32,7 +32,7 @@ export const usePreloadClassificationFrames = (
         if (isCancelled) break;
 
         await queryClient.prefetchQuery({
-          queryKey: ["classification_data", time, classType, color0, color1, height],
+          queryKey: ["classification_data", time, classType, color0, color1, height, radar_id],
           queryFn: () =>
             fetchClassificationData({
               time,

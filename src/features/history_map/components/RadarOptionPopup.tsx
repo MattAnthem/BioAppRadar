@@ -26,10 +26,10 @@ const RadarOptionPopup = () => {
     // Themes 
     const themes = useTheme();
     const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
-
+    const { mapModeHist } = useAppSelector(state=> state.historymap);
 
     // Redux read only states
-    const {  radarTimeHist, endTimeRadar, startTimeRadar, selectedParameter, selectedRadar, selectedType } = useAppSelector(state => state.hist_radarpopup);
+    const { selectedParameter, selectedRadar, selectedType } = useAppSelector(state => state.hist_radarpopup);
     
     const dispatch = useAppDispatch();
 
@@ -86,11 +86,11 @@ const RadarOptionPopup = () => {
         dispatch(setRadarEndTimeHist(adjustedTimes.fresh_end));
         dispatch(setRadarTimeHist(adjustedTimes.fresh_end));
 
-        setLocTime(radarTimeHist);
-        setLocStartTime(startTimeRadar);
-        setLocEndTime(endTimeRadar);
+        setLocTime(adjustedTimes.fresh_end);
+        setLocStartTime(adjustedTimes.fresh_start);
+        setLocEndTime(adjustedTimes.fresh_end);
 
-    }, [adjustedTimes, dispatch, endTimeRadar, isSuccess, radarTimeHist, startTimeRadar])
+    }, [adjustedTimes, dispatch, isSuccess])
 
 
 
@@ -188,6 +188,7 @@ const RadarOptionPopup = () => {
         isOpen={isPopupOpen}
         onOpen={handleTooglePopup}
         onClose={closePopup}
+        isActive={mapModeHist === 'radar' || mapModeHist === 'radar_gif'}
     >
 
         {/* Display mode toggle */}

@@ -8,6 +8,7 @@ import Tooltip from '../../../shared/components/popups/tooltip/Tooltip'
 import { useTheme } from '../../../shared/hooks/useTheme';
 import { useFreshDates } from '../../../shared/hooks/dates/useFreshDates';
 import { useBioclassCovQuery } from '../../../shared/hooks/useQuery/useBioclassTemporalCov';
+import { classif_Options, radar_options } from '../../../shared/static/select-options';
 
 const OptionPopover = lazy(() => import('../../../shared/components/popups/option/OptionPopover'));
 const SimpleSelect = lazy(() => import('../../../shared/components/selects/SimpleSelect'));
@@ -27,7 +28,18 @@ const ClassificationPopup = () => {
   const { active_border, active_text, border, hover } = themes.theme.displayTogglerBtn;
 
   // Read only redux states
-  const { availableVariables, selectedVariable, color_0, color_1, histClassifTime, endTimeClassif, startTimeClassif, radars, selectedRadar } = useAppSelector(state=> state.hist_classifpopup);
+  const { selectedVariable, color_0, color_1, histClassifTime, endTimeClassif, startTimeClassif, selectedRadar } = useAppSelector(state=> state.hist_classifpopup);
+  const { mapModeHist } = useAppSelector(state=> state.historymap);
+  // --- Local state for the inputs
+  const [locSelectedVar, setLocSelectedVar] = useState(Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : null);
+  const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
+  const [locColor0, setLocColor0] = useState(color_0 ?? '');
+  const [locColor1, setLocColor1] = useState(color_1 ?? '');
+  const [locTime, setLocTime] = useState(histClassifTime ?? '');
+  const [locStartTime, setLocStartTime] = useState(startTimeClassif ?? '');
+  const [locEndTime, setLocEndTime] = useState(endTimeClassif ?? '');
+  const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
+
   const dispatch = useAppDispatch();
 
   // --- Temporal coverages to restrict time selects ---
@@ -49,6 +61,8 @@ const ClassificationPopup = () => {
     dispatch(setHistClassifEndTime(adjustedTimes.fresh_end));
     dispatch(setHistClassifTime(adjustedTimes.fresh_end));
 
+    setLocTime(adjustedTimes.fresh_end);
+
     dispatch(setClassifPayloadHist({
       class: selectedVariable?.id as string,
       time: adjustedTimes.fresh_end,
@@ -57,31 +71,18 @@ const ClassificationPopup = () => {
     
   }, [adjustedTimes, dispatch, isSuccess, selectedRadar?.id, selectedVariable?.id])
   
-  // --- Local state for the inputs
-  const [locAvailableVars, setLocAvailableVars] = useState(availableVariables ?? []);
-  const [locSelectedVar, setLocSelectedVar] = useState(selectedVariable ?? null);
-  const [locRadars, setLocRadars] = useState(radars);
-  const [locSelectedRadar, setLocSelectedRadar] = useState(selectedRadar);
-  const [locColor0, setLocColor0] = useState(color_0 ?? '');
-  const [locColor1, setLocColor1] = useState(color_1 ?? '');
-  const [locTime, setLocTime] = useState(histClassifTime ?? '');
-  const [locStartTime, setLocStartTime] = useState(startTimeClassif ?? '');
-  const [locEndTime, setLocEndTime] = useState(endTimeClassif ?? '');
-  const [overlayMode, setOverlayMode] = useState<'gif' | 'png'>('png');
 
   // --- Sync local states with redux states on mount and when redux states change ---
   useEffect(() => {
     if (isPopupOpen) {
-      setLocAvailableVars(availableVariables);
       setLocSelectedVar(selectedVariable);    
       setLocColor0(color_0);
       setLocColor1(color_1);
       setLocTime(histClassifTime);
       setLocStartTime(startTimeClassif);
       setLocEndTime(endTimeClassif);
-      setLocRadars(radars);
     }
-  }, [availableVariables, color_0, color_1, histClassifTime, selectedVariable, isPopupOpen, startTimeClassif, endTimeClassif, radars])
+  }, [ color_0, color_1, histClassifTime, selectedVariable, isPopupOpen, startTimeClassif, endTimeClassif])
 
   // --- Toggle overlay mode handlers --- 
   const handleSetToPngMode = () => {
@@ -91,7 +92,7 @@ const ClassificationPopup = () => {
         setOverlayMode("gif");
   }
 
-  // --- Local input handlers (for edition : proper to the popup only) ---
+  // --- Local input handlers (for edition : proper to the popup) ---
   const handleInputVarChange = (variable: SelectOption) => {
     setLocSelectedVar(variable);
   }
@@ -170,6 +171,7 @@ return (
       isOpen={isPopupOpen}
       onOpen={handleTooglePopup}
       onClose={closePopup}
+      isActive={mapModeHist === 'classification' || mapModeHist === 'classif_gif'}
   >
 
         {/* Display mode toggle */}
@@ -221,7 +223,7 @@ return (
             <div className="border-b border-b-gray-400"/>
         </div>
         <SimpleSelect
-            options={locRadars}
+            options={radar_options}
             value={locSelectedRadar.displayText}
             width='w-full'
             onSelectValue={handleRadarChange}
@@ -234,7 +236,7 @@ return (
       </div>
 
       <SimpleSelect
-          options={locAvailableVars}
+          options={Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : []}
           value={locSelectedVar.displayText}
           width='w-full'
           onSelectValue={handleInputVarChange}

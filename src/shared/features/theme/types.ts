@@ -44,6 +44,7 @@ type PopupBtn = {
     secondary_hover: string;
     primary_text: string;
     secondary_text: string;
+    active_bg: string;
 }
 
 

@@ -64,7 +64,7 @@ export const light: ThemeElements = {
         }
     },
     sectionCard: {
-        bg: 'bg-stone-100',
+        bg: 'bg-gray-200',
         primary_text: 'text-[#1C2B33]',
         secondary_text: 'text-gray-600',
         border: 'border-gray-300',
@@ -121,7 +121,8 @@ export const light: ThemeElements = {
         primary_text: 'text-white',
         seconcondary_bg: 'bg-zinc-200',
         secondary_hover: 'hover:bg-zinc-300',
-        secondary_text: 'text-black'
+        secondary_text: 'text-black',
+        active_bg: 'outline-2 outline-blue-800 text-blue-800 text-lg'
     }
 }
 
@@ -247,6 +248,7 @@ export const dark: ThemeElements = {
         primary_text: 'text-white',
         seconcondary_bg: 'bg-zinc-700',
         secondary_hover: 'hover:bg-zinc-600',
-        secondary_text: 'text-white'
+        secondary_text: 'text-white',
+        active_bg: 'bg-zinc-900!'
     }
 }

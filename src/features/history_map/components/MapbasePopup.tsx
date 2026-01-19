@@ -61,7 +61,7 @@ const MapbasePopup = ({ displayColorbarOption=true, onChangeOverlayColor }: Base
   return (
     <OptionPopover
       customIcon={<Map className={iconSize}/>}
-      hoverText='Change Base Map'
+      hoverText='Base Map'
       isPrimary
       isOpen={isPopupOpen}
       onOpen={handleTooglePopup}

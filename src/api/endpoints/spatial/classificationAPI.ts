@@ -40,6 +40,7 @@ export interface ClassificationDataResponse {
  * @returns ClassificationDataResponse
  */
 export const fetchClassificationData = async (payload: ClassificationDataPayload): Promise<ClassificationDataResponse> => {
+    console.log(payload);
     const { data } = await axiosClient.post('/get_bioclass', payload);
     if (data.status !== 0) {
         throw new Error(data.message || 'Failed to fetch classification data', );

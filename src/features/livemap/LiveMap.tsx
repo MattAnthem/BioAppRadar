@@ -120,6 +120,7 @@ const LiveMap = () => {
         classificationPayload.color_0, 
         classificationPayload.color_1,
         currentAltitude,
+        1
     ]
 
     // Check if already cached

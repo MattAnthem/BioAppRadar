@@ -16,7 +16,7 @@ interface HistorymapSliceState {
 } 
 
 const initialState: HistorymapSliceState = {
-    mapModeHist: 'classification',
+    mapModeHist: 'sevip',
     radarPayloadHist: {
         colorbar: 'viridis',
         parameter: 'ref',

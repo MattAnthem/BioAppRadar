@@ -13,6 +13,7 @@ type ChartParamsPopupProps = {
 
   isPrimary?: boolean;
   isSimpleSelect?: boolean;
+  isActive?: boolean;
 
   isOpen?: boolean;  
   onOpen?: () => void;
@@ -27,6 +28,7 @@ const OptionPopover = ({
   isOpen,
   onOpen,
   onClose,
+  isActive=false,
   isSimpleSelect=false,
   isPrimary=false
 }: ChartParamsPopupProps) => {
@@ -37,7 +39,7 @@ const OptionPopover = ({
   const popupContentRef = useRef<HTMLDivElement | null>(null);
 
   const themes = useTheme();
-  const { primary_bg, primary_hover, primary_text, seconcondary_bg, secondary_hover, secondary_text } = themes.theme.popupBtn;
+  const { primary_bg, primary_hover, primary_text, seconcondary_bg, secondary_hover, secondary_text, active_bg } = themes.theme.popupBtn;
   const { options_bg, border } = themes.theme.simpleSelect;
 
   const isPopupOpen = isOpen ?? localOpen;
@@ -118,6 +120,7 @@ const OptionPopover = ({
             ${isPrimary ? primary_text : secondary_text} 
             ${isPrimary ? primary_hover : secondary_hover}
             ${isPopupOpen ? 'outline-2 outline-blue-800' : ''}
+            ${isActive ? active_bg : ''}
             p-1 rounded-sm
           `}
         >

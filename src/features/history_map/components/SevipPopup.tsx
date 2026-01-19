@@ -28,6 +28,7 @@ const SevipPopup = () => {
 
     // --- Read only redux states ---
     const { selectedVariable, availableVariables, histTimeSevip, startTimeSevip, endTimeSevip, selectedSpecie, speciesOptions, radars, selectedRadar } = useAppSelector(state => state.hist_sevippopup);
+    const { mapModeHist } = useAppSelector(state=> state.historymap);
 
     const dispatch = useAppDispatch();
 
@@ -160,6 +161,7 @@ const SevipPopup = () => {
         isOpen={isPopupOpen}
         onOpen={handleTogglePopup}
         onClose={handleClosePopup}
+        isActive={mapModeHist === 'sevip' || mapModeHist === 'sevip_gif'}
     >
 
         {/* Display mode toggle */}

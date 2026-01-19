@@ -1,16 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { SelectOption } from "../../../shared/components/selects/types";
-import { classif_Options, radar_options, species_options } from "../../../shared/static/select-options";
+import { classif_Options, radar_options, } from "../../../shared/static/select-options";
 
 interface HistClassificationPopupState {
     selectedVariable: SelectOption;
-    availableVariables: SelectOption[];
-    radars: SelectOption[];
     selectedRadar: SelectOption;
 
-    // Species
-    speciesOptions: SelectOption[];
-    selectedSpecie: SelectOption;
 
     color_0: string;
     color_1: string;
@@ -25,10 +20,7 @@ interface HistClassificationPopupState {
 
 const initialState: HistClassificationPopupState = {
     selectedVariable: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType[0] : null,
-    availableVariables: Array.isArray(classif_Options[0].availableType) ? classif_Options[0].availableType : [],
-    speciesOptions: species_options,
-    selectedSpecie: species_options[0],
-    radars: radar_options,
+
     selectedRadar: radar_options[0],
 
     color_0: '#dc3545',
@@ -46,9 +38,6 @@ const HistclassificationpopupSlice = createSlice({
     reducers: {
         setSelectedHistClassificationOption: (state, action) => {
             state.selectedVariable = action.payload;
-        },
-        setSelectedClassifHistSpecie: (state, action) => {
-            state.selectedSpecie = action.payload;
         },
         setHistClassificationColorZero: (state, action) => {
             state.color_0 = action.payload;
@@ -71,5 +60,5 @@ const HistclassificationpopupSlice = createSlice({
     }
 })
 
-export const { setHistClassificationColorOne, setHistClassifEndTime, setSelectedClassifHistSpecie, setHistClassifStartTime, setHistClassificationColorZero, setSelectedHistClassificationOption,  setHistClassifTime, setClassifRadar } = HistclassificationpopupSlice.actions;
+export const { setHistClassificationColorOne, setHistClassifEndTime, setHistClassifStartTime, setHistClassificationColorZero, setSelectedHistClassificationOption,  setHistClassifTime, setClassifRadar } = HistclassificationpopupSlice.actions;
 export default HistclassificationpopupSlice.reducer;

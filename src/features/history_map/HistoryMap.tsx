@@ -47,7 +47,6 @@ const HistoryMap = () => {
 
     const { data: coverageJson, error: coverageError , isLoading: coverageLoading} = useBoundariesQuery(payload, Boolean(selectedBoundary.id && selectedBoundaryType.id));
 
-
     
     //#region  Overlay fetching
     const isRadar = mapModeHist === 'radar';
@@ -160,7 +159,6 @@ const HistoryMap = () => {
   return (
     <SectionCard className='relative w-full h-full'>
 
-        
         {
             (error || coverageError) && (
                 <div className="absolute z-10 w-full h-full flex items-center justify-center">
